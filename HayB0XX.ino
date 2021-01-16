@@ -1,0 +1,186 @@
+/*
+  Some parts of this code were originally based on GCCPCB2 v1.208 code by Crane.
+
+  This code utilizes
+    Nicohood's Nintendo library
+    MHeironimus' Arduino Joystick Library
+    Arduino Keyboard Library
+    Mike Matera's ArduinoSTL library
+*/
+#include <ArduinoSTL.h>
+#include <type_traits>
+
+#include "DInputBackend.h"
+#include "DarkSouls.h"
+#include "FgcMode.h"
+#include "GamecubeBackend.h"
+#include "InputMode.h"
+#include "Melee18Button.h"
+#include "Melee20Button.h"
+#include "RocketLeague.h"
+#include "ToughLoveArena.h"
+#include "pinout_gccpcb2.h"
+
+enum reportState : byte {
+  ReportOff = 0x30,
+  ReportOn = 0x31,
+  ReportEnd = 0x0A,
+  ReportInvalid = 0x00
+};
+
+// Used to count updates so we only send state to the input viewer every 3
+// updates.
+int gReportClock = 0;
+
+void writeSerialReport();
+
+CommunicationBackend *gCurrentBackend;
+
+state::InputState gInputState;
+
+InputMode *gCurrentMode;
+
+void setup() {
+  pinMode(pinout::L, INPUT_PULLUP);
+  pinMode(pinout::LEFT, INPUT_PULLUP);
+  pinMode(pinout::DOWN, INPUT_PULLUP);
+  pinMode(pinout::RIGHT, INPUT_PULLUP);
+  pinMode(pinout::MODX, INPUT_PULLUP);
+  pinMode(pinout::MODY, INPUT_PULLUP);
+  pinMode(pinout::START, INPUT_PULLUP);
+  pinMode(pinout::SELECT, INPUT_PULLUP);
+  pinMode(pinout::HOME, INPUT_PULLUP);
+  pinMode(pinout::B, INPUT_PULLUP);
+  pinMode(pinout::X, INPUT_PULLUP);
+  pinMode(pinout::Z, INPUT_PULLUP);
+  pinMode(pinout::UP, INPUT_PULLUP);
+  pinMode(pinout::R, INPUT_PULLUP);
+  pinMode(pinout::Y, INPUT_PULLUP);
+  pinMode(pinout::CDOWN, INPUT_PULLUP);
+  pinMode(pinout::A, INPUT_PULLUP);
+  pinMode(pinout::CRIGHT, INPUT_PULLUP);
+  pinMode(pinout::CLEFT, INPUT_PULLUP);
+  pinMode(pinout::CUP, INPUT_PULLUP);
+  pinMode(pinout::LIGHTSHIELD, INPUT_PULLUP);
+  pinMode(pinout::MIDSHIELD, INPUT_PULLUP);
+  pinMode(pinout::SWITCH, OUTPUT);
+
+  // Hold Mod X on plugin for Brook board mode.
+  if ((digitalRead(pinout::MODX) == LOW) && (digitalRead(pinout::A) == LOW))
+    digitalWrite(pinout::SWITCH, HIGH);
+  else
+    digitalWrite(pinout::SWITCH, LOW);
+
+  /* Choose communication backend. Default to DInput mode. Hold C-Down on plugin
+     for GameCube mode. */
+  if (digitalRead(pinout::CDOWN) == LOW) {
+    gCurrentBackend = new GamecubeBackend(125);
+  } else {
+    gCurrentBackend = new DInputBackend();
+    // Input viewer only used when connected to PC i.e. when using DInput mode.
+    Serial.begin(115200, SERIAL_8N1);
+  }
+
+  /* Always start in Melee mode. Must set mode only after initialising the
+     backend. */
+  gCurrentMode =
+      new Melee20Button(socd::SOCD_2IP_NO_REAC, gInputState, gCurrentBackend);
+}
+
+void loop() {
+  gInputState.l = (digitalRead(pinout::L) == LOW);
+  gInputState.left = (digitalRead(pinout::LEFT) == LOW);
+  gInputState.down = (digitalRead(pinout::DOWN) == LOW);
+  gInputState.right = (digitalRead(pinout::RIGHT) == LOW);
+  gInputState.mod_x = (digitalRead(pinout::MODX) == LOW);
+  gInputState.mod_y = (digitalRead(pinout::MODY) == LOW);
+  gInputState.start = (digitalRead(pinout::START) == LOW);
+  gInputState.select = (digitalRead(pinout::SELECT) == LOW);
+  gInputState.home = (digitalRead(pinout::HOME) == LOW);
+  gInputState.b = (digitalRead(pinout::B) == LOW);
+  gInputState.x = (digitalRead(pinout::X) == LOW);
+  gInputState.z = (digitalRead(pinout::Z) == LOW);
+  gInputState.up = (digitalRead(pinout::UP) == LOW);
+  gInputState.r = (digitalRead(pinout::R) == LOW);
+  gInputState.y = (digitalRead(pinout::Y) == LOW);
+  gInputState.lightshield = (digitalRead(pinout::LIGHTSHIELD) == LOW);
+  gInputState.midshield = (digitalRead(pinout::MIDSHIELD) == LOW);
+  gInputState.c_down = (digitalRead(pinout::CDOWN) == LOW);
+  gInputState.a = (digitalRead(pinout::A) == LOW);
+  gInputState.c_right = (digitalRead(pinout::CRIGHT) == LOW);
+  gInputState.c_left = (digitalRead(pinout::CLEFT) == LOW);
+  gInputState.c_up = (digitalRead(pinout::CUP) == LOW);
+
+  /* Mode selection */
+  if (gInputState.mod_x && !gInputState.mod_y && gInputState.start) {
+    if (gInputState.l) {
+      delete gCurrentMode;
+      gCurrentMode = new Melee20Button(socd::SOCD_2IP_NO_REAC, gInputState,
+                                       gCurrentBackend);
+    } else if (gInputState.down) {
+      delete gCurrentMode;
+      gCurrentMode =
+          new FgcMode(socd::SOCD_NEUTRAL, gInputState, gCurrentBackend);
+    } else if (gInputState.left) {
+      delete gCurrentMode;
+      gCurrentMode =
+          new DarkSouls(socd::SOCD_2IP, gInputState, gCurrentBackend);
+    } else if (gInputState.right) {
+      delete gCurrentMode;
+      gCurrentMode =
+          new RocketLeague(socd::SOCD_2IP, gInputState, gCurrentBackend);
+    }
+  } else if (gInputState.mod_y && !gInputState.mod_x && gInputState.start) {
+    if (gInputState.l) {
+      delete gCurrentMode;
+      gCurrentMode = new ToughLoveArena(socd::SOCD_2IP, gInputState);
+    }
+  }
+
+  gCurrentMode->UpdateOutputs();
+
+  // Only run input viewer on every 3 updates, to prevent lag.
+  if (Serial.availableForWrite() > 32) {
+    if (gReportClock == 0) {
+      writeSerialReport();
+      gReportClock++;
+    } else if (gReportClock == 3) {
+      gReportClock = 0;
+    } else {
+      gReportClock++;
+    }
+  }
+}
+
+/**
+ * Write serial report for B0XX input viewer.
+ */
+void writeSerialReport() {
+  byte report[25] = {gInputState.start ? ReportOn : ReportOff,
+                     gInputState.y ? ReportOn : ReportOff,
+                     gInputState.x ? ReportOn : ReportOff,
+                     gInputState.b ? ReportOn : ReportOff,
+                     gInputState.a ? ReportOn : ReportOff,
+                     gInputState.l ? ReportOn : ReportOff,
+                     gInputState.r ? ReportOn : ReportOff,
+                     gInputState.z ? ReportOn : ReportOff,
+                     gInputState.up ? ReportOn : ReportOff,
+                     gInputState.down ? ReportOn : ReportOff,
+                     gInputState.right ? ReportOn : ReportOff,
+                     gInputState.left ? ReportOn : ReportOff,
+                     gInputState.mod_x ? ReportOn : ReportOff,
+                     gInputState.mod_y ? ReportOn : ReportOff,
+                     gInputState.c_left ? ReportOn : ReportOff,
+                     gInputState.c_right ? ReportOn : ReportOff,
+                     gInputState.c_up ? ReportOn : ReportOff,
+                     gInputState.c_down ? ReportOn : ReportOff,
+                     gInputState.lightshield ? ReportOn : ReportOff,
+                     gInputState.midshield ? ReportOn : ReportOff,
+                     gInputState.e_1 ? ReportOn : ReportOff,
+                     gInputState.e_2 ? ReportOn : ReportOff,
+                     gInputState.e_3 ? ReportOn : ReportOff,
+                     gInputState.e_4 ? ReportOn : ReportOff,
+                     ReportEnd};
+
+  Serial.write(report, 25);
+}
