@@ -36,7 +36,7 @@ Features include:
   * [Default button holds](#default-button-holds)
   * [Dolphin setup](#dolphin-setup)
 * [Configuration](#configuration)
-  * [Console/gamemode selection bindings](#console-gamemode-selection-bindings)
+  * [Console/gamemode selection bindings](#consolegamemode-selection-bindings)
   * [Creating custom input modes](#creating-custom-input-modes)
   * [Mod X lightshield and R shield tilt](#mod-x-lightshield-and-r-shield-tilt)
 * [Troubleshooting](#troubleshooting)
@@ -69,6 +69,8 @@ After that:
     - Edit `pinout_arduino.h` to match your wiring and the buttons that you have
   - `setup_arduino.h` for Arduino without native USB support (e.g. Nano or other)
     - Edit `pinout_arduino.h` to match your wiring and the buttons that you have
+    - You will also have to delete the files `DInputBackend.h` and
+      `DInputBackend.cpp` otherwise the Arduino IDE will complain at you
 3. Click Tools > Board and select your board type. For GCCPCB/GCCMX it should be
    Arduino Leonardo.
 4. Click Upload
