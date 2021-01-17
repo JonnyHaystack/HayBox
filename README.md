@@ -28,7 +28,6 @@ Features include:
 
 ## Table of Contents
 
-* [Introduction](#introduction)
 * [Getting Started](#getting-started)
   * [Requirements](#requirements)
   * [Installation](#installation)
