@@ -24,7 +24,7 @@ Features include:
 - Nunchuk support upcoming
 
 [![GitHub issues](https://img.shields.io/github/issues/JonnyHaystack/HayB0XX)](https://github.com/JonnyHaystack/HayB0XX/issues)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/JonnyHaystack/HayB0XX)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/JonnyHaystack/HayB0XX)](https://github.com/JonnyHaystack/HayB0XX/pulls)
 
 ## Table of Contents
 
