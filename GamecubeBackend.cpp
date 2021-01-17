@@ -1,10 +1,10 @@
 #include "GamecubeBackend.h"
-#include "pinout.h"
 
 #include <Nintendo.h>
 
-GamecubeBackend::GamecubeBackend(int pollingRate) : CommunicationBackend() {
-  mpGamecubeConsole = new CGamecubeConsole(pinout::GCC_DATA);
+GamecubeBackend::GamecubeBackend(int pollingRate, int gccDataPin)
+    : CommunicationBackend() {
+  mpGamecubeConsole = new CGamecubeConsole(gccDataPin);
   mGamecubeData = defaultGamecubeData;
 
   // Delay used between input updates to postpone them until right before the

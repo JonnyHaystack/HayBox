@@ -7,7 +7,7 @@
 
 class GamecubeBackend : public CommunicationBackend {
 public:
-  GamecubeBackend(int pollingRate);
+  GamecubeBackend(int pollingRate, int gccDataPin);
   ~GamecubeBackend();
   void SendOutputs(state::OutputState outputState);
 
