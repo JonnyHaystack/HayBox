@@ -275,6 +275,7 @@ see the [tags on this repository](https://github.com/JonnyHaystack/HayB0XX/tags)
 ## Contributors
 
 * **Jonathan Haylett** - *Creator* - [@JonnyHaystack](https://github.com/JonnyHaystack)
+* **Crane** - *Creator of fragmented remnants of GCCPCB code that still remain* - [@Crane1195](https://github.com/Crane1195)
 
 See also the list of [contributors](https://github.com/JonnyHaystack/HayB0XX/contributors) who participated in this project.
 
