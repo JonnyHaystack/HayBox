@@ -53,6 +53,10 @@ Features include:
 
 ### Installation
 
+Grab the latest release from above, or clone the repository with
+`git clone --recursive` if you have git installed (which makes it easier for you
+to pull updates).
+
 Currently as a workaround to get the ArduinoSTL to compile, it is necessary to
 do the following before you can flash the code:
 
