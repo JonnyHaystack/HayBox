@@ -1,4 +1,6 @@
 /*
+  HayB0XX Version 0.01
+
   Some parts of this code were originally based on GCCPCB2 v1.208 code by Crane.
 
   This code utilizes
@@ -10,16 +12,13 @@
 #include <ArduinoSTL.h>
 #include <type_traits>
 
-#include "DInputBackend.h"
-#include "DarkSouls.h"
+#include "setup_gccpcb2.h"
+
+#include "DefaultKeyboardMode.h"
 #include "FgcMode.h"
-#include "GamecubeBackend.h"
 #include "InputMode.h"
 #include "Melee18Button.h"
 #include "Melee20Button.h"
-#include "RocketLeague.h"
-#include "ToughLoveArena.h"
-#include "pinout_gccpcb2.h"
 
 enum reportState : byte {
   ReportOff = 0x30,
@@ -32,13 +31,31 @@ enum reportState : byte {
 // updates.
 int gReportClock = 0;
 
+void readInputs();
 void writeSerialReport();
 
-CommunicationBackend *gCurrentBackend;
+extern CommunicationBackend *gCurrentBackend;
+extern InputMode *gCurrentMode;
+extern state::InputState gInputState;
 
-state::InputState gInputState;
-
-InputMode *gCurrentMode;
+void selectInputMode() {
+  if (gInputState.mod_x && !gInputState.mod_y && gInputState.start) {
+    if (gInputState.l) {
+      delete gCurrentMode;
+      gCurrentMode = new Melee20Button(socd::SOCD_2IP_NO_REAC, gInputState,
+                                       gCurrentBackend);
+    } else if (gInputState.down) {
+      delete gCurrentMode;
+      gCurrentMode =
+          new FgcMode(socd::SOCD_NEUTRAL, gInputState, gCurrentBackend);
+    }
+  } else if (gInputState.mod_y && !gInputState.mod_x && gInputState.start) {
+    if (gInputState.l) {
+      delete gCurrentMode;
+      gCurrentMode = new DefaultKeyboardMode(socd::SOCD_2IP, gInputState);
+    }
+  }
+}
 
 void setup() {
   pinMode(pinout::L, INPUT_PULLUP);
@@ -63,31 +80,37 @@ void setup() {
   pinMode(pinout::CUP, INPUT_PULLUP);
   pinMode(pinout::LIGHTSHIELD, INPUT_PULLUP);
   pinMode(pinout::MIDSHIELD, INPUT_PULLUP);
-  pinMode(pinout::SWITCH, OUTPUT);
 
-  // Hold Mod X on plugin for Brook board mode.
-  if ((digitalRead(pinout::MODX) == LOW) && (digitalRead(pinout::A) == LOW))
-    digitalWrite(pinout::SWITCH, HIGH);
-  else
-    digitalWrite(pinout::SWITCH, LOW);
+  // Read inputs into gInputState initially to make backend selection logic in
+  // initialise() a bit cleaner.
+  readInputs();
 
-  /* Choose communication backend. Default to DInput mode. Hold C-Down on plugin
-     for GameCube mode. */
-  if (digitalRead(pinout::CDOWN) == LOW) {
-    gCurrentBackend = new GamecubeBackend(125);
-  } else {
-    gCurrentBackend = new DInputBackend();
-    // Input viewer only used when connected to PC i.e. when using DInput mode.
-    Serial.begin(115200, SERIAL_8N1);
-  }
-
-  /* Always start in Melee mode. Must set mode only after initialising the
-     backend. */
-  gCurrentMode =
-      new Melee20Button(socd::SOCD_2IP_NO_REAC, gInputState, gCurrentBackend);
+  // Setup specific to each type of DIY.
+  initialise();
 }
 
 void loop() {
+  readInputs();
+
+  /* Mode selection */
+  selectInputMode();
+
+  gCurrentMode->UpdateOutputs();
+
+  // Only run input viewer on every 3 updates, to prevent lag.
+  if (Serial.availableForWrite() > 32) {
+    if (gReportClock == 0) {
+      writeSerialReport();
+      gReportClock++;
+    } else if (gReportClock == 3) {
+      gReportClock = 0;
+    } else {
+      gReportClock++;
+    }
+  }
+}
+
+void readInputs() {
   gInputState.l = (digitalRead(pinout::L) == LOW);
   gInputState.left = (digitalRead(pinout::LEFT) == LOW);
   gInputState.down = (digitalRead(pinout::DOWN) == LOW);
@@ -110,46 +133,6 @@ void loop() {
   gInputState.c_right = (digitalRead(pinout::CRIGHT) == LOW);
   gInputState.c_left = (digitalRead(pinout::CLEFT) == LOW);
   gInputState.c_up = (digitalRead(pinout::CUP) == LOW);
-
-  /* Mode selection */
-  if (gInputState.mod_x && !gInputState.mod_y && gInputState.start) {
-    if (gInputState.l) {
-      delete gCurrentMode;
-      gCurrentMode = new Melee20Button(socd::SOCD_2IP_NO_REAC, gInputState,
-                                       gCurrentBackend);
-    } else if (gInputState.down) {
-      delete gCurrentMode;
-      gCurrentMode =
-          new FgcMode(socd::SOCD_NEUTRAL, gInputState, gCurrentBackend);
-    } else if (gInputState.left) {
-      delete gCurrentMode;
-      gCurrentMode =
-          new DarkSouls(socd::SOCD_2IP, gInputState, gCurrentBackend);
-    } else if (gInputState.right) {
-      delete gCurrentMode;
-      gCurrentMode =
-          new RocketLeague(socd::SOCD_2IP, gInputState, gCurrentBackend);
-    }
-  } else if (gInputState.mod_y && !gInputState.mod_x && gInputState.start) {
-    if (gInputState.l) {
-      delete gCurrentMode;
-      gCurrentMode = new ToughLoveArena(socd::SOCD_2IP, gInputState);
-    }
-  }
-
-  gCurrentMode->UpdateOutputs();
-
-  // Only run input viewer on every 3 updates, to prevent lag.
-  if (Serial.availableForWrite() > 32) {
-    if (gReportClock == 0) {
-      writeSerialReport();
-      gReportClock++;
-    } else if (gReportClock == 3) {
-      gReportClock = 0;
-    } else {
-      gReportClock++;
-    }
-  }
 }
 
 /**
