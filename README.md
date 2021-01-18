@@ -48,13 +48,13 @@ Features include:
 ### Requirements
 
 - Arduino IDE
-- [Latest HayB0XX release](https://github.com/JonnyHaystack/HayB0XX/releases)
+- Ideally a decent editor like VSCode if you're going to be changing any code
 
 ### Installation
 
-Grab the latest release from above, or clone the repository with
-`git clone --recursive` if you have git installed (which makes it easier for you
-to pull updates).
+Grab the [latest HayB0XX release](https://github.com/JonnyHaystack/HayB0XX/releases),
+or clone the repository with `git clone --recursive` if you have git installed
+(which makes it easier for you to pull updates).
 
 Currently as a workaround to get the ArduinoSTL to compile, it is necessary to
 do the following before you can flash the code:
