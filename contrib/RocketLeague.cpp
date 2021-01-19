@@ -12,12 +12,11 @@ RocketLeague::RocketLeague(socd::SocdType socdType,
                            state::InputState &rInputState,
                            CommunicationBackend *communicationBackend)
     : ControllerMode(socdType, rInputState, communicationBackend) {
-  mSocdPairs = {
-      socd::SocdPair{&rInputState.left, &rInputState.right},
-      socd::SocdPair{&rInputState.down, &rInputState.mod_x},
-      socd::SocdPair{&rInputState.c_left, &rInputState.c_right},
-      socd::SocdPair{&rInputState.c_down, &rInputState.c_up},
-  };
+  mSocdPairs.push_back(socd::SocdPair{&rInputState.left, &rInputState.right});
+  mSocdPairs.push_back(socd::SocdPair{&rInputState.down, &rInputState.mod_x});
+  mSocdPairs.push_back(
+      socd::SocdPair{&rInputState.c_left, &rInputState.c_right});
+  mSocdPairs.push_back(socd::SocdPair{&rInputState.c_down, &rInputState.c_up});
 }
 
 void RocketLeague::HandleSocd() {

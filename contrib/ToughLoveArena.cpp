@@ -4,9 +4,7 @@
 ToughLoveArena::ToughLoveArena(socd::SocdType socdType,
                                state::InputState &rInputState)
     : KeyboardMode(socdType, rInputState) {
-  mSocdPairs = {
-      socd::SocdPair{&rInputState.left, &rInputState.right},
-  };
+  mSocdPairs.push_back(socd::SocdPair{&rInputState.left, &rInputState.right});
 }
 
 void ToughLoveArena::SendKeys() {
