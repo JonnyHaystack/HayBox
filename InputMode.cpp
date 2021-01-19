@@ -9,21 +9,20 @@ InputMode::InputMode(socd::SocdType socdType, state::InputState &rInputState)
 void InputMode::HandleSocd() {
   // Initialize SOCD states if they aren't initialized.
   if (mSocdStates.size() != mSocdPairs.size()) {
-    mSocdStates.resize(mSocdPairs.size());
     for (int i = 0; i < mSocdPairs.size(); i++) {
-      mSocdStates[i] = {
+      mSocdStates.push_back({
           .was_low = false,
           .was_high = false,
           .lock_low = false,
           .lock_high = false,
-      };
+      });
     }
   }
 
   // Handle SOCD resolution for each SOCD button pair.
   for (int i = 0; i < mSocdPairs.size(); i++) {
-    socd::SocdPair pair = mSocdPairs.at(i);
-    socd::SocdState socd_state = mSocdStates.at(i);
+    socd::SocdPair pair = mSocdPairs[i];
+    socd::SocdState socd_state = mSocdStates[i];
     switch (mSocdType) {
     case socd::SOCD_NEUTRAL:
       socd::fNeutral(*pair.button_low, *pair.button_high);

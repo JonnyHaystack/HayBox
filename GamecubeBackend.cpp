@@ -1,6 +1,6 @@
-#include "GamecubeBackend.h"
+#include "src/Nintendo/src/Nintendo.h"
 
-#include <Nintendo.h>
+#include "GamecubeBackend.h"
 
 GamecubeBackend::GamecubeBackend(int pollingRate, int gccDataPin)
     : CommunicationBackend() {

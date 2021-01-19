@@ -56,11 +56,6 @@ Grab the [latest HayB0XX release](https://github.com/JonnyHaystack/HayB0XX/relea
 or clone the repository with `git clone --recursive` if you have git installed
 (which makes it easier for you to pull updates).
 
-Currently as a workaround to get the ArduinoSTL to compile, it is necessary to
-do the following before you can flash the code:
-
-In the Arduino IDE click Tools > Board > Board Manager > Arduino AVR Boards > Select Version and pick 1.8.2
-
 After that:
 1. Open the HayB0XX.ino sketch in the Arduino IDE
 2. Change the `#include "setup_xxx.h"` line at the top to use the
@@ -228,12 +223,10 @@ can configure pairs of opposing directions to apply SOCD handling to.
 
 For example, in `Melee20Button.cpp`:
 ```
-mSocdPairs = {
-    socd::SocdPair{&rInputState.left, &rInputState.right},
-    socd::SocdPair{&rInputState.down, &rInputState.up},
-    socd::SocdPair{&rInputState.c_left, &rInputState.c_right},
-    socd::SocdPair{&rInputState.c_down, &rInputState.c_up},
-};
+mSocdPairs.push_back(socd::SocdPair{&rInputState.left, &rInputState.right});
+mSocdPairs.push_back(socd::SocdPair{&rInputState.down, &rInputState.up});
+mSocdPairs.push_back(socd::SocdPair{&rInputState.c_left, &rInputState.c_right});
+mSocdPairs.push_back(socd::SocdPair{&rInputState.c_down, &rInputState.c_up});
 ```
 
 This sets up left/right, down/up, C-Left/C-Right, and C-Down/C-Up as pairs of
@@ -270,7 +263,7 @@ see the [tags on this repository](https://github.com/JonnyHaystack/HayB0XX/tags)
 
 ## Built With
 
-* [ArduinoSTL](https://github.com/mike-matera/ArduinoSTL) - Used to access C++ standard library features
+* [Arduino_Vector](https://github.com/zacsketches/Arduino_Vector) - Vector library used for SOCD pairs and state
 * [Arduino Joystick Library](https://github.com/MHeironimus/ArduinoJoystickLibrary) - Used for the DInput communication backend
 * [Arduino Nintendo Library](https://github.com/NicoHood/Nintendo) - Used for the GameCube console communication backend
 * [Keyboard Library for Arduino](https://github.com/arduino-libraries/Keyboard) - Used for keyboard input modes
@@ -286,7 +279,7 @@ See also the list of [contributors](https://github.com/JonnyHaystack/HayB0XX/con
 
 * The B0XX team, for designing and creating an incredible controller
 * [@Crane1195](https://github.com/Crane1195) - for his DIYB0XX and GCCPCB projects, and for hours of answering my constant questions
-* [@mike-matera](https://github.com/mike-matera) - for the ArduinoSTL library
+* [@zacsketches](https://github.com/zacsketches) - for the Arduino_Vector library
 * [@MHeironimus](https://github.com/MHeironimus) - for the Arduino Joystick library
 * [@NicoHood](https://github.com/NicoHood) - for the Nintendo library
 * The Arduino project - for all their open-source hardware and software

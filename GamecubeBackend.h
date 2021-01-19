@@ -1,9 +1,9 @@
 #ifndef GAMECUBEBACKEND_H_CVIKTWRY
 #define GAMECUBEBACKEND_H_CVIKTWRY
 
-#include "CommunicationBackend.h"
+#include "src/Nintendo/src/GamecubeAPI.hpp"
 
-#include <Nintendo.h>
+#include "CommunicationBackend.h"
 
 class GamecubeBackend : public CommunicationBackend {
 public:

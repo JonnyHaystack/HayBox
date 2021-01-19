@@ -1,7 +1,7 @@
 #ifndef DINPUTBACKEND_H_QR073UNQ
 #define DINPUTBACKEND_H_QR073UNQ
 
-#include <Joystick.h>
+#include "src/ArduinoJoystickLibrary/src/Joystick.h"
 
 #include "CommunicationBackend.h"
 

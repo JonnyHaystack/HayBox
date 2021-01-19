@@ -1,9 +1,9 @@
-[submodule "libraries/ArduinoSTL"]
-	path = libraries/ArduinoSTL
-	url = https://github.com/mike-matera/ArduinoSTL
-[submodule "libraries/Nintendo"]
-	path = libraries/Nintendo
-	url = https://github.com/NicoHood/Nintendo
-[submodule "libraries/ArduinoJoystickLibrary"]
-	path = libraries/ArduinoJoystickLibrary
+[submodule "src/Nintendo"]
+	path = src/Nintendo
+	url = https://github.com/JonnyHaystack/Nintendo
+[submodule "src/Arduino_Vector"]
+	path = src/Arduino_Vector
+	url = https://github.com/JonnyHaystack/Arduino_Vector
+[submodule "src/ArduinoJoystickLibrary"]
+	path = src/ArduinoJoystickLibrary
 	url = https://github.com/MHeironimus/ArduinoJoystickLibrary

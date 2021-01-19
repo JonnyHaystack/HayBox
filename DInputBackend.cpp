@@ -1,5 +1,4 @@
-#include <Joystick.h>
-#include <algorithm>
+#include "src/ArduinoJoystickLibrary/src/Joystick.h"
 
 #include "CommunicationBackend.h"
 #include "DInputBackend.h"
@@ -49,7 +48,7 @@ void DInputBackend::SendOutputs(state::OutputState outputState) {
   mpJoystick->setRxAxis(outputState.rightStickX);
   mpJoystick->setRyAxis(256 - outputState.rightStickY);
   mpJoystick->setThrottle(
-      std::max(outputState.triggerLAnalog, outputState.triggerRAnalog) + 1);
+      max(outputState.triggerLAnalog, outputState.triggerRAnalog) + 1);
 
   // D-pad Hat Switch
   mpJoystick->setHatSwitch(

@@ -1,7 +1,7 @@
 #ifndef INPUTMODE_H_ISO9UTAB
 #define INPUTMODE_H_ISO9UTAB
 
-#include <vector>
+#include "src/Arduino_Vector/Vector.h"
 
 #include "socd.h"
 #include "state.h"
@@ -14,12 +14,12 @@ public:
 
 protected:
   state::InputState &mrInputState;
-  std::vector<socd::SocdPair> mSocdPairs;
+  Vector<socd::SocdPair> mSocdPairs;
   virtual void HandleSocd();
 
 private:
   socd::SocdType mSocdType;
-  std::vector<socd::SocdState> mSocdStates;
+  Vector<socd::SocdState> mSocdStates;
 };
 
 #endif /* end of include guard: INPUTMODE_H_ISO9UTAB */

@@ -7,10 +7,8 @@
     Nicohood's Nintendo library
     MHeironimus' Arduino Joystick Library
     Arduino Keyboard Library
-    Mike Matera's ArduinoSTL library
+    Zac Staples' Arduino_Vector library
 */
-#include <ArduinoSTL.h>
-#include <type_traits>
 
 #include "setup_gccpcb2.h"
 
