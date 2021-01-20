@@ -10,6 +10,7 @@ Features include:
 - Supports all the usual DIY types with just one code release, only requiring a
   one line change
 - Up to date with B0XX V3 specifications
+- Supports DInput, GameCube, and Nintendo 64
 - Easy to create new controller modes (or keyboard modes) for different games
 - Fully customisable SOCD, allowing you to configure SOCD button pairs (e.g.
   left/right, up/down) for each controller/keyboard mode, and also easily change
@@ -18,9 +19,8 @@ Features include:
 - Controller modes and communication backends (e.g. DInput, GameCube, N64) are
   separate, independent entities, meaning you can use all of your controller
   modes with all supported consoles without any extra work
-- Very easily switch between different GameCube polling rates in order to have
-  optimal latency on console, overclocked adapter, or anything else
-- Nintendo 64 support upcoming
+- Very easily switch between different GameCube/N64 polling rates in order to
+  have optimal latency on console, overclocked adapter, or anything else
 - Nunchuk support upcoming
 
 [![GitHub issues](https://img.shields.io/github/issues/JonnyHaystack/HayB0XX)](https://github.com/JonnyHaystack/HayB0XX/issues)
@@ -84,7 +84,10 @@ To switch to Brook board mode on GCCPCB2 or GCCMX, hold Mod X + A on plugin.
 #### Communication backends (console selection)
 
 For all DIYs that support native USB it is configured to use the DInput backend
-as the default, and you can hold C-Down on plugin to use the GameCube backend.
+as the default. To select another backend on plugin, the following button holds
+are available:
+- C-Down - GameCube backend
+- C-Left - Nintendo 64 backend
 
 #### Game mode selection
 
@@ -115,7 +118,7 @@ the Dolphin controller config.
 
 #### Communication backends (console selection)
 
-The communication backend (e.g. DInput, GameCube) is selected based on the
+The communication backend (DInput, GameCube, or N64) is selected based on the
 buttons held on plugin. This is handled in your `setup_xxx.h` file, in the
 `initialise()` function. The logic here is very simple, and even if you have no
 programming experience you should be able to see what's going on and change
@@ -135,6 +138,9 @@ that while this works, it will result in more input lag. The point of setting
 the polling rate here is so that the GameCube backend can delay until right
 before the next poll before reading the inputs, so that the inputs are fresh and
 not outdated.
+
+Also note: Polling rate can be passed into the N64Backend constructor in the
+same way as this
 
 #### Input modes
 
@@ -265,7 +271,7 @@ see the [tags on this repository](https://github.com/JonnyHaystack/HayB0XX/tags)
 
 * [Arduino_Vector](https://github.com/zacsketches/Arduino_Vector) - Vector library used for SOCD pairs and state
 * [Arduino Joystick Library](https://github.com/MHeironimus/ArduinoJoystickLibrary) - Used for the DInput communication backend
-* [Arduino Nintendo Library](https://github.com/NicoHood/Nintendo) - Used for the GameCube console communication backend
+* [Arduino Nintendo Library](https://github.com/NicoHood/Nintendo) - Used for the GameCube and Nintendo 64 communication backends
 * [Keyboard Library for Arduino](https://github.com/arduino-libraries/Keyboard) - Used for keyboard input modes
 
 ## Contributors

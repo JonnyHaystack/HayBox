@@ -7,6 +7,7 @@
 #include "GamecubeBackend.h"
 #include "InputMode.h"
 #include "Melee20Button.h"
+#include "N64Backend.h"
 #include "socd.h"
 #include "state.h"
 
@@ -15,9 +16,14 @@ InputMode *gCurrentMode;
 state::InputState gInputState;
 
 void initialise() {
-  /* Only GameCube backend is available for Arduinos without native USB support.
-     However, you can still use keyboard modes. */
-  gCurrentBackend = new GamecubeBackend(125, pinout::GCC_DATA);
+  /* Choose communication backend. */
+  if (gInputState.c_left) {
+    // Hold C-Left on plugin for N64 mode.
+    gCurrentBackend = new N64Backend(60, pinout::GCC_DATA);
+  } else {
+    // Default to GameCube mode.
+    gCurrentBackend = new GamecubeBackend(125, pinout::GCC_DATA);
+  }
 
   /* Always start in Melee mode. Must set mode only after initialising the
      backend. */

@@ -8,6 +8,7 @@
 #include "GamecubeBackend.h"
 #include "InputMode.h"
 #include "Melee20Button.h"
+#include "N64Backend.h"
 #include "socd.h"
 #include "state.h"
 
@@ -20,6 +21,9 @@ void initialise() {
      for GameCube mode. */
   if (gInputState.c_down) {
     gCurrentBackend = new GamecubeBackend(125, pinout::GCC_DATA);
+  } else if (gInputState.c_left) {
+    // Hold C-Left on plugin for N64 mode.
+    gCurrentBackend = new N64Backend(60, pinout::GCC_DATA);
   } else {
     gCurrentBackend = new DInputBackend();
     // Input viewer only used when connected to PC i.e. when using DInput mode.

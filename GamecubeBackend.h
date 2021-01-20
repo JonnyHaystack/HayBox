@@ -1,7 +1,7 @@
 #ifndef GAMECUBEBACKEND_H_CVIKTWRY
 #define GAMECUBEBACKEND_H_CVIKTWRY
 
-#include "src/Nintendo/src/GamecubeAPI.hpp"
+#include "src/Nintendo/src/Nintendo.h"
 
 #include "CommunicationBackend.h"
 
