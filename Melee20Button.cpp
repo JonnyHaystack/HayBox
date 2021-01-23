@@ -6,9 +6,9 @@
 
 #include <Arduino.h>
 
-#define ANALOG_STICK_MIN 28
+#define ANALOG_STICK_MIN 48
 #define ANALOG_STICK_NEUTRAL 128
-#define ANALOG_STICK_MAX 228
+#define ANALOG_STICK_MAX 208
 
 Melee20Button::Melee20Button(socd::SocdType socdType,
                              state::InputState &rInputState,
@@ -260,11 +260,11 @@ void Melee20Button::UpdateAnalogOutputs() {
     mOutputState.leftStickX = 128 + (mVectorState.directionX * 100);
   }
 
-  if (mrInputState.lightshield || mrInputState.midshield) {
-    if (mrInputState.lightshield)
-      mOutputState.triggerRAnalog = 49;
-    if (mrInputState.midshield)
-      mOutputState.triggerRAnalog = 94;
+  if (mrInputState.lightshield) {
+    mOutputState.triggerRAnalog = 49;
+  }
+  if (mrInputState.midshield) {
+    mOutputState.triggerRAnalog = 94;
   }
 
   if (mrInputState.l) {

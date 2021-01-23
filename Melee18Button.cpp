@@ -4,9 +4,9 @@
 #include "socd.h"
 #include "state.h"
 
-#define ANALOG_STICK_MIN 28
+#define ANALOG_STICK_MIN 48
 #define ANALOG_STICK_NEUTRAL 128
-#define ANALOG_STICK_MAX 228
+#define ANALOG_STICK_MAX 208
 
 Melee18Button::Melee18Button(socd::SocdType socdType,
                              state::InputState &rInputState,
