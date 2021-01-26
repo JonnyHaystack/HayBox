@@ -10,13 +10,13 @@
     Zac Staples' Arduino_Vector library
 */
 
-#include "setup_gccpcb2.h"
+#include "src/setup_gccpcb2.h"
 
-#include "DefaultKeyboardMode.h"
-#include "FgcMode.h"
-#include "InputMode.h"
-#include "Melee18Button.h"
-#include "Melee20Button.h"
+#include "src/DefaultKeyboardMode.h"
+#include "src/FgcMode.h"
+#include "src/InputMode.h"
+#include "src/Melee18Button.h"
+#include "src/Melee20Button.h"
 
 enum reportState : byte {
   ReportOff = 0x30,
