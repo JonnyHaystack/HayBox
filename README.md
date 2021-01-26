@@ -64,14 +64,19 @@ After that:
   - `setup_gccpcb2.h` for GCCPCB2
   - `setup_gccmx.h` for GCCMX
   - `setup_arduino_nativeusb.h` for Arduino with native USB support (Leonardo/Micro)
-    - Edit `pinout_arduino.h` to match your wiring and the buttons that you have
+    - Using your preferred text editor, edit `pinout_arduino.h` in the `src`
+      directory to match your wiring and the buttons that you have
   - `setup_arduino.h` for Arduino without native USB support (e.g. Nano or other)
-    - Edit `pinout_arduino.h` to match your wiring and the buttons that you have
+    - Using your preferred text editor, edit `pinout_arduino.h` in the `src`
+      directory to match your wiring and the buttons that you have
     - You will also have to delete the files `DInputBackend.h` and
       `DInputBackend.cpp` otherwise the Arduino IDE will complain at you
-3. Click Tools > Board and select your board type. For GCCPCB/GCCMX it should be
+3. For any buttons that your controller doesn't have (e.g. Select and Home),
+   remove those lines from the pinout file and remove any references to them
+   from `readInputs()` and `setup()` in `HayB0XX.ino`
+4. Click Tools > Board and select your board type. For GCCPCB/GCCMX it should be
    Arduino Leonardo.
-4. Click Upload
+5. Click Upload
 
 ## Usage
 
