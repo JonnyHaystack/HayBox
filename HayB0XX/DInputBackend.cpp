@@ -1,4 +1,4 @@
-#include "ArduinoJoystickLibrary/src/Joystick.h"
+#include "src/ArduinoJoystickLibrary/src/Joystick.h"
 
 #include "CommunicationBackend.h"
 #include "DInputBackend.h"

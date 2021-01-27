@@ -1,7 +1,7 @@
 #ifndef INPUTMODE_H_ISO9UTAB
 #define INPUTMODE_H_ISO9UTAB
 
-#include "Arduino_Vector/Vector.h"
+#include "src/Arduino_Vector/Vector.h"
 
 #include "socd.h"
 #include "state.h"

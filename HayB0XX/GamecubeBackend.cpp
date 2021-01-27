@@ -1,4 +1,4 @@
-#include "Nintendo/src/Nintendo.h"
+#include "src/Nintendo/src/Nintendo.h"
 
 #include "GamecubeBackend.h"
 

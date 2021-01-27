@@ -1,7 +1,7 @@
 #ifndef N64BACKEND_H_HKGOPEJN
 #define N64BACKEND_H_HKGOPEJN
 
-#include "Nintendo/src/Nintendo.h"
+#include "src/Nintendo/src/Nintendo.h"
 
 #include "CommunicationBackend.h"
 
