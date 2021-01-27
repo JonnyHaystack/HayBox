@@ -1,9 +1,9 @@
-[submodule "src/Nintendo"]
-	path = src/Nintendo
-	url = https://github.com/JonnyHaystack/Nintendo
-[submodule "src/Arduino_Vector"]
-	path = src/Arduino_Vector
+[submodule "HayB0XX/src/Nintendo"]
+	path = HayB0XX/src/Nintendo
+	url = https://github.com/NicoHood/Nintendo
+[submodule "HayB0XX/src/Arduino_Vector"]
+	path = HayB0XX/src/Arduino_Vector
 	url = https://github.com/JonnyHaystack/Arduino_Vector
-[submodule "src/ArduinoJoystickLibrary"]
-	path = src/ArduinoJoystickLibrary
+[submodule "HayB0XX/src/ArduinoJoystickLibrary"]
+	path = HayB0XX/src/ArduinoJoystickLibrary
 	url = https://github.com/MHeironimus/ArduinoJoystickLibrary

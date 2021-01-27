@@ -58,18 +58,16 @@ or clone the repository with `git clone --recursive` if you have git installed
 
 After that:
 1. Open the HayB0XX.ino sketch in the Arduino IDE
-2. Change the `#include "src/setup_xxx.h"` line at the top to use the
-   appropriate pinout/setup file for the type of DIY that you are using:
+2. Change the `#include "setup_xxx.h"` line at the top to use the appropriate
+   pinout/setup file for the type of DIY that you are using:
   - `setup_gccpcb1.h` for GCCPCB1
   - `setup_gccpcb2.h` for GCCPCB2
   - `setup_gccmx.h` for GCCMX
   - `setup_smashbox.h` for Smash Box
   - `setup_arduino_nativeusb.h` for Arduino with native USB support (Leonardo/Micro)
-    - Using your preferred text editor, edit `pinout_arduino.h` in the `src`
-      directory to match your wiring and the buttons that you have
+    - Edit `pinout_arduino.h` to match your wiring and the buttons that you have
   - `setup_arduino.h` for Arduino without native USB support (e.g. Nano or other)
-    - Using your preferred text editor, edit `pinout_arduino.h` in the `src`
-      directory to match your wiring and the buttons that you have
+    - Edit `pinout_arduino.h` to match your wiring and the buttons that you have
     - You will also have to delete the files `DInputBackend.h`,
       `DInputBackend.cpp`, `KeyboardMode.h`, `KeyboardMode.cpp`,
       `DefaultKeyboardMode.h`, and `DefaultKeyboardMode.cpp` otherwise the
