@@ -29,7 +29,6 @@ enum reportState : byte {
 // updates.
 int gReportClock = 0;
 
-void readInputs();
 void writeSerialReport();
 
 extern CommunicationBackend *gCurrentBackend;
@@ -53,6 +52,31 @@ void selectInputMode() {
       gCurrentMode = new DefaultKeyboardMode(socd::SOCD_2IP, gInputState);
     }
   }
+}
+
+void readInputs() {
+  gInputState.l = (digitalRead(pinout::L) == LOW);
+  gInputState.left = (digitalRead(pinout::LEFT) == LOW);
+  gInputState.down = (digitalRead(pinout::DOWN) == LOW);
+  gInputState.right = (digitalRead(pinout::RIGHT) == LOW);
+  gInputState.mod_x = (digitalRead(pinout::MODX) == LOW);
+  gInputState.mod_y = (digitalRead(pinout::MODY) == LOW);
+  gInputState.start = (digitalRead(pinout::START) == LOW);
+  gInputState.select = (digitalRead(pinout::SELECT) == LOW);
+  gInputState.home = (digitalRead(pinout::HOME) == LOW);
+  gInputState.b = (digitalRead(pinout::B) == LOW);
+  gInputState.x = (digitalRead(pinout::X) == LOW);
+  gInputState.z = (digitalRead(pinout::Z) == LOW);
+  gInputState.up = (digitalRead(pinout::UP) == LOW);
+  gInputState.r = (digitalRead(pinout::R) == LOW);
+  gInputState.y = (digitalRead(pinout::Y) == LOW);
+  gInputState.lightshield = (digitalRead(pinout::LIGHTSHIELD) == LOW);
+  gInputState.midshield = (digitalRead(pinout::MIDSHIELD) == LOW);
+  gInputState.c_down = (digitalRead(pinout::CDOWN) == LOW);
+  gInputState.a = (digitalRead(pinout::A) == LOW);
+  gInputState.c_right = (digitalRead(pinout::CRIGHT) == LOW);
+  gInputState.c_left = (digitalRead(pinout::CLEFT) == LOW);
+  gInputState.c_up = (digitalRead(pinout::CUP) == LOW);
 }
 
 void setup() {
@@ -106,31 +130,6 @@ void loop() {
       gReportClock++;
     }
   }
-}
-
-void readInputs() {
-  gInputState.l = (digitalRead(pinout::L) == LOW);
-  gInputState.left = (digitalRead(pinout::LEFT) == LOW);
-  gInputState.down = (digitalRead(pinout::DOWN) == LOW);
-  gInputState.right = (digitalRead(pinout::RIGHT) == LOW);
-  gInputState.mod_x = (digitalRead(pinout::MODX) == LOW);
-  gInputState.mod_y = (digitalRead(pinout::MODY) == LOW);
-  gInputState.start = (digitalRead(pinout::START) == LOW);
-  gInputState.select = (digitalRead(pinout::SELECT) == LOW);
-  gInputState.home = (digitalRead(pinout::HOME) == LOW);
-  gInputState.b = (digitalRead(pinout::B) == LOW);
-  gInputState.x = (digitalRead(pinout::X) == LOW);
-  gInputState.z = (digitalRead(pinout::Z) == LOW);
-  gInputState.up = (digitalRead(pinout::UP) == LOW);
-  gInputState.r = (digitalRead(pinout::R) == LOW);
-  gInputState.y = (digitalRead(pinout::Y) == LOW);
-  gInputState.lightshield = (digitalRead(pinout::LIGHTSHIELD) == LOW);
-  gInputState.midshield = (digitalRead(pinout::MIDSHIELD) == LOW);
-  gInputState.c_down = (digitalRead(pinout::CDOWN) == LOW);
-  gInputState.a = (digitalRead(pinout::A) == LOW);
-  gInputState.c_right = (digitalRead(pinout::CRIGHT) == LOW);
-  gInputState.c_left = (digitalRead(pinout::CLEFT) == LOW);
-  gInputState.c_up = (digitalRead(pinout::CUP) == LOW);
 }
 
 /**
