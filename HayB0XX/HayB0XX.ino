@@ -10,7 +10,7 @@
     Zac Staples' Arduino_Vector library
 */
 
-#include "setup_r2b0xx.h"
+#include "setup_gccpcb2.h"
 
 #include "DefaultKeyboardMode.h"
 #include "FgcMode.h"
