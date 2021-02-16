@@ -17,6 +17,7 @@
 #include "InputMode.h"
 #include "Melee18Button.h"
 #include "Melee20Button.h"
+#include "ProjectM.h"
 
 enum reportState : byte {
   ReportOff = 0x30,
@@ -41,6 +42,9 @@ void selectInputMode() {
       delete gCurrentMode;
       gCurrentMode = new Melee20Button(socd::SOCD_2IP_NO_REAC, gInputState,
                                        gCurrentBackend);
+    } else if (gInputState.left) {
+      delete gCurrentMode;
+      gCurrentMode = new ProjectM(socd::SOCD_2IP, gInputState, gCurrentBackend);
     } else if (gInputState.down) {
       delete gCurrentMode;
       gCurrentMode =
