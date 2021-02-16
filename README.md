@@ -104,8 +104,9 @@ switch game anyway. It also serves the purpose of reducing the number of buttons
 you have to hold with one hand while plugging in.
 
 The default controller mode button combinations are:
-- Mod X + Start + Down - FGC mode (Hitbox style fighting game layout)
 - Mod X + Start + L - Melee mode (default)
+- Mod X + Start + Left - Project M/Project+ mode
+- Mod X + Start + Down - FGC mode (Hitbox style fighting game layout)
 
 Default keyboard mode button combinations:
 - Mod Y + Start + L - Default keyboard mode
