@@ -9,13 +9,24 @@
 #define ANALOG_STICK_MAX 228
 
 ProjectM::ProjectM(socd::SocdType socdType, state::InputState &rInputState,
-                   CommunicationBackend *communicationBackend)
+                   CommunicationBackend *communicationBackend,
+                   bool ledgedashMaxJumpTraj, bool trueZPress)
     : ControllerMode(socdType, rInputState, communicationBackend) {
+  mLedgedashMaxJumpTraj = ledgedashMaxJumpTraj;
+  mTrueZPress = trueZPress;
+
   mSocdPairs.push_back(socd::SocdPair{&rInputState.left, &rInputState.right});
   mSocdPairs.push_back(socd::SocdPair{&rInputState.down, &rInputState.up});
   mSocdPairs.push_back(
       socd::SocdPair{&rInputState.c_left, &rInputState.c_right});
   mSocdPairs.push_back(socd::SocdPair{&rInputState.c_down, &rInputState.c_up});
+
+  mHorizontalSocd = false;
+}
+
+void ProjectM::HandleSocd() {
+  mHorizontalSocd = mrInputState.left && mrInputState.right;
+  InputMode::HandleSocd();
 }
 
 void ProjectM::UpdateDigitalOutputs() {
@@ -23,7 +34,12 @@ void ProjectM::UpdateDigitalOutputs() {
   mOutputState.b = mrInputState.b;
   mOutputState.x = mrInputState.x;
   mOutputState.y = mrInputState.y;
-  mOutputState.buttonR = mrInputState.z;
+  // True Z press vs macro lightshield + A.
+  if (mTrueZPress || mrInputState.mod_x) {
+    mOutputState.buttonR = mrInputState.z;
+  } else {
+    mOutputState.a = mrInputState.z;
+  }
   mOutputState.triggerLDigital = mrInputState.l;
   mOutputState.triggerRDigital = mrInputState.r;
   mOutputState.start = mrInputState.start;
@@ -50,6 +66,16 @@ void ProjectM::UpdateAnalogOutputs() {
                 mrInputState.c_down, mrInputState.c_up, ANALOG_STICK_MIN,
                 ANALOG_STICK_NEUTRAL, ANALOG_STICK_MAX);
 
+  bool shield_button_pressed =
+      mrInputState.l || mrInputState.lightshield || mrInputState.midshield;
+
+  if (mVectorState.diagonal) {
+    if (mVectorState.directionY == 1) {
+      mOutputState.leftStickX = 128 + (mVectorState.directionX * 83);
+      mOutputState.leftStickY = 128 + (mVectorState.directionY * 93);
+    }
+  }
+
   if (mrInputState.mod_x) {
     if (mVectorState.horizontal) {
       mOutputState.leftStickX = 128 + (mVectorState.directionX * 70);
@@ -67,6 +93,16 @@ void ProjectM::UpdateAnalogOutputs() {
       mOutputState.leftStickX = 128 + (mVectorState.directionX * 70);
       mOutputState.leftStickY = 128 + (mVectorState.directionY * 34);
 
+      if (mrInputState.b) {
+        mOutputState.leftStickX = 128 + (mVectorState.directionX * 85);
+        mOutputState.leftStickY = 128 + (mVectorState.directionY * 31);
+      }
+
+      if (mrInputState.r) {
+        mOutputState.leftStickX = 128 + (mVectorState.directionX * 82);
+        mOutputState.leftStickY = 128 + (mVectorState.directionY * 35);
+      }
+
       if (mrInputState.c_up) {
         mOutputState.leftStickX = 128 + (mVectorState.directionX * 77);
         mOutputState.leftStickY = 128 + (mVectorState.directionY * 55);
@@ -74,7 +110,7 @@ void ProjectM::UpdateAnalogOutputs() {
 
       if (mrInputState.c_down) {
         mOutputState.leftStickX = 128 + (mVectorState.directionX * 82);
-        mOutputState.leftStickY = 128 + (mVectorState.directionY * 32);
+        mOutputState.leftStickY = 128 + (mVectorState.directionY * 36);
       }
 
       if (mrInputState.c_left) {
@@ -91,19 +127,25 @@ void ProjectM::UpdateAnalogOutputs() {
 
   if (mrInputState.mod_y) {
     if (mVectorState.horizontal) {
-      mOutputState.leftStickX = 128 + (mVectorState.directionX * 28);
+      mOutputState.leftStickX = 128 + (mVectorState.directionX * 35);
     }
     if (mVectorState.vertical) {
-      mOutputState.leftStickY = 128 + (mVectorState.directionY * 34);
-    }
-
-    if (mrInputState.b) {
-      mOutputState.leftStickX = 128 + (mVectorState.directionX * 59);
+      mOutputState.leftStickY = 128 + (mVectorState.directionY * 70);
     }
 
     if (mVectorState.diagonal) {
       mOutputState.leftStickX = 128 + (mVectorState.directionX * 28);
       mOutputState.leftStickY = 128 + (mVectorState.directionY * 58);
+
+      if (mrInputState.b) {
+        mOutputState.leftStickX = 128 + (mVectorState.directionX * 28);
+        mOutputState.leftStickY = 128 + (mVectorState.directionY * 85);
+      }
+
+      if (mrInputState.r) {
+        mOutputState.leftStickX = 128 + (mVectorState.directionX * 51);
+        mOutputState.leftStickY = 128 + (mVectorState.directionY * 82);
+      }
 
       if (mrInputState.c_up) {
         mOutputState.leftStickX = 128 + (mVectorState.directionX * 55);
@@ -111,12 +153,12 @@ void ProjectM::UpdateAnalogOutputs() {
       }
 
       if (mrInputState.c_down) {
-        mOutputState.leftStickX = 128 + (mVectorState.directionX * 32);
+        mOutputState.leftStickX = 128 + (mVectorState.directionX * 34);
         mOutputState.leftStickY = 128 + (mVectorState.directionY * 82);
       }
 
       if (mrInputState.c_left) {
-        mOutputState.leftStickX = 128 + (mVectorState.directionX * 50);
+        mOutputState.leftStickX = 128 + (mVectorState.directionX * 40);
         mOutputState.leftStickY = 128 + (mVectorState.directionY * 84);
       }
 
@@ -127,6 +169,21 @@ void ProjectM::UpdateAnalogOutputs() {
     }
   }
 
+  // C-stick ASDI Slideoff angle overrides any other C-stick modifiers (such as
+  // angled fsmash).
+  if (mVectorState.directionCX != 0 && mVectorState.directionCY != 0) {
+    // 3000 9875 = 30 78
+    mOutputState.rightStickX = 128 + (mVectorState.directionCX * 35);
+    mOutputState.rightStickY = 128 + (mVectorState.directionCY * 98);
+  }
+
+  // Horizontal SOCD overrides X-axis modifiers (for ledgedash maximum jump
+  // trajectory).
+  if (mLedgedashMaxJumpTraj && mHorizontalSocd && !mVectorState.vertical &&
+      !shield_button_pressed) {
+    mOutputState.leftStickX = 128 + (mVectorState.directionX * 100);
+  }
+
   if (mrInputState.lightshield) {
     mOutputState.triggerRAnalog = 49;
   }
@@ -134,20 +191,9 @@ void ProjectM::UpdateAnalogOutputs() {
     mOutputState.triggerRAnalog = 94;
   }
 
-  if (mrInputState.lightshield || mrInputState.midshield) {
-    if (mVectorState.horizontal && (mVectorState.directionY == -1)) {
-      mOutputState.leftStickX = 128 + (mVectorState.directionX * 57);
-      mOutputState.leftStickY = 128 - 55;
-    }
-
-    if (mrInputState.mod_x) {
-      if (mVectorState.horizontal) {
-        mOutputState.leftStickX = 128 + (mVectorState.directionX * 48);
-      }
-      if (mVectorState.vertical) {
-        mOutputState.leftStickY = 128 + (mVectorState.directionY * 48);
-      }
-    }
+  // Send lightshield input if we are using Z = lightshield + A macro.
+  if (mrInputState.z && !(mrInputState.mod_x || mTrueZPress)) {
+    mOutputState.triggerRAnalog = 49;
   }
 
   if (mrInputState.l) {

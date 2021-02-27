@@ -46,7 +46,8 @@ void selectInputMode() {
                                        gCurrentBackend);
     } else if (gInputState.left) {
       delete gCurrentMode;
-      gCurrentMode = new ProjectM(socd::SOCD_2IP, gInputState, gCurrentBackend);
+      gCurrentMode = new ProjectM(socd::SOCD_2IP_NO_REAC, gInputState,
+                                  gCurrentBackend, true, false);
     } else if (gInputState.down) {
       delete gCurrentMode;
       gCurrentMode =
