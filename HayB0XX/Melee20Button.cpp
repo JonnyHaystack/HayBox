@@ -179,7 +179,7 @@ void Melee20Button::UpdateAnalogOutputs() {
         mOutputState.leftStickX = 128 + (mVectorState.directionX * 38);
         mOutputState.leftStickY = 128 + (mVectorState.directionY * 70);
         // MY + L, R, LS, and MS + q3/4 = 5000 8500 = 40 68
-        if (mVectorState.directionX == -1) {
+        if (mVectorState.directionY == -1) {
           mOutputState.leftStickX = 128 + (mVectorState.directionX * 40);
           mOutputState.leftStickY = 128 + (mVectorState.directionY * 68);
         }
