@@ -38,7 +38,7 @@ void ProjectM::UpdateDigitalOutputs() {
   if (mTrueZPress || mrInputState.mod_x) {
     mOutputState.buttonR = mrInputState.z;
   } else {
-    mOutputState.a = mrInputState.z;
+    mOutputState.a = mrInputState.a || mrInputState.z;
   }
   mOutputState.triggerLDigital = mrInputState.l;
   mOutputState.triggerRDigital = mrInputState.r;
