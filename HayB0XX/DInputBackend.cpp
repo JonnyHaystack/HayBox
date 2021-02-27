@@ -9,17 +9,17 @@ DInputBackend::DInputBackend() : CommunicationBackend() {
                              17, 1, // Button Count, Hat Switch Count
                              true, true, false, // X and Y, but no Z Axis
                              true, true, false, // Rx, Ry, no Rz
-                             false, true,       // No rudder, throttle
+                             true, true,       // Rudder, throttle
                              false, false,
                              false); // No accelerator, no brake, no steering
 
   mpJoystick->begin(false);
   mpJoystick->setXAxisRange(0, 255);
   mpJoystick->setYAxisRange(0, 255);
-  mpJoystick->setZAxisRange(0, 255);
   mpJoystick->setRxAxisRange(0, 255);
   mpJoystick->setRyAxisRange(0, 255);
   mpJoystick->setThrottleRange(0, 255);
+  mpJoystick->setRudderRange(0, 255);
 }
 
 DInputBackend::~DInputBackend() {
@@ -39,16 +39,16 @@ void DInputBackend::SendOutputs(state::OutputState outputState) {
   mpJoystick->setButton(7, outputState.triggerLDigital);
   mpJoystick->setButton(8, outputState.select);
   mpJoystick->setButton(9, outputState.start);
-  mpJoystick->setButton(10, outputState.rightStickClick); // unchecked
-  mpJoystick->setButton(11, outputState.leftStickClick);  // unchecked
+  mpJoystick->setButton(10, outputState.rightStickClick);
+  mpJoystick->setButton(11, outputState.leftStickClick);
 
   // Analog outputs
   mpJoystick->setXAxis(outputState.leftStickX);
   mpJoystick->setYAxis(256 - outputState.leftStickY);
   mpJoystick->setRxAxis(outputState.rightStickX);
   mpJoystick->setRyAxis(256 - outputState.rightStickY);
-  mpJoystick->setThrottle(
-      max(outputState.triggerLAnalog, outputState.triggerRAnalog) + 1);
+  mpJoystick->setThrottle(outputState.triggerLAnalog + 1);
+  mpJoystick->setRudder(outputState.triggerRAnalog + 1);
 
   // D-pad Hat Switch
   mpJoystick->setHatSwitch(
