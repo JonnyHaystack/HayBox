@@ -38,6 +38,7 @@ Features include:
   * [Console/gamemode selection bindings](#consolegamemode-selection-bindings)
   * [Creating custom input modes](#creating-custom-input-modes)
   * [Mod X lightshield and R shield tilt](#mod-x-lightshield-and-r-shield-tilt)
+  * [Project M/Project+ mode](#project-mproject+-mode)
 * [Troubleshooting](#troubleshooting)
 * [Contributing](#contributing)
 * [Contributors](#contributors)
@@ -259,6 +260,40 @@ modifiers.
 If your DIY B0XX has no lightshield buttons, you may want to use Mod X for
 lightshield and put shield tilt on R instead. You can do this by using the
 Melee18Button mode instead of Melee20Button.
+
+### Project M/Project+ mode
+
+The ProjectM mode has some extra options to configure certain behaviours. See
+the constructor signature below for reference.
+
+```
+ProjectM(socd::SocdType socdType, state::InputState &rInputState,
+           CommunicationBackend *communicationBackend,
+           bool ledgedashMaxJumpTraj, bool trueZPress);
+```
+
+These options are configured by setting the relevant constructor parameter to
+true or false in `HayB0XX.ino`.
+
+Firstly, it allows you to enable or disable the behaviour borrowed from Melee
+mode where holding left and right (and no vertical directions) will give a 1.0 
+cardinal regardless of modifiers being held. This is controlled using the
+`ledgedashMaxJumpTraj` parameter.
+
+If you change the SOCD mode to 2IP (with reactivation), you should also change
+this option to false if you want a smooth gameplay experience.
+
+Secondly, Project M/Project+ do not handle Z presses the same way as Melee does.
+Melee interprets a Z press as lightshield + A, and thus it can be used for L
+cancelling without locking you out of techs. In PM/P+, a Z press will trigger a
+tech and thus cause unwanted tech lockouts if used to L cancel.
+By default in HayB0XX, the ProjectM mode is set to use a macro of lightshield + A
+in order to preserve expected behaviour from Melee. However, this macro does not
+enable you to use tether/grapple attacks or grab items. To workaround this, you
+can press Mod X + Z to send a true Z input.
+
+If this bothers you, and you just want to send a true Z input by default when
+pressing Z, you can set the `trueZPress` parameter to true.
 
 ## Troubleshooting
 
