@@ -171,7 +171,9 @@ void ProjectM::UpdateAnalogOutputs() {
 
   // C-stick ASDI Slideoff angle overrides any other C-stick modifiers (such as
   // angled fsmash).
-  if (mVectorState.directionCX != 0 && mVectorState.directionCY != 0) {
+  // We don't apply this for c-up + c-left/c-right in case we want to implement
+  // C-stick nair somehow.
+  if (mVectorState.directionCX != 0 && mVectorState.directionCY == -1) {
     // 3000 9875 = 30 78
     mOutputState.rightStickX = 128 + (mVectorState.directionCX * 35);
     mOutputState.rightStickY = 128 + (mVectorState.directionCY * 98);
