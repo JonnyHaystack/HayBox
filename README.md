@@ -38,7 +38,7 @@ Features include:
   * [Console/gamemode selection bindings](#consolegamemode-selection-bindings)
   * [Creating custom input modes](#creating-custom-input-modes)
   * [Mod X lightshield and R shield tilt](#mod-x-lightshield-and-r-shield-tilt)
-  * [Project M/Project+ mode](#project-mproject+-mode)
+  * [Project M/Project+ mode](#project-mproject-mode)
 * [Troubleshooting](#troubleshooting)
 * [Contributing](#contributing)
 * [Contributors](#contributors)
