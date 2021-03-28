@@ -33,6 +33,10 @@ void Melee18Button::UpdateDigitalOutputs() {
   mOutputState.y = mrInputState.y;
   mOutputState.buttonR = mrInputState.z;
   if (mrInputState.nunchuk_connected) {
+    // Lightshield with C button.
+    if (mrInputState.nunchuk_c) {
+      mOutputState.triggerLAnalog = 49;
+    }
     mOutputState.triggerLDigital = mrInputState.nunchuk_z;
   } else {
     mOutputState.triggerLDigital = mrInputState.l;
@@ -61,9 +65,7 @@ void Melee18Button::UpdateAnalogOutputs() {
                 mrInputState.c_down, mrInputState.c_up, ANALOG_STICK_MIN,
                 ANALOG_STICK_NEUTRAL, ANALOG_STICK_MAX);
 
-  bool shield_button_pressed = mrInputState.l || mrInputState.r ||
-                               mrInputState.lightshield ||
-                               mrInputState.midshield;
+  bool shield_button_pressed = mrInputState.l || mrInputState.r;
 
   if (mrInputState.mod_x) {
     if (mVectorState.horizontal) {
