@@ -21,7 +21,7 @@ Features include:
   modes with all supported consoles without any extra work
 - Very easily switch between different GameCube/N64 polling rates in order to
   have optimal latency on console, overclocked adapter, or anything else
-- Nunchuk support upcoming
+- Nunchuk support
 
 [![GitHub issues](https://img.shields.io/github/issues/JonnyHaystack/HayB0XX)](https://github.com/JonnyHaystack/HayB0XX/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/JonnyHaystack/HayB0XX)](https://github.com/JonnyHaystack/HayB0XX/pulls)
