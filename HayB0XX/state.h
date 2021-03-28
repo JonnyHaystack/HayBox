@@ -8,6 +8,7 @@ namespace state {
 
 // Button state.
 typedef struct {
+  // B0XX inputs.
   bool start;
   bool select;
   bool home;
@@ -30,12 +31,13 @@ typedef struct {
   bool c_right;
   bool c_up;
   bool c_down;
-  bool e_1;
-  bool e_2;
-  bool e_3;
-  bool e_4;
-  bool e_5;
-  bool e_6;
+
+  // Nunchuk inputs.
+  bool nunchuk_connected;
+  int8_t nunchuk_x;
+  int8_t nunchuk_y;
+  bool nunchuk_c;
+  bool nunchuk_z;
 } InputState;
 
 // State describing stick direction at the quadrant level.

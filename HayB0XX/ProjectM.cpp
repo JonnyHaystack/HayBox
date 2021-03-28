@@ -40,7 +40,11 @@ void ProjectM::UpdateDigitalOutputs() {
   } else {
     mOutputState.a = mrInputState.a || mrInputState.z;
   }
-  mOutputState.triggerLDigital = mrInputState.l;
+  if (mrInputState.nunchuk_connected) {
+    mOutputState.triggerLDigital = mrInputState.nunchuk_z;
+  } else {
+    mOutputState.triggerLDigital = mrInputState.l;
+  }
   mOutputState.triggerRDigital = mrInputState.r;
   mOutputState.start = mrInputState.start;
 
@@ -200,11 +204,11 @@ void ProjectM::UpdateAnalogOutputs() {
     mOutputState.triggerRAnalog = 49;
   }
 
-  if (mrInputState.l) {
+  if (mOutputState.triggerLDigital) {
     mOutputState.triggerLAnalog = 140;
   }
 
-  if (mrInputState.r) {
+  if (mOutputState.triggerRDigital) {
     mOutputState.triggerRAnalog = 140;
   }
 

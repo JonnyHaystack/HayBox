@@ -35,7 +35,11 @@ void Melee20Button::UpdateDigitalOutputs() {
   mOutputState.x = mrInputState.x;
   mOutputState.y = mrInputState.y;
   mOutputState.buttonR = mrInputState.z;
-  mOutputState.triggerLDigital = mrInputState.l;
+  if (mrInputState.nunchuk_connected) {
+    mOutputState.triggerLDigital = mrInputState.nunchuk_z;
+  } else {
+    mOutputState.triggerLDigital = mrInputState.l;
+  }
   mOutputState.triggerRDigital = mrInputState.r;
   mOutputState.start = mrInputState.start;
 
@@ -267,11 +271,11 @@ void Melee20Button::UpdateAnalogOutputs() {
     mOutputState.triggerRAnalog = 94;
   }
 
-  if (mrInputState.l) {
+  if (mOutputState.triggerLDigital) {
     mOutputState.triggerLAnalog = 140;
   }
 
-  if (mrInputState.r) {
+  if (mOutputState.triggerRDigital) {
     mOutputState.triggerRAnalog = 140;
   }
 

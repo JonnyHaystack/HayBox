@@ -32,7 +32,11 @@ void Melee18Button::UpdateDigitalOutputs() {
   mOutputState.x = mrInputState.x;
   mOutputState.y = mrInputState.y;
   mOutputState.buttonR = mrInputState.z;
-  mOutputState.triggerLDigital = mrInputState.l;
+  if (mrInputState.nunchuk_connected) {
+    mOutputState.triggerLDigital = mrInputState.nunchuk_z;
+  } else {
+    mOutputState.triggerLDigital = mrInputState.l;
+  }
   mOutputState.triggerRDigital = mrInputState.r;
   mOutputState.start = mrInputState.start;
 

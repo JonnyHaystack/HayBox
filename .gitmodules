@@ -7,3 +7,6 @@
 [submodule "HayB0XX/src/ArduinoJoystickLibrary"]
 	path = HayB0XX/src/ArduinoJoystickLibrary
 	url = https://github.com/MHeironimus/ArduinoJoystickLibrary
+[submodule "HayB0XX/src/NintendoExtensionCtrl"]
+	path = HayB0XX/src/NintendoExtensionCtrl
+	url = https://github.com/JonnyHaystack/NintendoExtensionCtrl.git

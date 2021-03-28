@@ -51,6 +51,10 @@ void ControllerMode::UpdateOutputs() {
   HandleSocd();
   UpdateDigitalOutputs();
   UpdateAnalogOutputs(); // Handle modifier logic.
+  if (mrInputState.nunchuk_connected) {
+    mOutputState.leftStickX = mrInputState.nunchuk_x;
+    mOutputState.leftStickY = mrInputState.nunchuk_y;
+  }
 
   // Send outputs via communication backend.
   mpCommunicationBackend->SendOutputs(mOutputState);

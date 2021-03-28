@@ -1,5 +1,5 @@
 /*
-  HayB0XX Version 0.0.6
+  HayB0XX Version 0.0.7
 
   Some parts of this code were originally based on GCCPCB2 v1.208 code by Crane.
 
@@ -18,6 +18,7 @@
 #include "Melee18Button.h"
 #include "Melee20Button.h"
 #include "ProjectM.h"
+#include "src/NintendoExtensionCtrl/src/Nunchuk.h"
 
 enum reportState : byte {
   ReportOff = 0x30,
@@ -37,6 +38,8 @@ void writeSerialReport();
 extern CommunicationBackend *gCurrentBackend;
 extern InputMode *gCurrentMode;
 extern state::InputState gInputState;
+
+Nunchuk gNunchuk;
 
 void selectInputMode() {
   if (gInputState.mod_x && !gInputState.mod_y && gInputState.start) {
@@ -62,6 +65,7 @@ void selectInputMode() {
 }
 
 void readInputs() {
+  // B0XX inputs.
   gInputState.l = (digitalRead(pinout::L) == LOW);
   gInputState.left = (digitalRead(pinout::LEFT) == LOW);
   gInputState.down = (digitalRead(pinout::DOWN) == LOW);
@@ -84,9 +88,21 @@ void readInputs() {
   gInputState.c_right = (digitalRead(pinout::CRIGHT) == LOW);
   gInputState.c_left = (digitalRead(pinout::CLEFT) == LOW);
   gInputState.c_up = (digitalRead(pinout::CUP) == LOW);
+
+  // Nunchuk inputs.
+  if (gNunchuk.update()) {
+    gInputState.nunchuk_connected = true;
+    gInputState.nunchuk_x = gNunchuk.joyX();
+    gInputState.nunchuk_y = gNunchuk.joyY();
+    gInputState.nunchuk_c = gNunchuk.buttonC();
+    gInputState.nunchuk_z = gNunchuk.buttonZ();
+  }
 }
 
 void setup() {
+  gNunchuk.begin();
+  gNunchuk.connect();
+
   pinMode(pinout::L, INPUT_PULLUP);
   pinMode(pinout::LEFT, INPUT_PULLUP);
   pinMode(pinout::DOWN, INPUT_PULLUP);
