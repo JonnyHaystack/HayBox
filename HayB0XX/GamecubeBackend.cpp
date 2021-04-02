@@ -7,9 +7,14 @@ GamecubeBackend::GamecubeBackend(int pollingRate, int gccDataPin)
   mpGamecubeConsole = new CGamecubeConsole(gccDataPin);
   mGamecubeData = defaultGamecubeData;
 
-  // Delay used between input updates to postpone them until right before the
-  // next poll, while also leaving time (850us) for processing to finish.
-  mDelay = (1000000 / pollingRate) - 850;
+  if (pollingRate > 0) {
+    // Delay used between input updates to postpone them until right before the
+    // next poll, while also leaving time (850us) for processing to finish.
+    mDelay = (1000000 / pollingRate) - 850;
+  } else {
+    // If polling rate is set to 0, disable the delay.
+    mDelay = 0;
+  }
 }
 
 GamecubeBackend::~GamecubeBackend() { delete mpGamecubeConsole; }
