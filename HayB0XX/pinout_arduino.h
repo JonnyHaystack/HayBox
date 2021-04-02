@@ -9,13 +9,13 @@ enum pinout {
   L = 15,
   LEFT = 16,
   DOWN = 14,
-  RIGHT = 3,
-  MODX = 2,
+  RIGHT = 1,
+  MODX = 12,
   MODY = 0,
 
-  SELECT = 1,
+  SELECT = 2,
   START = 4,
-  HOME = 12,
+  HOME = 3,
 
   CLEFT = 8,
   CUP = 10,
