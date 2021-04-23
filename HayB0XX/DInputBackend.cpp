@@ -41,6 +41,7 @@ void DInputBackend::SendOutputs(state::OutputState outputState) {
   mpJoystick->setButton(9, outputState.start);
   mpJoystick->setButton(10, outputState.rightStickClick);
   mpJoystick->setButton(11, outputState.leftStickClick);
+  mpJoystick->setButton(12, outputState.home);
 
   // Analog outputs
   mpJoystick->setXAxis(outputState.leftStickX);
