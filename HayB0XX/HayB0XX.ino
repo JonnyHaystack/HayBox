@@ -1,5 +1,5 @@
 /*
-  HayB0XX Version 0.1.0
+  HayB0XX Version 0.1.1
 
   Some parts of this code were originally based on GCCPCB2 v1.208 code by Crane.
 
@@ -19,6 +19,8 @@
 #include "Melee20Button.h"
 #include "ProjectM.h"
 #include "src/NintendoExtensionCtrl/src/Nunchuk.h"
+
+#define NUNCHUK_ENABLE false
 
 enum reportState : byte {
   ReportOff = 0x30,
@@ -100,8 +102,10 @@ void readInputs() {
 }
 
 void setup() {
-  gNunchuk.begin();
-  gNunchuk.connect();
+  if (NUNCHUK_ENABLE) {
+    gNunchuk.begin();
+    gNunchuk.connect();
+  }
 
   pinMode(pinout::L, INPUT_PULLUP);
   pinMode(pinout::LEFT, INPUT_PULLUP);
@@ -126,7 +130,7 @@ void setup() {
   pinMode(pinout::LIGHTSHIELD, INPUT_PULLUP);
   pinMode(pinout::MIDSHIELD, INPUT_PULLUP);
 
-  // Read inputs into gInputState initially to make backend selection logic in
+  // Read initial inputs into gInputState to make backend selection logic in
   // initialise() a bit cleaner.
   readInputs();
 

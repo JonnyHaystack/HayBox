@@ -39,6 +39,7 @@ Features include:
   * [Creating custom input modes](#creating-custom-input-modes)
   * [Mod X lightshield and R shield tilt](#mod-x-lightshield-and-r-shield-tilt)
   * [Project M/Project+ mode](#project-mproject-mode)
+  * [Enable Nunchuk support](#enable-nunchuk-support)
 * [Troubleshooting](#troubleshooting)
 * [Contributing](#contributing)
 * [Contributors](#contributors)
@@ -295,9 +296,29 @@ can press Mod X + Z to send a true Z input.
 If this bothers you, and you just want to send a true Z input by default when
 pressing Z, you can set the `trueZPress` parameter to true.
 
+### Enable Nunchuk support
+
+Nunchuk support is disabled by default as it can cause a number of issues if the
+i2c pins (pin 2 and 3 on Arduino Leonardo) are used for GPIO. To enable it, find
+the line `#define NUNCHUK_ENABLE false` at the top of HayB0XX.ino and change it
+to `true`.
+
 ## Troubleshooting
 
+### Controller not working with console or GameCube adapter
 
+- Make sure you are holding C-Down on plugin (if using default bindings).
+- If you are using an official adapter you will likely have to disable the
+  polling latency optimisation by passing in a polling rate of 0 to the
+  GamecubeBackend constructor.
+- If using pins 2 or 3 for your GameCube circuit, make sure Nunchuk support is
+  disabled
+
+### Joystick.h, nintendo.h, arduino_vector.h, and keyboard.h files are missing
+
+If the libraries are missing it's because you didn't download the release
+correctly. Do not click "download repo as zip" or "download source". Download
+the latest release artifact from the releases page.
 
 ## Contributing
 
