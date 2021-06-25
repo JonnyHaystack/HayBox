@@ -21,7 +21,6 @@ Melee20Button::Melee20Button(socd::SocdType socdType,
   mSocdPairs.push_back(socd::SocdPair{&rInputState.c_down, &rInputState.c_up});
 
   mHorizontalSocd = false;
-  mFoxCssMacro = 0;
 }
 
 void Melee20Button::HandleSocd() {
