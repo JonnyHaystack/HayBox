@@ -15,7 +15,6 @@ public:
 
 private:
   bool mHorizontalSocd;
-  int mFoxCssMacro;
   void HandleSocd();
 };
 
