@@ -82,8 +82,9 @@ void Melee18Button::UpdateAnalogOutputs() {
 
     // Angled fsmash
     if (mVectorState.directionCX != 0) {
-      mOutputState.rightStickX = 128 + (mVectorState.directionCX * 65);
-      mOutputState.rightStickY = 128 + (mVectorState.directionY * 23);
+      // 8500 5250 = 68 42
+      mOutputState.rightStickX = 128 + (mVectorState.directionCX * 68);
+      mOutputState.rightStickY = 128 + (mVectorState.directionY * 42);
     }
 
     /* Up B angles */
@@ -271,7 +272,7 @@ void Melee18Button::UpdateAnalogOutputs() {
   // Horizontal SOCD overrides X-axis modifiers (for ledgedash maximum jump
   // trajectory).
   if (!mrInputState.r && mHorizontalSocd && !mVectorState.vertical) {
-    mOutputState.leftStickX = 128 + (mVectorState.directionX * 100);
+    mOutputState.leftStickX = 128 + (mVectorState.directionX * 80);
   }
 
   // Shut off c-stick when using dpad layer.

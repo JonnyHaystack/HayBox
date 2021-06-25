@@ -17,7 +17,6 @@ private:
   bool mHorizontalSocd;
   int mFoxCssMacro;
   void HandleSocd();
-  int PickFox(int step);
 };
 
 #endif /* end of include guard: MELEE20BUTTON_H_KHJ2DTIY */

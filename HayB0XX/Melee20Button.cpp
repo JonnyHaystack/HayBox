@@ -107,8 +107,9 @@ void Melee20Button::UpdateAnalogOutputs() {
 
     // Angled fsmash
     if (mVectorState.directionCX != 0) {
-      mOutputState.rightStickX = 128 + (mVectorState.directionCX * 65);
-      mOutputState.rightStickY = 128 + (mVectorState.directionY * 23);
+      // 8500 5250 = 68 42
+      mOutputState.rightStickX = 128 + (mVectorState.directionCX * 68);
+      mOutputState.rightStickY = 128 + (mVectorState.directionY * 42);
     }
 
     /* Up B angles */
@@ -262,7 +263,7 @@ void Melee20Button::UpdateAnalogOutputs() {
   // Horizontal SOCD overrides X-axis modifiers (for ledgedash maximum jump
   // trajectory).
   if (mHorizontalSocd && !mVectorState.vertical) {
-    mOutputState.leftStickX = 128 + (mVectorState.directionX * 100);
+    mOutputState.leftStickX = 128 + (mVectorState.directionX * 80);
   }
 
   if (mrInputState.lightshield) {
@@ -284,86 +285,5 @@ void Melee20Button::UpdateAnalogOutputs() {
   if (mrInputState.mod_x && mrInputState.mod_y) {
     mOutputState.rightStickX = 128;
     mOutputState.rightStickY = 128;
-  }
-
-  // CSS Macro
-  mFoxCssMacro = PickFox(mFoxCssMacro);
-}
-
-int Melee20Button::PickFox(int step) {
-  // When macro is first triggered, set the stick position and let it be sent
-  // to the console.
-  if (step == 0) {
-    // Mod X and Mod Y must both be held.
-    if (!(mrInputState.mod_x && mrInputState.mod_y)) {
-      return 0;
-    }
-
-    // Select controller port based on top right hand row buttons.
-    if (mrInputState.r) {
-      step = 1;
-    } else if (mrInputState.y) {
-      step = 2;
-    } else if (mrInputState.lightshield) {
-      step = 3;
-    } else if (mrInputState.midshield) {
-      step = 4;
-    }
-
-    // Fairly optimal angles from each port to Fox.
-    if (step == 1) {
-      mOutputState.leftStickX = 128 + 27;
-      mOutputState.leftStickY = 128 + 75;
-    } else if (step == 2) {
-      mOutputState.leftStickX = 128 - 39;
-      mOutputState.leftStickY = 128 + 69;
-    } else if (step == 3) {
-      mOutputState.leftStickX = 128 - 70;
-      mOutputState.leftStickY = 128 + 38;
-    } else if (step == 4) {
-      mOutputState.leftStickX = 128 - 76;
-      mOutputState.leftStickY = 128 + 24;
-    }
-    return step;
-  }
-
-  // On the next update, we want to delay before we send any other inputs.
-  if (1 <= step && step <= 4) {
-    if (step == 1) {
-      delay(180);
-    } else if (step == 2) {
-      delay(170);
-    } else if (step == 3) {
-      delay(320);
-    } else if (step == 4) {
-      delay(530);
-    }
-    return 5;
-  }
-
-  // Next step is to press A to select Fox.
-  if (step == 5) {
-    mOutputState.a = true;
-    return step + 1;
-  }
-
-  // Next step is to press Y twice to cycle to Blue Fox.
-  if (step == 6) {
-    delay(30); // Hold A for 1 frame.
-    mOutputState.y = true;
-    return step + 1;
-  }
-  if (step == 7) {
-    delay(30); // Hold Y for 1 frame.
-    return step + 1;
-  }
-  if (step == 8) {
-    delay(30); // Release Y for 1 frame.
-    mOutputState.y = true;
-    return step + 1;
-  }
-  if (step == 9) {
-    delay(30); // Hold Y for 1 frame.
-    return 0;
   }
 }
