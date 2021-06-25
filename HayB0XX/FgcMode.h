@@ -12,6 +12,9 @@ public:
           CommunicationBackend *communicationBackend);
   void UpdateDigitalOutputs();
   void UpdateAnalogOutputs();
+
+private:
+  void HandleSocd();
 };
 
 #endif /* end of include guard: FGCMODE_H_K5EHYJDA */
