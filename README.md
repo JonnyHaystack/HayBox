@@ -66,6 +66,10 @@ After that:
   - `setup_gccpcb2.h` for GCCPCB2
   - `setup_gccmx.h` for GCCMX
   - `setup_smashbox.h` for Smash Box
+    - You will also have to delete the files `DInputBackend.h`,
+      `DInputBackend.cpp`, `KeyboardMode.h`, `KeyboardMode.cpp`,
+      `DefaultKeyboardMode.h`, and `DefaultKeyboardMode.cpp` otherwise the
+      Arduino IDE will complain at you
   - `setup_arduino_nativeusb.h` for Arduino with native USB support (Leonardo/Micro)
     - Edit `pinout_arduino.h` to match your wiring and the buttons that you have
   - `setup_arduino.h` for Arduino without native USB support (e.g. Nano or other)
