@@ -1,5 +1,5 @@
 /*
-  HayB0XX Version 0.1.2
+  HayB0XX Version 1.0.0
 
   Some parts of this code were originally based on GCCPCB2 v1.208 code by Crane.
 
@@ -10,7 +10,7 @@
     Zac Staples' Arduino_Vector library
 */
 
-#define NUNCHUK_ENABLE true
+#define NUNCHUK_ENABLE false
 
 #include <Arduino.h>
 
