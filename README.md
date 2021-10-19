@@ -8,8 +8,7 @@ but I ended up doing a complete rewrite and made things much more maintainable
 and extensible.
 
 Features include:
-- Supports all the usual controller types with just one code release, only
-  requiring a one line change
+- Supports all the usual controller types with just one code release
 - Up to date with B0XX V3 specifications
 - Supports DInput, GameCube, and Nintendo 64
 - Easy to create new controller modes (or keyboard modes) for different games
