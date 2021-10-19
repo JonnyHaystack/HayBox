@@ -1,7 +1,8 @@
 # HayB0XX
 
 HayB0XX is a modular custom firmware for [B0XX](https://b0xx.com) style
-controllers powered by AVR microcontrollers. It was originally based on Crane's
+controllers powered by 16MHz AVR microcontrollers. It was originally
+based on Crane's
 [DIYB0XX/GCCPCB code](https://github.com/Crane1195/GCCPCB/tree/master/code),
 but I ended up doing a complete rewrite and made things much more maintainable
 and extensible.
@@ -311,9 +312,9 @@ it to `true`.
 ### Controller not working with console or GameCube adapter
 
 - Make sure you are holding C-Down on plugin (if using default bindings).
-- If you are using an official adapter you will likely have to disable the
-  polling latency optimisation by passing in a polling rate of 0 to the
-  GamecubeBackend constructor.
+- If you are using an official adapter you will likely have to hold C-Up
+  on plugin which disables the polling latency optimisation by passing
+  in a polling rate of 0 to the GamecubeBackend constructor.
 - If using pins 2 or 3 for your GameCube circuit, make sure Nunchuk support is
   disabled
 
@@ -333,11 +334,12 @@ see the [tags on this repository](https://github.com/JonnyHaystack/HayB0XX/tags)
 * [Arduino Joystick Library](https://github.com/MHeironimus/ArduinoJoystickLibrary) - Used for the DInput communication backend
 * [Arduino Nintendo Library](https://github.com/NicoHood/Nintendo) - Used for the GameCube and Nintendo 64 communication backends
 * [Keyboard Library for Arduino](https://github.com/arduino-libraries/Keyboard) - Used for keyboard input modes
+* [Nintendo Extension Controller Library](https://github.com/dmadison/NintendoExtensionCtrl) - Used for Nunchuk support
 
 ## Contributors
 
 * **Jonathan Haylett** - *Creator* - [@JonnyHaystack](https://github.com/JonnyHaystack)
-* **Crane** - *Creator of fragmented remnants of GCCPCB code that still remain* - [@Crane1195](https://github.com/Crane1195)
+* **Crane** - *Creator of the original DIYB0XX firmware* - [@Crane1195](https://github.com/Crane1195)
 
 See also the list of [contributors](https://github.com/JonnyHaystack/HayB0XX/contributors) who participated in this project.
 
@@ -348,6 +350,7 @@ See also the list of [contributors](https://github.com/JonnyHaystack/HayB0XX/con
 * [@zacsketches](https://github.com/zacsketches) - for the Arduino_Vector library
 * [@MHeironimus](https://github.com/MHeironimus) - for the Arduino Joystick library
 * [@NicoHood](https://github.com/NicoHood) - for the Nintendo library
+* [@dmadison](https://github.com/dmadison) - for the Nintendo Extension Controller library
 * The Arduino project - for all their open-source hardware and software
 
 ## Related projects
