@@ -64,6 +64,10 @@ After that:
   extracted
 3. Choose the appropriate build environment for your controller's PCB by
   clicking the environment selection button near the bottom left of the window
+  
+  ![Screenshot 2021-10-19 003017](https://user-images.githubusercontent.com/1266473/137824617-4a282217-c6cc-48fb-a55c-1ca40d460538.png)
+  ![Screenshot 2021-10-19 003055](https://user-images.githubusercontent.com/1266473/137824641-4a21c8df-abe1-41fe-a15e-a6e9f5a95467.png)
+  
 4. If your controller is a DIY built using an Arduino, you may need to edit the
   file `src/config/pinout_arduino.h`. For any buttons that your controller
   doesn't have, you can just set it to a pin that you aren't using.
