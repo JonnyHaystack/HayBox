@@ -1,14 +1,14 @@
 # HayB0XX
 
-HayB0XX is a modular custom firmware for DIY [B0XX](https://b0xx.com)
-controllers. It was originally based on Crane's
+HayB0XX is a modular custom firmware for [B0XX](https://b0xx.com) style
+controllers powered by 16MHz AVR microcontrollers. It was originally
+based on Crane's
 [DIYB0XX/GCCPCB code](https://github.com/Crane1195/GCCPCB/tree/master/code),
 but I ended up doing a complete rewrite and made things much more maintainable
 and extensible.
 
 Features include:
-- Supports all the usual DIY types with just one code release, only requiring a
-  one line change
+- Supports all the usual controller types with just one code release
 - Up to date with B0XX V3 specifications
 - Supports DInput, GameCube, and Nintendo 64
 - Easy to create new controller modes (or keyboard modes) for different games
@@ -49,41 +49,31 @@ Features include:
 
 ### Requirements
 
-- Arduino IDE
-- Ideally a decent editor like VSCode if you're going to be changing any code
+- [PlatformIO IDE for VSCode](https://platformio.org/install/ide?install=vscode)
 
 ### Installation
 
-Grab the [latest HayB0XX release](https://github.com/JonnyHaystack/HayB0XX/releases),
-or clone the repository with `git clone --recursive` if you have git installed
-(which makes it easier for you to pull updates).
+Download and extract the
+[latest HayB0XX release](https://github.com/JonnyHaystack/HayB0XX/releases),
+or clone the repository if you have git installed (which makes it easier for you
+to pull updates).
 
 After that:
-1. Open the HayB0XX.ino sketch in the Arduino IDE
-2. Change the `#include "setup_xxx.h"` line at the top to use the appropriate
-   pinout/setup file for the type of DIY that you are using:
-  - `setup_gccpcb1.h` for GCCPCB1
-  - `setup_gccpcb2.h` for GCCPCB2
-  - `setup_gccmx.h` for GCCMX
-  - `setup_smashbox.h` for Smash Box
-    - You will also have to delete the files `DInputBackend.h`,
-      `DInputBackend.cpp`, `KeyboardMode.h`, `KeyboardMode.cpp`,
-      `DefaultKeyboardMode.h`, and `DefaultKeyboardMode.cpp` otherwise the
-      Arduino IDE will complain at you
-  - `setup_arduino_nativeusb.h` for Arduino with native USB support (Leonardo/Micro)
-    - Edit `pinout_arduino.h` to match your wiring and the buttons that you have
-  - `setup_arduino.h` for Arduino without native USB support (e.g. Nano or other)
-    - Edit `pinout_arduino.h` to match your wiring and the buttons that you have
-    - You will also have to delete the files `DInputBackend.h`,
-      `DInputBackend.cpp`, `KeyboardMode.h`, `KeyboardMode.cpp`,
-      `DefaultKeyboardMode.h`, and `DefaultKeyboardMode.cpp` otherwise the
-      Arduino IDE will complain at you
-3. For any buttons that your controller doesn't have (e.g. Select and Home),
-   remove those lines from the pinout file and remove any references to them
-   from `readInputs()` and `setup()` in `HayB0XX.ino`
-4. Click Tools > Board and select your board type. For GCCPCB/GCCMX it should be
-   Arduino Leonardo.
-5. Click Upload
+1. Open Visual Studio Code
+2. Click File -> Open Folder and navigate to the HayB0XX folder that you
+  extracted
+3. Choose the appropriate build environment for your controller's PCB by
+  clicking the environment selection button near the bottom left of the window
+  
+  ![Screenshot 2021-10-19 003017](https://user-images.githubusercontent.com/1266473/137824617-4a282217-c6cc-48fb-a55c-1ca40d460538.png)
+  ![Screenshot 2021-10-19 003055](https://user-images.githubusercontent.com/1266473/137824641-4a21c8df-abe1-41fe-a15e-a6e9f5a95467.png)
+  
+4. If your controller is a DIY built using an Arduino, you may need to edit the
+  file `src/config/pinout_arduino.h`. For any buttons that your controller
+  doesn't have, you can just set it to a pin that you aren't using.
+5. Click Build (in the bottom left) to make sure everything compiles without
+  errors
+6. Plug in your controller via USB and click Upload (next to the Build button)
 
 ## Usage
 
@@ -91,15 +81,17 @@ After that:
 
 #### Brook board passthrough mode
 
-To switch to Brook board mode on GCCPCB2 or GCCMX, hold Mod X + A on plugin.
+To switch to Brook board mode on GCCPCB2, GCCMX, or B0XX R2, hold Mod X + A on
+plugin.
 
 #### Communication backends (console selection)
 
 For all DIYs that support native USB it is configured to use the DInput backend
 as the default. To select another backend on plugin, the following button holds
 are available:
-- C-Down - GameCube backend
-- C-Left - Nintendo 64 backend
+- C-Down - GameCube backend (125Hz)
+- C-Up - GameCube backend (polling rate fix disabled)
+- C-Left - Nintendo 64 backend (60Hz)
 
 #### Game mode selection
 
@@ -121,9 +113,9 @@ Default keyboard mode button combinations:
 
 HayB0XX needs a different controller profile than the normal B0XX one, as it
 uses different outputs in an effort to be more compatible with different (mostly
-older) games. To install the profile, copy the HayB0XX.ini file to the folder
-`<YourDolphinInstallation>\User\Config\Profiles\GCPad`, then load it as usual in
-the Dolphin controller config.
+older) games. To install the profile, copy the file `profiles/HayB0XX.ini` to
+the folder `<YourDolphinInstallation>\User\Config\Profiles\GCPad`, then load it
+as usual in the Dolphin controller config.
 
 ## Configuration
 
@@ -132,19 +124,26 @@ the Dolphin controller config.
 #### Communication backends (console selection)
 
 The communication backend (DInput, GameCube, or N64) is selected based on the
-buttons held on plugin. This is handled in your `setup_xxx.h` file, in the
+buttons held on plugin. This is handled in your `src/config/setup_xxx.h` file, in the
 `initialise()` function. The logic here is very simple, and even if you have no
 programming experience you should be able to see what's going on and change
 things if you wish.
 
+The setup files corresponding to the environments are:
+- `setup_arduino_nativeusb.h` for Arduino with native USB support (e.g. Leonardo, Micro)
+- `setup_arduino.h` for Arduino without native USB support (e.g. Uno, Nano, Mega 2560)
+- `setup_gccpcb1.h` for GCCPCB1
+- `setup_gccpcb2.h` for GCCPCB2
+- `setup_gccmx.h` for GCCMX
+- `setup_r1b0xx.h` for B0XX R1
+- `setup_r2b0xx.h` for B0XX R2
+- `setup_smashbox.h` for Smash Box
+
 You may notice that the number 125 is passed into `GamecubeBackend()`. This lets
 you change the polling rate e.g. if your DIY doesn't support native input and
 you want to use it with an overclocked GameCube controller adapter. In that
-example, you would pass in 1000 to sync up to the 1000Hz polling rate.
-
-If you want to be able to play both on console and on an overclocked adapter,
-you can add another `if` statement to create a button hold to set polling rate
-to 1000Hz.
+example, you would pass in 1000 to sync up to the 1000Hz polling rate, or 0 to
+disable this lag fix completely.
 
 Note: You may notice that 1000Hz polling rate works on console as well. Be aware
 that while this works, it will result in more input lag. The point of setting
@@ -158,11 +157,11 @@ same way as this
 #### Input modes
 
 To configure the button holds for input modes (controller/keyboard modes), go
-into `HayB0XX.ino`, in the `selectInputMode()` function. Each `if` statement is
-a button combination to select an input mode.
+into `src/config/mode_selection.h`, in the `selectInputMode()` function. Each
+`if` statement is a button combination to select an input mode.
 
 All input modes support passing in a SOCD handling mode, e.g.
-`socd::2IP_NO_REAC`. You can see the other available modes in `socd.h`.
+`socd::2IP_NO_REAC`. You can see the other available modes in `src/core/socd.h`.
 
 Every ControllerMode must have gInputState and gCurrentBackend passed into it,
 as can be seen in the existing code here.
@@ -240,7 +239,7 @@ anything from it. This is done automatically at the start of each iteration.
 In the constructor of each mode (for controller modes *and* keyboard modes), you
 can configure pairs of opposing directions to apply SOCD handling to.
 
-For example, in `Melee20Button.cpp`:
+For example, in `src/modes/Melee20Button.cpp`:
 ```
 mSocdPairs.push_back(socd::SocdPair{&rInputState.left, &rInputState.right});
 mSocdPairs.push_back(socd::SocdPair{&rInputState.down, &rInputState.up});
@@ -278,7 +277,7 @@ ProjectM(socd::SocdType socdType, state::InputState &rInputState,
 ```
 
 These options are configured by setting the relevant constructor parameter to
-true or false in `HayB0XX.ino`.
+true or false in `src/config/mode_selection.h`.
 
 Firstly, it allows you to enable or disable the behaviour borrowed from Melee
 mode where holding left and right (and no vertical directions) will give a 1.0 
@@ -304,25 +303,19 @@ pressing Z, you can set the `trueZPress` parameter to true.
 
 Nunchuk support is disabled by default as it can cause a number of issues if the
 i2c pins (pin 2 and 3 on Arduino Leonardo) are used for GPIO. To enable it, find
-the line `#define NUNCHUK_ENABLE false` at the top of HayB0XX.ino and change it
-to `true`.
+the line `#define NUNCHUK_ENABLE false` at the top of `src/main.cpp` and change
+it to `true`.
 
 ## Troubleshooting
 
 ### Controller not working with console or GameCube adapter
 
 - Make sure you are holding C-Down on plugin (if using default bindings).
-- If you are using an official adapter you will likely have to disable the
-  polling latency optimisation by passing in a polling rate of 0 to the
-  GamecubeBackend constructor.
+- If you are using an official adapter you will likely have to hold C-Up
+  on plugin which disables the polling latency optimisation by passing
+  in a polling rate of 0 to the GamecubeBackend constructor.
 - If using pins 2 or 3 for your GameCube circuit, make sure Nunchuk support is
   disabled
-
-### Joystick.h, nintendo.h, arduino_vector.h, and keyboard.h files are missing
-
-If the libraries are missing it's because you didn't download the release
-correctly. Do not click "download repo as zip" or "download source". Download
-the latest release artifact from the releases page.
 
 ## Contributing
 
@@ -340,11 +333,12 @@ see the [tags on this repository](https://github.com/JonnyHaystack/HayB0XX/tags)
 * [Arduino Joystick Library](https://github.com/MHeironimus/ArduinoJoystickLibrary) - Used for the DInput communication backend
 * [Arduino Nintendo Library](https://github.com/NicoHood/Nintendo) - Used for the GameCube and Nintendo 64 communication backends
 * [Keyboard Library for Arduino](https://github.com/arduino-libraries/Keyboard) - Used for keyboard input modes
+* [Nintendo Extension Controller Library](https://github.com/dmadison/NintendoExtensionCtrl) - Used for Nunchuk support
 
 ## Contributors
 
 * **Jonathan Haylett** - *Creator* - [@JonnyHaystack](https://github.com/JonnyHaystack)
-* **Crane** - *Creator of fragmented remnants of GCCPCB code that still remain* - [@Crane1195](https://github.com/Crane1195)
+* **Crane** - *Creator of the original DIYB0XX firmware* - [@Crane1195](https://github.com/Crane1195)
 
 See also the list of [contributors](https://github.com/JonnyHaystack/HayB0XX/contributors) who participated in this project.
 
@@ -355,6 +349,7 @@ See also the list of [contributors](https://github.com/JonnyHaystack/HayB0XX/con
 * [@zacsketches](https://github.com/zacsketches) - for the Arduino_Vector library
 * [@MHeironimus](https://github.com/MHeironimus) - for the Arduino Joystick library
 * [@NicoHood](https://github.com/NicoHood) - for the Nintendo library
+* [@dmadison](https://github.com/dmadison) - for the Nintendo Extension Controller library
 * The Arduino project - for all their open-source hardware and software
 
 ## Related projects
