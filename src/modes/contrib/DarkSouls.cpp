@@ -37,6 +37,7 @@ void DarkSouls::UpdateDigitalOutputs() {
     mOutputState.triggerLDigital = mrInputState.up;
     mOutputState.select = mrInputState.start;
   } else if (layerZ) {
+    mOutputState.a = mrInputState.a;
     mOutputState.dpadLeft = mrInputState.b;
     mOutputState.dpadDown = mrInputState.x;
     mOutputState.dpadUp = mrInputState.z;
