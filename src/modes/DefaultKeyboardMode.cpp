@@ -5,15 +5,15 @@ DefaultKeyboardMode::DefaultKeyboardMode(socd::SocdType socdType,
     : KeyboardMode(socdType, rInputState) {}
 
 void DefaultKeyboardMode::SendKeys() {
-  Press('q', mrInputState.l);
-  Press('3', mrInputState.left);
-  Press('4', mrInputState.down);
-  Press('5', mrInputState.right);
+  Press('a', mrInputState.l);
+  Press('b', mrInputState.left);
+  Press('c', mrInputState.down);
+  Press('d', mrInputState.right);
   Press('e', mrInputState.mod_x);
   Press('f', mrInputState.mod_y);
-  //Press('g', mrInputState.select);
+  Press('g', mrInputState.select);
   Press('h', mrInputState.start);
-  //Press('i', mrInputState.home);
+  Press('i', mrInputState.home);
   Press('j', mrInputState.r);
   Press('k', mrInputState.y);
   Press('l', mrInputState.lightshield);

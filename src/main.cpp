@@ -125,7 +125,7 @@ void loop() {
   selectInputMode();
 
   // Only run input viewer on every 3 updates, to prevent lag.
-  if (Serial && Serial.availableForWrite() > 32) {
+  if (Serial.availableForWrite() > 32) {
     if (gReportClock == 0) {
       writeSerialReport();
       gReportClock++;
