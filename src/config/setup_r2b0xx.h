@@ -25,21 +25,27 @@ void initialise() {
   else
     digitalWrite(pinout::SWITCH, HIGH);
 
+  gCurrentBackend = new DInputBackend();
+  delay(500);
+  bool usb_connected = UDADDR & _BV(ADDEN);
+
   /* Choose communication backend. */
-  if (gInputState.c_down) {
-    // Hold C-Down on plugin for GameCube mode.
-    gCurrentBackend = new GamecubeBackend(125, pinout::GCC_DATA);
-  } else if (gInputState.c_up) {
-    // Hold C-Up on plugin for official GameCube adapter mode.
-    gCurrentBackend = new GamecubeBackend(0, pinout::GCC_DATA);
-  } else if (gInputState.c_left) {
-    // Hold C-Left on plugin for N64 mode.
-    gCurrentBackend = new N64Backend(60, pinout::GCC_DATA);
-  } else {
-    // Default to DInput mode.
-    gCurrentBackend = new DInputBackend();
+  if (usb_connected) {
+    // Default to DInput mode if USB is connected.
     // Input viewer only used when connected to PC i.e. when using DInput mode.
     Serial.begin(115200, SERIAL_8N1);
+  } else {
+    delete gCurrentBackend;
+    if (gInputState.c_left) {
+      // Hold C-Left on plugin for N64.
+      gCurrentBackend = new N64Backend(60, pinout::GCC_DATA);
+    if (gInputState.a) {
+      // Hold A on plugin for GameCube adapter.
+      gCurrentBackend = new GamecubeBackend(0, pinout::GCC_DATA);
+    } else {
+      // Default to GameCube/Wii.
+      gCurrentBackend = new GamecubeBackend(125, pinout::GCC_DATA);
+    }
   }
 
   /* Always start in Melee mode. Must set mode only after initialising the
