@@ -86,12 +86,11 @@ plugin.
 
 #### Communication backends (console selection)
 
-For all DIYs that support native USB it is configured to use the DInput backend
-as the default. To select another backend on plugin, the following button holds
-are available:
-- C-Down - GameCube backend (125Hz)
-- C-Up - GameCube backend (polling rate fix disabled)
-- C-Left - Nintendo 64 backend (60Hz)
+By default, the DInput backend is selected if a USB connection is detected.
+Otherwise, it defaults to GameCube backend, unless another backend is manually
+selected by holding one of the following buttons on plugin:
+- A - GameCube backend (polling rate fix disabled - used for GCC adapters)
+- C-Left - Nintendo 64 backend (60Hz polling rate)
 
 #### Game mode selection
 
