@@ -31,7 +31,7 @@ void initialise() {
     if (gInputState.c_left) {
       // Hold C-Left on plugin for N64.
       gCurrentBackend = new N64Backend(60, pinout::GCC_DATA);
-    if (gInputState.a) {
+    } else if (gInputState.a) {
       // Hold A on plugin for GameCube adapter.
       gCurrentBackend = new GamecubeBackend(0, pinout::GCC_DATA);
     } else {
