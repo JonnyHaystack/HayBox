@@ -17,12 +17,12 @@ state::InputState gInputState;
 
 void initialise() {
   /* Choose communication backend. */
+  if (gInputState.c_left) {
+    // Hold C-Left on plugin for N64.
+    gCurrentBackend = new N64Backend(60, pinout::GCC_DATA);
   if (gInputState.a) {
     // Hold A on plugin for GameCube adapter.
     gCurrentBackend = new GamecubeBackend(0, pinout::GCC_DATA);
-  } else if (gInputState.c_left) {
-    // Hold C-Left on plugin for N64.
-    gCurrentBackend = new N64Backend(60, pinout::GCC_DATA);
   } else {
     // Default to GameCube/Wii.
     gCurrentBackend = new GamecubeBackend(125, pinout::GCC_DATA);
