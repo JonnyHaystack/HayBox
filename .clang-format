@@ -1,0 +1,56 @@
+AlignAfterOpenBracket: BlockIndent
+AlignConsecutiveMacros: false
+AlignEscapedNewlines: DontAlign
+AlignOperands: Align
+AlignTrailingComments: false
+AllowAllArgumentsOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: false
+AllowShortBlocksOnASingleLine: Empty
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortEnumsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+BinPackArguments: false
+BinPackParameters: false
+BreakBeforeInheritanceComma: false
+BreakConstructorInitializers: AfterColon
+BreakConstructorInitializersBeforeComma: false
+BreakInheritanceList: AfterColon
+BreakStringLiterals: false
+ColumnLimit: 100
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+ConstructorInitializerIndentWidth: 4
+ContinuationIndentWidth: 4
+Cpp11BracedListStyle: false
+DeriveLineEnding: true
+FixNamespaceComments: false
+IncludeBlocks: Merge
+IndentCaseLabels: true
+IndentWidth: 4
+LambdaBodyIndentation: OuterScope
+Language: Cpp
+NamespaceIndentation: All
+PackConstructorInitializers: CurrentLine
+PointerAlignment: Right
+QualifierAlignment: Left
+ReferenceAlignment: Right
+ReflowComments: true
+SeparateDefinitionBlocks: Always
+SortIncludes: true
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex:           '"[[:alnum:]._-]+"'
+    Priority:        1
+    SortPriority:    1
+  - Regex:           '^((<|").*/)'
+    Priority:        2
+    SortPriority:    2
+  - Regex:           '<[[:alnum:]._-]+>'
+    Priority:        3
+    SortPriority:    3
+SortUsingDeclarations: false
+SpaceBeforeCtorInitializerColon: true
+SpacesInContainerLiterals: false
+TabWidth: 4
+UseTab: Never
