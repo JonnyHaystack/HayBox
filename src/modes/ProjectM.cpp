@@ -9,10 +9,10 @@ ProjectM::ProjectM(socd::SocdType socd_type, bool ledgedash_max_jump_traj, bool 
     this->ledgedash_max_jump_traj = ledgedash_max_jump_traj;
     this->true_z_press = true_z_press;
 
-    // socd_pairs.push_back(socd::SocdPair{ &inputs.left, &inputs.right });
-    // socd_pairs.push_back(socd::SocdPair{ &inputs.down, &inputs.up });
-    // socd_pairs.push_back(socd::SocdPair{ &inputs.c_left, &inputs.c_right });
-    // socd_pairs.push_back(socd::SocdPair{ &inputs.c_down, &inputs.c_up });
+    socd_pairs.push_back(socd::SocdPair{ &InputState::left, &InputState::right });
+    socd_pairs.push_back(socd::SocdPair{ &InputState::down, &InputState::up });
+    socd_pairs.push_back(socd::SocdPair{ &InputState::c_left, &InputState::c_right });
+    socd_pairs.push_back(socd::SocdPair{ &InputState::c_down, &InputState::c_up });
 
     horizontal_socd = false;
 }

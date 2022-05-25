@@ -12,10 +12,10 @@ void InputMode::HandleSocd(InputState &inputs) {
     if (socd_states.size() != socd_pairs.size()) {
         for (int i = 0; i < socd_pairs.size(); i++) {
             socd_states.push_back({
-                .was_low = false,
-                .was_high = false,
-                .lock_low = false,
-                .lock_high = false,
+                .was_dir1 = false,
+                .was_dir2 = false,
+                .lock_dir1 = false,
+                .lock_dir2 = false,
             });
         }
     }
@@ -26,14 +26,18 @@ void InputMode::HandleSocd(InputState &inputs) {
         socd::SocdState socd_state = socd_states[i];
         switch (socd_type) {
             case socd::SOCD_NEUTRAL:
-                socd::neutral(*pair.button_low, *pair.button_high);
+                socd::neutral(inputs.*(pair.input_dir1), inputs.*(pair.input_dir2));
                 break;
             case socd::SOCD_2IP:
-                socd_states[i] = socd::twoIP(*pair.button_low, *pair.button_high, socd_state);
+                socd_states[i] =
+                    socd::twoIP(inputs.*(pair.input_dir1), inputs.*(pair.input_dir2), socd_state);
                 break;
             case socd::SOCD_2IP_NO_REAC:
-                socd_states[i] =
-                    socd::twoIPNoReactivate(*pair.button_low, *pair.button_high, socd_state);
+                socd_states[i] = socd::twoIPNoReactivate(
+                    inputs.*(pair.input_dir1),
+                    inputs.*(pair.input_dir2),
+                    socd_state
+                );
                 break;
             case socd::SOCD_KEYBOARD:
                 break;

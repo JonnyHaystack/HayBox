@@ -1,6 +1,7 @@
 #ifndef _CORE_SOCD_HPP
 #define _CORE_SOCD_HPP
 
+#include "state.hpp"
 #include "stdlib.hpp"
 
 namespace socd {
@@ -13,22 +14,22 @@ namespace socd {
     } SocdType;
 
     typedef struct {
-        bool *button_low;
-        bool *button_high;
+        bool InputState::*input_dir1;
+        bool InputState::*input_dir2;
     } SocdPair;
 
     typedef struct {
-        bool was_low;
-        bool was_high;
-        bool lock_low;
-        bool lock_high;
+        bool was_dir1;
+        bool was_dir2;
+        bool lock_dir1;
+        bool lock_dir2;
     } SocdState;
 
-    SocdState twoIPNoReactivate(bool &isLow, bool &isHigh, SocdState socdState);
+    SocdState twoIPNoReactivate(bool &dir1, bool &dir2, SocdState socd_state);
 
-    SocdState twoIP(bool &isLow, bool &isHigh, SocdState socdState);
+    SocdState twoIP(bool &dir1, bool &dir2, SocdState socd_state);
 
-    void neutral(bool &isLow, bool &isHigh);
+    void neutral(bool &dir1, bool &dir2);
 
 }
 

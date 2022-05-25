@@ -1,7 +1,7 @@
 #include "modes/FgcMode.hpp"
 
 FgcMode::FgcMode(socd::SocdType socd_type) : ControllerMode(socd_type) {
-    // socd_pairs.push_back(socd::SocdPair{ &inputs.left, &inputs.right });
+    socd_pairs.push_back(socd::SocdPair{ &InputState::left, &InputState::right });
 }
 
 void FgcMode::HandleSocd(InputState &inputs) {
