@@ -1,217 +1,223 @@
-#include "ProjectM.h"
+#include "modes/ProjectM.hpp"
 
 #define ANALOG_STICK_MIN 28
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 228
 
-ProjectM::ProjectM(socd::SocdType socdType, state::InputState &rInputState,
-                   CommunicationBackend *communicationBackend,
-                   bool ledgedashMaxJumpTraj, bool trueZPress)
-    : ControllerMode(socdType, rInputState, communicationBackend) {
-  mLedgedashMaxJumpTraj = ledgedashMaxJumpTraj;
-  mTrueZPress = trueZPress;
+ProjectM::ProjectM(socd::SocdType socd_type, bool ledgedash_max_jump_traj, bool true_z_press)
+    : ControllerMode(socd_type) {
+    this->ledgedash_max_jump_traj = ledgedash_max_jump_traj;
+    this->true_z_press = true_z_press;
 
-  mSocdPairs.push_back(socd::SocdPair{&rInputState.left, &rInputState.right});
-  mSocdPairs.push_back(socd::SocdPair{&rInputState.down, &rInputState.up});
-  mSocdPairs.push_back(
-      socd::SocdPair{&rInputState.c_left, &rInputState.c_right});
-  mSocdPairs.push_back(socd::SocdPair{&rInputState.c_down, &rInputState.c_up});
+    // socd_pairs.push_back(socd::SocdPair{ &inputs.left, &inputs.right });
+    // socd_pairs.push_back(socd::SocdPair{ &inputs.down, &inputs.up });
+    // socd_pairs.push_back(socd::SocdPair{ &inputs.c_left, &inputs.c_right });
+    // socd_pairs.push_back(socd::SocdPair{ &inputs.c_down, &inputs.c_up });
 
-  mHorizontalSocd = false;
+    horizontal_socd = false;
 }
 
-void ProjectM::HandleSocd() {
-  mHorizontalSocd = mrInputState.left && mrInputState.right;
-  InputMode::HandleSocd();
+void ProjectM::HandleSocd(InputState &inputs) {
+    horizontal_socd = inputs.left && inputs.right;
+    InputMode::HandleSocd(inputs);
 }
 
-void ProjectM::UpdateDigitalOutputs() {
-  mOutputState.a = mrInputState.a;
-  mOutputState.b = mrInputState.b;
-  mOutputState.x = mrInputState.x;
-  mOutputState.y = mrInputState.y;
-  // True Z press vs macro lightshield + A.
-  if (mTrueZPress || mrInputState.mod_x) {
-    mOutputState.buttonR = mrInputState.z;
-  } else {
-    mOutputState.a = mrInputState.a || mrInputState.z;
-  }
-  if (mrInputState.nunchuk_connected) {
-    mOutputState.triggerLDigital = mrInputState.nunchuk_z;
-  } else {
-    mOutputState.triggerLDigital = mrInputState.l;
-  }
-  mOutputState.triggerRDigital = mrInputState.r;
-  mOutputState.start = mrInputState.start;
+void ProjectM::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
+    outputs.a = inputs.a;
+    outputs.b = inputs.b;
+    outputs.x = inputs.x;
+    outputs.y = inputs.y;
+    // True Z press vs macro lightshield + A.
+    if (true_z_press || inputs.mod_x) {
+        outputs.buttonR = inputs.z;
+    } else {
+        outputs.a = inputs.a || inputs.z;
+    }
+    if (inputs.nunchuk_connected) {
+        outputs.triggerLDigital = inputs.nunchuk_z;
+    } else {
+        outputs.triggerLDigital = inputs.l;
+    }
+    outputs.triggerRDigital = inputs.r;
+    outputs.start = inputs.start;
 
-  // D-Pad layer can be activated by holding Mod X + Mod Y, or by holding the C
-  // button on a nunchuk.
-  if ((mrInputState.mod_x && mrInputState.mod_y) || mrInputState.nunchuk_c) {
-    mOutputState.dpadUp = mrInputState.c_up;
-    mOutputState.dpadDown = mrInputState.c_down;
-    mOutputState.dpadLeft = mrInputState.c_left;
-    mOutputState.dpadRight = mrInputState.c_right;
-  }
+    // D-Pad layer can be activated by holding Mod X + Mod Y, or by holding the C
+    // button on a nunchuk.
+    if ((inputs.mod_x && inputs.mod_y) || inputs.nunchuk_c) {
+        outputs.dpadUp = inputs.c_up;
+        outputs.dpadDown = inputs.c_down;
+        outputs.dpadLeft = inputs.c_left;
+        outputs.dpadRight = inputs.c_right;
+    }
 
-  // Don't override dpad up if it's already pressed using the MX + MY dpad
-  // layer.
-  mOutputState.dpadUp = mOutputState.dpadUp || mrInputState.midshield;
+    // Don't override dpad up if it's already pressed using the MX + MY dpad
+    // layer.
+    outputs.dpadUp = outputs.dpadUp || inputs.midshield;
 
-  if (mrInputState.select)
-    mOutputState.dpadLeft = true;
-  if (mrInputState.home)
-    mOutputState.dpadRight = true;
+    if (inputs.select)
+        outputs.dpadLeft = true;
+    if (inputs.home)
+        outputs.dpadRight = true;
 }
 
-void ProjectM::UpdateAnalogOutputs() {
-  HandleVectors(mrInputState.left, mrInputState.right, mrInputState.down,
-                mrInputState.up, mrInputState.c_left, mrInputState.c_right,
-                mrInputState.c_down, mrInputState.c_up, ANALOG_STICK_MIN,
-                ANALOG_STICK_NEUTRAL, ANALOG_STICK_MAX);
+void ProjectM::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
+    UpdateDirections(
+        inputs.left,
+        inputs.right,
+        inputs.down,
+        inputs.up,
+        inputs.c_left,
+        inputs.c_right,
+        inputs.c_down,
+        inputs.c_up,
+        ANALOG_STICK_MIN,
+        ANALOG_STICK_NEUTRAL,
+        ANALOG_STICK_MAX,
+        outputs
+    );
 
-  bool shield_button_pressed =
-      mrInputState.l || mrInputState.lightshield || mrInputState.midshield;
+    bool shield_button_pressed = inputs.l || inputs.lightshield || inputs.midshield;
 
-  if (mVectorState.diagonal) {
-    if (mVectorState.directionY == 1) {
-      mOutputState.leftStickX = 128 + (mVectorState.directionX * 83);
-      mOutputState.leftStickY = 128 + (mVectorState.directionY * 93);
-    }
-  }
-
-  if (mrInputState.mod_x) {
-    if (mVectorState.horizontal) {
-      mOutputState.leftStickX = 128 + (mVectorState.directionX * 70);
-    }
-    if (mVectorState.vertical) {
-      mOutputState.leftStickY = 128 + (mVectorState.directionY * 60);
-    }
-
-    if (mVectorState.directionCX != 0) {
-      mOutputState.rightStickX = 128 + (mVectorState.directionCX * 65);
-      mOutputState.rightStickY = 128 + (mVectorState.directionY * 23);
+    if (directions.diagonal) {
+        if (directions.y == 1) {
+            outputs.leftStickX = 128 + (directions.x * 83);
+            outputs.leftStickY = 128 + (directions.y * 93);
+        }
     }
 
-    if (mVectorState.diagonal) {
-      mOutputState.leftStickX = 128 + (mVectorState.directionX * 70);
-      mOutputState.leftStickY = 128 + (mVectorState.directionY * 34);
+    if (inputs.mod_x) {
+        if (directions.horizontal) {
+            outputs.leftStickX = 128 + (directions.x * 70);
+        }
+        if (directions.vertical) {
+            outputs.leftStickY = 128 + (directions.y * 60);
+        }
 
-      if (mrInputState.b) {
-        mOutputState.leftStickX = 128 + (mVectorState.directionX * 85);
-        mOutputState.leftStickY = 128 + (mVectorState.directionY * 31);
-      }
+        if (directions.cx != 0) {
+            outputs.rightStickX = 128 + (directions.cx * 65);
+            outputs.rightStickY = 128 + (directions.y * 23);
+        }
 
-      if (mrInputState.r) {
-        mOutputState.leftStickX = 128 + (mVectorState.directionX * 82);
-        mOutputState.leftStickY = 128 + (mVectorState.directionY * 35);
-      }
+        if (directions.diagonal) {
+            outputs.leftStickX = 128 + (directions.x * 70);
+            outputs.leftStickY = 128 + (directions.y * 34);
 
-      if (mrInputState.c_up) {
-        mOutputState.leftStickX = 128 + (mVectorState.directionX * 77);
-        mOutputState.leftStickY = 128 + (mVectorState.directionY * 55);
-      }
+            if (inputs.b) {
+                outputs.leftStickX = 128 + (directions.x * 85);
+                outputs.leftStickY = 128 + (directions.y * 31);
+            }
 
-      if (mrInputState.c_down) {
-        mOutputState.leftStickX = 128 + (mVectorState.directionX * 82);
-        mOutputState.leftStickY = 128 + (mVectorState.directionY * 36);
-      }
+            if (inputs.r) {
+                outputs.leftStickX = 128 + (directions.x * 82);
+                outputs.leftStickY = 128 + (directions.y * 35);
+            }
 
-      if (mrInputState.c_left) {
-        mOutputState.leftStickX = 128 + (mVectorState.directionX * 84);
-        mOutputState.leftStickY = 128 + (mVectorState.directionY * 50);
-      }
+            if (inputs.c_up) {
+                outputs.leftStickX = 128 + (directions.x * 77);
+                outputs.leftStickY = 128 + (directions.y * 55);
+            }
 
-      if (mrInputState.c_right) {
-        mOutputState.leftStickX = 128 + (mVectorState.directionX * 72);
-        mOutputState.leftStickY = 128 + (mVectorState.directionY * 61);
-      }
+            if (inputs.c_down) {
+                outputs.leftStickX = 128 + (directions.x * 82);
+                outputs.leftStickY = 128 + (directions.y * 36);
+            }
+
+            if (inputs.c_left) {
+                outputs.leftStickX = 128 + (directions.x * 84);
+                outputs.leftStickY = 128 + (directions.y * 50);
+            }
+
+            if (inputs.c_right) {
+                outputs.leftStickX = 128 + (directions.x * 72);
+                outputs.leftStickY = 128 + (directions.y * 61);
+            }
+        }
     }
-  }
 
-  if (mrInputState.mod_y) {
-    if (mVectorState.horizontal) {
-      mOutputState.leftStickX = 128 + (mVectorState.directionX * 35);
+    if (inputs.mod_y) {
+        if (directions.horizontal) {
+            outputs.leftStickX = 128 + (directions.x * 35);
+        }
+        if (directions.vertical) {
+            outputs.leftStickY = 128 + (directions.y * 70);
+        }
+
+        if (directions.diagonal) {
+            outputs.leftStickX = 128 + (directions.x * 28);
+            outputs.leftStickY = 128 + (directions.y * 58);
+
+            if (inputs.b) {
+                outputs.leftStickX = 128 + (directions.x * 28);
+                outputs.leftStickY = 128 + (directions.y * 85);
+            }
+
+            if (inputs.r) {
+                outputs.leftStickX = 128 + (directions.x * 51);
+                outputs.leftStickY = 128 + (directions.y * 82);
+            }
+
+            if (inputs.c_up) {
+                outputs.leftStickX = 128 + (directions.x * 55);
+                outputs.leftStickY = 128 + (directions.y * 77);
+            }
+
+            if (inputs.c_down) {
+                outputs.leftStickX = 128 + (directions.x * 34);
+                outputs.leftStickY = 128 + (directions.y * 82);
+            }
+
+            if (inputs.c_left) {
+                outputs.leftStickX = 128 + (directions.x * 40);
+                outputs.leftStickY = 128 + (directions.y * 84);
+            }
+
+            if (inputs.c_right) {
+                outputs.leftStickX = 128 + (directions.x * 62);
+                outputs.leftStickY = 128 + (directions.y * 72);
+            }
+        }
     }
-    if (mVectorState.vertical) {
-      mOutputState.leftStickY = 128 + (mVectorState.directionY * 70);
+
+    // C-stick ASDI Slideoff angle overrides any other C-stick modifiers (such as
+    // angled fsmash).
+    // We don't apply this for c-up + c-left/c-right in case we want to implement
+    // C-stick nair somehow.
+    if (directions.cx != 0 && directions.cy == -1) {
+        // 3000 9875 = 30 78
+        outputs.rightStickX = 128 + (directions.cx * 35);
+        outputs.rightStickY = 128 + (directions.cy * 98);
     }
 
-    if (mVectorState.diagonal) {
-      mOutputState.leftStickX = 128 + (mVectorState.directionX * 28);
-      mOutputState.leftStickY = 128 + (mVectorState.directionY * 58);
-
-      if (mrInputState.b) {
-        mOutputState.leftStickX = 128 + (mVectorState.directionX * 28);
-        mOutputState.leftStickY = 128 + (mVectorState.directionY * 85);
-      }
-
-      if (mrInputState.r) {
-        mOutputState.leftStickX = 128 + (mVectorState.directionX * 51);
-        mOutputState.leftStickY = 128 + (mVectorState.directionY * 82);
-      }
-
-      if (mrInputState.c_up) {
-        mOutputState.leftStickX = 128 + (mVectorState.directionX * 55);
-        mOutputState.leftStickY = 128 + (mVectorState.directionY * 77);
-      }
-
-      if (mrInputState.c_down) {
-        mOutputState.leftStickX = 128 + (mVectorState.directionX * 34);
-        mOutputState.leftStickY = 128 + (mVectorState.directionY * 82);
-      }
-
-      if (mrInputState.c_left) {
-        mOutputState.leftStickX = 128 + (mVectorState.directionX * 40);
-        mOutputState.leftStickY = 128 + (mVectorState.directionY * 84);
-      }
-
-      if (mrInputState.c_right) {
-        mOutputState.leftStickX = 128 + (mVectorState.directionX * 62);
-        mOutputState.leftStickY = 128 + (mVectorState.directionY * 72);
-      }
+    // Horizontal SOCD overrides X-axis modifiers (for ledgedash maximum jump
+    // trajectory).
+    if (ledgedash_max_jump_traj && horizontal_socd && !directions.vertical &&
+        !shield_button_pressed) {
+        outputs.leftStickX = 128 + (directions.x * 100);
     }
-  }
 
-  // C-stick ASDI Slideoff angle overrides any other C-stick modifiers (such as
-  // angled fsmash).
-  // We don't apply this for c-up + c-left/c-right in case we want to implement
-  // C-stick nair somehow.
-  if (mVectorState.directionCX != 0 && mVectorState.directionCY == -1) {
-    // 3000 9875 = 30 78
-    mOutputState.rightStickX = 128 + (mVectorState.directionCX * 35);
-    mOutputState.rightStickY = 128 + (mVectorState.directionCY * 98);
-  }
+    if (inputs.lightshield) {
+        outputs.triggerRAnalog = 49;
+    }
+    if (inputs.midshield) {
+        outputs.triggerRAnalog = 94;
+    }
 
-  // Horizontal SOCD overrides X-axis modifiers (for ledgedash maximum jump
-  // trajectory).
-  if (mLedgedashMaxJumpTraj && mHorizontalSocd && !mVectorState.vertical &&
-      !shield_button_pressed) {
-    mOutputState.leftStickX = 128 + (mVectorState.directionX * 100);
-  }
+    // Send lightshield input if we are using Z = lightshield + A macro.
+    if (inputs.z && !(inputs.mod_x || true_z_press)) {
+        outputs.triggerRAnalog = 49;
+    }
 
-  if (mrInputState.lightshield) {
-    mOutputState.triggerRAnalog = 49;
-  }
-  if (mrInputState.midshield) {
-    mOutputState.triggerRAnalog = 94;
-  }
+    if (outputs.triggerLDigital) {
+        outputs.triggerLAnalog = 140;
+    }
 
-  // Send lightshield input if we are using Z = lightshield + A macro.
-  if (mrInputState.z && !(mrInputState.mod_x || mTrueZPress)) {
-    mOutputState.triggerRAnalog = 49;
-  }
+    if (outputs.triggerRDigital) {
+        outputs.triggerRAnalog = 140;
+    }
 
-  if (mOutputState.triggerLDigital) {
-    mOutputState.triggerLAnalog = 140;
-  }
-
-  if (mOutputState.triggerRDigital) {
-    mOutputState.triggerRAnalog = 140;
-  }
-
-  // Shut off c-stick when using dpad layer.
-  if (mrInputState.mod_x && mrInputState.mod_y) {
-    mOutputState.rightStickX = 128;
-    mOutputState.rightStickY = 128;
-  }
+    // Shut off c-stick when using dpad layer.
+    if (inputs.mod_x && inputs.mod_y) {
+        outputs.rightStickX = 128;
+        outputs.rightStickY = 128;
+    }
 }

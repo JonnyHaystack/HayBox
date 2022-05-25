@@ -1,46 +1,44 @@
-#include "FgcMode.h"
+#include "modes/FgcMode.hpp"
 
-FgcMode::FgcMode(socd::SocdType socdType, state::InputState &rInputState,
-                 CommunicationBackend *communicationBackend)
-    : ControllerMode(socdType, rInputState, communicationBackend) {
-  mSocdPairs.push_back(socd::SocdPair{&rInputState.left, &rInputState.right});
+FgcMode::FgcMode(socd::SocdType socd_type) : ControllerMode(socd_type) {
+    // socd_pairs.push_back(socd::SocdPair{ &inputs.left, &inputs.right });
 }
 
-void FgcMode::HandleSocd() {
-  if (mrInputState.down && (mrInputState.mod_x || mrInputState.c_up)) {
-    mrInputState.down = false;
-  }
-  InputMode::HandleSocd();
+void FgcMode::HandleSocd(InputState &inputs) {
+    if (inputs.down && (inputs.mod_x || inputs.c_up)) {
+        inputs.down = false;
+    }
+    InputMode::HandleSocd(inputs);
 }
 
-void FgcMode::UpdateDigitalOutputs() {
-  // Directions
-  mOutputState.dpadLeft = mrInputState.left;
-  mOutputState.dpadRight = mrInputState.right;
-  mOutputState.dpadDown = mrInputState.down;
-  mOutputState.dpadUp = mrInputState.mod_x || mrInputState.c_up;
+void FgcMode::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
+    // Directions
+    outputs.dpadLeft = inputs.left;
+    outputs.dpadRight = inputs.right;
+    outputs.dpadDown = inputs.down;
+    outputs.dpadUp = inputs.mod_x || inputs.c_up;
 
-  // Menu keys
-  mOutputState.start = mrInputState.start;
-  mOutputState.select = mrInputState.c_left;
-  mOutputState.home = mrInputState.c_down;
+    // Menu keys
+    outputs.start = inputs.start;
+    outputs.select = inputs.c_left;
+    outputs.home = inputs.c_down;
 
-  // Right hand bottom row
-  mOutputState.a = mrInputState.b;
-  mOutputState.b = mrInputState.x;
-  mOutputState.triggerRDigital = mrInputState.z;
-  mOutputState.triggerLDigital = mrInputState.up;
+    // Right hand bottom row
+    outputs.a = inputs.b;
+    outputs.b = inputs.x;
+    outputs.triggerRDigital = inputs.z;
+    outputs.triggerLDigital = inputs.up;
 
-  // Right hand top row
-  mOutputState.x = mrInputState.r;
-  mOutputState.y = mrInputState.y;
-  mOutputState.buttonR = mrInputState.lightshield;
-  mOutputState.buttonL = mrInputState.midshield;
+    // Right hand top row
+    outputs.x = inputs.r;
+    outputs.y = inputs.y;
+    outputs.buttonR = inputs.lightshield;
+    outputs.buttonL = inputs.midshield;
 }
 
-void FgcMode::UpdateAnalogOutputs() {
-  mOutputState.leftStickX = 128;
-  mOutputState.leftStickY = 128;
-  mOutputState.rightStickX = 128;
-  mOutputState.rightStickY = 128;
+void FgcMode::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
+    outputs.leftStickX = 128;
+    outputs.leftStickY = 128;
+    outputs.rightStickX = 128;
+    outputs.rightStickY = 128;
 }
