@@ -14,7 +14,6 @@ typedef struct {
 class GpioButtonInput : public InputSource {
   public:
     GpioButtonInput(GpioButtonMapping *button_mappings, size_t button_count);
-    ~GpioButtonInput();
     void UpdateInputs(InputState &inputs);
     InputScanSpeed ScanSpeed();
 

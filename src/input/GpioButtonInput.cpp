@@ -13,8 +13,6 @@ GpioButtonInput::GpioButtonInput(GpioButtonMapping *button_mappings, size_t butt
     }
 }
 
-GpioButtonInput::~GpioButtonInput() {}
-
 InputScanSpeed GpioButtonInput::ScanSpeed() {
     return InputScanSpeed::FAST;
 }

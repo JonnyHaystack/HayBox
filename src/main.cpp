@@ -1,12 +1,4 @@
-/* HayB0XX Version 2.0.0 */
-
-#define NUNCHUK_ENABLE false
-
-// #include <Arduino.h>
-
-#if NUNCHUK_ENABLE
-#include <NintendoExtensionCtrl.h>
-#endif
+/* HayBox Version 2.0.0 */
 
 #include "config.hpp"
 
@@ -18,22 +10,9 @@ extern CommunicationBackend **backends;
 extern uint8_t backend_count;
 KeyboardMode *current_kb_mode = nullptr;
 
-#if NUNCHUK_ENABLE
-Nunchuk gNunchuk;
-#endif
-
 void setup() {
     // Controller-specific setup. Must be called first.
     initialise();
-
-#if NUNCHUK_ENABLE
-    gNunchuk.begin();
-    if (gNunchuk.connect()) {
-        inputs.nunchuk_connected = true;
-    } else {
-        gNunchuk.i2c().end();
-    }
-#endif
 }
 
 void loop() {
