@@ -4,7 +4,7 @@
 #include "stdlib.hpp"
 
 namespace serial {
-    void init(uint baudrate);
+    void init(unsigned long baudrate);
     void close();
     void print(const char *string);
     void write(uint8_t byte);

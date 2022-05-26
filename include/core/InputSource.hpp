@@ -13,8 +13,8 @@ class InputSource {
   public:
     InputSource();
     virtual ~InputSource(){};
-    virtual void UpdateInputs(InputState &inputs) = 0;
     virtual InputScanSpeed ScanSpeed() = 0;
+    virtual void UpdateInputs(InputState &inputs) = 0;
 };
 
 #endif

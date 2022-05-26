@@ -24,6 +24,6 @@ void loop() {
     }
 
     if (current_kb_mode != nullptr) {
-        current_kb_mode->SendReport(backends[0]->CurrentInputs());
+        current_kb_mode->SendReport(backends[0]->GetInputs());
     }
 }

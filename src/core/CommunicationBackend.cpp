@@ -13,7 +13,7 @@ CommunicationBackend::CommunicationBackend(
     _input_source_count = input_source_count;
 }
 
-InputState &CommunicationBackend::CurrentInputs() {
+InputState &CommunicationBackend::GetInputs() {
     return _inputs;
 }
 

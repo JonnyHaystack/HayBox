@@ -13,6 +13,7 @@
 #include "core/socd.hpp"
 #include "core/state.hpp"
 #include "input/GpioButtonInput.hpp"
+#include "input/NunchukInput.hpp"
 #include "modes/Melee20Button.hpp"
 
 CommunicationBackend **backends;
@@ -59,7 +60,7 @@ void initialise() {
     GpioButtonInput *gpio_input = new GpioButtonInput(button_mappings, button_count);
 
     // Put input sources into an array.
-    InputSource *input_sources[] = { gpio_input };
+    InputSource *input_sources[] = { gpio_input, new NunchukInput() };
     size_t input_source_count = sizeof(input_sources) / sizeof(InputSource *);
 
     // Read button holds.

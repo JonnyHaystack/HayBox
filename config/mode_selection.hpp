@@ -11,7 +11,7 @@ extern KeyboardMode *current_kb_mode;
 
 void select_mode(CommunicationBackend **backends, uint8_t backend_count) {
     for (int i = 0; i < backend_count; i++) {
-        InputState &inputs = backends[i]->CurrentInputs();
+        InputState &inputs = backends[i]->GetInputs();
         if (inputs.mod_x && !inputs.mod_y && inputs.start) {
             if (inputs.l) {
                 backends[i]->SetGameMode(new Melee20Button(socd::SOCD_2IP_NO_REAC));

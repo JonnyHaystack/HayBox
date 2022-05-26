@@ -11,7 +11,7 @@ class CommunicationBackend {
     CommunicationBackend(InputSource **input_sources, uint8_t input_source_count);
     virtual ~CommunicationBackend(){};
 
-    InputState &CurrentInputs();
+    InputState &GetInputs();
     void ScanInputs();
     void ScanInputs(InputScanSpeed input_source_filter);
 

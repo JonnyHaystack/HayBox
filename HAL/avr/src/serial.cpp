@@ -3,7 +3,7 @@
 #include "stdlib.hpp"
 
 namespace serial {
-    void init(uint baudrate) {
+    void init(unsigned long baudrate) {
         Serial.begin(baudrate);
     }
 
