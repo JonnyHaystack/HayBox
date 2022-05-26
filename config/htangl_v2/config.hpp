@@ -85,17 +85,14 @@ void initialise() {
         delete primary_backend;
         if (button_holds.c_left) {
             // Hold C-Left on plugin for N64.
-            delete primary_backend;
             primary_backend =
                 new N64Backend(input_sources, input_source_count, 60, pinout.joybus_data);
         } else if (button_holds.a) {
             // Hold A on plugin for GameCube adapter.
-            delete primary_backend;
             primary_backend =
                 new GamecubeBackend(input_sources, input_source_count, 0, pinout.joybus_data);
         } else {
             // Default to GameCube/Wii.
-            delete primary_backend;
             primary_backend =
                 new GamecubeBackend(input_sources, input_source_count, 125, pinout.joybus_data);
         }
