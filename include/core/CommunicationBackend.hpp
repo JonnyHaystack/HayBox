@@ -8,7 +8,7 @@
 
 class CommunicationBackend {
   public:
-    CommunicationBackend(InputSource **input_sources, uint8_t input_source_count);
+    CommunicationBackend(InputSource **input_sources, size_t input_source_count);
     virtual ~CommunicationBackend(){};
 
     InputState &GetInputs();
@@ -23,7 +23,7 @@ class CommunicationBackend {
   protected:
     InputState _inputs;
     InputSource **_input_sources;
-    uint8_t _input_source_count;
+    size_t _input_source_count;
 
     OutputState _outputs;
     ControllerMode *_gamemode;

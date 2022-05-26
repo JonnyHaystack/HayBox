@@ -2,20 +2,26 @@
 
 #include "gpio.hpp"
 
+#include <ArduinoNunchuk.hpp>
 #include <Wire.h>
 
 NunchukInput::NunchukInput(int detect_pin) {
-    _nunchuk = new ArduinoNunchuk(Wire);
-
     if (detect_pin > -1) {
         gpio::init_pin(detect_pin, gpio::GpioMode::GPIO_INPUT_PULLUP);
+        if (gpio::read_digital(detect_pin)) {
+            _nunchuk = nullptr;
+            return;
+        }
     }
 
-    if (gpio::read_digital(detect_pin) || !_nunchuk->init() || !_nunchuk->update()) {
+    _nunchuk = new ArduinoNunchuk(Wire);
+
+    if (!_nunchuk->init() || !_nunchuk->update()) {
         // If a Nunchuk isn't connected we don't want i2c to stay enabled because it might interfere
         // with inputs if i2c pins are also used for buttons. The destructor of ArduinoNunchuk
         // ends the i2c communication.
         delete _nunchuk;
+        _nunchuk = nullptr;
     }
 }
 

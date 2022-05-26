@@ -19,7 +19,7 @@ class GpioButtonInput : public InputSource {
 
   protected:
     GpioButtonMapping *_button_mappings;
-    uint8_t _button_count;
+    size_t _button_count;
 };
 
 #endif

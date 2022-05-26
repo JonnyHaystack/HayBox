@@ -17,7 +17,7 @@
 #include "modes/Melee20Button.hpp"
 
 CommunicationBackend **backends;
-uint8_t backend_count;
+size_t backend_count;
 
 GpioButtonMapping button_mappings[] = {
     {&InputState::l,            12},
@@ -58,16 +58,20 @@ Pinout pinout = {
 };
 
 void initialise() {
-    // Create GPIO input source first and use it to read button states for checking button holds.
+    // Create Nunchuk input source - must be done before GPIO input source otherwise it would
+    // disable the pullups on the i2c pins.
+    delay(50);
+    NunchukInput *nunchuk = new NunchukInput();
+
+    // Create GPIO input source and use it to read button states for checking button holds.
     GpioButtonInput *gpio_input = new GpioButtonInput(button_mappings, button_count);
 
-    // Put input sources into an array.
-    InputSource *input_sources[] = { gpio_input, new NunchukInput() };
-    size_t input_source_count = sizeof(input_sources) / sizeof(InputSource *);
-
-    // Read button holds.
     InputState button_holds;
     gpio_input->UpdateInputs(button_holds);
+
+    // Create array of input sources to be used.
+    InputSource *input_sources[] = { gpio_input, nunchuk };
+    size_t input_source_count = sizeof(input_sources) / sizeof(InputSource *);
 
     CommunicationBackend *primary_backend = new DInputBackend(input_sources, input_source_count);
     delay(500);

@@ -7,7 +7,7 @@
 #include "core/state.hpp"
 
 extern CommunicationBackend **backends;
-extern uint8_t backend_count;
+extern size_t backend_count;
 KeyboardMode *current_kb_mode = nullptr;
 
 void setup() {
@@ -19,7 +19,7 @@ void loop() {
     /* Mode selection */
     // select_mode();
 
-    for (int i = 0; i < backend_count; i++) {
+    for (size_t i = 0; i < backend_count; i++) {
         backends[i]->SendReport();
     }
 
