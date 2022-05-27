@@ -46,15 +46,12 @@ SpacesInLineCommentPrefix:
   Maximum: 1
 IncludeBlocks: Regroup
 IncludeCategories:
-  - Regex:           '"[[:alnum:]._-]+"'
+  - Regex:           '".*"'
     Priority:        1
     SortPriority:    1
-  - Regex:           '^((<|").*/)'
+  - Regex:           '<.*>'
     Priority:        2
     SortPriority:    2
-  - Regex:           '<[[:alnum:]._-]+>'
-    Priority:        3
-    SortPriority:    3
 SortUsingDeclarations: false
 SpaceBeforeCtorInitializerColon: true
 SpacesInContainerLiterals: false
