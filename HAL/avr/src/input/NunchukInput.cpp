@@ -6,6 +6,8 @@
 #include <Wire.h>
 
 NunchukInput::NunchukInput(int detect_pin) {
+    delay(50);
+
     if (detect_pin > -1) {
         gpio::init_pin(detect_pin, gpio::GpioMode::GPIO_INPUT_PULLUP);
         if (gpio::read_digital(detect_pin)) {

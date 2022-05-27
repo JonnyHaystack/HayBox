@@ -60,7 +60,6 @@ Pinout pinout = {
 void initialise() {
     // Create Nunchuk input source - must be done before GPIO input source otherwise it would
     // disable the pullups on the i2c pins.
-    delay(50);
     NunchukInput *nunchuk = new NunchukInput();
 
     // Create GPIO input source and use it to read button states for checking button holds.

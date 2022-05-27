@@ -17,13 +17,13 @@ void setup() {
 
 void loop() {
     /* Mode selection */
-    // select_mode();
+    select_mode(backends[0]);
 
-    for (size_t i = 0; i < backend_count; i++) {
-        backends[i]->SendReport();
-    }
+    if (current_kb_mode == nullptr) {
+        for (size_t i = 0; i < backend_count; i++) {
+            backends[i]->SendReport();
+        }
 
-    if (current_kb_mode != nullptr) {
         current_kb_mode->SendReport(backends[0]->GetInputs());
     }
 }
