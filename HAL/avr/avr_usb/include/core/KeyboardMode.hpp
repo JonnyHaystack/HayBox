@@ -13,7 +13,7 @@ class KeyboardMode : public InputMode {
     virtual void SendKeys(InputState &inputs) = 0;
 
   protected:
-    void Press(char key, bool press);
+    void Press(uint8_t key, bool press);
 };
 
 #endif

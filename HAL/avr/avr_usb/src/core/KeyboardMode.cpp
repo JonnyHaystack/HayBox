@@ -18,7 +18,7 @@ void KeyboardMode::SendReport(InputState &inputs) {
     SendKeys(inputs);
 }
 
-void KeyboardMode::Press(char key, bool press) {
+void KeyboardMode::Press(uint8_t key, bool press) {
     if (press)
         Keyboard.press(key);
     else
