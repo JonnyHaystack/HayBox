@@ -5,7 +5,7 @@
 #include "comms/DInputBackend.hpp"
 #include "comms/GamecubeBackend.hpp"
 #include "comms/N64Backend.hpp"
-// #include "config/mode_selection.hpp"
+#include "config/mode_selection.hpp"
 #include "core/CommunicationBackend.hpp"
 #include "core/InputMode.hpp"
 #include "core/KeyboardMode.hpp"
@@ -19,7 +19,7 @@
 
 CommunicationBackend **backends;
 size_t backend_count;
-// KeyboardMode *current_kb_mode = nullptr;
+KeyboardMode *current_kb_mode = nullptr;
 
 GpioButtonMapping button_mappings[] = {
     {&InputState::l,            12},
@@ -55,8 +55,8 @@ Pinout pinout = {
     .joybus_data = 13,
     .mux = -1,
     .nunchuk_detect = -1,
-    .nunchuk_sda = 2,
-    .nunchuk_scl = 3,
+    .nunchuk_sda = -1,
+    .nunchuk_scl = -1,
 };
 
 void setup() {

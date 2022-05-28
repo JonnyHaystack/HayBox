@@ -1,12 +1,11 @@
 #ifndef _CONFIG_HPP
 #define _CONFIG_HPP
 
-#include "stdlib.hpp"
-
 #include "comms/B0XXInputViewer.hpp"
 #include "comms/DInputBackend.hpp"
 #include "comms/GamecubeBackend.hpp"
 #include "comms/N64Backend.hpp"
+#include "config/mode_selection.hpp"
 #include "core/CommunicationBackend.hpp"
 #include "core/InputMode.hpp"
 #include "core/pinout.hpp"
@@ -15,9 +14,11 @@
 #include "input/GpioButtonInput.hpp"
 #include "input/NunchukInput.hpp"
 #include "modes/Melee20Button.hpp"
+#include "stdlib.hpp"
 
 CommunicationBackend **backends;
 size_t backend_count;
+KeyboardMode *current_kb_mode = nullptr;
 
 GpioButtonMapping button_mappings[] = {
     {&InputState::l,            9 },
@@ -50,12 +51,12 @@ size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
 Pinout pinout = {
     .joybus_data = 17,
     .mux = 7,
-    .nunchuk_sda = 2,
-    .nunchuk_scl = 3,
     .nunchuk_detect = -1,
+    .nunchuk_sda = -1,
+    .nunchuk_scl = -1,
 };
 
-void initialise() {
+void setup() {
     // Create Nunchuk input source - must be done before GPIO input source otherwise it would
     // disable the pullups on the i2c pins.
     NunchukInput *nunchuk = new NunchukInput();
@@ -67,7 +68,7 @@ void initialise() {
     gpio_input->UpdateInputs(button_holds);
 
     // Create array of input sources to be used.
-    InputSource *input_sources[] = { gpio_input, new NunchukInput() };
+    static InputSource *input_sources[] = { gpio_input, nunchuk };
     size_t input_source_count = sizeof(input_sources) / sizeof(InputSource *);
 
     // Hold Mod X + A on plugin for Brook board mode.
@@ -85,10 +86,10 @@ void initialise() {
     if (usb_connected) {
         // Default to DInput mode if USB is connected.
         // Input viewer only used when connected to PC i.e. when using DInput mode.
-        backends = new CommunicationBackend *[2] {
+        backend_count = 2;
+        backends = new CommunicationBackend *[backend_count] {
             primary_backend, new B0XXInputViewer(input_sources, input_source_count)
         };
-        backend_count = 2;
     } else {
         delete primary_backend;
         if (button_holds.c_left) {
@@ -106,12 +107,24 @@ void initialise() {
         }
 
         // If not DInput then only using 1 backend (no input viewer).
-        backends = new CommunicationBackend *[1] { primary_backend };
         backend_count = 1;
+        backends = new CommunicationBackend *[backend_count] { primary_backend };
     }
 
     // Default to Melee mode.
     primary_backend->SetGameMode(new Melee20Button(socd::SOCD_2IP_NO_REAC));
+}
+
+void loop() {
+    select_mode(backends[0]);
+
+    for (size_t i = 0; i < backend_count; i++) {
+        backends[i]->SendReport();
+    }
+
+    if (current_kb_mode != nullptr) {
+        current_kb_mode->SendReport(backends[0]->GetInputs());
+    }
 }
 
 #endif

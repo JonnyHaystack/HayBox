@@ -107,7 +107,6 @@ void setup() {
         };
         backend_count = 2;
     } else {
-        delete primary_backend;
         if (button_holds.c_left) {
             // Hold C-Left on plugin for N64.
             // primary_backend =
