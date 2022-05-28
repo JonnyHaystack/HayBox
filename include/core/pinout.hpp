@@ -6,9 +6,9 @@
 typedef struct {
     uint8_t joybus_data;
     int mux;
+    int nunchuk_detect;
     int nunchuk_sda;
     int nunchuk_scl;
-    int nunchuk_detect;
 } Pinout;
 
 #endif

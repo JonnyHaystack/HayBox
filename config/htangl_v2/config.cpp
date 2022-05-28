@@ -1,23 +1,25 @@
 #ifndef _CONFIG_HPP
 #define _CONFIG_HPP
 
-#include "stdlib.hpp"
-
 #include "comms/B0XXInputViewer.hpp"
 #include "comms/DInputBackend.hpp"
 #include "comms/GamecubeBackend.hpp"
 #include "comms/N64Backend.hpp"
+// #include "config/mode_selection.hpp"
 #include "core/CommunicationBackend.hpp"
 #include "core/InputMode.hpp"
+#include "core/KeyboardMode.hpp"
 #include "core/pinout.hpp"
 #include "core/socd.hpp"
 #include "core/state.hpp"
 #include "input/GpioButtonInput.hpp"
 #include "input/NunchukInput.hpp"
 #include "modes/Melee20Button.hpp"
+#include "stdlib.hpp"
 
 CommunicationBackend **backends;
 size_t backend_count;
+// KeyboardMode *current_kb_mode = nullptr;
 
 GpioButtonMapping button_mappings[] = {
     {&InputState::l,            12},
@@ -52,12 +54,12 @@ size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
 Pinout pinout = {
     .joybus_data = 13,
     .mux = -1,
+    .nunchuk_detect = -1,
     .nunchuk_sda = 2,
     .nunchuk_scl = 3,
-    .nunchuk_detect = -1,
 };
 
-void initialise() {
+void setup() {
     // Create Nunchuk input source - must be done before GPIO input source otherwise it would
     // disable the pullups on the i2c pins.
     NunchukInput *nunchuk = new NunchukInput();
@@ -69,7 +71,7 @@ void initialise() {
     gpio_input->UpdateInputs(button_holds);
 
     // Create array of input sources to be used.
-    InputSource *input_sources[] = { gpio_input, nunchuk };
+    static InputSource *input_sources[] = { gpio_input, nunchuk };
     size_t input_source_count = sizeof(input_sources) / sizeof(InputSource *);
 
     CommunicationBackend *primary_backend = new DInputBackend(input_sources, input_source_count);
@@ -107,6 +109,18 @@ void initialise() {
 
     // Default to Melee mode.
     primary_backend->SetGameMode(new Melee20Button(socd::SOCD_2IP_NO_REAC));
+}
+
+void loop() {
+    select_mode(backends[0]);
+
+    for (size_t i = 0; i < backend_count; i++) {
+        backends[i]->SendReport();
+    }
+
+    if (current_kb_mode != nullptr) {
+        current_kb_mode->SendReport(backends[0]->GetInputs());
+    }
 }
 
 #endif
