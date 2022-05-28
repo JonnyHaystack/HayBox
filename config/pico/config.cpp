@@ -14,6 +14,7 @@
 #include "core/state.hpp"
 #include "input/GpioButtonInput.hpp"
 #include "input/NunchukInput.hpp"
+#include "joybus_utils.hpp"
 #include "modes/Melee20Button.hpp"
 #include "stdlib.hpp"
 
@@ -87,19 +88,12 @@ void setup() {
     static InputSource *input_sources[] = { gpio_input, nunchuk };
     size_t input_source_count = sizeof(input_sources) / sizeof(InputSource *);
 
-    // USB autodetection.
-    bool usb_connected = false;
-    for (int i = 0; i < 100; i++) {
-        if (USBDevice.mounted()) {
-            usb_connected = true;
-            break;
-        }
-    }
+    ConnectedConsole console = detect_console(pinout.joybus_data);
 
     /* Select communication backend. */
     CommunicationBackend *primary_backend;
-    if (usb_connected) {
-        // Default to DInput mode if USB is connected.
+    if (console == ConnectedConsole::NONE) {
+        // Default to DInput mode if no console detected.
         // Input viewer only used when connected to PC i.e. when using DInput mode.
         primary_backend = new DInputBackend(input_sources, input_source_count);
         backends = new CommunicationBackend *[2] {
@@ -107,14 +101,12 @@ void setup() {
         };
         backend_count = 2;
     } else {
-        if (button_holds.c_left) {
-            // Hold C-Left on plugin for N64.
-            // primary_backend =
-            //     new N64Backend(input_sources, input_source_count, 60, pinout.joybus_data);
-        } else {
-            // Default to GameCube.
+        if (console == ConnectedConsole::GAMECUBE) {
             primary_backend =
                 new GamecubeBackend(input_sources, input_source_count, pinout.joybus_data);
+        } else if (console == ConnectedConsole::N64) {
+            // primary_backend =
+            //     new N64Backend(input_sources, input_source_count, 60, pinout.joybus_data);
         }
 
         // If not DInput then only using 1 backend (no input viewer).
