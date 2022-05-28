@@ -19,38 +19,38 @@ size_t backend_count;
 KeyboardMode *current_kb_mode = nullptr;
 
 GpioButtonMapping button_mappings[] = {
-    {&InputState::l,            12},
-    { &InputState::left,        7 },
-    { &InputState::down,        11},
-    { &InputState::right,       5 },
+    {&InputState::l,            6 },
+    { &InputState::left,        4 },
+    { &InputState::down,        0 },
+    { &InputState::right,       1 },
 
-    { &InputState::mod_x,       9 },
-    { &InputState::mod_y,       A1},
+    { &InputState::mod_x,       14},
+    { &InputState::mod_y,       16},
 
     { &InputState::select,      2 },
-    { &InputState::start,       1 },
-    { &InputState::home,        3 },
+    { &InputState::start,       3 },
+    { &InputState::home,        5 },
 
-    { &InputState::c_left,      A3},
-    { &InputState::c_up,        A4},
-    { &InputState::c_down,      A0},
-    { &InputState::a,           10},
-    { &InputState::c_right,     A2},
+    { &InputState::c_left,      A2},
+    { &InputState::c_up,        A3},
+    { &InputState::c_down,      15},
+    { &InputState::a,           A5},
+    { &InputState::c_right,     A4},
 
-    { &InputState::b,           0 },
-    { &InputState::x,           4 },
-    { &InputState::z,           6 },
-    { &InputState::up,          8 },
+    { &InputState::b,           7 },
+    { &InputState::x,           9 },
+    { &InputState::z,           12},
+    { &InputState::up,          A0},
 
-    { &InputState::r,           16},
-    { &InputState::y,           15},
-    { &InputState::lightshield, A5},
-    { &InputState::midshield,   14},
+    { &InputState::r,           10},
+    { &InputState::y,           11},
+    { &InputState::lightshield, 13},
+    { &InputState::midshield,   A1},
 };
 size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
 
 Pinout pinout = {
-    .joybus_data = 13,
+    .joybus_data = 8,
     .mux = -1,
     .nunchuk_detect = -1,
     .nunchuk_sda = -1,
@@ -58,10 +58,6 @@ Pinout pinout = {
 };
 
 void setup() {
-    // Create Nunchuk input source - must be done before GPIO input source otherwise it would
-    // disable the pullups on the i2c pins.
-    NunchukInput *nunchuk = new NunchukInput();
-
     // Create GPIO input source and use it to read button states for checking button holds.
     GpioButtonInput *gpio_input = new GpioButtonInput(button_mappings, button_count);
 
@@ -69,7 +65,7 @@ void setup() {
     gpio_input->UpdateInputs(button_holds);
 
     // Create array of input sources to be used.
-    static InputSource *input_sources[] = { gpio_input, nunchuk };
+    static InputSource *input_sources[] = { gpio_input };
     size_t input_source_count = sizeof(input_sources) / sizeof(InputSource *);
 
     CommunicationBackend *primary_backend = new DInputBackend(input_sources, input_source_count);
