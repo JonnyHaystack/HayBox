@@ -46,8 +46,8 @@ void DInputBackend::SendReport() {
     _gamepad->leftYAxis((int8_t)(128 - _outputs.leftStickY));
     _gamepad->rightXAxis((int8_t)(_outputs.rightStickX + 128));
     _gamepad->rightYAxis((int8_t)(128 - _outputs.rightStickY));
-    _gamepad->triggerLAnalog((int8_t)(_outputs.triggerLAnalog + 128));
-    _gamepad->triggerRAnalog((int8_t)(_outputs.triggerRAnalog + 128));
+    _gamepad->triggerLAnalog((int8_t)(_outputs.triggerLAnalog + 128 + 2));
+    _gamepad->triggerRAnalog((int8_t)(_outputs.triggerRAnalog + 128 + 2));
 
     // D-pad Hat Switch
     _gamepad->hatSwitch(
