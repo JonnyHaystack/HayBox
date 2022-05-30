@@ -15,8 +15,6 @@
 #include "modes/Melee20Button.hpp"
 #include "stdlib.hpp"
 
-#include <Adafruit_TinyUSB.h>
-#include <Arduino.h>
 #include <pico/bootrom.h>
 
 CommunicationBackend **backends;
@@ -92,11 +90,11 @@ void setup() {
     if (console == ConnectedConsole::NONE) {
         // Default to DInput mode if no console detected.
         // Input viewer only used when connected to PC i.e. when using DInput mode.
+        backend_count = 2;
         primary_backend = new DInputBackend(input_sources, input_source_count);
-        backends = new CommunicationBackend *[2] {
+        backends = new CommunicationBackend *[backend_count] {
             primary_backend, new B0XXInputViewer(input_sources, input_source_count)
         };
-        backend_count = 2;
     } else {
         if (console == ConnectedConsole::GAMECUBE) {
             primary_backend =
@@ -107,8 +105,8 @@ void setup() {
         }
 
         // If not DInput then only using 1 backend (no input viewer).
-        backends = new CommunicationBackend *[1] { primary_backend };
         backend_count = 1;
+        backends = new CommunicationBackend *[backend_count] { primary_backend };
     }
 
     // Default to Melee mode.

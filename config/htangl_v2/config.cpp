@@ -80,10 +80,10 @@ void setup() {
     if (usb_connected) {
         // Default to DInput mode if USB is connected.
         // Input viewer only used when connected to PC i.e. when using DInput mode.
-        backends = new CommunicationBackend *[2] {
+        backend_count = 2;
+        backends = new CommunicationBackend *[backend_count] {
             primary_backend, new B0XXInputViewer(input_sources, input_source_count)
         };
-        backend_count = 2;
     } else {
         delete primary_backend;
         if (button_holds.a) {
@@ -97,8 +97,8 @@ void setup() {
         }
 
         // If not DInput then only using 1 backend (no input viewer).
-        backends = new CommunicationBackend *[1] { primary_backend };
         backend_count = 1;
+        backends = new CommunicationBackend *[backend_count] { primary_backend };
     }
 
     // Default to Melee mode.
