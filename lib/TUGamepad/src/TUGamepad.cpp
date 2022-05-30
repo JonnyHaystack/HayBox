@@ -43,7 +43,7 @@ bool TUGamepad::ready() {
 };
 
 bool TUGamepad::sendState() {
-    return _usb_hid.sendReport(0, &_report, sizeof(hid_gamepad_report_t));
+    return _usb_hid.sendReport(0, &_report, sizeof(gamepad_report_t));
 }
 
 void TUGamepad::resetInputs() {
@@ -80,28 +80,28 @@ void TUGamepad::buttons(uint32_t buttons) {
     _report.buttons = buttons;
 }
 
-void TUGamepad::leftXAxis(int8_t value) {
-    _report.x = value;
+void TUGamepad::leftXAxis(uint8_t value) {
+    _report.x = (value << 8) + 127;
 }
 
-void TUGamepad::leftYAxis(int8_t value) {
-    _report.y = value;
+void TUGamepad::leftYAxis(uint8_t value) {
+    _report.y = (value << 8) + 127;
 }
 
-void TUGamepad::rightXAxis(int8_t value) {
-    _report.rx = value;
+void TUGamepad::rightXAxis(uint8_t value) {
+    _report.rx = (value << 8) + 127;
 }
 
-void TUGamepad::rightYAxis(int8_t value) {
-    _report.ry = value;
+void TUGamepad::rightYAxis(uint8_t value) {
+    _report.ry = (value << 8) + 127;
 }
 
-void TUGamepad::triggerLAnalog(int8_t value) {
-    _report.z = value;
+void TUGamepad::triggerLAnalog(uint8_t value) {
+    _report.z = (value << 8) + 127;
 }
 
-void TUGamepad::triggerRAnalog(int8_t value) {
-    _report.rz = value;
+void TUGamepad::triggerRAnalog(uint8_t value) {
+    _report.rz = (value << 8) + 127;
 }
 
 void TUGamepad::hatSwitch(hid_gamepad_hat_t direction) {
