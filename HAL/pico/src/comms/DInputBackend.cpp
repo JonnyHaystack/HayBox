@@ -41,7 +41,7 @@ void DInputBackend::SendReport() {
     _gamepad->setButton(11, _outputs.leftStickClick);
     _gamepad->setButton(12, _outputs.home);
 
-    // Analog _outputs
+    // Analog outputs
     _gamepad->leftXAxis(_outputs.leftStickX + 128);
     _gamepad->leftYAxis(128 - _outputs.leftStickY);
     _gamepad->rightXAxis(_outputs.rightStickX + 128);
@@ -50,31 +50,7 @@ void DInputBackend::SendReport() {
     _gamepad->triggerRAnalog(_outputs.triggerRAnalog + 129);
 
     // D-pad Hat Switch
-    _gamepad->hatSwitch(
-        GetDpadAngle(_outputs.dpadLeft, _outputs.dpadRight, _outputs.dpadDown, _outputs.dpadUp)
-    );
+    _gamepad->hatSwitch(_outputs.dpadLeft, _outputs.dpadRight, _outputs.dpadDown, _outputs.dpadUp);
 
     _gamepad->sendState();
-}
-
-hid_gamepad_hat_t DInputBackend::GetDpadAngle(bool left, bool right, bool down, bool up) {
-    hid_gamepad_hat_t angle = GAMEPAD_HAT_CENTERED;
-    if (right && !left) {
-        angle = GAMEPAD_HAT_RIGHT;
-        if (down)
-            angle = GAMEPAD_HAT_DOWN_RIGHT;
-        if (up)
-            angle = GAMEPAD_HAT_UP_RIGHT;
-    } else if (left && !right) {
-        angle = GAMEPAD_HAT_LEFT;
-        if (down)
-            angle = GAMEPAD_HAT_DOWN_LEFT;
-        if (up)
-            angle = GAMEPAD_HAT_UP_LEFT;
-    } else if (down && !up) {
-        angle = GAMEPAD_HAT_DOWN;
-    } else if (up && !down) {
-        angle = GAMEPAD_HAT_UP;
-    }
-    return angle;
 }

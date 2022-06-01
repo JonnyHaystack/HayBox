@@ -60,7 +60,7 @@ void DInputBackend::SendReport() {
     _joystick->setButton(11, _outputs.leftStickClick);
     _joystick->setButton(12, _outputs.home);
 
-    // Analog _outputs
+    // Analog outputs
     _joystick->setXAxis(_outputs.leftStickX);
     _joystick->setYAxis(256 - _outputs.leftStickY);
     _joystick->setRxAxis(_outputs.rightStickX);
