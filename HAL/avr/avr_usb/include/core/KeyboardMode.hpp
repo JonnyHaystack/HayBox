@@ -5,6 +5,8 @@
 #include "core/socd.hpp"
 #include "core/state.hpp"
 
+#include <keycodes.h>
+
 class KeyboardMode : public InputMode {
   public:
     KeyboardMode(socd::SocdType socd_type);

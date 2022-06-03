@@ -2,25 +2,20 @@
 
 #include "core/InputMode.hpp"
 
-#include <Keyboard.h>
+#include <ArduinoKeyboard.hpp>
 
-KeyboardMode::KeyboardMode(socd::SocdType socd_type) : InputMode(socd_type) {
-    Keyboard.begin();
-}
+KeyboardMode::KeyboardMode(socd::SocdType socd_type) : InputMode(socd_type) {}
 
 KeyboardMode::~KeyboardMode() {
-    Keyboard.releaseAll();
-    Keyboard.end();
+    _keyboard.releaseAll();
 }
 
 void KeyboardMode::SendReport(InputState &inputs) {
     HandleSocd(inputs);
     SendKeys(inputs);
+    _keyboard.sendReport();
 }
 
 void KeyboardMode::Press(uint8_t key, bool press) {
-    if (press)
-        Keyboard.press(key);
-    else
-        Keyboard.release(key);
+    _keyboard.setPressed(key, press);
 }
