@@ -1,10 +1,9 @@
 #ifndef _CORE_COMMUNICATIONBACKEND_HPP
 #define _CORE_COMMUNICATIONBACKEND_HPP
 
-#include "state.hpp"
-
 #include "core/ControllerMode.hpp"
 #include "core/InputSource.hpp"
+#include "state.hpp"
 
 class CommunicationBackend {
   public:
@@ -16,7 +15,7 @@ class CommunicationBackend {
     void ScanInputs(InputScanSpeed input_source_filter);
 
     void UpdateOutputs();
-    void SetGameMode(ControllerMode *gamemode);
+    virtual void SetGameMode(ControllerMode *gamemode);
 
     virtual void SendReport() = 0;
 

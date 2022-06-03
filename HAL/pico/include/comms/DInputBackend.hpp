@@ -1,11 +1,10 @@
 #ifndef _COMMS_DINPUTBACKEND_HPP
 #define _COMMS_DINPUTBACKEND_HPP
 
-#include "stdlib.hpp"
-
 #include "core/CommunicationBackend.hpp"
 #include "core/ControllerMode.hpp"
 #include "core/InputSource.hpp"
+#include "stdlib.hpp"
 
 #include <TUGamepad.hpp>
 
