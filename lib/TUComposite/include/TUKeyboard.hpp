@@ -1,10 +1,10 @@
-#ifndef _TUKEYBOARD_TUKEYBOARD_HPP
-#define _TUKEYBOARD_TUKEYBOARD_HPP
+#ifndef _TUCOMPOSITE_TUKEYBOARD_HPP
+#define _TUCOMPOSITE_TUKEYBOARD_HPP
+
+#include "TUComposite.hpp"
 
 #include <Adafruit_TinyUSB.h>
 #include <Arduino.h>
-
-const uint8_t _keyboard_hid_report_desc[] = { TUD_HID_REPORT_DESC_KEYBOARD() };
 
 class TUKeyboard {
   public:
@@ -19,7 +19,6 @@ class TUKeyboard {
 
   private:
     hid_keyboard_report_t _report;
-    Adafruit_USBD_HID _usb_hid;
 };
 
 #endif

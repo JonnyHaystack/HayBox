@@ -6,26 +6,26 @@
 DefaultKeyboardMode::DefaultKeyboardMode(socd::SocdType socd_type) : KeyboardMode(socd_type) {}
 
 void DefaultKeyboardMode::SendKeys(InputState &inputs) {
-    Press('a', inputs.l);
-    Press('b', inputs.left);
-    Press('c', inputs.down);
-    Press('d', inputs.right);
-    Press('e', inputs.mod_x);
-    Press('f', inputs.mod_y);
-    Press('g', inputs.select);
-    Press('h', inputs.start);
-    Press('i', inputs.home);
-    Press('j', inputs.r);
-    Press('k', inputs.y);
-    Press('l', inputs.lightshield);
-    Press('m', inputs.midshield);
-    Press('n', inputs.b);
-    Press('o', inputs.x);
-    Press('p', inputs.z);
-    Press('q', inputs.up);
-    Press('r', inputs.c_up);
-    Press('s', inputs.c_left);
-    Press('t', inputs.c_right);
-    Press('u', inputs.a);
-    Press('v', inputs.c_down);
+    Press(HID_KEY_A, inputs.l);
+    Press(HID_KEY_B, inputs.left);
+    Press(HID_KEY_C, inputs.down);
+    Press(HID_KEY_D, inputs.right);
+    Press(HID_KEY_E, inputs.mod_x);
+    Press(HID_KEY_F, inputs.mod_y);
+    Press(HID_KEY_G, inputs.select);
+    Press(HID_KEY_H, inputs.start);
+    Press(HID_KEY_I, inputs.home);
+    Press(HID_KEY_J, inputs.r);
+    Press(HID_KEY_K, inputs.y);
+    Press(HID_KEY_L, inputs.lightshield);
+    Press(HID_KEY_M, inputs.midshield);
+    Press(HID_KEY_N, inputs.b);
+    Press(HID_KEY_O, inputs.x);
+    Press(HID_KEY_P, inputs.z);
+    Press(HID_KEY_Q, inputs.up);
+    Press(HID_KEY_R, inputs.c_up);
+    Press(HID_KEY_S, inputs.c_left);
+    Press(HID_KEY_T, inputs.c_right);
+    Press(HID_KEY_U, inputs.a);
+    Press(HID_KEY_V, inputs.c_down);
 }

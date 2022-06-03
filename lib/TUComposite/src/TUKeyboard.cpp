@@ -1,13 +1,12 @@
 #include "TUKeyboard.hpp"
 
+#include "TUComposite.hpp"
+
 #include <Adafruit_TinyUSB.h>
 
 #define MODIFIER_MASK(mod_kc) (1 << (mod_kc & 0x0F))
 
-TUKeyboard::TUKeyboard() {
-    _usb_hid.setPollInterval(1);
-    _usb_hid.setReportDescriptor(_keyboard_hid_report_desc, sizeof(_keyboard_hid_report_desc));
-}
+TUKeyboard::TUKeyboard() {}
 
 void TUKeyboard::begin() {
     _usb_hid.begin();
@@ -36,6 +35,7 @@ void TUKeyboard::press(uint8_t keycode) {
     for (int i = 0; i < 6; i++) {
         if (_report.keycode[i] == HID_KEY_NONE) {
             _report.keycode[i] = keycode;
+            return;
         }
     }
 }
@@ -61,10 +61,9 @@ void TUKeyboard::release(uint8_t keycode) {
 void TUKeyboard::setPressed(uint8_t keycode, bool pressed) {
     if (pressed) {
         press(keycode);
-        return;
+    } else {
+        release(keycode);
     }
-
-    release(keycode);
 }
 
 void TUKeyboard::releaseAll() {
@@ -75,5 +74,8 @@ void TUKeyboard::releaseAll() {
 }
 
 void TUKeyboard::sendState() {
-    _usb_hid.sendReport(0, &_report, sizeof(hid_keyboard_report_t));
+    while (!_usb_hid.ready()) {
+        tight_loop_contents();
+    }
+    _usb_hid.sendReport(RID_KEYBOARD, &_report, sizeof(hid_keyboard_report_t));
 }
