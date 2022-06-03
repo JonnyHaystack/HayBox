@@ -1,8 +1,7 @@
 #include "comms/B0XXInputViewer.hpp"
 
-#include "serial.hpp"
-
 #include "core/InputSource.hpp"
+#include "serial.hpp"
 
 #define ASCII_BIT(x) (x ? '1' : '0');
 

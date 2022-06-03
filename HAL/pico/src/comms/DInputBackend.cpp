@@ -22,7 +22,14 @@ DInputBackend::~DInputBackend() {
 
 void DInputBackend::SendReport() {
     // Update inputs from all sources at once.
-    ScanInputs();
+    ScanInputs(InputScanSpeed::SLOW);
+    ScanInputs(InputScanSpeed::MEDIUM);
+
+    while (!_gamepad->ready()) {
+        tight_loop_contents();
+    }
+
+    ScanInputs(InputScanSpeed::FAST);
 
     UpdateOutputs();
 
