@@ -17,12 +17,4 @@ namespace gpio {
             gpio_pull_down(pin);
         }
     }
-
-    bool read_digital(uint pin) {
-        return gpio_get(pin);
-    }
-
-    void write_digital(uint pin, bool value) {
-        gpio_put(pin, value);
-    }
 }

@@ -13,12 +13,4 @@ namespace gpio {
             pinMode(pin, INPUT);
         }
     }
-
-    bool read_digital(uint pin) {
-        return digitalRead(pin);
-    }
-
-    void write_digital(uint pin, bool value) {
-        digitalWrite(pin, value);
-    }
 }
