@@ -5,10 +5,13 @@
 #define ANALOG_STICK_MAX 208
 
 Melee20Button::Melee20Button(socd::SocdType socdType) : ControllerMode(socdType) {
-    socd_pairs.push_back(socd::SocdPair{ &InputState::left, &InputState::right });
-    socd_pairs.push_back(socd::SocdPair{ &InputState::down, &InputState::up });
-    socd_pairs.push_back(socd::SocdPair{ &InputState::c_left, &InputState::c_right });
-    socd_pairs.push_back(socd::SocdPair{ &InputState::c_down, &InputState::c_up });
+    _socd_pair_count = 4;
+    _socd_pairs = new socd::SocdPair[_socd_pair_count]{
+        socd::SocdPair{&InputState::left,    &InputState::right  },
+        socd::SocdPair{ &InputState::down,   &InputState::up     },
+        socd::SocdPair{ &InputState::c_left, &InputState::c_right},
+        socd::SocdPair{ &InputState::c_down, &InputState::c_up   },
+    };
 
     horizontal_socd = false;
 }

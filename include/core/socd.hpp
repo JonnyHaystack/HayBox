@@ -19,17 +19,17 @@ namespace socd {
     } SocdPair;
 
     typedef struct {
-        bool was_dir1;
-        bool was_dir2;
-        bool lock_dir1;
-        bool lock_dir2;
+        bool was_dir1 = false;
+        bool was_dir2 = false;
+        bool lock_dir1 = false;
+        bool lock_dir2 = false;
     } SocdState;
 
-    SocdState twoIPNoReactivate(bool &dir1, bool &dir2, SocdState socd_state);
+    void twoIPNoReactivate(bool &input_dir1, bool &input_dir2, SocdState &socd_state);
 
-    SocdState twoIP(bool &dir1, bool &dir2, SocdState socd_state);
+    void twoIP(bool &input_dir1, bool &input_dir2, SocdState &socd_state);
 
-    void neutral(bool &dir1, bool &dir2);
+    void neutral(bool &input_dir1, bool &input_dir2);
 
 }
 

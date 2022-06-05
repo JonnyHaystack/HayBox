@@ -4,22 +4,22 @@
 #include "socd.hpp"
 #include "state.hpp"
 
-#include <Vector.h>
-
 class InputMode {
   public:
     InputMode(socd::SocdType socd_type);
-    virtual ~InputMode(){};
+    virtual ~InputMode();
 
   protected:
-    Vector<socd::SocdPair> socd_pairs;
-    virtual void HandleSocd(InputState &inputs);
+    socd::SocdPair *_socd_pairs;
+    uint _socd_pair_count = 0;
     /* Exposed to child classes so that game modes are able to have different behaviour depending on
      * SOCD cleaning mode. */
-    socd::SocdType socd_type;
+    socd::SocdType _socd_type;
+
+    virtual void HandleSocd(InputState &inputs);
 
   private:
-    Vector<socd::SocdState> socd_states;
+    socd::SocdState *_socd_states = nullptr;
 };
 
 #endif
