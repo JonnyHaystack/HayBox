@@ -8,8 +8,8 @@ InputMode::InputMode(socd::SocdType socd_type) {
 }
 
 InputMode::~InputMode() {
-    delete _socd_pairs;
-    delete _socd_states;
+    delete[] _socd_pairs;
+    delete[] _socd_states;
 }
 
 void InputMode::HandleSocd(InputState &inputs) {
@@ -19,7 +19,7 @@ void InputMode::HandleSocd(InputState &inputs) {
     }
 
     // Handle SOCD resolution for each SOCD button pair.
-    for (int i = 0; i < _socd_pair_count; i++) {
+    for (size_t i = 0; i < _socd_pair_count; i++) {
         socd::SocdPair pair = _socd_pairs[i];
         switch (_socd_type) {
             case socd::SOCD_NEUTRAL:

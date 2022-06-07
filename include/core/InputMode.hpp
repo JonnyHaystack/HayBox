@@ -11,7 +11,7 @@ class InputMode {
 
   protected:
     socd::SocdPair *_socd_pairs;
-    uint _socd_pair_count = 0;
+    size_t _socd_pair_count = 0;
     /* Exposed to child classes so that game modes are able to have different behaviour depending on
      * SOCD cleaning mode. */
     socd::SocdType _socd_type;
