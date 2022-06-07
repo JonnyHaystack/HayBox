@@ -8,7 +8,7 @@ GpioButtonInput::GpioButtonInput(GpioButtonMapping *button_mappings, size_t butt
 
     // Initialize button pins.
     for (size_t i = 0; i < _button_count; i++) {
-        uint8_t pin = _button_mappings[i].pin;
+        uint pin = _button_mappings[i].pin;
         gpio::init_pin(pin, gpio::GpioMode::GPIO_INPUT_PULLUP);
     }
 }

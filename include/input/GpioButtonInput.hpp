@@ -1,14 +1,13 @@
 #ifndef _INPUT_GPIOBUTTONINPUT_HPP
 #define _INPUT_GPIOBUTTONINPUT_HPP
 
-#include "stdlib.hpp"
-
 #include "core/InputSource.hpp"
 #include "core/state.hpp"
+#include "stdlib.hpp"
 
 typedef struct {
     bool InputState::*button;
-    uint8_t pin;
+    uint pin;
 } GpioButtonMapping;
 
 class GpioButtonInput : public InputSource {
