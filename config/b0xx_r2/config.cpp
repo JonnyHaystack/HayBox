@@ -1,6 +1,3 @@
-#ifndef _CONFIG_HPP
-#define _CONFIG_HPP
-
 #include "comms/B0XXInputViewer.hpp"
 #include "comms/DInputBackend.hpp"
 #include "comms/GamecubeBackend.hpp"
@@ -126,5 +123,3 @@ void loop() {
         current_kb_mode->SendReport(backends[0]->GetInputs());
     }
 }
-
-#endif
