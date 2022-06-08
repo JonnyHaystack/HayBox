@@ -14,7 +14,7 @@ GamecubeBackend::GamecubeBackend(
     int offset
 )
     : CommunicationBackend(input_sources, input_source_count) {
-    _gamecube = new GamecubeConsole(data_pin, pio);
+    _gamecube = new GamecubeConsole(data_pin, pio, sm, offset);
     _report = default_gc_report;
 }
 
