@@ -6,10 +6,11 @@
 #include "modes/FgcMode.hpp"
 #include "modes/Melee20Button.hpp"
 #include "modes/ProjectM.hpp"
+#include "modes/Ultimate.hpp"
 
 extern KeyboardMode *current_kb_mode;
 
-void set_controller_mode(CommunicationBackend *backend, ControllerMode *mode) {
+void set_mode(CommunicationBackend *backend, ControllerMode *mode) {
     // Delete keyboard mode in case one is set, so we don't end up getting both controller and
     // keyboard inputs.
     delete current_kb_mode;
@@ -19,7 +20,7 @@ void set_controller_mode(CommunicationBackend *backend, ControllerMode *mode) {
     backend->SetGameMode(mode);
 }
 
-void set_keyboard_mode(CommunicationBackend *backend, KeyboardMode *mode) {
+void set_mode(CommunicationBackend *backend, KeyboardMode *mode) {
     // Delete and reassign current keyboard mode.
     delete current_kb_mode;
     current_kb_mode = mode;
@@ -32,15 +33,17 @@ void select_mode(CommunicationBackend *backend) {
     InputState &inputs = backend->GetInputs();
     if (inputs.mod_x && !inputs.mod_y && inputs.start) {
         if (inputs.l) {
-            set_controller_mode(backend, new Melee20Button(socd::SOCD_2IP_NO_REAC));
+            set_mode(backend, new Melee20Button(socd::SOCD_2IP_NO_REAC));
         } else if (inputs.left) {
-            set_controller_mode(backend, new ProjectM(socd::SOCD_2IP_NO_REAC, true, false));
+            set_mode(backend, new ProjectM(socd::SOCD_2IP_NO_REAC, true, false));
         } else if (inputs.down) {
-            set_controller_mode(backend, new FgcMode(socd::SOCD_NEUTRAL));
+            set_mode(backend, new Ultimate(socd::SOCD_2IP));
+        } else if (inputs.right) {
+            set_mode(backend, new FgcMode(socd::SOCD_NEUTRAL));
         }
     } else if (inputs.mod_y && !inputs.mod_x && inputs.start) {
         if (inputs.l) {
-            set_keyboard_mode(backend, new DefaultKeyboardMode(socd::SOCD_2IP));
+            set_mode(backend, new DefaultKeyboardMode(socd::SOCD_2IP));
         }
     }
 }
