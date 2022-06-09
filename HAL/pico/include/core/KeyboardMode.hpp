@@ -12,10 +12,10 @@ class KeyboardMode : public InputMode {
     KeyboardMode(socd::SocdType socd_type);
     ~KeyboardMode();
     void SendReport(InputState &inputs);
-    virtual void SendKeys(InputState &inputs) = 0;
 
   protected:
-    void Press(uint8_t key, bool press);
+    void Press(uint8_t keycode, bool press);
+    virtual void UpdateKeys(InputState &inputs) = 0;
 
   private:
     TUKeyboard *_keyboard;

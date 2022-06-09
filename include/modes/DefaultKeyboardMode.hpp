@@ -8,7 +8,9 @@
 class DefaultKeyboardMode : public KeyboardMode {
   public:
     DefaultKeyboardMode(socd::SocdType socd_type);
-    void SendKeys(InputState &inputs);
+
+  protected:
+    void UpdateKeys(InputState &inputs);
 };
 
 #endif

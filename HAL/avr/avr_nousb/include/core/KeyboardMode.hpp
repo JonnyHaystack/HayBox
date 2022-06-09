@@ -4,16 +4,17 @@
 #include "core/InputMode.hpp"
 #include "core/socd.hpp"
 #include "core/state.hpp"
+#include "keycodes.h"
 
 class KeyboardMode : public InputMode {
   public:
     KeyboardMode(socd::SocdType socd_type);
     ~KeyboardMode();
-    void SendReport();
-    virtual void SendKeys() = 0;
+    void SendReport(InputState &inputs);
 
   protected:
     void Press(uint8_t keycode, bool press);
+    virtual void UpdateKeys(InputState &inputs) = 0;
 };
 
 #endif

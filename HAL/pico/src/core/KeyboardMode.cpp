@@ -17,10 +17,10 @@ KeyboardMode::~KeyboardMode() {
 
 void KeyboardMode::SendReport(InputState &inputs) {
     HandleSocd(inputs);
-    SendKeys(inputs);
+    UpdateKeys(inputs);
     _keyboard->sendState();
 }
 
-void KeyboardMode::Press(uint8_t key, bool press) {
-    _keyboard->setPressed(key, press);
+void KeyboardMode::Press(uint8_t keycode, bool press) {
+    _keyboard->setPressed(keycode, press);
 }

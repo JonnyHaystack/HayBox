@@ -5,7 +5,7 @@
 
 DefaultKeyboardMode::DefaultKeyboardMode(socd::SocdType socd_type) : KeyboardMode(socd_type) {}
 
-void DefaultKeyboardMode::SendKeys(InputState &inputs) {
+void DefaultKeyboardMode::UpdateKeys(InputState &inputs) {
     Press(HID_KEY_A, inputs.l);
     Press(HID_KEY_B, inputs.left);
     Press(HID_KEY_C, inputs.down);
