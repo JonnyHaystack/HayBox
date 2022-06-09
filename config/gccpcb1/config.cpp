@@ -5,12 +5,10 @@
 #include "config/mode_selection.hpp"
 #include "core/CommunicationBackend.hpp"
 #include "core/InputMode.hpp"
-#include "core/KeyboardMode.hpp"
 #include "core/pinout.hpp"
 #include "core/socd.hpp"
 #include "core/state.hpp"
 #include "input/GpioButtonInput.hpp"
-#include "input/NunchukInput.hpp"
 #include "modes/Melee20Button.hpp"
 #include "stdlib.hpp"
 
@@ -19,38 +17,35 @@ size_t backend_count;
 KeyboardMode *current_kb_mode = nullptr;
 
 GpioButtonMapping button_mappings[] = {
-    {&InputState::l,            6 },
-    { &InputState::left,        4 },
+    {&InputState::l,            16},
+    { &InputState::left,        1 },
     { &InputState::down,        0 },
-    { &InputState::right,       1 },
+    { &InputState::right,       4 },
+    { &InputState::mod_x,       5 },
+    { &InputState::mod_y,       6 },
 
-    { &InputState::mod_x,       14},
-    { &InputState::mod_y,       16},
+    { &InputState::start,       7 },
 
-    { &InputState::select,      2 },
-    { &InputState::start,       3 },
-    { &InputState::home,        5 },
+    { &InputState::c_left,      9 },
+    { &InputState::c_up,        8 },
+    { &InputState::c_down,      12},
+    { &InputState::a,           15},
+    { &InputState::c_right,     14},
 
-    { &InputState::c_left,      A2},
-    { &InputState::c_up,        A3},
-    { &InputState::c_down,      15},
-    { &InputState::a,           A5},
-    { &InputState::c_right,     A4},
+    { &InputState::b,           A2},
+    { &InputState::x,           A1},
+    { &InputState::z,           A0},
+    { &InputState::up,          13},
 
-    { &InputState::b,           7 },
-    { &InputState::x,           9 },
-    { &InputState::z,           12},
-    { &InputState::up,          A0},
-
-    { &InputState::r,           10},
-    { &InputState::y,           11},
-    { &InputState::lightshield, 13},
-    { &InputState::midshield,   A1},
+    { &InputState::r,           A4},
+    { &InputState::y,           A3},
+    { &InputState::lightshield, 11},
+    { &InputState::midshield,   10},
 };
 size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
 
 Pinout pinout = {
-    .joybus_data = 8,
+    .joybus_data = A5,
     .mux = -1,
     .nunchuk_detect = -1,
     .nunchuk_sda = -1,
@@ -82,7 +77,11 @@ void setup() {
         };
     } else {
         delete primary_backend;
-        if (button_holds.a) {
+        if (button_holds.c_left) {
+            // Hold C-Left on plugin for N64.
+            primary_backend =
+                new N64Backend(input_sources, input_source_count, 60, pinout.joybus_data);
+        } else if (button_holds.a) {
             // Hold A on plugin for GameCube adapter.
             primary_backend =
                 new GamecubeBackend(input_sources, input_source_count, 0, pinout.joybus_data);

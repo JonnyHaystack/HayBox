@@ -13,7 +13,7 @@
 #include "modes/Melee20Button.hpp"
 #include "stdlib.hpp"
 
-CommunicationBackend **backends;
+CommunicationBackend **backends = nullptr;
 size_t backend_count;
 KeyboardMode *current_kb_mode = nullptr;
 
@@ -22,6 +22,7 @@ GpioButtonMapping button_mappings[] = {
     { &InputState::left,        15},
     { &InputState::down,        16},
     { &InputState::right,       14},
+
     { &InputState::mod_x,       8 },
     { &InputState::mod_y,       6 },
 
@@ -31,7 +32,7 @@ GpioButtonMapping button_mappings[] = {
     { &InputState::c_up,        A2},
     { &InputState::c_down,      5 },
     { &InputState::a,           13},
-    { &InputState::c_right,     18},
+    { &InputState::c_right,     A0},
 
     { &InputState::b,           4 },
     { &InputState::x,           A5},

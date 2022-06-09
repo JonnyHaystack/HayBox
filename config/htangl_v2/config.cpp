@@ -14,7 +14,7 @@
 #include "modes/Melee20Button.hpp"
 #include "stdlib.hpp"
 
-CommunicationBackend **backends;
+CommunicationBackend **backends = nullptr;
 size_t backend_count;
 KeyboardMode *current_kb_mode = nullptr;
 
