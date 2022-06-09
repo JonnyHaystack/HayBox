@@ -15,6 +15,8 @@ class KeyboardMode : public InputMode {
 
   protected:
     void Press(uint8_t keycode, bool press);
+
+  private:
     virtual void UpdateKeys(InputState &inputs) = 0;
 };
 

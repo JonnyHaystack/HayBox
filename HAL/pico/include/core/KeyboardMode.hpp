@@ -15,10 +15,11 @@ class KeyboardMode : public InputMode {
 
   protected:
     void Press(uint8_t keycode, bool press);
-    virtual void UpdateKeys(InputState &inputs) = 0;
 
   private:
     TUKeyboard *_keyboard;
+
+    virtual void UpdateKeys(InputState &inputs) = 0;
 };
 
 #endif

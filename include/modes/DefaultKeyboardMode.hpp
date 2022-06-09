@@ -9,7 +9,7 @@ class DefaultKeyboardMode : public KeyboardMode {
   public:
     DefaultKeyboardMode(socd::SocdType socd_type);
 
-  protected:
+  private:
     void UpdateKeys(InputState &inputs);
 };
 
