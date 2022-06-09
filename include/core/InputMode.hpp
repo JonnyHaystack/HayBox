@@ -10,7 +10,7 @@ class InputMode {
     virtual ~InputMode();
 
   protected:
-    socd::SocdPair *_socd_pairs;
+    socd::SocdPair *_socd_pairs = nullptr;
     size_t _socd_pair_count = 0;
     /* Exposed to child classes so that game modes are able to have different behaviour depending on
      * SOCD cleaning mode. */
