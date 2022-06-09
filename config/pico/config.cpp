@@ -17,7 +17,7 @@
 
 #include <pico/bootrom.h>
 
-CommunicationBackend **backends;
+CommunicationBackend **backends = nullptr;
 size_t backend_count;
 KeyboardMode *current_kb_mode = nullptr;
 
@@ -75,12 +75,8 @@ void setup() {
     gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
     gpio_put(PICO_DEFAULT_LED_PIN, 1);
 
-    // Create Nunchuk input source.
-    NunchukInput *nunchuk =
-        new NunchukInput(Wire, pinout.nunchuk_detect, pinout.nunchuk_sda, pinout.nunchuk_scl);
-
     // Create array of input sources to be used.
-    static InputSource *input_sources[] = { gpio_input, nunchuk };
+    static InputSource *input_sources[] = { gpio_input };
     size_t input_source_count = sizeof(input_sources) / sizeof(InputSource *);
 
     ConnectedConsole console = detect_console(pinout.joybus_data);
@@ -122,5 +118,23 @@ void loop() {
 
     if (current_kb_mode != nullptr) {
         current_kb_mode->SendReport(backends[0]->GetInputs());
+    }
+}
+
+NunchukInput *nunchuk = nullptr;
+
+void setup1() {
+    while (backends == nullptr) {
+        tight_loop_contents();
+    }
+
+    // Create Nunchuk input source.
+    nunchuk = new NunchukInput(Wire, pinout.nunchuk_detect, pinout.nunchuk_sda, pinout.nunchuk_scl);
+}
+
+void loop1() {
+    if (backends != nullptr) {
+        nunchuk->UpdateInputs(backends[0]->GetInputs());
+        delayMicroseconds(50);
     }
 }
