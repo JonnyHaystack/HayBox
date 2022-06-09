@@ -13,6 +13,10 @@ InputMode::~InputMode() {
 }
 
 void InputMode::HandleSocd(InputState &inputs) {
+    if (_socd_pairs == nullptr) {
+        return;
+    }
+
     // Initialize SOCD states if they aren't initialized.
     if (_socd_states == nullptr) {
         _socd_states = new socd::SocdState[_socd_pair_count];
