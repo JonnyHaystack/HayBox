@@ -27,6 +27,8 @@ class ControllerMode : public InputMode {
 
   protected:
     StickDirections directions;
+
+  private:
     virtual void UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) = 0;
     virtual void UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) = 0;
 };

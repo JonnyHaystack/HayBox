@@ -8,13 +8,7 @@ ControllerMode::ControllerMode(socd::SocdType socd_type) : InputMode(socd_type) 
 void ControllerMode::UpdateOutputs(InputState &inputs, OutputState &outputs) {
     HandleSocd(inputs);
     UpdateDigitalOutputs(inputs, outputs);
-    UpdateAnalogOutputs(inputs, outputs); // Handle modifier logic.
-
-    // TODO: Nunchuk behaviour should be determined inside the individual modes
-    if (inputs.nunchuk_connected) {
-        outputs.leftStickX = inputs.nunchuk_x;
-        outputs.leftStickY = inputs.nunchuk_y;
-    }
+    UpdateAnalogOutputs(inputs, outputs);
 }
 
 void ControllerMode::ResetDirections() {

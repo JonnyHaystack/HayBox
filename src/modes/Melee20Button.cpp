@@ -4,7 +4,7 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 208
 
-Melee20Button::Melee20Button(socd::SocdType socdType) : ControllerMode(socdType) {
+Melee20Button::Melee20Button(socd::SocdType socd_type) : ControllerMode(socd_type) {
     _socd_pair_count = 4;
     _socd_pairs = new socd::SocdPair[_socd_pair_count]{
         socd::SocdPair{&InputState::left,    &InputState::right  },
@@ -100,11 +100,6 @@ void Melee20Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
             }
         }
 
-        // Side B nerf
-        if (inputs.b) {
-            outputs.leftStickX = 128 + (directions.x * 53);
-        }
-
         // Angled fsmash
         if (directions.cx != 0) {
             // 8500 5250 = 68 42
@@ -192,7 +187,7 @@ void Melee20Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
             }
         }
 
-        // Side B nerf
+        // Turnaround neutral B nerf
         if (inputs.b) {
             outputs.leftStickX = 128 + (directions.x * 80);
         }
@@ -285,5 +280,11 @@ void Melee20Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
     if (inputs.mod_x && inputs.mod_y) {
         outputs.rightStickX = 128;
         outputs.rightStickY = 128;
+    }
+
+    // Nunchuk overrides left stick.
+    if (inputs.nunchuk_connected) {
+        outputs.leftStickX = inputs.nunchuk_x;
+        outputs.leftStickY = inputs.nunchuk_y;
     }
 }

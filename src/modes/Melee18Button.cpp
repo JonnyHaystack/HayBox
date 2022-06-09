@@ -80,11 +80,6 @@ void Melee18Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
             outputs.leftStickY = 128 + (directions.y * 23);
         }
 
-        // Side B nerf
-        if (inputs.b) {
-            outputs.leftStickX = 128 + (directions.x * 53);
-        }
-
         // Angled fsmash
         if (directions.cx != 0) {
             // 8500 5250 = 68 42
@@ -155,6 +150,7 @@ void Melee18Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
             outputs.leftStickY = 128 + (directions.y * 59);
         }
 
+        // Turnaround neutral B nerf
         if (inputs.b) {
             outputs.leftStickX = 128 + (directions.x * 80);
         }
@@ -284,5 +280,11 @@ void Melee18Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
     if (inputs.mod_x && inputs.mod_y) {
         outputs.rightStickX = 128;
         outputs.rightStickY = 128;
+    }
+
+    // Nunchuk overrides left stick.
+    if (inputs.nunchuk_connected) {
+        outputs.leftStickX = inputs.nunchuk_x;
+        outputs.leftStickY = inputs.nunchuk_y;
     }
 }
