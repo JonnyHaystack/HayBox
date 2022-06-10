@@ -6,9 +6,6 @@
 
 ProjectM::ProjectM(socd::SocdType socd_type, bool ledgedash_max_jump_traj, bool true_z_press)
     : ControllerMode(socd_type) {
-    this->ledgedash_max_jump_traj = ledgedash_max_jump_traj;
-    this->true_z_press = true_z_press;
-
     _socd_pair_count = 4;
     _socd_pairs = new socd::SocdPair[_socd_pair_count]{
         socd::SocdPair{&InputState::left,    &InputState::right  },
@@ -17,6 +14,8 @@ ProjectM::ProjectM(socd::SocdType socd_type, bool ledgedash_max_jump_traj, bool 
         socd::SocdPair{ &InputState::c_down, &InputState::c_up   },
     };
 
+    this->ledgedash_max_jump_traj = ledgedash_max_jump_traj;
+    this->true_z_press = true_z_press;
     horizontal_socd = false;
 }
 
