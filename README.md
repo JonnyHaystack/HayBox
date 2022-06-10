@@ -371,8 +371,9 @@ If you are using an Arduino-based controller without a boost circuit, you will n
 
 ## Contributing
 
-I welcome contributions and if you make an input mode that you want to share just
-let me know and it can be added to the extra modes directory.
+I welcome contributions and if you make an input mode that you want to share,
+feel free to make a pull request. Please install the clang-format plugin for
+VS Code and use it to format any code you want added.
 
 ### Versioning
 
