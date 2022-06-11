@@ -54,7 +54,7 @@ void B0XXInputViewer::SendReport() {
     _report[20] = ASCII_BIT(false);
     _report[21] = ASCII_BIT(false);
     _report[22] = ASCII_BIT(false);
-    _report[23] = ASCII_BIT(false);
+    _report[23] = ASCII_BIT(true);
     _report[24] = '\n';
 
     serial::write(_report, 25);
