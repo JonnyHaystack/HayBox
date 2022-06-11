@@ -1,85 +1,82 @@
-#include "socd.h"
+#include "core/socd.hpp"
 
-socd::SocdState socd::fTwoIPNoReactivate(bool &isLow, bool &isHigh,
-                                         SocdState socdState) {
-  bool is_low = false;
-  bool is_high = false;
-  if (isLow && isHigh) {
-    if (socdState.was_high) {
-      is_low = true;
-      is_high = false;
-      socdState.lock_high = true;
+void socd::twoIPNoReactivate(bool &input_dir1, bool &input_dir2, SocdState &socd_state) {
+    bool is_dir1 = false;
+    bool is_dir2 = false;
+    if (input_dir1 && input_dir2) {
+        if (socd_state.was_dir2) {
+            is_dir1 = true;
+            is_dir2 = false;
+            socd_state.lock_dir2 = true;
+        }
+        if (socd_state.was_dir1) {
+            is_dir1 = false;
+            is_dir2 = true;
+            socd_state.lock_dir1 = true;
+        }
     }
-    if (socdState.was_low) {
-      is_low = false;
-      is_high = true;
-      socdState.lock_low = true;
+    if (!input_dir1 && input_dir2 && !socd_state.lock_dir2) {
+        is_dir1 = false;
+        is_dir2 = true;
+        socd_state.was_dir2 = true;
+        socd_state.was_dir1 = false;
+        socd_state.lock_dir1 = false;
     }
-  }
-  if (!isLow && isHigh && (socdState.lock_high == false)) {
-    is_low = false;
-    is_high = true;
-    socdState.was_high = true;
-    socdState.was_low = false;
-    socdState.lock_low = false;
-  }
-  if (isLow && !isHigh && (socdState.lock_low == false)) {
-    is_low = true;
-    is_high = false;
-    socdState.was_low = true;
-    socdState.was_high = false;
-    socdState.lock_high = false;
-  }
-  if (!isLow && !isHigh) {
-    socdState.was_high = false;
-    socdState.was_low = false;
-    socdState.lock_low = false;
-    socdState.lock_high = false;
-  }
-  isLow = is_low;
-  isHigh = is_high;
-  return socdState;
+    if (input_dir1 && !input_dir2 && !socd_state.lock_dir1) {
+        is_dir1 = true;
+        is_dir2 = false;
+        socd_state.was_dir1 = true;
+        socd_state.was_dir2 = false;
+        socd_state.lock_dir2 = false;
+    }
+    if (!input_dir1 && !input_dir2) {
+        socd_state.was_dir2 = false;
+        socd_state.was_dir1 = false;
+        socd_state.lock_dir1 = false;
+        socd_state.lock_dir2 = false;
+    }
+    input_dir1 = is_dir1;
+    input_dir2 = is_dir2;
 }
 
-socd::SocdState socd::fTwoIP(bool &isLow, bool &isHigh, SocdState socdState) {
-  bool is_low = false;
-  bool is_high = false;
-  if (isLow && socdState.was_high) {
-    is_low = true;
-    is_high = false;
-  }
-  if (isHigh && socdState.was_low) {
-    is_low = false;
-    is_high = true;
-  }
-  if (!isLow && isHigh) {
-    is_low = false;
-    is_high = true;
-    socdState.was_high = true;
-    socdState.was_low = false;
-  }
-  if (isLow && !isHigh) {
-    is_low = true;
-    is_high = false;
-    socdState.was_low = true;
-    socdState.was_high = false;
-  }
-  isLow = is_low;
-  isHigh = is_high;
-  return socdState;
+void socd::twoIP(bool &input_dir1, bool &input_dir2, SocdState &socd_state) {
+    bool is_dir1 = false;
+    bool is_dir2 = false;
+    if (input_dir1 && socd_state.was_dir2) {
+        is_dir1 = true;
+        is_dir2 = false;
+    }
+    if (input_dir2 && socd_state.was_dir1) {
+        is_dir1 = false;
+        is_dir2 = true;
+    }
+    if (!input_dir1 && input_dir2) {
+        is_dir1 = false;
+        is_dir2 = true;
+        socd_state.was_dir2 = true;
+        socd_state.was_dir1 = false;
+    }
+    if (input_dir1 && !input_dir2) {
+        is_dir1 = true;
+        is_dir2 = false;
+        socd_state.was_dir1 = true;
+        socd_state.was_dir2 = false;
+    }
+    input_dir1 = is_dir1;
+    input_dir2 = is_dir2;
 }
 
-void socd::fNeutral(bool &isLow, bool &isHigh) {
-  bool is_low = false;
-  bool is_high = false;
-  if (!isLow && isHigh) {
-    is_low = false;
-    is_high = true;
-  }
-  if (isLow && !isHigh) {
-    is_low = true;
-    is_high = false;
-  }
-  isLow = is_low;
-  isHigh = is_high;
+void socd::neutral(bool &input_dir1, bool &input_dir2) {
+    bool is_dir1 = false;
+    bool is_dir2 = false;
+    if (!input_dir1 && input_dir2) {
+        is_dir1 = false;
+        is_dir2 = true;
+    }
+    if (input_dir1 && !input_dir2) {
+        is_dir1 = true;
+        is_dir2 = false;
+    }
+    input_dir1 = is_dir1;
+    input_dir2 = is_dir2;
 }

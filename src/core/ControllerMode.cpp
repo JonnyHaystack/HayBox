@@ -1,127 +1,89 @@
-#include "ControllerMode.h"
+#include "core/ControllerMode.hpp"
 
-ControllerMode::ControllerMode(socd::SocdType socdType,
-                               state::InputState &rInputState,
-                               CommunicationBackend *communicationBackend)
-    : InputMode(socdType, rInputState) {
-  mpCommunicationBackend = communicationBackend;
-
-  // Set up initial state.
-  ResetOutputs();
-  ResetVectors();
+ControllerMode::ControllerMode(socd::SocdType socd_type) : InputMode(socd_type) {
+    // Set up initial state.
+    ResetDirections();
 }
 
-void ControllerMode::ResetOutputs() {
-  mOutputState = {
-      // Digital outputs.
-      .a = false,
-      .b = false,
-      .x = false,
-      .y = false,
-      .buttonL = false,
-      .buttonR = false,
-      .triggerLDigital = false,
-      .triggerRDigital = false,
-      .start = false,
-      .select = false,
-      .home = false,
-      .dpadUp = false,
-      .dpadDown = false,
-      .dpadLeft = false,
-      .dpadRight = false,
-      .leftStickClick = false,
-      .rightStickClick = false,
-
-      // Analog outputs.
-      .leftStickX = 0,
-      .leftStickY = 0,
-      .rightStickX = 0,
-      .rightStickY = 0,
-      .triggerRAnalog = 0,
-      .triggerLAnalog = 0,
-  };
+void ControllerMode::UpdateOutputs(InputState &inputs, OutputState &outputs) {
+    HandleSocd(inputs);
+    UpdateDigitalOutputs(inputs, outputs);
+    UpdateAnalogOutputs(inputs, outputs);
 }
 
-void ControllerMode::UpdateOutputs() {
-  ResetOutputs();
-  HandleSocd();
-  UpdateDigitalOutputs();
-  UpdateAnalogOutputs(); // Handle modifier logic.
-
-  if (mrInputState.nunchuk_connected) {
-    mOutputState.leftStickX = mrInputState.nunchuk_x;
-    mOutputState.leftStickY = mrInputState.nunchuk_y;
-  }
-
-  // Send outputs via communication backend.
-  mpCommunicationBackend->SendOutputs(mOutputState);
+void ControllerMode::ResetDirections() {
+    directions = {
+        .horizontal = false,
+        .vertical = false,
+        .diagonal = false,
+        .x = 0,
+        .y = 0,
+        .cx = 0,
+        .cy = 0,
+    };
 }
 
-void ControllerMode::ResetVectors() {
-  mVectorState = {
-      .horizontal = false,
-      .vertical = false,
-      .diagonal = false,
-      .directionX = 0,
-      .directionY = 0,
-      .directionCX = 0,
-      .directionCY = 0,
-  };
-}
+void ControllerMode::UpdateDirections(
+    bool lsLeft,
+    bool lsRight,
+    bool lsDown,
+    bool lsUp,
+    bool rsLeft,
+    bool rsRight,
+    bool rsDown,
+    bool rsUp,
+    uint8_t analogStickMin,
+    uint8_t analogStickNeutral,
+    uint8_t analogStickMax,
+    OutputState &outputs
+) {
+    ResetDirections();
 
-void ControllerMode::HandleVectors(bool lsLeft, bool lsRight, bool lsDown,
-                                   bool lsUp, bool rsLeft, bool rsRight,
-                                   bool rsDown, bool rsUp,
-                                   uint8_t analogStickMin,
-                                   uint8_t analogStickNeutral,
-                                   uint8_t analogStickMax) {
-  ResetVectors();
+    outputs.leftStickX = analogStickNeutral;
+    outputs.leftStickY = analogStickNeutral;
+    outputs.rightStickX = analogStickNeutral;
+    outputs.rightStickY = analogStickNeutral;
 
-  mOutputState.leftStickX = analogStickNeutral;
-  mOutputState.leftStickY = analogStickNeutral;
-  mOutputState.rightStickX = analogStickNeutral;
-  mOutputState.rightStickY = analogStickNeutral;
+    // Coordinate calculations to make modifier handling simpler.
+    if (lsLeft || lsRight) {
+        directions.horizontal = true;
+        if (lsLeft) {
+            directions.x = -1;
+            outputs.leftStickX = analogStickMin;
+        } else {
+            directions.x = 1;
+            outputs.leftStickX = analogStickMax;
+        }
+    }
+    if (lsDown || lsUp) {
+        directions.vertical = true;
+        if (lsDown) {
+            directions.y = -1;
+            outputs.leftStickY = analogStickMin;
+        } else {
+            directions.y = 1;
+            outputs.leftStickY = analogStickMax;
+        }
+    }
+    if (directions.horizontal && directions.vertical)
+        directions.diagonal = true;
 
-  // Coordinate calculations to make modifier handling simpler.
-  if (lsLeft || lsRight) {
-    mVectorState.horizontal = true;
-    if (lsLeft) {
-      mVectorState.directionX = -1;
-      mOutputState.leftStickX = analogStickMin;
-    } else {
-      mVectorState.directionX = 1;
-      mOutputState.leftStickX = analogStickMax;
+    if (rsLeft || rsRight) {
+        if (rsLeft) {
+            directions.cx = -1;
+            outputs.rightStickX = analogStickMin;
+        } else {
+            directions.cx = 1;
+            outputs.rightStickX = analogStickMax;
+        }
     }
-  }
-  if (lsDown || lsUp) {
-    mVectorState.vertical = true;
-    if (lsDown) {
-      mVectorState.directionY = -1;
-      mOutputState.leftStickY = analogStickMin;
-    } else {
-      mVectorState.directionY = 1;
-      mOutputState.leftStickY = analogStickMax;
+    if (rsDown || rsUp) {
+        if (rsDown) {
+            directions.cy = -1;
+            outputs.rightStickY = analogStickMin;
+        } else {
+            directions.cy = 1;
+            outputs.rightStickY = analogStickMax;
+        }
     }
-  }
-  if (mVectorState.horizontal && mVectorState.vertical)
-    mVectorState.diagonal = true;
-
-  if (rsLeft || rsRight) {
-    if (rsLeft) {
-      mVectorState.directionCX = -1;
-      mOutputState.rightStickX = analogStickMin;
-    } else {
-      mVectorState.directionCX = 1;
-      mOutputState.rightStickX = analogStickMax;
-    }
-  }
-  if (rsDown || rsUp) {
-    if (rsDown) {
-      mVectorState.directionCY = -1;
-      mOutputState.rightStickY = analogStickMin;
-    } else {
-      mVectorState.directionCY = 1;
-      mOutputState.rightStickY = analogStickMax;
-    }
-  }
 }

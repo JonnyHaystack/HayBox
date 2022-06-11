@@ -1,4 +1,6 @@
+DisableFormat: false
 AlignAfterOpenBracket: BlockIndent
+AlignArrayOfStructures: Left
 AlignConsecutiveMacros: false
 AlignEscapedNewlines: DontAlign
 AlignOperands: Align
@@ -14,9 +16,9 @@ AllowShortLoopsOnASingleLine: false
 BinPackArguments: false
 BinPackParameters: false
 BreakBeforeInheritanceComma: false
-BreakConstructorInitializers: AfterColon
+BreakConstructorInitializers: BeforeColon
 BreakConstructorInitializersBeforeComma: false
-BreakInheritanceList: AfterColon
+BreakInheritanceList: AfterComma
 BreakStringLiterals: false
 ColumnLimit: 100
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
@@ -33,22 +35,23 @@ Language: Cpp
 NamespaceIndentation: All
 PackConstructorInitializers: CurrentLine
 PointerAlignment: Right
-QualifierAlignment: Left
+QualifierAlignment: Custom
+QualifierOrder: ['inline', 'static', 'const', 'constexpr', 'restrict', 'volatile', 'type']
 ReferenceAlignment: Right
 ReflowComments: true
 SeparateDefinitionBlocks: Always
 SortIncludes: true
+SpacesInLineCommentPrefix:
+  Minimum: 1
+  Maximum: 1
 IncludeBlocks: Regroup
 IncludeCategories:
-  - Regex:           '"[[:alnum:]._-]+"'
+  - Regex:           '".*"'
     Priority:        1
     SortPriority:    1
-  - Regex:           '^((<|").*/)'
+  - Regex:           '<.*>'
     Priority:        2
     SortPriority:    2
-  - Regex:           '<[[:alnum:]._-]+>'
-    Priority:        3
-    SortPriority:    3
 SortUsingDeclarations: false
 SpaceBeforeCtorInitializerColon: true
 SpacesInContainerLiterals: false

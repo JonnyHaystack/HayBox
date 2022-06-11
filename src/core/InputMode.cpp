@@ -1,43 +1,46 @@
-#include "socd.h"
-#include "InputMode.h"
+#include "core/InputMode.hpp"
 
-InputMode::InputMode(socd::SocdType socdType, state::InputState &rInputState)
-    : mrInputState(rInputState) {
-  mSocdType = socdType;
-  mrInputState = rInputState;
+#include "core/socd.hpp"
+#include "core/state.hpp"
+
+InputMode::InputMode(socd::SocdType socd_type) {
+    _socd_type = socd_type;
 }
 
-void InputMode::HandleSocd() {
-  // Initialize SOCD states if they aren't initialized.
-  if (mSocdStates.size() != mSocdPairs.size()) {
-    for (int i = 0; i < mSocdPairs.size(); i++) {
-      mSocdStates.push_back({
-          .was_low = false,
-          .was_high = false,
-          .lock_low = false,
-          .lock_high = false,
-      });
-    }
-  }
+InputMode::~InputMode() {
+    delete[] _socd_pairs;
+    delete[] _socd_states;
+}
 
-  // Handle SOCD resolution for each SOCD button pair.
-  for (int i = 0; i < mSocdPairs.size(); i++) {
-    socd::SocdPair pair = mSocdPairs[i];
-    socd::SocdState socd_state = mSocdStates[i];
-    switch (mSocdType) {
-    case socd::SOCD_NEUTRAL:
-      socd::fNeutral(*pair.button_low, *pair.button_high);
-      break;
-    case socd::SOCD_2IP:
-      mSocdStates[i] =
-          socd::fTwoIP(*pair.button_low, *pair.button_high, socd_state);
-      break;
-    case socd::SOCD_2IP_NO_REAC:
-      mSocdStates[i] = socd::fTwoIPNoReactivate(*pair.button_low,
-                                                *pair.button_high, socd_state);
-      break;
-    case socd::SOCD_KEYBOARD:
-      break;
+void InputMode::HandleSocd(InputState &inputs) {
+    if (_socd_pairs == nullptr) {
+        return;
     }
-  }
+
+    // Initialize SOCD states if they aren't initialized.
+    if (_socd_states == nullptr) {
+        _socd_states = new socd::SocdState[_socd_pair_count];
+    }
+
+    // Handle SOCD resolution for each SOCD button pair.
+    for (size_t i = 0; i < _socd_pair_count; i++) {
+        socd::SocdPair pair = _socd_pairs[i];
+        switch (_socd_type) {
+            case socd::SOCD_NEUTRAL:
+                socd::neutral(inputs.*(pair.input_dir1), inputs.*(pair.input_dir2));
+                break;
+            case socd::SOCD_2IP:
+                socd::twoIP(inputs.*(pair.input_dir1), inputs.*(pair.input_dir2), _socd_states[i]);
+                break;
+            case socd::SOCD_2IP_NO_REAC:
+                socd::twoIPNoReactivate(
+                    inputs.*(pair.input_dir1),
+                    inputs.*(pair.input_dir2),
+                    _socd_states[i]
+                );
+                break;
+            case socd::SOCD_KEYBOARD:
+                break;
+        }
+    }
 }
