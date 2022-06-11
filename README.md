@@ -61,7 +61,7 @@ Features include:
 ### Requirements
 
 - [PlatformIO IDE for VSCode](https://platformio.org/install/ide?install=vscode)
-- [Git](https://git-scm.com/downloads) - required only if you are using a Pico. Should become unnecessary at some point in the future.
+- [Git](https://git-scm.com/downloads) - required only if you are using a Pico. May become unnecessary at some point in the future.
 
 ### Installation
 
