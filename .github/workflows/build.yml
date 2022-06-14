@@ -32,32 +32,65 @@ jobs:
         python -m pip install --upgrade pip
         pip install --upgrade platformio
 
-    - name: Build Pico
-      run: pio run -e pico
-
-    - name: Organize files for upload
-      shell: bash
+    - name: Build Pico firmware
       run: |
-        mkdir -p picofw
-        cp .pio/build/pico/firmware.uf2 picofw/pico.uf2
+        pio run -e pico
+        mkdir -p pico
+        cp .pio/build/pico/firmware.uf2 pico/pico.uf2
 
     - name: Publish pico artifacts
       uses: actions/upload-artifact@v2
       with:
         name: Pico firmware
-        path: picofw
-
-    - name: Build Arduino Micro
-      run: pio run -e uno
-
-    - name: Organize files for upload
-      shell: bash
+        path: pico
+        
+    - name: Build Arduino mega firmware
       run: |
-        mkdir -p unofw
-        cp .pio/build/uno/firmware.hex unofw/uno.hex
+        pio run -e mega
+        mkdir -p mega
+        cp .pio/build/pico/firmware.uf2 pico/pico.uf2
 
-    - name: Publish uno artifacts
+    - name: Publish pico artifacts
       uses: actions/upload-artifact@v2
       with:
-        name: Uno firmware
-        path: unofw
+        name: Pico firmware
+        path: pico
+
+    - name: Build B0xx R1 firmware
+      shell: bash
+      run: |
+        pio run -e b0xx_r1
+        mkdir -p b0xx_r1
+        cp .pio/build/b0xx_r1/firmware.hex b0xx_r1/b0xx_r1.hex
+
+    - name: Publish B0xx R1 artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: B0xx R1 firmware
+        path: b0xx_r1
+        
+    - name: Build B0xx R2 firmware
+      shell: bash
+      run: |
+        pio run -e b0xx_r2
+        mkdir -p b0xx_r2
+        cp .pio/build/b0xx_r2/firmware.hex b0xx_r2/b0xx_r2.hex
+
+    - name: Publish B0xx R2 artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: B0xx R2 firmware
+        path: b0xx_r2
+
+    - name: Build smashbox firmware
+      shell: bash
+      run: |
+        pio run -e smashbox
+        mkdir -p smashbox
+        cp .pio/build/smashbox/firmware.hex unofw/uno.hex
+
+    - name: Publish smashbox artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: Smashbox firmware
+        path: smashbox
