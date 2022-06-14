@@ -43,30 +43,6 @@ jobs:
       with:
         name: Pico firmware
         path: pico
-        
-    - name: Build Arduino Mega firmware
-      run: |
-        pio run -e mega
-        mkdir -p mega
-        cp .pio/build/mega/firmware.hex mega/mega.hex
-
-    - name: Publish Arduino Mega artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: Arduino Mega firmware
-        path: mega
-        
-    - name: Build Arduino Leonardo firmware
-      run: |
-        pio run -e leonardo
-        mkdir -p leonardo
-        cp .pio/build/leonardo/firmware.hex leonardo/leonardo.hex
-
-    - name: Publish Arduino Leonardo artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: Arduino Leonardo firmware
-        path: leonardo
 
     - name: Build B0xx R1 firmware
       shell: bash
