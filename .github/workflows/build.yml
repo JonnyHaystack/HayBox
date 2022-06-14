@@ -75,7 +75,7 @@ jobs:
       run: |
         pio run -e smashbox
         mkdir -p smashbox
-        cp .pio/build/smashbox/firmware.hex unofw/uno.hex
+        cp .pio/build/smashbox/firmware.hex smashbox/smashbox.hex
 
     - name: Publish smashbox artifacts
       uses: actions/upload-artifact@v2
