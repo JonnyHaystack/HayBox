@@ -48,7 +48,7 @@ jobs:
         path: picofw
 
     - name: Build Arduino Micro
-      run: pio run -e pico
+      run: pio run -e uno
 
     - name: Organize files for upload
       shell: bash
