@@ -54,7 +54,7 @@ jobs:
       shell: bash
       run: |
         mkdir -p unofw
-        cp .pio/build/uno/firmware.hex artifact/uno.hex
+        cp .pio/build/uno/firmware.hex unofw/uno.hex
 
     - name: Publish uno artifacts
       uses: actions/upload-artifact@v2
