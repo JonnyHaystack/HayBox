@@ -32,17 +32,32 @@ jobs:
         python -m pip install --upgrade pip
         pip install --upgrade platformio
 
-    - name: Run PlatformIO
+    - name: Build Pico
       run: pio run -e pico
 
     - name: Organize files for upload
       shell: bash
       run: |
-        mkdir -p artifact
-        cp .pio/build/pico/firmware.uf2 artifact/pico.uf2
+        mkdir -p picofw
+        cp .pio/build/pico/firmware.uf2 picofw/pico.uf2
 
-    - name: Publish firmware artifacts
+    - name: Publish pico artifacts
       uses: actions/upload-artifact@v2
       with:
         name: Pico firmware
-        path: artifact
+        path: picofw
+
+    - name: Build Arduino Micro
+      run: pio run -e pico
+
+    - name: Organize files for upload
+      shell: bash
+      run: |
+        mkdir -p unofw
+        cp .pio/build/uno/firmware.hex artifact/uno.hex
+
+    - name: Publish uno artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: Uno firmware
+        path: unofw
