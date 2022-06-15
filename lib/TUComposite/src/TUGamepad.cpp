@@ -75,7 +75,7 @@ void TUGamepad::setButton(uint8_t button, bool pressed) {
     }
 }
 
-void TUGamepad::buttons(uint32_t buttons) {
+void TUGamepad::buttons(uint16_t buttons) {
     _report.buttons = buttons;
 }
 
