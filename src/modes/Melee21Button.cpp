@@ -248,22 +248,18 @@ void Melee21Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
     }
 
     if (inputs.mod_z) {
-        // MZ + Horizontal (even if shield is held) = 6625 = 53
         if (directions.horizontal) {
-            outputs.leftStickX = 128 + (directions.x * 53);
+            outputs.leftStickX = 128 + (directions.x * 73);
         }
-        // MZ + Vertical (even if shield is held) = 5375 = 43
         if (directions.vertical) {
-            outputs.leftStickY = 128 + (directions.y * 43);
+            outputs.leftStickY = 128 + (directions.y * 31);
         }
         if (directions.diagonal) {
-            // MZ + q1/2/3/4 = 7375 3125 = 59 25
-            outputs.leftStickX = 128 + (directions.x * 59);
-            outputs.leftStickY = 128 + (directions.y * 25);
+            outputs.leftStickX = 128 + (directions.x * 73);
+            outputs.leftStickY = 128 + (directions.y * 31);
             if (shield_button_pressed) {
-                // MZ + L, R, LS, and MS + q1/2/3/4 = 6375 3750 = 51 30
-                outputs.leftStickX = 128 + (directions.x * 51);
-                outputs.leftStickY = 128 + (directions.y * 30);
+                outputs.leftStickX = 128 + (directions.x * 73);
+                outputs.leftStickY = 128 + (directions.y * 31);
             }
         }
     }
