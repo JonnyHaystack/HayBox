@@ -82,3 +82,17 @@ jobs:
       with:
         name: Smashbox firmware
         path: smashbox
+
+    - name: Build lbx firmware
+      shell: bash
+      run: |
+        pio run -e lbx
+        mkdir -p lbx
+        cp .pio/build/lbx/firmware.hex lbx/lbx.hex
+
+    - name: Publish lbx artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: LBX firmware
+        path: lbx
+
