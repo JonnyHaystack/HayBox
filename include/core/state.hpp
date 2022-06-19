@@ -24,6 +24,7 @@ typedef struct inputstate {
     bool left = false;
     bool mod_x = false;
     bool mod_y = false;
+    bool mod_z = false;
     bool c_left = false;
     bool c_right = false;
     bool c_up = false;
