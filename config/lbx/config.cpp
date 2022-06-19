@@ -1,4 +1,4 @@
-#include "comms/B0XXInputViewer.hpp"
+#include "comms/LBXInputViewer.hpp"
 #include "comms/DInputBackend.hpp"
 #include "comms/GamecubeBackend.hpp"
 #include "comms/N64Backend.hpp"
@@ -79,7 +79,7 @@ void setup() {
         // Input viewer only used when connected to PC i.e. when using DInput mode.
         backend_count = 2;
         backends = new CommunicationBackend *[backend_count] {
-            primary_backend, new B0XXInputViewer(input_sources, input_source_count)
+            primary_backend, new LBXInputViewer(input_sources, input_source_count)
         };
     } else {
         delete primary_backend;
