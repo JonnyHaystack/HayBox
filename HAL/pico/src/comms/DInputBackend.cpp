@@ -21,7 +21,6 @@ DInputBackend::~DInputBackend() {
 }
 
 void DInputBackend::SendReport() {
-    // Update inputs from all sources at once.
     ScanInputs(InputScanSpeed::SLOW);
     ScanInputs(InputScanSpeed::MEDIUM);
 

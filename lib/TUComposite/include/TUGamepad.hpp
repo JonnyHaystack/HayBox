@@ -43,7 +43,7 @@ class TUGamepad {
     void setButton(uint8_t button, bool pressed);
     void releaseAll();
 
-    void buttons(uint32_t buttons);
+    void buttons(uint16_t buttons);
     void leftXAxis(uint8_t value);
     void leftYAxis(uint8_t value);
     void rightXAxis(uint8_t value);

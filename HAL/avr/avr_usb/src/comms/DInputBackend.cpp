@@ -10,28 +10,28 @@ DInputBackend::DInputBackend(InputSource **input_sources, size_t input_source_co
     _joystick = new Joystick_(
         JOYSTICK_DEFAULT_REPORT_ID,
         JOYSTICK_TYPE_GAMEPAD,
-        17,
-        1, // Button Count, Hat Switch Count
-        true,
-        true,
-        false, // X and Y, but no Z Axis
-        true,
-        true,
-        false, // Rx, Ry, no Rz
-        true,
-        true, // Rudder, throttle
-        false,
-        false,
-        false
-    ); // No accelerator, no brake, no steering
+        16, // Button Count
+        1, // Hat Switch Count
+        true, // X Axis
+        true, // Y Axis
+        true, // Z Axis
+        true, // Rx Axis
+        true, // Ry Axis
+        true, // Rz Axis
+        false, // No rudder
+        false, // No throttle
+        false, // No accelerator
+        false, // No brake
+        false // No steering
+    );
 
     _joystick->begin(false);
     _joystick->setXAxisRange(0, 255);
     _joystick->setYAxisRange(0, 255);
     _joystick->setRxAxisRange(0, 255);
     _joystick->setRyAxisRange(0, 255);
-    _joystick->setThrottleRange(0, 255);
-    _joystick->setRudderRange(0, 255);
+    _joystick->setZAxisRange(0, 255);
+    _joystick->setRzAxisRange(0, 255);
 }
 
 DInputBackend::~DInputBackend() {
@@ -65,8 +65,8 @@ void DInputBackend::SendReport() {
     _joystick->setYAxis(256 - _outputs.leftStickY);
     _joystick->setRxAxis(_outputs.rightStickX);
     _joystick->setRyAxis(256 - _outputs.rightStickY);
-    _joystick->setThrottle(_outputs.triggerLAnalog + 1);
-    _joystick->setRudder(_outputs.triggerRAnalog + 1);
+    _joystick->setZAxis(_outputs.triggerLAnalog + 1);
+    _joystick->setRzAxis(_outputs.triggerRAnalog + 1);
 
     // D-pad Hat Switch
     _joystick->setHatSwitch(
