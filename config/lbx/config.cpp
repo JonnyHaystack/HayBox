@@ -1,4 +1,4 @@
-#include "comms/LBXInputViewer.hpp"
+#include "comms/B0XXInputViewer.hpp"
 #include "comms/DInputBackend.hpp"
 #include "comms/GamecubeBackend.hpp"
 #include "comms/N64Backend.hpp"
@@ -9,7 +9,7 @@
 #include "core/socd.hpp"
 #include "core/state.hpp"
 #include "input/GpioButtonInput.hpp"
-#include "modes/Melee21Button.hpp"
+#include "modes/LbxMelee.hpp"
 #include "stdlib.hpp"
 
 CommunicationBackend **backends = nullptr;
@@ -79,7 +79,7 @@ void setup() {
         // Input viewer only used when connected to PC i.e. when using DInput mode.
         backend_count = 2;
         backends = new CommunicationBackend *[backend_count] {
-            primary_backend, new LBXInputViewer(input_sources, input_source_count)
+            primary_backend, new B0XXInputViewer(input_sources, input_source_count)
         };
     } else {
         delete primary_backend;
@@ -103,7 +103,7 @@ void setup() {
     }
 
     // Default to Melee mode.
-    primary_backend->SetGameMode(new Melee21Button(socd::SOCD_2IP_NO_REAC));
+    primary_backend->SetGameMode(new LbxMelee(socd::SOCD_2IP_NO_REAC));
 }
 
 void loop() {
