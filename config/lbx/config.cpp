@@ -47,8 +47,8 @@ GpioButtonMapping button_mappings[] = {
 size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
 
 Pinout pinout = {
-    .joybus_data = 17,
-    .mux = 7
+    .joybus_data = 7,
+    .mux = A4
 };
 
 void setup() {
@@ -65,9 +65,9 @@ void setup() {
     // Hold B on plugin for Brook board mode.
     pinMode(pinout.mux, OUTPUT);
     if (button_holds.b)
-        digitalWrite(pinout.mux, LOW);
-    else
         digitalWrite(pinout.mux, HIGH);
+    else
+        digitalWrite(pinout.mux, LOW);
 
     CommunicationBackend *primary_backend = new DInputBackend(input_sources, input_source_count);
     delay(500);
