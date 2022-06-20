@@ -135,6 +135,6 @@ void setup1() {
 void loop1() {
     if (backends != nullptr) {
         nunchuk->UpdateInputs(backends[0]->GetInputs());
-        delayMicroseconds(50);
+        busy_wait_us(50);
     }
 }
