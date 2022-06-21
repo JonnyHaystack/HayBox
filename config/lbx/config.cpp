@@ -15,6 +15,7 @@
 CommunicationBackend **backends = nullptr;
 size_t backend_count;
 KeyboardMode *current_kb_mode = nullptr;
+bool brook_mode = false;
 
 GpioButtonMapping button_mappings[] = {
     {&InputState::l,            11},
@@ -46,10 +47,7 @@ GpioButtonMapping button_mappings[] = {
 };
 size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
 
-Pinout pinout = {
-    .joybus_data = 7,
-    .mux = A4
-};
+Pinout pinout = { .joybus_data = 7, .mux = A4 };
 
 void setup() {
     // Create GPIO input source and use it to read button states for checking button holds.
@@ -64,10 +62,13 @@ void setup() {
 
     // Hold B on plugin for Brook board mode.
     pinMode(pinout.mux, OUTPUT);
-    if (button_holds.b)
+    if (button_holds.b) {
         digitalWrite(pinout.mux, HIGH);
-    else
+        brook_mode = true;
+    } else {
         digitalWrite(pinout.mux, LOW);
+        brook_mode = false;
+    }
 
     CommunicationBackend *primary_backend = new DInputBackend(input_sources, input_source_count);
     delay(500);
@@ -108,6 +109,22 @@ void setup() {
 
 void loop() {
     select_mode(backends[0]);
+
+    if (brook_mode) {
+        InputState &inputs = backends[0]->GetInputs();
+
+        if (inputs.mod_x || inputs.mod_y || inputs.c_down || inputs.a) {
+            digitalWrite(17, LOW);
+        } else {
+            digitalWrite(17, HIGH);
+        }
+
+        if (inputs.l) {
+            digitalWrite(30, LOW);
+        } else {
+            digitalWrite(30, HIGH);
+        }
+    }
 
     for (size_t i = 0; i < backend_count; i++) {
         backends[i]->SendReport();
