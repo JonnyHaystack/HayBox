@@ -26,14 +26,14 @@ uint row_pins[num_rows] = { 20, 19, 18, 17, 16 };
 uint col_pins[num_cols] = { 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
 // clang-format off
 SwitchMatrixElement matrix[num_rows][num_cols] = {
-    {NA,      NA,        NA,         NA,         NA, NA,          NA,         NA,        NA,          NA,          NA,        NA,               NA            },
-    { NA,     NA,        NA,         NA,         NA, NA,          NA,         NA,        NA,          BTN(r),      BTN(y),    BTN(lightshield), BTN(midshield)},
-    { BTN(l), BTN(left), BTN(down),  BTN(right), NA, BTN(select), BTN(start), BTN(home), NA,          BTN(b),      BTN(x),    BTN(z),           BTN(up)       },
-    { NA,     NA,        NA,         NA,         NA, NA,          NA,         NA,        NA,          BTN(c_left), BTN(c_up), BTN(c_left),      NA            },
-    { NA,     NA,        BTN(mod_x), BTN(mod_y), NA, NA,          NA,         NA,        BTN(c_down), BTN(a),      NA,        NA,               NA            },
+    {NA,      NA,        NA,         NA,         NA, BTN(select), BTN(start), BTN(home), NA, BTN(r),      BTN(y),    BTN(lightshield), BTN(midshield)},
+    { BTN(l), BTN(left), BTN(down),  BTN(right), NA, NA,          NA,         NA,        NA, BTN(b),      BTN(x),    BTN(z),           BTN(up)       },
+    { NA,     NA,        NA,         NA,         NA, NA,          NA,         NA,        NA, NA,          NA,        NA,               NA            },
+    { NA,     NA,        NA,         NA,         NA, NA,          NA,         NA,        NA, BTN(c_left), BTN(c_up), BTN(c_right),     NA            },
+    { NA,     NA,        BTN(mod_x), BTN(mod_y), NA, NA,          NA,         NA,        NA, BTN(c_down), BTN(a),    NA,               NA            },
 };
 // clang-format on
-DiodeDirection diode_direction = DiodeDirection::ROW2COL;
+DiodeDirection diode_direction = DiodeDirection::COL2ROW;
 
 const Pinout pinout = {
     .joybus_data = 22,
