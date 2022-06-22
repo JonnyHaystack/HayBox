@@ -17,6 +17,7 @@
 CommunicationBackend **backends = nullptr;
 size_t backend_count;
 KeyboardMode *current_kb_mode = nullptr;
+bool use_brook_mode = false;
 
 // Customise this to match your controller's pinout.
 GpioButtonMapping button_mappings[] = {
@@ -72,6 +73,17 @@ void setup() {
     static InputSource *input_sources[] = { gpio_input, nunchuk };
     size_t input_source_count = sizeof(input_sources) / sizeof(InputSource *);
 
+    // Hold start on plugin for Brook board mode.
+    pinMode(pinout.mux, OUTPUT);
+    if (button_holds.start) {
+        digitalWrite(pinout.mux, HIGH);
+        use_brook_mode = true;
+        // When Brook Firmware takes control, so we can no longer make use of control
+        // layout/gamemode/backend once enabled.
+        return;
+    }
+
+    digitalWrite(pinout.mux, LOW);
     CommunicationBackend *primary_backend = new DInputBackend(input_sources, input_source_count);
     delay(500);
     bool usb_connected = UDADDR & _BV(ADDEN);
@@ -106,6 +118,10 @@ void setup() {
 }
 
 void loop() {
+    if (use_brook_mode) {
+        return;
+    }
+
     select_mode(backends[0]);
 
     for (size_t i = 0; i < backend_count; i++) {
