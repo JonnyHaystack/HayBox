@@ -9,7 +9,6 @@
 #include "core/socd.hpp"
 #include "core/state.hpp"
 #include "input/GpioButtonInput.hpp"
-#include "modes/MeleeLbx.hpp"
 #include "stdlib.hpp"
 
 const int brook_up_pin = 17;
@@ -21,14 +20,14 @@ KeyboardMode *current_kb_mode = nullptr;
 bool brook_mode = false;
 
 GpioButtonMapping button_mappings[] = {
-    {&InputState::l,            11},
+    { &InputState::l,           11},
     { &InputState::left,        15},
     { &InputState::down,        16},
     { &InputState::right,       14},
 
     { &InputState::mod_x,       3 },
     { &InputState::mod_y,       0 },
-    { &InputState::select,      2 }, // Third mod button
+    { &InputState::nunchuk_c,   2 }, // Dpad Toggle button
 
     { &InputState::start,       A5},
 
@@ -110,7 +109,7 @@ void setup() {
     }
 
     // Default to Melee mode.
-    primary_backend->SetGameMode(new MeleeLbx(socd::SOCD_2IP_NO_REAC));
+    primary_backend->SetGameMode(new Melee20Button(socd::SOCD_2IP_NO_REAC));
 }
 
 void loop() {
