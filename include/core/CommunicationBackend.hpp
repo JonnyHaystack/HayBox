@@ -14,21 +14,20 @@ class CommunicationBackend {
     void ScanInputs();
     void ScanInputs(InputScanSpeed input_source_filter);
 
-    void UpdateOutputs();
+    virtual void UpdateOutputs();
     virtual void SetGameMode(ControllerMode *gamemode);
 
     virtual void SendReport() = 0;
 
   protected:
+    void ResetOutputs();
+
     InputState _inputs;
     InputSource **_input_sources;
     size_t _input_source_count;
 
     OutputState _outputs;
-    ControllerMode *_gamemode;
-
-  private:
-    void ResetOutputs();
+    ControllerMode *_gamemode;  
 };
 
 #endif

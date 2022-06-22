@@ -1,4 +1,5 @@
 #include "comms/B0XXInputViewer.hpp"
+#include "comms/BrookPassthroughBackend.hpp"
 #include "comms/DInputBackend.hpp"
 #include "comms/GamecubeBackend.hpp"
 #include "comms/N64Backend.hpp"
@@ -50,6 +51,25 @@ GpioButtonMapping button_mappings[] = {
 };
 size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
 
+GpioButtonMapping brook_button_mappings[] = {
+  // These are the only buttons which aren't alos bound on brook board directly.
+    { &InputState::l,           11},
+
+    { &InputState::mod_x,       3 },
+    { &InputState::mod_y,       0 },
+    { &InputState::dpad_toggle, 2 },
+
+    { &InputState::c_left,      4 },
+    { &InputState::c_up,        8 },
+    { &InputState::c_down,      1 },
+    { &InputState::a,           12},
+    { &InputState::c_right,     6 },
+};
+size_t brook_button_count = sizeof(brook_button_mappings) / sizeof(GpioButtonMapping);
+
+static int BROOK_DPAD_UP_PIN = 17;
+static int BROOK_L3_PIN = 30;
+
 Pinout pinout = {
     .joybus_data = 7,
     .mux = A4,
@@ -78,8 +98,34 @@ void setup() {
     if (button_holds.start) {
         digitalWrite(pinout.mux, HIGH);
         use_brook_mode = true;
-        // When Brook Firmware takes control, so we can no longer make use of control
-        // layout/gamemode/backend once enabled.
+        // Create array of input sources to be used for brook.
+        static InputSource *brook_input_sources[] = {
+            new GpioButtonInput(brook_button_mappings, brook_button_count)
+        };
+        size_t brook_input_source_count = sizeof(brook_input_sources) / sizeof(InputSource *);
+
+        pinMode(BROOK_DPAD_UP_PIN, OUTPUT);
+        pinMode(BROOK_L3_PIN, OUTPUT);
+        // If not DInput then only using 1 backend (no input viewer).
+        backend_count = 1;
+        backends = new CommunicationBackend *[backend_count] {
+            new BrookPassthroughBackend(
+                brook_input_sources,
+                brook_input_source_count,
+                BROOK_DPAD_UP_PIN,
+                BROOK_L3_PIN
+            )
+        };
+        // Brook Firmware takes control, so we can't control layout/gamemode/backend in this branch
+        // IN Addition, you can force the following brook modes by holding the corresponding button on connecting.
+        // If none are held, brook will auto-detect.
+        // 1P/X = PS3
+        // 2P/Y = PS4
+        // 3P/RB = XID-PC
+        // 4P/LB = Nintendo Switch
+        // These listed buttons correspond to the mapping in brook mode (so can't be remapped)
+        // So in the case of the default layout for lbx these correspond to R, Y, LightShield, MidShield
+        // 
         return;
     }
 
@@ -118,17 +164,14 @@ void setup() {
 }
 
 void loop() {
-    if (use_brook_mode) {
-        return;
+    if (!use_brook_mode) {
+        select_mode(backends[0]);
+        if (current_kb_mode != nullptr) {
+            current_kb_mode->SendReport(backends[0]->GetInputs());
+        }
     }
-
-    select_mode(backends[0]);
 
     for (size_t i = 0; i < backend_count; i++) {
         backends[i]->SendReport();
-    }
-
-    if (current_kb_mode != nullptr) {
-        current_kb_mode->SendReport(backends[0]->GetInputs());
     }
 }
