@@ -9,7 +9,7 @@
 #include "core/socd.hpp"
 #include "core/state.hpp"
 #include "input/GpioButtonInput.hpp"
-#include "modes/LbxMelee.hpp"
+#include "modes/MeleeLbx.hpp"
 #include "stdlib.hpp"
 
 CommunicationBackend **backends = nullptr;
@@ -106,7 +106,7 @@ void setup() {
     }
 
     // Default to Melee mode.
-    primary_backend->SetGameMode(new LbxMelee(socd::SOCD_2IP_NO_REAC));
+    primary_backend->SetGameMode(new MeleeLbx(socd::SOCD_2IP_NO_REAC));
 }
 
 void loop() {

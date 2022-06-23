@@ -1,13 +1,14 @@
-#ifndef _MODES_LBXMELEE_HPP
-#define _MODES_LBXMELEE_HPP
+#ifndef _MODES_MELEELBX_HPP
+#define _MODES_MELEELBX_HPP
 
+#include "config/lbx/modes/MeleeLbx.hpp"
 #include "modes/Melee20Button.hpp"
 #include "core/socd.hpp"
 #include "core/state.hpp"
 
-class LbxMelee : public Melee20Button {
+class MeleeLbx : public Melee20Button {
   public:
-    LbxMelee(socd::SocdType socd_type);
+    MeleeLbx(socd::SocdType socd_type);
 
   private:
     void UpdateDigitalOutputs(InputState &inputs, OutputState &outputs);
