@@ -16,6 +16,8 @@ CommunicationBackend **backends = nullptr;
 size_t backend_count;
 KeyboardMode *current_kb_mode = nullptr;
 bool brook_mode = false;
+const int brook_up_pin = 17;
+const int brook_l_pin = 30;
 
 GpioButtonMapping button_mappings[] = {
     {&InputState::l,            11},
@@ -25,7 +27,7 @@ GpioButtonMapping button_mappings[] = {
 
     { &InputState::mod_x,       3 },
     { &InputState::mod_y,       0 },
-    { &InputState::mod_z,       2 },
+    { &InputState::select,       2 }, // Third mod button
 
     { &InputState::start,       A5},
 
@@ -108,23 +110,19 @@ void setup() {
 }
 
 void loop() {
-    select_mode(backends[0]);
-
     if (brook_mode) {
-        InputState &inputs = backends[0]->GetInputs();
+        bool button_l = digitalRead(button_mappings[0].pin);
+        bool button_mod_x = digitalRead(button_mappings[4].pin);
+        bool button_mod_y = digitalRead(button_mappings[5].pin);
+        bool button_cstick_down = digitalRead(button_mappings[10].pin);
+        bool button_a = digitalRead(button_mappings[11].pin);
 
-        if (inputs.mod_x || inputs.mod_y || inputs.c_down || inputs.a) {
-            digitalWrite(17, LOW);
-        } else {
-            digitalWrite(17, HIGH);
-        }
-
-        if (inputs.l) {
-            digitalWrite(30, LOW);
-        } else {
-            digitalWrite(30, HIGH);
-        }
+        digitalWrite(brook_up_pin, button_mod_x && button_mod_y && button_cstick_down && button_a);
+        digitalWrite(brook_l_pin, button_l);
+        return;
     }
+
+    select_mode(backends[0]);
 
     for (size_t i = 0; i < backend_count; i++) {
         backends[i]->SendReport();
