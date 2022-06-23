@@ -12,12 +12,13 @@
 #include "modes/MeleeLbx.hpp"
 #include "stdlib.hpp"
 
+const int brook_up_pin = 17;
+const int brook_l_pin = 30;
+
 CommunicationBackend **backends = nullptr;
 size_t backend_count;
 KeyboardMode *current_kb_mode = nullptr;
 bool brook_mode = false;
-const int brook_up_pin = 17;
-const int brook_l_pin = 30;
 
 GpioButtonMapping button_mappings[] = {
     {&InputState::l,            11},
