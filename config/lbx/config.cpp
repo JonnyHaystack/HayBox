@@ -28,7 +28,7 @@ GpioButtonMapping button_mappings[] = {
 
     { &InputState::mod_x,       3 },
     { &InputState::mod_y,       0 },
-    { &InputState::select,       2 }, // Third mod button
+    { &InputState::select,      2 }, // Third mod button
 
     { &InputState::start,       A5},
 
