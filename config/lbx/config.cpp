@@ -50,7 +50,10 @@ GpioButtonMapping button_mappings[] = {
 };
 size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
 
-Pinout pinout = { .joybus_data = 7, .mux = A4 };
+Pinout pinout = {
+    .joybus_data = 7,
+    .mux = A4,
+};
 
 void setup() {
     // Create GPIO input source and use it to read button states for checking button holds.
