@@ -49,6 +49,23 @@ GpioButtonMapping button_mappings[] = {
 };
 size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
 
+GpioButtonMapping brook_button_mappings[] = {
+  // These are the only buttons which aren't also bound on brook board directly.
+  // And so the only buttons which can be bound to dpad_up and l3 on brook
+  // WARNING: Bind as few of these as you need, since it increases latency
+    { &InputState::l,           11},
+
+    { &InputState::mod_x,       3 },
+    { &InputState::mod_y,       0 },
+    { &InputState::nunchuk_c,   2 },
+
+    { &InputState::c_left,      4 },
+    { &InputState::c_up,        8 },
+    { &InputState::c_down,      1 },
+    { &InputState::a,           12},
+    { &InputState::c_right,     6 },
+};
+
 Pinout pinout = {
     .joybus_data = 7,
     .mux = A4,
@@ -124,11 +141,11 @@ void setup() {
 
 void loop() {
     if (brook_mode) {
-        bool button_l = digitalRead(button_mappings[0].pin);
-        bool button_mod_x = digitalRead(button_mappings[4].pin);
-        bool button_mod_y = digitalRead(button_mappings[5].pin);
-        bool button_cstick_down = digitalRead(button_mappings[10].pin);
-        bool button_a = digitalRead(button_mappings[11].pin);
+        bool button_l = digitalRead(brook_button_mappings[0].pin);
+        bool button_mod_x = digitalRead(brook_button_mappings[1].pin);
+        bool button_mod_y = digitalRead(brook_button_mappings[2].pin);
+        bool button_cstick_down = digitalRead(brook_button_mappings[6].pin);
+        bool button_a = digitalRead(brook_button_mappings[7].pin);
 
         digitalWrite(brook_up_pin, button_mod_x && button_mod_y && button_cstick_down && button_a);
         digitalWrite(brook_l_pin, button_l);
