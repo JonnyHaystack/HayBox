@@ -65,15 +65,25 @@ void setup() {
     static InputSource *input_sources[] = { gpio_input };
     size_t input_source_count = sizeof(input_sources) / sizeof(InputSource *);
 
-    // Hold B on plugin for Brook board mode.
+    // Hold start on plugin for Brook board mode.
     pinMode(pinout.mux, OUTPUT);
-    if (button_holds.b) {
+    if (button_holds.start) {
         digitalWrite(pinout.mux, HIGH);
         brook_mode = true;
-    } else {
-        digitalWrite(pinout.mux, LOW);
-        brook_mode = false;
+        return;
+        // remaining code is no-op if brook is enabled.
+        // Brook Firmware takes control, so we can't control layout/gamemode/backend in this branch
+        // IN Addition, you can force the following brook modes by holding the corresponding button on connecting.
+        // If none are held, brook will auto-detect.
+        // 1P/X = PS3
+        // 2P/Y = PS4
+        // 3P/RB = XID-PC
+        // 4P/LB = Nintendo Switch
+        // These listed buttons correspond to the mapping in brook mode (so can't be remapped)
+        // So in the case of the default layout for lbx these correspond to R, Y, LightShield, MidShield
     }
+    digitalWrite(pinout.mux, LOW);
+    brook_mode = false;
 
     CommunicationBackend *primary_backend = new DInputBackend(input_sources, input_source_count);
     delay(500);
