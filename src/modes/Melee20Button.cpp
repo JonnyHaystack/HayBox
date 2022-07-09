@@ -91,9 +91,7 @@ void Melee20Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
             // MX + q1/2/3/4
             SetLeftStick(outputs, 7375, 3125); // 22.96377°
             if (shield_button_pressed) {
-                // MX + L, R, LS, and MS + q1/2/3/4 = 6375 3750 = 51 30
-                outputs.leftStickX = 128 + (directions.x * 51);
-                outputs.leftStickY = 128 + (directions.y * 30);
+                SetLeftStick(outputs, 6375, 3750); // 30.46554°
             }
         }
 
