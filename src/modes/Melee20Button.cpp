@@ -50,6 +50,31 @@ void Melee20Button::UpdateDigitalOutputs(InputState &inputs, OutputState &output
         outputs.dpadRight = true;
 }
 
+void SetAxis(uint8_t* axis, const int8_t &direction, const uint16_t &value) {
+    *axis = 128 + (direction * (uint8_t)(value / 125));
+}
+
+void SetLeftStickX(OutputState &outputs, const StickDirections &directions, const uint16_t &value) {
+    SetAxis(&outputs.leftStickX, directions.x, value);
+}
+
+void SetLeftStickY(OutputState &outputs, const StickDirections &directions, const uint16_t &value) {
+    SetAxis(&outputs.leftStickY, directions.y, value);
+}
+
+void SetStick(uint8_t* xAxis, uint8_t* yAxis, const uint8_t &xDirection, const uint8_t &yDirection, const uint16_t &xValue, const uint16_t &yValue) {
+    SetAxis(xAxis, xDirection, xValue);
+    SetAxis(yAxis, yDirection, yValue);
+}
+
+void SetLeftStick(OutputState &outputs, const StickDirections &directions, const uint16_t &xValue, const uint16_t &yValue) {
+    SetStick(&outputs.leftStickX, &outputs.leftStickY, directions.x, directions.y, xValue, yValue);
+}
+
+void SetRightStick(OutputState &outputs, const StickDirections &directions, const uint16_t &xValue, const uint16_t &yValue) {
+    SetStick(&outputs.rightStickX, &outputs.leftStickY, directions.x, directions.y, xValue, yValue);
+}
+
 void Melee20Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
     // Coordinate calculations to make modifier handling simpler.
     UpdateDirections(
@@ -69,30 +94,27 @@ void Melee20Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
 
     bool shield_button_pressed = inputs.l || inputs.r || inputs.lightshield || inputs.midshield;
     if (directions.diagonal) {
-        // L, R, LS, and MS + q1/2 = 7000 7000
-        outputs.leftStickX = 128 + (directions.x * 56);
-        outputs.leftStickY = 128 + (directions.y * 56);
-        // L, R, LS, and MS + q3/4 = 7000 6875 (For vanilla shield drop. Gives 44.5
-        // degree wavedash).
-        if (directions.y == -1 && shield_button_pressed) {
-            outputs.leftStickX = 128 + (directions.x * 56);
-            outputs.leftStickY = 128 + (directions.y * 55);
+        // L, R, LS, and MS + q1/2
+        SetLeftStick(outputs, directions, 7000, 7000); // 45°
+
+        // L, R, LS, and MS + q3/4 = Vanilla shield drop
+        if (directions.y < 0 && shield_button_pressed) {
+            SetLeftStick(outputs, directions, 7000, 6875); // 44.48384°
         }
     }
 
     if (inputs.mod_x) {
-        // MX + Horizontal (even if shield is held) = 6625 = 53
+        // MX + Horizontal (even if shield is held)
         if (directions.horizontal) {
-            outputs.leftStickX = 128 + (directions.x * 53);
+            SetLeftStickX(outputs, directions, 6625);
         }
-        // MX + Vertical (even if shield is held) = 5375 = 43
+        // MX + Vertical (even if shield is held)
         if (directions.vertical) {
-            outputs.leftStickY = 128 + (directions.y * 43);
+            SetLeftStickY(outputs, directions, 5375);
         }
         if (directions.diagonal) {
-            // MX + q1/2/3/4 = 7375 3125 = 59 25
-            outputs.leftStickX = 128 + (directions.x * 59);
-            outputs.leftStickY = 128 + (directions.y * 25);
+            // MX + q1/2/3/4
+            SetLeftStick(outputs, directions, 7375, 3125); // 22.96377°
             if (shield_button_pressed) {
                 // MX + L, R, LS, and MS + q1/2/3/4 = 6375 3750 = 51 30
                 outputs.leftStickX = 128 + (directions.x * 51);
@@ -102,146 +124,98 @@ void Melee20Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
 
         // Angled fsmash
         if (directions.cx != 0) {
-            // 8500 5250 = 68 42
-            outputs.rightStickX = 128 + (directions.cx * 68);
-            outputs.rightStickY = 128 + (directions.y * 42);
+            SetStick(&outputs.rightStickX, &outputs.rightStickY, directions.cx, directions.y, 8500, 5250); // 31.70143°
         }
 
         /* Up B angles */
         if (directions.diagonal && !shield_button_pressed) {
-            // 22.9638 - 7375 3125 = 59 25
-            outputs.leftStickX = 128 + (directions.x * 59);
-            outputs.leftStickY = 128 + (directions.y * 25);
-            // 27.37104 - 7000 3625 (27.38) = 56 29
+            SetLeftStick(outputs, directions, 7375, 3125); // 22.9638°
             if (inputs.c_down) {
-                outputs.leftStickX = 128 + (directions.x * 56);
-                outputs.leftStickY = 128 + (directions.y * 29);
+                SetLeftStick(outputs, directions, 7000, 3625); // 27.37104°
             }
-            // 31.77828 - 7875 4875 (31.76) = 63 39
             if (inputs.c_left) {
-                outputs.leftStickX = 128 + (directions.x * 63);
-                outputs.leftStickY = 128 + (directions.y * 39);
+                SetLeftStick(outputs, directions, 7875, 4875); // 31.77828°
             }
-            // 36.18552 - 7000 5125 (36.21) = 56 41
             if (inputs.c_up) {
-                outputs.leftStickX = 128 + (directions.x * 56);
-                outputs.leftStickY = 128 + (directions.y * 41);
+                SetLeftStick(outputs, directions, 7000, 5125); // 36.18552°
             }
-            // 40.59276 - 6125 5250 (40.6) = 49 42
             if (inputs.c_right) {
-                outputs.leftStickX = 128 + (directions.x * 49);
-                outputs.leftStickY = 128 + (directions.y * 42);
+                SetLeftStick(outputs, directions, 6125, 5250); // 40.59276°
             }
 
             /* Extended Up B Angles */
             if (inputs.b) {
-                // 22.9638 - 9125 3875 (23.0) = 73 31
-                outputs.leftStickX = 128 + (directions.x * 73);
-                outputs.leftStickY = 128 + (directions.y * 31);
-                // 27.37104 - 8750 4500 (27.2) = 70 36
+                SetLeftStick(outputs, directions, 9125, 3875); // 22.9638°
                 if (inputs.c_down) {
-                    outputs.leftStickX = 128 + (directions.x * 70);
-                    outputs.leftStickY = 128 + (directions.y * 36);
+                    SetLeftStick(outputs, directions, 8750, 4500); // 27.37104°
                 }
-                // 31.77828 - 8500 5250 (31.7) = 68 42
                 if (inputs.c_left) {
-                    outputs.leftStickX = 128 + (directions.x * 68);
-                    outputs.leftStickY = 128 + (directions.y * 42);
+                    SetLeftStick(outputs, directions, 8500, 5250); // 31.77828°
                 }
-                // 36.18552 - 7375 5375 (36.1) = 59 43
                 if (inputs.c_up) {
-                    outputs.leftStickX = 128 + (directions.x * 59);
-                    outputs.leftStickY = 128 + (directions.y * 43);
+                    SetLeftStick(outputs, directions, 7375, 5375); // 36.18552°
                 }
-                // 40.59276 - 6375 5375 (40.1) = 51 43
                 if (inputs.c_right) {
-                    outputs.leftStickX = 128 + (directions.x * 51);
-                    outputs.leftStickY = 128 + (directions.y * 43);
+                    SetLeftStick(outputs, directions, 6375, 5375); // 40.59276°
                 }
             }
         }
     }
 
     if (inputs.mod_y) {
-        // MY + Horizontal (even if shield is held) = 3375 = 27
+        // MY + Horizontal (even if shield is held)
         if (directions.horizontal) {
-            outputs.leftStickX = 128 + (directions.x * 27);
+            SetLeftStickX(outputs, directions, 3375);
         }
-        // MY + Vertical (even if shield is held) = 7375 = 59
+        // MY + Vertical (even if shield is held)
         if (directions.vertical) {
-            outputs.leftStickY = 128 + (directions.y * 59);
+            SetLeftStickY(outputs, directions, 7375);
         }
         if (directions.diagonal) {
-            // MY + q1/2/3/4 = 3125 7375 = 25 59
-            outputs.leftStickX = 128 + (directions.x * 25);
-            outputs.leftStickY = 128 + (directions.y * 59);
+            SetLeftStick(outputs, directions, 3125, 7375); // 67.03623°
             if (shield_button_pressed) {
-                // MY + L, R, LS, and MS + q1/2 = 4750 8750 = 38 70
-                outputs.leftStickX = 128 + (directions.x * 38);
-                outputs.leftStickY = 128 + (directions.y * 70);
-                // MY + L, R, LS, and MS + q3/4 = 5000 8500 = 40 68
-                if (directions.y == -1) {
-                    outputs.leftStickX = 128 + (directions.x * 40);
-                    outputs.leftStickY = 128 + (directions.y * 68);
+                SetLeftStick(outputs, directions, 4750, 8750); // 61.50436°
+                if (directions.y < 0) {
+                    SetLeftStick(outputs, directions, 5000, 8500); // 59.53446°
                 }
             }
         }
 
         // Turnaround neutral B nerf
         if (inputs.b) {
-            outputs.leftStickX = 128 + (directions.x * 80);
+            SetLeftStickX(outputs, directions, 10000);
         }
 
         /* Up B angles */
         if (directions.diagonal && !shield_button_pressed) {
-            // 67.0362 - 3125 7375 = 25 59
-            outputs.leftStickX = 128 + (directions.x * 25);
-            outputs.leftStickY = 128 + (directions.y * 59);
-            // 62.62896 - 3625 7000 (62.62) = 29 56
+            SetLeftStick(outputs, directions, 3125, 7375); // 67.03623°
             if (inputs.c_down) {
-                outputs.leftStickX = 128 + (directions.x * 29);
-                outputs.leftStickY = 128 + (directions.y * 56);
+                SetLeftStick(outputs, directions, 3625, 7000); // 62.62896°
             }
-            // 58.22172 - 4875 7875 (58.24) = 39 63
             if (inputs.c_left) {
-                outputs.leftStickX = 128 + (directions.x * 39);
-                outputs.leftStickY = 128 + (directions.y * 63);
+                SetLeftStick(outputs, directions, 4875, 7875); // 58.22172°
             }
-            // 53.81448 - 5125 7000 (53.79) = 41 56
             if (inputs.c_up) {
-                outputs.leftStickX = 128 + (directions.x * 41);
-                outputs.leftStickY = 128 + (directions.y * 56);
+                SetLeftStick(outputs, directions, 5125, 7000); // 53.81448°
             }
-            // 49.40724 - 6375 7625 (50.10) = 51 61
             if (inputs.c_right) {
-                outputs.leftStickX = 128 + (directions.x * 51);
-                outputs.leftStickY = 128 + (directions.y * 61);
+                SetLeftStick(outputs, directions, 6375, 7625); // 49.40724°
             }
 
             /* Extended Up B Angles */
             if (inputs.b) {
-                // 67.0362 - 3875 9125 = 31 73
-                outputs.leftStickX = 128 + (directions.x * 31);
-                outputs.leftStickY = 128 + (directions.y * 73);
-                // 62.62896 - 4500 8750 (62.8) = 36 70
+                SetLeftStick(outputs, directions, 3875, 9125); // 67.0362°
                 if (inputs.c_down) {
-                    outputs.leftStickX = 128 + (directions.x * 36);
-                    outputs.leftStickY = 128 + (directions.y * 70);
+                    SetLeftStick(outputs, directions, 4500, 8750); // 62.62896°
                 }
-                // 58.22172 - 5250 8500 (58.3) = 42 68
                 if (inputs.c_left) {
-                    outputs.leftStickX = 128 + (directions.x * 42);
-                    outputs.leftStickY = 128 + (directions.y * 68);
+                    SetLeftStick(outputs, directions, 5250, 8500); // 58.22172°
                 }
-                // 53.81448 - 5875 8000 (53.7) = 47 64
                 if (inputs.c_up) {
-                    outputs.leftStickX = 128 + (directions.x * 47);
-                    outputs.leftStickY = 128 + (directions.y * 64);
+                    SetLeftStick(outputs, directions, 5875, 8000); // 53.81448°
                 }
-                // 49.40724 - 5875 7125 (50.49) = 47 57
                 if (inputs.c_right) {
-                    outputs.leftStickX = 128 + (directions.x * 47);
-                    outputs.leftStickY = 128 + (directions.y * 57);
+                    SetLeftStick(outputs, directions, 5875, 7125); // 49.40724°
                 }
             }
         }
@@ -250,15 +224,13 @@ void Melee20Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
     // C-stick ASDI Slideoff angle overrides any other C-stick modifiers (such as
     // angled fsmash).
     if (directions.cx != 0 && directions.cy != 0) {
-        // 5250 8500 = 42 68
-        outputs.rightStickX = 128 + (directions.cx * 42);
-        outputs.rightStickY = 128 + (directions.cy * 68);
+        SetRightStick(outputs, directions, 5250, 8500); // 58.29857°
     }
 
     // Horizontal SOCD overrides X-axis modifiers (for ledgedash maximum jump
     // trajectory).
     if (horizontal_socd && !directions.vertical) {
-        outputs.leftStickX = 128 + (directions.x * 80);
+        SetLeftStickX(outputs, directions, 10000);
     }
 
     if (inputs.lightshield) {
@@ -278,8 +250,7 @@ void Melee20Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
 
     // Shut off c-stick when using dpad layer.
     if (inputs.mod_x && inputs.mod_y) {
-        outputs.rightStickX = 128;
-        outputs.rightStickY = 128;
+        SetRightStick(outputs, directions, 0000, 0000);
     }
 
     // Nunchuk overrides left stick.
