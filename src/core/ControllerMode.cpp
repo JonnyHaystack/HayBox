@@ -92,11 +92,11 @@ void ControllerMode::SetAxis(uint8_t* axis, const int8_t &direction, const uint1
     *axis = 128 + (direction * (uint8_t)(value / 125));
 }
 
-void ControllerMode::SetLeftStickX(OutputState &outputs, const StickDirections &directions, const uint16_t &value) {
+void ControllerMode::SetLeftStickX(OutputState &outputs, const uint16_t &value) {
     SetAxis(&outputs.leftStickX, directions.x, value);
 }
 
-void ControllerMode::SetLeftStickY(OutputState &outputs, const StickDirections &directions, const uint16_t &value) {
+void ControllerMode::SetLeftStickY(OutputState &outputs, const uint16_t &value) {
     SetAxis(&outputs.leftStickY, directions.y, value);
 }
 
@@ -105,10 +105,10 @@ void ControllerMode::SetStick(uint8_t* xAxis, uint8_t* yAxis, const uint8_t &xDi
     SetAxis(yAxis, yDirection, yValue);
 }
 
-void ControllerMode::SetLeftStick(OutputState &outputs, const StickDirections &directions, const uint16_t &xValue, const uint16_t &yValue) {
+void ControllerMode::SetLeftStick(OutputState &outputs, const uint16_t &xValue, const uint16_t &yValue) {
     SetStick(&outputs.leftStickX, &outputs.leftStickY, directions.x, directions.y, xValue, yValue);
 }
 
-void ControllerMode::SetRightStick(OutputState &outputs, const StickDirections &directions, const uint16_t &xValue, const uint16_t &yValue) {
+void ControllerMode::SetRightStick(OutputState &outputs, const uint16_t &xValue, const uint16_t &yValue) {
     SetStick(&outputs.rightStickX, &outputs.leftStickY, directions.x, directions.y, xValue, yValue);
 }
