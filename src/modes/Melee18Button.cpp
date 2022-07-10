@@ -228,7 +228,7 @@ void Melee18Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
 
     // Shut off c-stick when using dpad layer.
     if (inputs.mod_x && inputs.mod_y) {
-        SetRightStick(outputs, 0000, 0000);
+        SetRightStick(outputs, 0000, 0000); // 0°
     }
 
     // Nunchuk overrides left stick.
