@@ -74,57 +74,49 @@ void ProjectM::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
     bool shield_button_pressed = inputs.l || inputs.lightshield || inputs.midshield;
 
     if (directions.diagonal) {
-        if (directions.y == 1) {
-            outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 83);
-            outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 93);
+        if (directions.y > 0) {
+            SetLeftStick(outputs, 8300, 9300); // 48.25195°
         }
     }
 
     if (inputs.mod_x) {
         if (directions.horizontal) {
-            outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 70);
+            SetLeftStickX(outputs, 7000);
         }
         if (directions.vertical) {
-            outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 60);
+            SetLeftStickY(outputs, 6000);
         }
 
+        // Angled fsmash
         if (directions.cx != 0) {
-            outputs.rightStickX = ANALOG_STICK_NEUTRAL + (directions.cx * 65);
-            outputs.rightStickY = ANALOG_STICK_NEUTRAL + (directions.y * 23);
+            SetStick(&outputs.rightStickX, &outputs.rightStickY, directions.cx, directions.y, 6500, 2300); // 19.48613°
         }
 
         if (directions.diagonal) {
-            outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 70);
-            outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 34);
+            SetLeftStick(outputs, 7000, 3400); // 25.90651°
 
             if (inputs.b) {
-                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 85);
-                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 31);
+                SetLeftStick(outputs, 8500, 3100); // 20.03721°
             }
 
             if (inputs.r) {
-                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 82);
-                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 35);
+                SetLeftStick(outputs, 8200, 3500); // 23.11421°
             }
 
             if (inputs.c_up) {
-                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 77);
-                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 55);
+                SetLeftStick(outputs, 7700, 5500); // 35.53768°
             }
 
             if (inputs.c_down) {
-                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 82);
-                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 36);
+                SetLeftStick(outputs, 8200, 3600); // 23.70265°
             }
 
             if (inputs.c_left) {
-                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 84);
-                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 50);
+                SetLeftStick(outputs, 8400, 5000); // 30.76272°
             }
 
             if (inputs.c_right) {
-                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 72);
-                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 61);
+                SetLeftStick(outputs, 7200, 6100); // 40.27201°
             }
         }
     }
@@ -138,37 +130,30 @@ void ProjectM::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         }
 
         if (directions.diagonal) {
-            outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 28);
-            outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 58);
+            SetLeftStick(outputs, 2800, 5800); // 64.23067°
 
             if (inputs.b) {
-                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 28);
-                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 85);
+                SetLeftStick(outputs, 2800, 8500); // 71.76751°
             }
 
             if (inputs.r) {
-                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 51);
-                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 82);
+                SetLeftStick(outputs, 5100, 8200); // 58.1204°
             }
 
             if (inputs.c_up) {
-                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 55);
-                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 77);
+                SetLeftStick(outputs, 5500, 7700); // 54.46232°
             }
 
             if (inputs.c_down) {
-                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 34);
-                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 82);
+                SetLeftStick(outputs, 3400, 8200); // 67.47943°
             }
 
             if (inputs.c_left) {
-                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 40);
-                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 84);
+                SetLeftStick(outputs, 4000, 8400); // 64.53665°
             }
 
             if (inputs.c_right) {
-                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 62);
-                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 72);
+                SetLeftStick(outputs, 6200, 7200); // 49.26789°
             }
         }
     }
@@ -177,17 +162,15 @@ void ProjectM::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
     // angled fsmash).
     // We don't apply this for c-up + c-left/c-right in case we want to implement
     // C-stick nair somehow.
-    if (directions.cx != 0 && directions.cy == -1) {
-        // 3000 9875 = 30 78
-        outputs.rightStickX = ANALOG_STICK_NEUTRAL + (directions.cx * 35);
-        outputs.rightStickY = ANALOG_STICK_NEUTRAL + (directions.cy * 98);
+    if (directions.cx != 0 && directions.cy < 0) {
+        SetLeftStick(outputs, 3500, 9800); // 70.34618°
     }
 
     // Horizontal SOCD overrides X-axis modifiers (for ledgedash maximum jump
     // trajectory).
     if (ledgedash_max_jump_traj && horizontal_socd && !directions.vertical &&
         !shield_button_pressed) {
-        outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 100);
+        SetLeftStickX(outputs, 10000);
     }
 
     if (inputs.lightshield) {
@@ -212,8 +195,7 @@ void ProjectM::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
 
     // Shut off c-stick when using dpad layer.
     if (inputs.mod_x && inputs.mod_y) {
-        outputs.rightStickX = ANALOG_STICK_NEUTRAL;
-        outputs.rightStickY = ANALOG_STICK_NEUTRAL;
+        SetRightStick(outputs, 0000, 0000);
     }
 
     // Nunchuk overrides left stick.
