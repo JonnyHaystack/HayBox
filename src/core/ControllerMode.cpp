@@ -89,7 +89,7 @@ void ControllerMode::UpdateDirections(
 }
 
 void ControllerMode::SetAxis(uint8_t* axis, const int8_t &direction, const uint16_t &value) {
-    *axis = 128 + (direction * (uint8_t)(value / 125));
+    *axis = ANALOG_STICK_NEUTRAL + (direction * (uint8_t)(value / 125));
 }
 
 void ControllerMode::SetLeftStickX(OutputState &outputs, const uint16_t &value) {

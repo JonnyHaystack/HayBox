@@ -64,83 +64,83 @@ void RivalsOfAether::UpdateAnalogOutputs(InputState &inputs, OutputState &output
 
     if (inputs.mod_x) {
         if (directions.horizontal) {
-            outputs.leftStickX = 128 + (directions.x * 66);
+            outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 66);
         }
 
         // Angled fsmash
         if (directions.cx != 0) {
-            outputs.rightStickX = 128 + (directions.cx * 65);
-            outputs.rightStickY = 128 + (directions.y * 23);
+            outputs.rightStickX = ANALOG_STICK_NEUTRAL + (directions.cx * 65);
+            outputs.rightStickY = ANALOG_STICK_NEUTRAL + (directions.y * 23);
         }
 
         // Need to check coord system in RoA
 
         /* Up B angles */
         if (directions.diagonal && !shield_button_pressed) {
-            outputs.leftStickX = 128 + (directions.x * 59);
-            outputs.leftStickY = 128 + (directions.y * 23);
+            outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 59);
+            outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 23);
 
             if (inputs.c_down) {
-                outputs.leftStickX = 128 + (directions.x * 49);
-                outputs.leftStickY = 128 + (directions.y * 24);
+                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 49);
+                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 24);
             }
 
             if (inputs.c_left) {
-                outputs.leftStickX = 128 + (directions.x * 52);
-                outputs.leftStickY = 128 + (directions.y * 31);
+                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 52);
+                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 31);
             }
 
             if (inputs.c_up) {
-                outputs.leftStickX = 128 + (directions.x * 49);
-                outputs.leftStickY = 128 + (directions.y * 35);
+                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 49);
+                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 35);
             }
 
             if (inputs.c_right) {
-                outputs.leftStickX = 128 + (directions.x * 51);
-                outputs.leftStickY = 128 + (directions.y * 43);
+                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 51);
+                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 43);
             }
         }
     }
 
     if (inputs.mod_y) {
         if (directions.horizontal) {
-            outputs.leftStickX = 128 + (directions.x * 44);
+            outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 44);
         }
 
         /* Up B angles */
         if (directions.diagonal && !shield_button_pressed) {
-            outputs.leftStickX = 128 + (directions.x * 44);
-            outputs.leftStickY = 128 + (directions.y * 113);
+            outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 44);
+            outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 113);
 
             if (inputs.c_down) {
-                outputs.leftStickX = 128 + (directions.x * 44);
-                outputs.leftStickY = 128 + (directions.y * 90);
+                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 44);
+                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 90);
             }
 
             if (inputs.c_left) {
-                outputs.leftStickX = 128 + (directions.x * 44);
-                outputs.leftStickY = 128 + (directions.y * 74);
+                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 44);
+                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 74);
             }
 
             if (inputs.c_up) {
-                outputs.leftStickX = 128 + (directions.x * 45);
-                outputs.leftStickY = 128 + (directions.y * 63);
+                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 45);
+                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 63);
             }
 
             if (inputs.c_right) {
-                outputs.leftStickX = 128 + (directions.x * 47);
-                outputs.leftStickY = 128 + (directions.y * 57);
+                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 47);
+                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 57);
             }
         }
     }
 
     if (inputs.l) {
         if (directions.horizontal)
-            outputs.leftStickX = 128 + (directions.x * 100);
+            outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 100);
         if (directions.vertical)
-            outputs.leftStickY = 128 + (directions.y * 100);
+            outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 100);
         if (directions.horizontal && (directions.y == -1)) {
-            outputs.leftStickX = 128 + (directions.x * 100);
+            outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 100);
             outputs.leftStickY = ANALOG_STICK_MIN;
         }
     }
@@ -148,16 +148,16 @@ void RivalsOfAether::UpdateAnalogOutputs(InputState &inputs, OutputState &output
     if (inputs.r) {
         if (directions.diagonal) {
             if (inputs.mod_y) {
-                outputs.leftStickX = 128 + (directions.x * 40);
-                outputs.leftStickY = 128 + (directions.y * 68);
+                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 40);
+                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 68);
             }
         }
     }
 
     // Shut off c-stick when using dpad layer.
     if (inputs.mod_x && inputs.mod_y) {
-        outputs.rightStickX = 128;
-        outputs.rightStickY = 128;
+        outputs.rightStickX = ANALOG_STICK_NEUTRAL;
+        outputs.rightStickY = ANALOG_STICK_NEUTRAL;
     }
 
     // Nunchuk overrides left stick.

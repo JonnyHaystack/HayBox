@@ -18,7 +18,7 @@ void MeleeLbx::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
 void MeleeLbx::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
     Melee20Button::UpdateAnalogOutputs(inputs, outputs);
     if (inputs.select) {
-        outputs.rightStickX = 128;
-        outputs.rightStickY = 128;
+        outputs.rightStickX = ANALOG_STICK_NEUTRAL;
+        outputs.rightStickY = ANALOG_STICK_NEUTRAL;
     }
 }

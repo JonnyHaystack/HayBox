@@ -47,10 +47,10 @@ bool TUGamepad::sendState() {
 
 void TUGamepad::resetInputs() {
     releaseAll();
-    leftXAxis(128);
-    leftYAxis(128);
-    rightXAxis(128);
-    rightYAxis(128);
+    leftXAxis(ANALOG_STICK_NEUTRAL);
+    leftYAxis(ANALOG_STICK_NEUTRAL);
+    rightXAxis(ANALOG_STICK_NEUTRAL);
+    rightYAxis(ANALOG_STICK_NEUTRAL);
     triggerLAnalog(0);
     triggerRAnalog(0);
 }

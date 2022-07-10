@@ -48,10 +48,10 @@ void DInputBackend::SendReport() {
     _gamepad->setButton(12, _outputs.home);
 
     // Analog outputs
-    _gamepad->leftXAxis(_outputs.leftStickX + 128);
-    _gamepad->leftYAxis(128 - _outputs.leftStickY);
-    _gamepad->rightXAxis(_outputs.rightStickX + 128);
-    _gamepad->rightYAxis(128 - _outputs.rightStickY);
+    _gamepad->leftXAxis(_outputs.leftStickX + ANALOG_STICK_NEUTRAL);
+    _gamepad->leftYAxis(ANALOG_STICK_NEUTRAL - _outputs.leftStickY);
+    _gamepad->rightXAxis(_outputs.rightStickX + ANALOG_STICK_NEUTRAL);
+    _gamepad->rightYAxis(ANALOG_STICK_NEUTRAL - _outputs.rightStickY);
     _gamepad->triggerLAnalog(_outputs.triggerLAnalog + 129);
     _gamepad->triggerRAnalog(_outputs.triggerRAnalog + 129);
 

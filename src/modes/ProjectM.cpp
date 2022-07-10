@@ -81,100 +81,100 @@ void ProjectM::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
 
     if (directions.diagonal) {
         if (directions.y == 1) {
-            outputs.leftStickX = 128 + (directions.x * 83);
-            outputs.leftStickY = 128 + (directions.y * 93);
+            outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 83);
+            outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 93);
         }
     }
 
     if (inputs.mod_x) {
         if (directions.horizontal) {
-            outputs.leftStickX = 128 + (directions.x * 70);
+            outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 70);
         }
         if (directions.vertical) {
-            outputs.leftStickY = 128 + (directions.y * 60);
+            outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 60);
         }
 
         if (directions.cx != 0) {
-            outputs.rightStickX = 128 + (directions.cx * 65);
-            outputs.rightStickY = 128 + (directions.y * 23);
+            outputs.rightStickX = ANALOG_STICK_NEUTRAL + (directions.cx * 65);
+            outputs.rightStickY = ANALOG_STICK_NEUTRAL + (directions.y * 23);
         }
 
         if (directions.diagonal) {
-            outputs.leftStickX = 128 + (directions.x * 70);
-            outputs.leftStickY = 128 + (directions.y * 34);
+            outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 70);
+            outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 34);
 
             if (inputs.b) {
-                outputs.leftStickX = 128 + (directions.x * 85);
-                outputs.leftStickY = 128 + (directions.y * 31);
+                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 85);
+                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 31);
             }
 
             if (inputs.r) {
-                outputs.leftStickX = 128 + (directions.x * 82);
-                outputs.leftStickY = 128 + (directions.y * 35);
+                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 82);
+                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 35);
             }
 
             if (inputs.c_up) {
-                outputs.leftStickX = 128 + (directions.x * 77);
-                outputs.leftStickY = 128 + (directions.y * 55);
+                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 77);
+                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 55);
             }
 
             if (inputs.c_down) {
-                outputs.leftStickX = 128 + (directions.x * 82);
-                outputs.leftStickY = 128 + (directions.y * 36);
+                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 82);
+                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 36);
             }
 
             if (inputs.c_left) {
-                outputs.leftStickX = 128 + (directions.x * 84);
-                outputs.leftStickY = 128 + (directions.y * 50);
+                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 84);
+                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 50);
             }
 
             if (inputs.c_right) {
-                outputs.leftStickX = 128 + (directions.x * 72);
-                outputs.leftStickY = 128 + (directions.y * 61);
+                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 72);
+                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 61);
             }
         }
     }
 
     if (inputs.mod_y) {
         if (directions.horizontal) {
-            outputs.leftStickX = 128 + (directions.x * 35);
+            outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 35);
         }
         if (directions.vertical) {
-            outputs.leftStickY = 128 + (directions.y * 70);
+            outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 70);
         }
 
         if (directions.diagonal) {
-            outputs.leftStickX = 128 + (directions.x * 28);
-            outputs.leftStickY = 128 + (directions.y * 58);
+            outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 28);
+            outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 58);
 
             if (inputs.b) {
-                outputs.leftStickX = 128 + (directions.x * 28);
-                outputs.leftStickY = 128 + (directions.y * 85);
+                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 28);
+                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 85);
             }
 
             if (inputs.r) {
-                outputs.leftStickX = 128 + (directions.x * 51);
-                outputs.leftStickY = 128 + (directions.y * 82);
+                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 51);
+                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 82);
             }
 
             if (inputs.c_up) {
-                outputs.leftStickX = 128 + (directions.x * 55);
-                outputs.leftStickY = 128 + (directions.y * 77);
+                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 55);
+                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 77);
             }
 
             if (inputs.c_down) {
-                outputs.leftStickX = 128 + (directions.x * 34);
-                outputs.leftStickY = 128 + (directions.y * 82);
+                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 34);
+                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 82);
             }
 
             if (inputs.c_left) {
-                outputs.leftStickX = 128 + (directions.x * 40);
-                outputs.leftStickY = 128 + (directions.y * 84);
+                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 40);
+                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 84);
             }
 
             if (inputs.c_right) {
-                outputs.leftStickX = 128 + (directions.x * 62);
-                outputs.leftStickY = 128 + (directions.y * 72);
+                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 62);
+                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 72);
             }
         }
     }
@@ -185,15 +185,15 @@ void ProjectM::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
     // C-stick nair somehow.
     if (directions.cx != 0 && directions.cy == -1) {
         // 3000 9875 = 30 78
-        outputs.rightStickX = 128 + (directions.cx * 35);
-        outputs.rightStickY = 128 + (directions.cy * 98);
+        outputs.rightStickX = ANALOG_STICK_NEUTRAL + (directions.cx * 35);
+        outputs.rightStickY = ANALOG_STICK_NEUTRAL + (directions.cy * 98);
     }
 
     // Horizontal SOCD overrides X-axis modifiers (for ledgedash maximum jump
     // trajectory).
     if (ledgedash_max_jump_traj && horizontal_socd && !directions.vertical &&
         !shield_button_pressed) {
-        outputs.leftStickX = 128 + (directions.x * 100);
+        outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 100);
     }
 
     if (inputs.lightshield) {
@@ -218,8 +218,8 @@ void ProjectM::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
 
     // Shut off c-stick when using dpad layer.
     if (inputs.mod_x && inputs.mod_y) {
-        outputs.rightStickX = 128;
-        outputs.rightStickY = 128;
+        outputs.rightStickX = ANALOG_STICK_NEUTRAL;
+        outputs.rightStickY = ANALOG_STICK_NEUTRAL;
     }
 
     // Nunchuk overrides left stick.

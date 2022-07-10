@@ -45,14 +45,14 @@ void N64Backend::SendReport() {
     _data.report.ddown = _outputs.dpadDown;
     _data.report.dup = _outputs.dpadUp;
     // Somewhat ugly way of mapping right stick to C-Pad
-    _data.report.cleft = _outputs.rightStickX < 128;
-    _data.report.cright = _outputs.rightStickX > 128;
-    _data.report.cdown = _outputs.rightStickY < 128;
-    _data.report.cup = _outputs.rightStickY > 128;
+    _data.report.cleft = _outputs.rightStickX < ANALOG_STICK_NEUTRAL;
+    _data.report.cright = _outputs.rightStickX > ANALOG_STICK_NEUTRAL;
+    _data.report.cdown = _outputs.rightStickY < ANALOG_STICK_NEUTRAL;
+    _data.report.cup = _outputs.rightStickY > ANALOG_STICK_NEUTRAL;
 
     // Analog outputs - converted from unsigned to signed 8-bit integers
-    _data.report.xAxis = _outputs.leftStickX - 128;
-    _data.report.yAxis = _outputs.leftStickY - 128;
+    _data.report.xAxis = _outputs.leftStickX - ANALOG_STICK_NEUTRAL;
+    _data.report.yAxis = _outputs.leftStickY - ANALOG_STICK_NEUTRAL;
 
     // Send outputs to console.
     _n64->write(_data);
