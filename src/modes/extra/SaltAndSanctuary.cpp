@@ -1,7 +1,6 @@
 #include "modes/extra/SaltAndSanctuary.hpp"
 
 #define ANALOG_STICK_MIN 1
-#define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 255
 
 SaltAndSanctuary::SaltAndSanctuary(socd::SocdType socd_type) : ControllerMode(socd_type) {

@@ -1,7 +1,6 @@
 #include "modes/Melee20Button.hpp"
 
 #define ANALOG_STICK_MIN 48
-#define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 208
 
 Melee20Button::Melee20Button(socd::SocdType socd_type) : ControllerMode(socd_type) {

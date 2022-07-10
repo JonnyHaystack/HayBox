@@ -1,7 +1,6 @@
 #include "modes/extra/RocketLeague.hpp"
 
 #define ANALOG_STICK_MIN 0
-#define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 255
 
 RocketLeague::RocketLeague(socd::SocdType socd_type) : ControllerMode(socd_type) {

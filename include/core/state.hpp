@@ -3,6 +3,8 @@
 
 #include "stdlib.hpp"
 
+#define ANALOG_STICK_NEUTRAL 128
+
 // Button state.
 typedef struct inputstate {
     // Rectangle inputs.

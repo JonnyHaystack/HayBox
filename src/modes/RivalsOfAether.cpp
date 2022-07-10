@@ -1,7 +1,6 @@
 #include "modes/RivalsOfAether.hpp"
 
 #define ANALOG_STICK_MIN 28
-#define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 228
 
 RivalsOfAether::RivalsOfAether(socd::SocdType socd_type) : ControllerMode(socd_type) {

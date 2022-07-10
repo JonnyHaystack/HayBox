@@ -1,7 +1,6 @@
 #include "modes/ProjectM.hpp"
 
 #define ANALOG_STICK_MIN 28
-#define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 228
 
 ProjectM::ProjectM(socd::SocdType socd_type, bool ledgedash_max_jump_traj, bool true_z_press)
