@@ -10,8 +10,8 @@ class DarkSouls : public ControllerMode {
     DarkSouls(socd::SocdType socd_type);
 
   private:
-    void UpdateDigitalOutputs(InputState &inputs);
-    void UpdateAnalogOutputs(InputState &inputs);
+    void UpdateDigitalOutputs();
+    void UpdateAnalogOutputs();
 };
 
 #endif
