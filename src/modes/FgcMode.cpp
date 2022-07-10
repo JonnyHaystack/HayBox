@@ -40,6 +40,8 @@ void FgcMode::UpdateDigitalOutputs() {
 }
 
 void FgcMode::UpdateAnalogOutputs() {
-    SetLeftStick(0000, 0000);
-    SetRightStick(0000, 0000);
+    _outputs->leftStickX = ANALOG_STICK_NEUTRAL;
+    _outputs->leftStickY = ANALOG_STICK_NEUTRAL;
+    _outputs->rightStickX = ANALOG_STICK_NEUTRAL;
+    _outputs->rightStickY = ANALOG_STICK_NEUTRAL;
 }

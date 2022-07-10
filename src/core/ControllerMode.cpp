@@ -1,7 +1,7 @@
 #include "core/ControllerMode.hpp"
 
 ControllerMode::ControllerMode(socd::SocdType socd_type, uint8_t analog_stick_length) : InputMode(socd_type) {
-    this->analog_stick_length = analog_stick_length;
+    this->_analog_stick_length = _analog_stick_length;
 
     // Set up initial state.
     ResetDirections();
@@ -41,8 +41,8 @@ void ControllerMode::UpdateDirections(
     bool rsDown,
     bool rsUp
 ) {
-    uint8_t analogStickMin = ANALOG_STICK_NEUTRAL - analog_stick_length;
-    uint8_t analogStickMax = ANALOG_STICK_NEUTRAL + analog_stick_length;
+    uint8_t analogStickMin = ANALOG_STICK_NEUTRAL - _analog_stick_length;
+    uint8_t analogStickMax = ANALOG_STICK_NEUTRAL + _analog_stick_length;
     ResetDirections();
 
     _outputs->leftStickX = ANALOG_STICK_NEUTRAL;
@@ -92,33 +92,4 @@ void ControllerMode::UpdateDirections(
             _outputs->rightStickY = analogStickMax;
         }
     }
-}
-
-void ControllerMode::SetAxis(uint8_t* axis, const int8_t &direction, const uint16_t &value) {
-    *axis = ANALOG_STICK_NEUTRAL + direction * (uint8_t)(value / (10000 / analog_stick_length));
-}
-
-void ControllerMode::SetLeftStickX(const uint16_t &value) {
-    SetAxis(&_outputs->leftStickX, directions.x, value);
-}
-
-void ControllerMode::SetLeftStickY(const uint16_t &value) {
-    SetAxis(&_outputs->leftStickY, directions.y, value);
-}
-
-void ControllerMode::SetStick(uint8_t* xAxis, uint8_t* yAxis, const uint8_t &xDirection, const uint8_t &yDirection, const uint16_t &xValue, const uint16_t &yValue) {
-    SetAxis(xAxis, xDirection, xValue);
-    SetAxis(yAxis, yDirection, yValue);
-}
-
-void ControllerMode::SetLeftStick(const uint16_t &xValue, const uint16_t &yValue) {
-    SetStick(&_outputs->leftStickX, &_outputs->leftStickY, directions.x, directions.y, xValue, yValue);
-}
-
-void ControllerMode::SetRightStick(const uint16_t &xValue, const uint16_t &yValue) {
-    SetStick(&_outputs->rightStickX, &_outputs->leftStickY, directions.x, directions.y, xValue, yValue);
-}
-
-void ControllerMode::SetAngledFSmash(const uint16_t &xValue, const uint16_t yValue) {
-    SetStick(&_outputs->rightStickX, &_outputs->rightStickY, directions.cx, directions.y, xValue, yValue);
 }

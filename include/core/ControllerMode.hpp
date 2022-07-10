@@ -23,22 +23,13 @@ class ControllerMode : public InputMode {
 
   protected:
     StickDirections directions;
+    uint8_t _analog_stick_length;
     OutputState* _outputs = nullptr;
 
-    void SetLeftStickX(const uint16_t &value);
-    void SetLeftStickY(const uint16_t &value);
-    void SetStick(uint8_t* xAxis, uint8_t* yAxis, const uint8_t &xDirection, const uint8_t &yDirection, const uint16_t &xValue, const uint16_t &yValue);
-    void SetLeftStick(const uint16_t &xValue, const uint16_t &yValue);
-    void SetRightStick(const uint16_t &xValue, const uint16_t &yValue);
-    void SetAngledFSmash(const uint16_t &xValue, const uint16_t yValue);
-
   private:
-    uint8_t analog_stick_length;
 
     virtual void UpdateDigitalOutputs() = 0;
     virtual void UpdateAnalogOutputs() = 0;
-
-    void SetAxis(uint8_t* axis, const int8_t &direction, const uint16_t &value);
 };
 
 #endif
