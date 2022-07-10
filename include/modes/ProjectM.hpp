@@ -14,9 +14,9 @@ class ProjectM : public ControllerMode {
     bool true_z_press;
     bool horizontal_socd;
 
-    void HandleSocd(InputState &inputs);
-    void UpdateDigitalOutputs(InputState &inputs);
-    void UpdateAnalogOutputs(InputState &inputs);
+    void HandleSocd();
+    void UpdateDigitalOutputs();
+    void UpdateAnalogOutputs();
 };
 
 #endif

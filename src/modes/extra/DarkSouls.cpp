@@ -11,8 +11,8 @@ DarkSouls::DarkSouls(socd::SocdType socd_type) : ControllerMode(socd_type) {
 }
 
 void DarkSouls::UpdateDigitalOutputs(InputState &inputs) {
-    outputs->y = inputs.y;
-    outputs->x = inputs.r;
+    _outputs->y = inputs.y;
+    _outputs->x = inputs.r;
 
     // Base layer.
     bool layer0 = !inputs.x && !inputs.nunchuk_c;
@@ -22,23 +22,23 @@ void DarkSouls::UpdateDigitalOutputs(InputState &inputs) {
     bool layerC = inputs.nunchuk_c;
 
     if (layer0) {
-        outputs->a = inputs.a;
-        outputs->b = inputs.b;
-        outputs->buttonR = inputs.z;
-        outputs->buttonL = inputs.up;
-        outputs->start = inputs.start | inputs.nunchuk_z;
+        _outputs->a = inputs.a;
+        _outputs->b = inputs.b;
+        _outputs->buttonR = inputs.z;
+        _outputs->buttonL = inputs.up;
+        _outputs->start = inputs.start | inputs.nunchuk_z;
     } else if (layerX) {
-        outputs->rightStickClick = inputs.a;
-        outputs->triggerRDigital = inputs.z;
-        outputs->triggerLDigital = inputs.up;
-        outputs->select = inputs.start;
+        _outputs->rightStickClick = inputs.a;
+        _outputs->triggerRDigital = inputs.z;
+        _outputs->triggerLDigital = inputs.up;
+        _outputs->select = inputs.start;
     } else if (layerC) {
-        outputs->a = inputs.a;
-        outputs->dpadLeft = inputs.b;
-        outputs->dpadDown = inputs.x;
-        outputs->dpadUp = inputs.z;
-        outputs->dpadRight = inputs.up;
-        outputs->select = inputs.nunchuk_z;
+        _outputs->a = inputs.a;
+        _outputs->dpadLeft = inputs.b;
+        _outputs->dpadDown = inputs.x;
+        _outputs->dpadUp = inputs.z;
+        _outputs->dpadRight = inputs.up;
+        _outputs->select = inputs.nunchuk_z;
     }
 }
 
@@ -56,7 +56,7 @@ void DarkSouls::UpdateAnalogOutputs(InputState &inputs) {
 
     // Nunchuk overrides left stick.
     if (inputs.nunchuk_connected) {
-        outputs->leftStickX = inputs.nunchuk_x;
-        outputs->leftStickY = inputs.nunchuk_y;
+        _outputs->leftStickX = inputs.nunchuk_x;
+        _outputs->leftStickY = inputs.nunchuk_y;
     }
 }

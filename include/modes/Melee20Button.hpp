@@ -10,13 +10,13 @@ class Melee20Button : public ControllerMode {
     Melee20Button(socd::SocdType socd_type);
 
   protected:
-    virtual void UpdateDigitalOutputs(InputState &inputs);
-    virtual void UpdateAnalogOutputs(InputState &inputs);
+    virtual void UpdateDigitalOutputs();
+    virtual void UpdateAnalogOutputs();
 
   private:
     bool horizontal_socd;
 
-    void HandleSocd(InputState &inputs);
+    void HandleSocd();
 };
 
 #endif

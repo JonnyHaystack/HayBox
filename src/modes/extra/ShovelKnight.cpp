@@ -11,20 +11,20 @@ ShovelKnight::ShovelKnight(socd::SocdType socd_type) : ControllerMode(socd_type)
 }
 
 void ShovelKnight::UpdateDigitalOutputs(InputState &inputs) {
-    outputs->dpadLeft = inputs.left;
-    outputs->dpadRight = inputs.right;
-    outputs->dpadDown = inputs.down;
-    outputs->dpadUp = inputs.mod_x;
+    _outputs->dpadLeft = inputs.left;
+    _outputs->dpadRight = inputs.right;
+    _outputs->dpadDown = inputs.down;
+    _outputs->dpadUp = inputs.mod_x;
 
-    outputs->b = inputs.x; // Jump
-    outputs->a = inputs.a; // Attack
-    outputs->y = inputs.b; // Attack
-    outputs->x = inputs.z; // Subweapon
-    outputs->buttonL = inputs.r; // Subweapon prev
-    outputs->buttonR = inputs.y; // Subweapon next
+    _outputs->b = inputs.x; // Jump
+    _outputs->a = inputs.a; // Attack
+    _outputs->y = inputs.b; // Attack
+    _outputs->x = inputs.z; // Subweapon
+    _outputs->buttonL = inputs.r; // Subweapon prev
+    _outputs->buttonR = inputs.y; // Subweapon next
 
-    outputs->select = inputs.lightshield; // Inventory
-    outputs->start = inputs.start; // Pause
+    _outputs->select = inputs.lightshield; // Inventory
+    _outputs->start = inputs.start; // Pause
 }
 
 void ShovelKnight::UpdateAnalogOutputs(InputState &inputs) {

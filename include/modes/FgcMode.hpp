@@ -10,9 +10,9 @@ class FgcMode : public ControllerMode {
     FgcMode(socd::SocdType socd_type);
 
   private:
-    void HandleSocd(InputState &inputs);
-    void UpdateDigitalOutputs(InputState &inputs);
-    void UpdateAnalogOutputs(InputState &inputs);
+    void HandleSocd();
+    void UpdateDigitalOutputs();
+    void UpdateAnalogOutputs();
 };
 
 #endif

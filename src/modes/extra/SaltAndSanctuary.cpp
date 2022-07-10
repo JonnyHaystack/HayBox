@@ -11,22 +11,22 @@ SaltAndSanctuary::SaltAndSanctuary(socd::SocdType socd_type) : ControllerMode(so
 }
 
 void SaltAndSanctuary::UpdateDigitalOutputs(InputState &inputs) {
-    outputs->dpadRight = inputs.l; // Block
-    outputs->b = inputs.b; // Roll
-    outputs->a = inputs.a; // Attack
-    outputs->y = inputs.z; // Strong
-    outputs->dpadDown = inputs.mod_y; // Use
-    outputs->x = inputs.x; // Jump
+    _outputs->dpadRight = inputs.l; // Block
+    _outputs->b = inputs.b; // Roll
+    _outputs->a = inputs.a; // Attack
+    _outputs->y = inputs.z; // Strong
+    _outputs->dpadDown = inputs.mod_y; // Use
+    _outputs->x = inputs.x; // Jump
 
-    outputs->buttonL = inputs.r; // Previous item
-    outputs->buttonR = inputs.y; // Next item
-    outputs->triggerLDigital = inputs.lightshield; // Use item
+    _outputs->buttonL = inputs.r; // Previous item
+    _outputs->buttonR = inputs.y; // Next item
+    _outputs->triggerLDigital = inputs.lightshield; // Use item
 
-    outputs->triggerRDigital = inputs.midshield; // Use torch
+    _outputs->triggerRDigital = inputs.midshield; // Use torch
 
-    outputs->dpadLeft = inputs.up; // Switch loadout
+    _outputs->dpadLeft = inputs.up; // Switch loadout
 
-    outputs->start = inputs.start; // Inventory
+    _outputs->start = inputs.start; // Inventory
 }
 
 void SaltAndSanctuary::UpdateAnalogOutputs(InputState &inputs) {

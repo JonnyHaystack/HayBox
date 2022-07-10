@@ -7,39 +7,39 @@ FgcMode::FgcMode(socd::SocdType socd_type) : ControllerMode(socd_type) {
     };
 }
 
-void FgcMode::HandleSocd(InputState &inputs) {
-    if (inputs.down && (inputs.mod_x || inputs.c_up)) {
-        inputs.down = false;
+void FgcMode::HandleSocd() {
+    if (_inputs->down && (_inputs->mod_x || _inputs->c_up)) {
+        _inputs->down = false;
     }
-    InputMode::HandleSocd(inputs);
+    InputMode::HandleSocd();
 }
 
-void FgcMode::UpdateDigitalOutputs(InputState &inputs) {
+void FgcMode::UpdateDigitalOutputs() {
     // Directions
-    outputs->dpadLeft = inputs.left;
-    outputs->dpadRight = inputs.right;
-    outputs->dpadDown = inputs.down;
-    outputs->dpadUp = inputs.mod_x || inputs.c_up;
+    _outputs->dpadLeft = _inputs->left;
+    _outputs->dpadRight = _inputs->right;
+    _outputs->dpadDown = _inputs->down;
+    _outputs->dpadUp = _inputs->mod_x || _inputs->c_up;
 
     // Menu keys
-    outputs->start = inputs.start;
-    outputs->select = inputs.c_left;
-    outputs->home = inputs.c_down;
+    _outputs->start = _inputs->start;
+    _outputs->select = _inputs->c_left;
+    _outputs->home = _inputs->c_down;
 
     // Right hand bottom row
-    outputs->a = inputs.b;
-    outputs->b = inputs.x;
-    outputs->triggerRDigital = inputs.z;
-    outputs->triggerLDigital = inputs.up;
+    _outputs->a = _inputs->b;
+    _outputs->b = _inputs->x;
+    _outputs->triggerRDigital = _inputs->z;
+    _outputs->triggerLDigital = _inputs->up;
 
     // Right hand top row
-    outputs->x = inputs.r;
-    outputs->y = inputs.y;
-    outputs->buttonR = inputs.lightshield;
-    outputs->buttonL = inputs.midshield;
+    _outputs->x = _inputs->r;
+    _outputs->y = _inputs->y;
+    _outputs->buttonR = _inputs->lightshield;
+    _outputs->buttonL = _inputs->midshield;
 }
 
-void FgcMode::UpdateAnalogOutputs(InputState &inputs) {
+void FgcMode::UpdateAnalogOutputs() {
     SetLeftStick(0000, 0000);
     SetRightStick(0000, 0000);
 }

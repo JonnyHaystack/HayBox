@@ -12,27 +12,27 @@ Ultimate2::Ultimate2(socd::SocdType socd_type) : ControllerMode(socd_type, 100) 
 }
 
 void Ultimate2::UpdateDigitalOutputs(InputState &inputs) {
-    outputs->a = inputs.a;
-    outputs->b = inputs.b;
-    outputs->x = inputs.x;
-    outputs->y = inputs.y;
-    outputs->buttonR = inputs.z;
-    outputs->triggerLDigital = inputs.l;
-    outputs->triggerRDigital = inputs.r;
-    outputs->start = inputs.start;
+    _outputs->a = inputs.a;
+    _outputs->b = inputs.b;
+    _outputs->x = inputs.x;
+    _outputs->y = inputs.y;
+    _outputs->buttonR = inputs.z;
+    _outputs->triggerLDigital = inputs.l;
+    _outputs->triggerRDigital = inputs.r;
+    _outputs->start = inputs.start;
 
     // D-Pad
     if (inputs.mod_x && inputs.mod_y) {
-        outputs->dpadUp = inputs.c_up;
-        outputs->dpadDown = inputs.c_down;
-        outputs->dpadLeft = inputs.c_left;
-        outputs->dpadRight = inputs.c_right;
+        _outputs->dpadUp = inputs.c_up;
+        _outputs->dpadDown = inputs.c_down;
+        _outputs->dpadLeft = inputs.c_left;
+        _outputs->dpadRight = inputs.c_right;
     }
 
     if (inputs.select)
-        outputs->dpadLeft = true;
+        _outputs->dpadLeft = true;
     if (inputs.home)
-        outputs->dpadRight = true;
+        _outputs->dpadRight = true;
 }
 
 void Ultimate2::UpdateAnalogOutputs(InputState &inputs) {
@@ -82,7 +82,7 @@ void Ultimate2::UpdateAnalogOutputs(InputState &inputs) {
 
         // Angled fsmash/ftilt with C-Stick + MX
         if (directions.cx != 0) {
-            SetStick(&outputs->rightStickX, &outputs->rightStickY, directions.cx, directions.y, 12700, 5900); // 24.91802°
+            SetStick(&_outputs->rightStickX, &_outputs->rightStickY, directions.cx, directions.y, 12700, 5900); // 24.91802°
         }
 
         /* Up B angles */
@@ -143,11 +143,11 @@ void Ultimate2::UpdateAnalogOutputs(InputState &inputs) {
     }
 
     if (inputs.l) {
-        outputs->triggerLAnalog = 140;
+        _outputs->triggerLAnalog = 140;
     }
 
     if (inputs.r) {
-        outputs->triggerRAnalog = 140;
+        _outputs->triggerRAnalog = 140;
     }
 
     // Shut off c-stick when using dpad layer.
@@ -157,7 +157,7 @@ void Ultimate2::UpdateAnalogOutputs(InputState &inputs) {
 
     // Nunchuk overrides left stick.
     if (inputs.nunchuk_connected) {
-        outputs->leftStickX = inputs.nunchuk_x;
-        outputs->leftStickY = inputs.nunchuk_y;
+        _outputs->leftStickX = inputs.nunchuk_x;
+        _outputs->leftStickY = inputs.nunchuk_y;
     }
 }

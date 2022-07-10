@@ -11,17 +11,17 @@ HollowKnight::HollowKnight(socd::SocdType socd_type) : ControllerMode(socd_type)
 }
 
 void HollowKnight::UpdateDigitalOutputs(InputState &inputs) {
-    outputs->a = inputs.a; // Attack
-    outputs->b = inputs.b; // Dash
-    outputs->x = inputs.x; // Jump
-    outputs->y = inputs.mod_y; // Spell
-    outputs->triggerLDigital = inputs.r; // Focus/cast
-    outputs->triggerRDigital = inputs.z;
-    outputs->buttonR = inputs.up; // Dream nail
+    _outputs->a = inputs.a; // Attack
+    _outputs->b = inputs.b; // Dash
+    _outputs->x = inputs.x; // Jump
+    _outputs->y = inputs.mod_y; // Spell
+    _outputs->triggerLDigital = inputs.r; // Focus/cast
+    _outputs->triggerRDigital = inputs.z;
+    _outputs->buttonR = inputs.up; // Dream nail
 
-    outputs->buttonL = inputs.lightshield; // Map
-    outputs->select = inputs.midshield; // Inventory
-    outputs->start = inputs.start; // Pause
+    _outputs->buttonL = inputs.lightshield; // Map
+    _outputs->select = inputs.midshield; // Inventory
+    _outputs->start = inputs.start; // Pause
 }
 
 void HollowKnight::UpdateAnalogOutputs(InputState &inputs) {

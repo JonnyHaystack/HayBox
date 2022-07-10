@@ -8,16 +8,15 @@ ControllerMode::ControllerMode(socd::SocdType socd_type, uint8_t analog_stick_le
 }
 
 void ControllerMode::UpdateOutputs(InputState* inputs, OutputState* outputs) {
-    
-    HandleSocd(inputs);
+    _inputs = inputs;
+    _outputs = outputs;
 
-    if (outputs == nullptr)
+    if (inputs == nullptr || outputs == nullptr)
         return;
 
-    this->outputs = outputs;
-
-    UpdateDigitalOutputs(inputs);
-    UpdateAnalogOutputs(inputs);
+    HandleSocd();
+    UpdateDigitalOutputs();
+    UpdateAnalogOutputs();
 }
 
 void ControllerMode::ResetDirections() {
@@ -46,30 +45,30 @@ void ControllerMode::UpdateDirections(
     uint8_t analogStickMax = ANALOG_STICK_NEUTRAL + analog_stick_length;
     ResetDirections();
 
-    outputs->leftStickX = ANALOG_STICK_NEUTRAL;
-    outputs->leftStickY = ANALOG_STICK_NEUTRAL;
-    outputs->rightStickX = ANALOG_STICK_NEUTRAL;
-    outputs->rightStickY = ANALOG_STICK_NEUTRAL;
+    _outputs->leftStickX = ANALOG_STICK_NEUTRAL;
+    _outputs->leftStickY = ANALOG_STICK_NEUTRAL;
+    _outputs->rightStickX = ANALOG_STICK_NEUTRAL;
+    _outputs->rightStickY = ANALOG_STICK_NEUTRAL;
 
     // Coordinate calculations to make modifier handling simpler.
     if (lsLeft || lsRight) {
         directions.horizontal = true;
         if (lsLeft) {
             directions.x = -1;
-            outputs->leftStickX = analogStickMin;
+            _outputs->leftStickX = analogStickMin;
         } else {
             directions.x = 1;
-            outputs->leftStickX = analogStickMax;
+            _outputs->leftStickX = analogStickMax;
         }
     }
     if (lsDown || lsUp) {
         directions.vertical = true;
         if (lsDown) {
             directions.y = -1;
-            outputs->leftStickY = analogStickMin;
+            _outputs->leftStickY = analogStickMin;
         } else {
             directions.y = 1;
-            outputs->leftStickY = analogStickMax;
+            _outputs->leftStickY = analogStickMax;
         }
     }
     if (directions.horizontal && directions.vertical)
@@ -78,19 +77,19 @@ void ControllerMode::UpdateDirections(
     if (rsLeft || rsRight) {
         if (rsLeft) {
             directions.cx = -1;
-            outputs->rightStickX = analogStickMin;
+            _outputs->rightStickX = analogStickMin;
         } else {
             directions.cx = 1;
-            outputs->rightStickX = analogStickMax;
+            _outputs->rightStickX = analogStickMax;
         }
     }
     if (rsDown || rsUp) {
         if (rsDown) {
             directions.cy = -1;
-            outputs->rightStickY = analogStickMin;
+            _outputs->rightStickY = analogStickMin;
         } else {
             directions.cy = 1;
-            outputs->rightStickY = analogStickMax;
+            _outputs->rightStickY = analogStickMax;
         }
     }
 }
@@ -100,11 +99,11 @@ void ControllerMode::SetAxis(uint8_t* axis, const int8_t &direction, const uint1
 }
 
 void ControllerMode::SetLeftStickX(const uint16_t &value) {
-    SetAxis(&outputs->leftStickX, directions.x, value);
+    SetAxis(&_outputs->leftStickX, directions.x, value);
 }
 
 void ControllerMode::SetLeftStickY(const uint16_t &value) {
-    SetAxis(&outputs->leftStickY, directions.y, value);
+    SetAxis(&_outputs->leftStickY, directions.y, value);
 }
 
 void ControllerMode::SetStick(uint8_t* xAxis, uint8_t* yAxis, const uint8_t &xDirection, const uint8_t &yDirection, const uint16_t &xValue, const uint16_t &yValue) {
@@ -113,9 +112,9 @@ void ControllerMode::SetStick(uint8_t* xAxis, uint8_t* yAxis, const uint8_t &xDi
 }
 
 void ControllerMode::SetLeftStick(const uint16_t &xValue, const uint16_t &yValue) {
-    SetStick(&outputs->leftStickX, &outputs->leftStickY, directions.x, directions.y, xValue, yValue);
+    SetStick(&_outputs->leftStickX, &_outputs->leftStickY, directions.x, directions.y, xValue, yValue);
 }
 
 void ControllerMode::SetRightStick(const uint16_t &xValue, const uint16_t &yValue) {
-    SetStick(&outputs->rightStickX, &outputs->leftStickY, directions.x, directions.y, xValue, yValue);
+    SetStick(&_outputs->rightStickX, &_outputs->leftStickY, directions.x, directions.y, xValue, yValue);
 }

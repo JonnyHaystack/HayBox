@@ -12,59 +12,59 @@ Melee18Button::Melee18Button(socd::SocdType socd_type) : ControllerMode(socd_typ
     horizontal_socd = false;
 }
 
-void Melee18Button::HandleSocd(InputState &inputs) {
-    horizontal_socd = inputs.left && inputs.right;
-    InputMode::HandleSocd(inputs);
+void Melee18Button::HandleSocd() {
+    horizontal_socd = _inputs->left && _inputs->right;
+    InputMode::HandleSocd();
 }
 
-void Melee18Button::UpdateDigitalOutputs(InputState &inputs) {
-    outputs->a = inputs.a;
-    outputs->b = inputs.b;
-    outputs->x = inputs.x;
-    outputs->y = inputs.y;
-    outputs->buttonR = inputs.z;
-    if (inputs.nunchuk_connected) {
+void Melee18Button::UpdateDigitalOutputs() {
+    _outputs->a = _inputs->a;
+    _outputs->b = _inputs->b;
+    _outputs->x = _inputs->x;
+    _outputs->y = _inputs->y;
+    _outputs->buttonR = _inputs->z;
+    if (_inputs->nunchuk_connected) {
         // Lightshield with C button.
-        if (inputs.nunchuk_c) {
-            outputs->triggerLAnalog = 49;
+        if (_inputs->nunchuk_c) {
+            _outputs->triggerLAnalog = 49;
         }
-        outputs->triggerLDigital = inputs.nunchuk_z;
+        _outputs->triggerLDigital = _inputs->nunchuk_z;
     } else {
-        outputs->triggerLDigital = inputs.l;
+        _outputs->triggerLDigital = _inputs->l;
     }
-    outputs->triggerRDigital = inputs.r;
-    outputs->start = inputs.start;
+    _outputs->triggerRDigital = _inputs->r;
+    _outputs->start = _inputs->start;
 
     /********* DPAD *********/
-    if (inputs.mod_x && inputs.mod_y) {
-        outputs->dpadUp = inputs.c_up;
-        outputs->dpadDown = inputs.c_down;
-        outputs->dpadLeft = inputs.c_left;
-        outputs->dpadRight = inputs.c_right;
+    if (_inputs->mod_x && _inputs->mod_y) {
+        _outputs->dpadUp = _inputs->c_up;
+        _outputs->dpadDown = _inputs->c_down;
+        _outputs->dpadLeft = _inputs->c_left;
+        _outputs->dpadRight = _inputs->c_right;
     }
 
-    if (inputs.select)
-        outputs->dpadLeft = true;
-    if (inputs.home)
-        outputs->dpadRight = true;
+    if (_inputs->select)
+        _outputs->dpadLeft = true;
+    if (_inputs->home)
+        _outputs->dpadRight = true;
 }
 
-void Melee18Button::UpdateAnalogOutputs(InputState &inputs) {
+void Melee18Button::UpdateAnalogOutputs() {
     // Coordinate calculations to make modifier handling simpler.
     UpdateDirections(
-        inputs.left,
-        inputs.right,
-        inputs.down,
-        inputs.up,
-        inputs.c_left,
-        inputs.c_right,
-        inputs.c_down,
-        inputs.c_up
+        _inputs->left,
+        _inputs->right,
+        _inputs->down,
+        _inputs->up,
+        _inputs->c_left,
+        _inputs->c_right,
+        _inputs->c_down,
+        _inputs->c_up
     );
 
-    bool shield_button_pressed = inputs.l || inputs.r;
+    bool shield_button_pressed = _inputs->l || _inputs->r;
 
-    if (inputs.mod_x) {
+    if (_inputs->mod_x) {
         if (directions.horizontal) {
             SetLeftStickX(6625);
         }
@@ -74,45 +74,45 @@ void Melee18Button::UpdateAnalogOutputs(InputState &inputs) {
 
         // Angled fsmash
         if (directions.cx != 0) {
-            SetStick(&outputs->rightStickX, &outputs->rightStickY, directions.cx, directions.y, 8500, 5250); // 31.70143°
+            SetStick(&_outputs->rightStickX, &_outputs->rightStickY, directions.cx, directions.y, 8500, 5250); // 31.70143°
         }
 
         /* Up B angles */
         if (directions.diagonal && !shield_button_pressed) {
             SetLeftStick(7375, 3125); // 22.9638°
-            if (inputs.c_down) {
+            if (_inputs->c_down) {
                 SetLeftStick(7000, 3625); // 27.37104°
             }
-            if (inputs.c_left) {
+            if (_inputs->c_left) {
                 SetLeftStick(7875, 4875); // 31.77828°
             }
-            if (inputs.c_up) {
+            if (_inputs->c_up) {
                 SetLeftStick(7000, 5125); // 36.18552°
             }
-            if (inputs.c_right) {
+            if (_inputs->c_right) {
                 SetLeftStick(6125, 5250); // 40.59276°
             }
 
             /* Extended Up B Angles */
-            if (inputs.b) {
+            if (_inputs->b) {
                 SetLeftStick(9125, 3875); // 22.9638°
-                if (inputs.c_down) {
+                if (_inputs->c_down) {
                     SetLeftStick(8750, 4500); // 27.37104°
                 }
-                if (inputs.c_left) {
+                if (_inputs->c_left) {
                     SetLeftStick(8500, 5250); // 31.77828°
                 }
-                if (inputs.c_up) {
+                if (_inputs->c_up) {
                     SetLeftStick(7375, 5375); // 36.18552°
                 }
-                if (inputs.c_right) {
+                if (_inputs->c_right) {
                     SetLeftStick(6375, 5375); // 40.59276°
                 }
             }
         }
     }
 
-    if (inputs.mod_y) {
+    if (_inputs->mod_y) {
         if (directions.horizontal) {
             SetLeftStickX(3375);
         }
@@ -121,46 +121,46 @@ void Melee18Button::UpdateAnalogOutputs(InputState &inputs) {
         }
 
         // Turnaround neutral B nerf
-        if (inputs.b) {
+        if (_inputs->b) {
             SetLeftStickX(10000);
         }
 
         /* Up B angles */
         if (directions.diagonal && !shield_button_pressed) {
             SetLeftStick(3125, 7375); // 67.03623°
-            if (inputs.c_down) {
+            if (_inputs->c_down) {
                 SetLeftStick(3625, 7000); // 62.62896°
             }
-            if (inputs.c_left) {
+            if (_inputs->c_left) {
                 SetLeftStick(4875, 7875); // 58.22172°
             }
-            if (inputs.c_up) {
+            if (_inputs->c_up) {
                 SetLeftStick(5125, 7000); // 53.81448°
             }
-            if (inputs.c_right) {
+            if (_inputs->c_right) {
                 SetLeftStick(6375, 7625); // 49.40724°
             }
 
             /* Extended Up B Angles */
-            if (inputs.b) {
+            if (_inputs->b) {
                 SetLeftStick(3875, 9125); // 67.0362°
-                if (inputs.c_down) {
+                if (_inputs->c_down) {
                     SetLeftStick(4500, 8750); // 62.62896°
                 }
-                if (inputs.c_left) {
+                if (_inputs->c_left) {
                     SetLeftStick(5250, 8500); // 58.22172°
                 }
-                if (inputs.c_up) {
+                if (_inputs->c_up) {
                     SetLeftStick(5875, 8000); // 53.81448°
                 }
-                if (inputs.c_right) {
+                if (_inputs->c_right) {
                     SetLeftStick(5875, 7125); // 49.40724°
                 }
             }
         }
     }
 
-    if (inputs.l) {
+    if (_inputs->l) {
         if (directions.horizontal)
             SetLeftStickX(10000);
         if (directions.vertical)
@@ -171,24 +171,24 @@ void Melee18Button::UpdateAnalogOutputs(InputState &inputs) {
         if (directions.horizontal && directions.y < 0) {
             SetLeftStick(7125, 6875); // 43.97697°
         }
-        if (inputs.mod_x || inputs.mod_y) {
-            if (!(inputs.mod_x && inputs.mod_y)) {
-                outputs->triggerLDigital = false;
-                outputs->triggerRAnalog = 49;
+        if (_inputs->mod_x || _inputs->mod_y) {
+            if (!(_inputs->mod_x && _inputs->mod_y)) {
+                _outputs->triggerLDigital = false;
+                _outputs->triggerRAnalog = 49;
             }
 
             if (directions.diagonal) {
-                if (inputs.mod_x) {
+                if (_inputs->mod_x) {
                     SetLeftStick(6375, 3750); // 30.46554°
                 }
-                if (inputs.mod_y) {
+                if (_inputs->mod_y) {
                     SetLeftStick(5000, 8500); // 59.53446°
                 }
             }
         }
     }
 
-    if (inputs.r) {
+    if (_inputs->r) {
         if (directions.horizontal) {
             SetLeftStickX(6375);
         }
@@ -197,10 +197,10 @@ void Melee18Button::UpdateAnalogOutputs(InputState &inputs) {
         }
         if (directions.diagonal) {
             SetLeftStickX(5375);
-            if (inputs.mod_x) {
+            if (_inputs->mod_x) {
                 SetLeftStick(6375, 3750); // 30.46554°
             }
-            if (inputs.mod_y) {
+            if (_inputs->mod_y) {
                 SetLeftStick(5000, 8500); // 59.53446°
             }
         }
@@ -214,18 +214,18 @@ void Melee18Button::UpdateAnalogOutputs(InputState &inputs) {
 
     // Horizontal SOCD overrides X-axis modifiers (for ledgedash maximum jump
     // trajectory).
-    if (!inputs.r && horizontal_socd && !directions.vertical) {
+    if (!_inputs->r && horizontal_socd && !directions.vertical) {
         SetLeftStickX(10000);
     }
 
     // Shut off c-stick when using dpad layer.
-    if (inputs.mod_x && inputs.mod_y) {
+    if (_inputs->mod_x && _inputs->mod_y) {
         SetRightStick(0000, 0000); // 0°
     }
 
     // Nunchuk overrides left stick.
-    if (inputs.nunchuk_connected) {
-        outputs->leftStickX = inputs.nunchuk_x;
-        outputs->leftStickY = inputs.nunchuk_y;
+    if (_inputs->nunchuk_connected) {
+        _outputs->leftStickX = _inputs->nunchuk_x;
+        _outputs->leftStickY = _inputs->nunchuk_y;
     }
 }

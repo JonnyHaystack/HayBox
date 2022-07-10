@@ -8,7 +8,7 @@
 class ControllerMode : public InputMode {
   public:
     ControllerMode(socd::SocdType socd_type, uint8_t analog_stick_length = 127);
-    void UpdateOutputs(InputState &inputs, OutputState* outputs);
+    void UpdateOutputs(InputState* inputs, OutputState* outputs);
     void ResetDirections();
     virtual void UpdateDirections(
         bool lsLeft,
@@ -23,7 +23,7 @@ class ControllerMode : public InputMode {
 
   protected:
     StickDirections directions;
-    OutputState* outputs = nullptr;
+    OutputState* _outputs = nullptr;
 
     void SetLeftStickX(const uint16_t &value);
     void SetLeftStickY(const uint16_t &value);
@@ -34,8 +34,8 @@ class ControllerMode : public InputMode {
   private:
     uint8_t analog_stick_length;
 
-    virtual void UpdateDigitalOutputs(InputState &inputs) = 0;
-    virtual void UpdateAnalogOutputs(InputState &inputs) = 0;
+    virtual void UpdateDigitalOutputs() = 0;
+    virtual void UpdateAnalogOutputs() = 0;
 
     void SetAxis(uint8_t* axis, const int8_t &direction, const uint16_t &value);
 };
