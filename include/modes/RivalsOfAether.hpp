@@ -1,11 +1,11 @@
 #ifndef _MODES_RIVALSOFAETHER_HPP
 #define _MODES_RIVALSOFAETHER_HPP
 
-#include "core/ControllerMode.hpp"
+#include "modes/PlatformFighter.hpp"
 #include "core/socd.hpp"
 #include "core/state.hpp"
 
-class RivalsOfAether : public ControllerMode {
+class RivalsOfAether : public PlatformFighter {
   public:
     RivalsOfAether(socd::SocdType socd_type);
 

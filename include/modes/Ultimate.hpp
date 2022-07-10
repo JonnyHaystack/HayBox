@@ -1,11 +1,11 @@
 #ifndef _MODES_ULTIMATE_HPP
 #define _MODES_ULTIMATE_HPP
 
-#include "core/ControllerMode.hpp"
+#include "modes/PlatformFighter.hpp"
 #include "core/socd.hpp"
 #include "core/state.hpp"
 
-class Ultimate : public ControllerMode {
+class Ultimate : public PlatformFighter {
   public:
     Ultimate(socd::SocdType socd_type);
 

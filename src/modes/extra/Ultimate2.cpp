@@ -1,15 +1,8 @@
 /* Ultimate2 profile by Taker */
 #include "modes/extra/Ultimate2.hpp"
 
-Ultimate2::Ultimate2(socd::SocdType socd_type) : ControllerMode(socd_type, 100) {
-    _socd_pair_count = 4;
-    _socd_pairs = new socd::SocdPair[_socd_pair_count]{
-        socd::SocdPair{&InputState::left,    &InputState::right  },
-        socd::SocdPair{ &InputState::down,   &InputState::up     },
-        socd::SocdPair{ &InputState::c_left, &InputState::c_right},
-        socd::SocdPair{ &InputState::c_down, &InputState::c_up   },
-    };
-}
+Ultimate2::Ultimate2(socd::SocdType socd_type)
+    : PlatformFighter(socd_type) { }
 
 void Ultimate2::UpdateDigitalOutputs(InputState &inputs) {
     _outputs->a = inputs.a;

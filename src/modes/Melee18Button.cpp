@@ -1,21 +1,7 @@
 #include "modes/Melee18Button.hpp"
 
-Melee18Button::Melee18Button(socd::SocdType socd_type) : ControllerMode(socd_type, 80) {
-    _socd_pair_count = 4;
-    _socd_pairs = new socd::SocdPair[_socd_pair_count]{
-        socd::SocdPair{&InputState::left,    &InputState::right  },
-        socd::SocdPair{ &InputState::down,   &InputState::up     },
-        socd::SocdPair{ &InputState::c_left, &InputState::c_right},
-        socd::SocdPair{ &InputState::c_down, &InputState::c_up   },
-    };
-
-    horizontal_socd = false;
-}
-
-void Melee18Button::HandleSocd() {
-    horizontal_socd = _inputs->left && _inputs->right;
-    InputMode::HandleSocd();
-}
+Melee18Button::Melee18Button(socd::SocdType socd_type)
+    : PlatformFighter(socd_type, 80) { }
 
 void Melee18Button::UpdateDigitalOutputs() {
     _outputs->a = _inputs->a;
@@ -214,7 +200,7 @@ void Melee18Button::UpdateAnalogOutputs() {
 
     // Horizontal SOCD overrides X-axis modifiers (for ledgedash maximum jump
     // trajectory).
-    if (!_inputs->r && horizontal_socd && !directions.vertical) {
+    if (!_inputs->r && _horizontal_socd && !directions.vertical) {
         SetLeftStickX(10000);
     }
 

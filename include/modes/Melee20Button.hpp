@@ -1,22 +1,17 @@
 #ifndef _MODES_MELEE20BUTTON_HPP
 #define _MODES_MELEE20BUTTON_HPP
 
-#include "core/ControllerMode.hpp"
+#include "modes/PlatformFighter.hpp"
 #include "core/socd.hpp"
 #include "core/state.hpp"
 
-class Melee20Button : public ControllerMode {
+class Melee20Button : public PlatformFighter {
   public:
     Melee20Button(socd::SocdType socd_type);
 
-  protected:
+  private:
     virtual void UpdateDigitalOutputs();
     virtual void UpdateAnalogOutputs();
-
-  private:
-    bool horizontal_socd;
-
-    void HandleSocd();
 };
 
 #endif

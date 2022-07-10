@@ -1,23 +1,9 @@
 #include "modes/ProjectM.hpp"
 
 ProjectM::ProjectM(socd::SocdType socd_type, bool ledgedash_max_jump_traj, bool true_z_press)
-    : ControllerMode(socd_type, 100) {
-    _socd_pair_count = 4;
-    _socd_pairs = new socd::SocdPair[_socd_pair_count]{
-        socd::SocdPair{&InputState::left,    &InputState::right  },
-        socd::SocdPair{ &InputState::down,   &InputState::up     },
-        socd::SocdPair{ &InputState::c_left, &InputState::c_right},
-        socd::SocdPair{ &InputState::c_down, &InputState::c_up   },
-    };
-
+    : PlatformFighter(socd_type) {
     this->ledgedash_max_jump_traj = ledgedash_max_jump_traj;
     this->true_z_press = true_z_press;
-    horizontal_socd = false;
-}
-
-void ProjectM::HandleSocd() {
-    horizontal_socd = _inputs->left && _inputs->right;
-    InputMode::HandleSocd();
 }
 
 void ProjectM::UpdateDigitalOutputs() {
@@ -167,7 +153,7 @@ void ProjectM::UpdateAnalogOutputs() {
 
     // Horizontal SOCD overrides X-axis modifiers (for ledgedash maximum jump
     // trajectory).
-    if (ledgedash_max_jump_traj && horizontal_socd && !directions.vertical &&
+    if (ledgedash_max_jump_traj && _horizontal_socd && !directions.vertical &&
         !shield_button_pressed) {
         SetLeftStickX(10000);
     }
