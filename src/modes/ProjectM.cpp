@@ -1,9 +1,7 @@
 #include "modes/ProjectM.hpp"
 
-#define ANALOG_STICK_LENGTH 100
-
 ProjectM::ProjectM(socd::SocdType socd_type, bool ledgedash_max_jump_traj, bool true_z_press)
-    : ControllerMode(socd_type) {
+    : ControllerMode(socd_type, 100) {
     _socd_pair_count = 4;
     _socd_pairs = new socd::SocdPair[_socd_pair_count]{
         socd::SocdPair{&InputState::left,    &InputState::right  },
@@ -70,9 +68,6 @@ void ProjectM::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         inputs.c_right,
         inputs.c_down,
         inputs.c_up,
-        ANALOG_STICK_MIN,
-        ANALOG_STICK_NEUTRAL,
-        ANALOG_STICK_MAX,
         outputs
     );
 

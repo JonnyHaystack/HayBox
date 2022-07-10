@@ -7,7 +7,7 @@
 
 class ControllerMode : public InputMode {
   public:
-    ControllerMode(socd::SocdType socd_type);
+    ControllerMode(socd::SocdType socd_type, uint8_t analog_stick_length = 127);
     void UpdateOutputs(InputState &inputs, OutputState &outputs);
     void ResetDirections();
     virtual void UpdateDirections(
@@ -19,9 +19,6 @@ class ControllerMode : public InputMode {
         bool rsRight,
         bool rsDown,
         bool rsUp,
-        uint8_t analogStickMin,
-        uint8_t analogStickNeutral,
-        uint8_t analogStickMax,
         OutputState &outputs
     );
 
@@ -35,6 +32,8 @@ class ControllerMode : public InputMode {
     void SetRightStick(OutputState &outputs, const uint16_t &xValue, const uint16_t &yValue);
 
   private:
+    uint8_t analog_stick_length;
+
     virtual void UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) = 0;
     virtual void UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) = 0;
 

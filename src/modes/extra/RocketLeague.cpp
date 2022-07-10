@@ -1,7 +1,5 @@
 #include "modes/extra/RocketLeague.hpp"
 
-#define ANALOG_STICK_LENGTH 127
-
 RocketLeague::RocketLeague(socd::SocdType socd_type) : ControllerMode(socd_type) {
     _socd_pair_count = 3;
     _socd_pairs = new socd::SocdPair[_socd_pair_count]{
@@ -62,9 +60,6 @@ void RocketLeague::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs)
         inputs.c_right,
         inputs.c_down,
         inputs.c_up,
-        ANALOG_STICK_MIN,
-        ANALOG_STICK_NEUTRAL,
-        ANALOG_STICK_MAX,
         outputs
     );
 

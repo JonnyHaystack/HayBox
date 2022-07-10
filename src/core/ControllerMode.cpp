@@ -1,6 +1,8 @@
 #include "core/ControllerMode.hpp"
 
-ControllerMode::ControllerMode(socd::SocdType socd_type) : InputMode(socd_type) {
+ControllerMode::ControllerMode(socd::SocdType socd_type, uint8_t analog_stick_length) : InputMode(socd_type) {
+    this->analog_stick_length = analog_stick_length;
+
     // Set up initial state.
     ResetDirections();
 }
@@ -32,17 +34,16 @@ void ControllerMode::UpdateDirections(
     bool rsRight,
     bool rsDown,
     bool rsUp,
-    uint8_t analogStickMin,
-    uint8_t analogStickNeutral,
-    uint8_t analogStickMax,
     OutputState &outputs
 ) {
+    uint8_t analogStickMin = ANALOG_STICK_NEUTRAL - analog_stick_length;
+    uint8_t analogStickMax = ANALOG_STICK_NEUTRAL + analog_stick_length;
     ResetDirections();
 
-    outputs.leftStickX = analogStickNeutral;
-    outputs.leftStickY = analogStickNeutral;
-    outputs.rightStickX = analogStickNeutral;
-    outputs.rightStickY = analogStickNeutral;
+    outputs.leftStickX = ANALOG_STICK_NEUTRAL;
+    outputs.leftStickY = ANALOG_STICK_NEUTRAL;
+    outputs.rightStickX = ANALOG_STICK_NEUTRAL;
+    outputs.rightStickY = ANALOG_STICK_NEUTRAL;
 
     // Coordinate calculations to make modifier handling simpler.
     if (lsLeft || lsRight) {
@@ -89,7 +90,7 @@ void ControllerMode::UpdateDirections(
 }
 
 void ControllerMode::SetAxis(uint8_t* axis, const int8_t &direction, const uint16_t &value) {
-    *axis = ANALOG_STICK_NEUTRAL + (direction * (uint8_t)(value / 125));
+    *axis = ANALOG_STICK_NEUTRAL + direction * (uint8_t)(value / (10000 / analog_stick_length));
 }
 
 void ControllerMode::SetLeftStickX(OutputState &outputs, const uint16_t &value) {

@@ -1,8 +1,6 @@
 #include "modes/RivalsOfAether.hpp"
 
-#define ANALOG_STICK_LENGTH 100
-
-RivalsOfAether::RivalsOfAether(socd::SocdType socd_type) : ControllerMode(socd_type) {
+RivalsOfAether::RivalsOfAether(socd::SocdType socd_type) : ControllerMode(socd_type, 100) {
     _socd_pair_count = 4;
     _socd_pairs = new socd::SocdPair[_socd_pair_count]{
         socd::SocdPair{&InputState::left,    &InputState::right  },
@@ -53,9 +51,6 @@ void RivalsOfAether::UpdateAnalogOutputs(InputState &inputs, OutputState &output
         inputs.c_right,
         inputs.c_down,
         inputs.c_up,
-        ANALOG_STICK_MIN,
-        ANALOG_STICK_NEUTRAL,
-        ANALOG_STICK_MAX,
         outputs
     );
 
@@ -140,7 +135,7 @@ void RivalsOfAether::UpdateAnalogOutputs(InputState &inputs, OutputState &output
             outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 100);
         if (directions.horizontal && (directions.y == -1)) {
             outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 100);
-            outputs.leftStickY = ANALOG_STICK_MIN;
+            outputs.leftStickY = 28; // TODO
         }
     }
 

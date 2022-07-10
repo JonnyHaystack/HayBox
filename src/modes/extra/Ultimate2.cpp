@@ -1,9 +1,7 @@
 /* Ultimate2 profile by Taker */
 #include "modes/extra/Ultimate2.hpp"
 
-#define ANALOG_STICK_LENGTH 100
-
-Ultimate2::Ultimate2(socd::SocdType socd_type) : ControllerMode(socd_type) {
+Ultimate2::Ultimate2(socd::SocdType socd_type) : ControllerMode(socd_type, 100) {
     _socd_pair_count = 4;
     _socd_pairs = new socd::SocdPair[_socd_pair_count]{
         socd::SocdPair{&InputState::left,    &InputState::right  },
@@ -48,9 +46,6 @@ void Ultimate2::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         inputs.c_right,
         inputs.c_down,
         inputs.c_up,
-        ANALOG_STICK_MIN,
-        ANALOG_STICK_NEUTRAL,
-        ANALOG_STICK_MAX,
         outputs
     );
 

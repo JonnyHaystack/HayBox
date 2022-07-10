@@ -4,8 +4,6 @@
 #include "stdlib.hpp"
 
 #define ANALOG_STICK_NEUTRAL 128
-#define ANALOG_STICK_MIN (ANALOG_STICK_NEUTRAL - ANALOG_STICK_LENGTH)
-#define ANALOG_STICK_MAX (ANALOG_STICK_NEUTRAL + ANALOG_STICK_LENGTH)
 
 // Button state.
 typedef struct inputstate {

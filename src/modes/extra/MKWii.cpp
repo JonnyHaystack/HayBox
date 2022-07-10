@@ -1,7 +1,5 @@
 #include "modes/extra/MKWii.hpp"
 
-#define ANALOG_STICK_LENGTH 127
-
 MKWii::MKWii(socd::SocdType socd_type) : ControllerMode(socd_type) {
     _socd_pair_count = 4;
     _socd_pairs = new socd::SocdPair[_socd_pair_count]{
@@ -33,9 +31,6 @@ void MKWii::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         false,
         false,
         false,
-        ANALOG_STICK_MIN,
-        ANALOG_STICK_NEUTRAL,
-        ANALOG_STICK_MAX,
         outputs
     );
 
