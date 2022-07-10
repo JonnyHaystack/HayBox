@@ -62,7 +62,7 @@ void RivalsOfAether::UpdateAnalogOutputs() {
 
         // Angled fsmash
         if (directions.cx != 0) {
-            SetStick(&_outputs->rightStickX, &_outputs->rightStickY, directions.cx, directions.y, 6500, 2300); // 19.48613°
+            SetAngledFSmash(6500, 2300); // 19.48613°
         }
 
         // Need to check coord system in RoA

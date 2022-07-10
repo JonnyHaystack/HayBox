@@ -82,7 +82,7 @@ void Ultimate2::UpdateAnalogOutputs(InputState &inputs) {
 
         // Angled fsmash/ftilt with C-Stick + MX
         if (directions.cx != 0) {
-            SetStick(&_outputs->rightStickX, &_outputs->rightStickY, directions.cx, directions.y, 12700, 5900); // 24.91802°
+            SetAngledFSmash(12700, 5900); // 24.91802°
         }
 
         /* Up B angles */

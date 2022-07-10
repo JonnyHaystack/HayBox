@@ -30,6 +30,7 @@ class ControllerMode : public InputMode {
     void SetStick(uint8_t* xAxis, uint8_t* yAxis, const uint8_t &xDirection, const uint8_t &yDirection, const uint16_t &xValue, const uint16_t &yValue);
     void SetLeftStick(const uint16_t &xValue, const uint16_t &yValue);
     void SetRightStick(const uint16_t &xValue, const uint16_t &yValue);
+    void SetAngledFSmash(const uint16_t &xValue, const uint16_t yValue);
 
   private:
     uint8_t analog_stick_length;
