@@ -10,26 +10,26 @@ SaltAndSanctuary::SaltAndSanctuary(socd::SocdType socd_type) : ControllerMode(so
     };
 }
 
-void SaltAndSanctuary::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
-    outputs.dpadRight = inputs.l; // Block
-    outputs.b = inputs.b; // Roll
-    outputs.a = inputs.a; // Attack
-    outputs.y = inputs.z; // Strong
-    outputs.dpadDown = inputs.mod_y; // Use
-    outputs.x = inputs.x; // Jump
+void SaltAndSanctuary::UpdateDigitalOutputs(InputState &inputs) {
+    outputs->dpadRight = inputs.l; // Block
+    outputs->b = inputs.b; // Roll
+    outputs->a = inputs.a; // Attack
+    outputs->y = inputs.z; // Strong
+    outputs->dpadDown = inputs.mod_y; // Use
+    outputs->x = inputs.x; // Jump
 
-    outputs.buttonL = inputs.r; // Previous item
-    outputs.buttonR = inputs.y; // Next item
-    outputs.triggerLDigital = inputs.lightshield; // Use item
+    outputs->buttonL = inputs.r; // Previous item
+    outputs->buttonR = inputs.y; // Next item
+    outputs->triggerLDigital = inputs.lightshield; // Use item
 
-    outputs.triggerRDigital = inputs.midshield; // Use torch
+    outputs->triggerRDigital = inputs.midshield; // Use torch
 
-    outputs.dpadLeft = inputs.up; // Switch loadout
+    outputs->dpadLeft = inputs.up; // Switch loadout
 
-    outputs.start = inputs.start; // Inventory
+    outputs->start = inputs.start; // Inventory
 }
 
-void SaltAndSanctuary::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
+void SaltAndSanctuary::UpdateAnalogOutputs(InputState &inputs) {
     // Coordinate calculations to make modifier handling simpler.
     UpdateDirections(
         inputs.left,
@@ -39,7 +39,6 @@ void SaltAndSanctuary::UpdateAnalogOutputs(InputState &inputs, OutputState &outp
         inputs.c_left,
         inputs.c_right,
         inputs.c_down,
-        inputs.c_up,
-        outputs
+        inputs.c_up
     );
 }

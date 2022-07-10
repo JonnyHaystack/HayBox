@@ -16,40 +16,40 @@ void RocketLeague::HandleSocd(InputState &inputs) {
     InputMode::HandleSocd(inputs);
 }
 
-void RocketLeague::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
-    outputs.a = inputs.a;
-    outputs.b = inputs.b;
-    outputs.x = inputs.midshield;
-    outputs.y = inputs.up;
-    outputs.buttonL = inputs.l;
-    outputs.buttonR = inputs.lightshield;
-    outputs.triggerLDigital = inputs.z;
-    outputs.triggerRDigital = inputs.x;
-    outputs.leftStickClick = inputs.r;
+void RocketLeague::UpdateDigitalOutputs(InputState &inputs) {
+    outputs->a = inputs.a;
+    outputs->b = inputs.b;
+    outputs->x = inputs.midshield;
+    outputs->y = inputs.up;
+    outputs->buttonL = inputs.l;
+    outputs->buttonR = inputs.lightshield;
+    outputs->triggerLDigital = inputs.z;
+    outputs->triggerRDigital = inputs.x;
+    outputs->leftStickClick = inputs.r;
 
     // Hold accelerate and reverse simultaneously for rear view.
     if (inputs.z && inputs.x) {
-        outputs.rightStickClick = true;
+        outputs->rightStickClick = true;
         // Override (deactivate) accelerator.
-        outputs.triggerRDigital = false;
+        outputs->triggerRDigital = false;
     }
 
     // MX + Start = Select
     if (inputs.mod_x)
-        outputs.select = inputs.start;
+        outputs->select = inputs.start;
     else
-        outputs.start = inputs.start;
+        outputs->start = inputs.start;
 
     // D-Pad
     if (inputs.mod_x && inputs.mod_y) {
-        outputs.dpadUp = inputs.c_up;
-        outputs.dpadDown = inputs.c_down;
-        outputs.dpadLeft = inputs.c_left;
-        outputs.dpadRight = inputs.c_right;
+        outputs->dpadUp = inputs.c_up;
+        outputs->dpadDown = inputs.c_down;
+        outputs->dpadLeft = inputs.c_left;
+        outputs->dpadRight = inputs.c_right;
     }
 }
 
-void RocketLeague::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
+void RocketLeague::UpdateAnalogOutputs(InputState &inputs) {
     // Coordinate calculations to make modifier handling simpler.
     UpdateDirections(
         inputs.left,
@@ -59,34 +59,33 @@ void RocketLeague::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs)
         inputs.c_left,
         inputs.c_right,
         inputs.c_down,
-        inputs.c_up,
-        outputs
+        inputs.c_up
     );
 
     if (inputs.mod_y) {
         if (directions.diagonal) {
-            outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 70);
-            // outputs.leftStickY =
+            outputs->leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 70);
+            // outputs->leftStickY =
             // ANALOG_STICK_NEUTRAL + (directions.y * 76);
         } else if (directions.horizontal) {
-            outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 35);
+            outputs->leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 35);
         } else if (directions.vertical) {
-            outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 76);
+            outputs->leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 76);
         }
     } else if (directions.diagonal) {
         // Good speed flip angle with no mods.
-        outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 70);
+        outputs->leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 70);
     }
 
     // Shut off right stick when using dpad layer.
     if (inputs.mod_x && inputs.mod_y) {
-        outputs.rightStickX = ANALOG_STICK_NEUTRAL;
-        outputs.rightStickY = ANALOG_STICK_NEUTRAL;
+        outputs->rightStickX = ANALOG_STICK_NEUTRAL;
+        outputs->rightStickY = ANALOG_STICK_NEUTRAL;
     }
 
     // Nunchuk overrides left stick.
     if (inputs.nunchuk_connected) {
-        outputs.leftStickX = inputs.nunchuk_x;
-        outputs.leftStickY = inputs.nunchuk_y;
+        outputs->leftStickX = inputs.nunchuk_x;
+        outputs->leftStickY = inputs.nunchuk_y;
     }
 }

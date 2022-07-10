@@ -10,9 +10,9 @@ DarkSouls::DarkSouls(socd::SocdType socd_type) : ControllerMode(socd_type) {
     };
 }
 
-void DarkSouls::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
-    outputs.y = inputs.y;
-    outputs.x = inputs.r;
+void DarkSouls::UpdateDigitalOutputs(InputState &inputs) {
+    outputs->y = inputs.y;
+    outputs->x = inputs.r;
 
     // Base layer.
     bool layer0 = !inputs.x && !inputs.nunchuk_c;
@@ -22,27 +22,27 @@ void DarkSouls::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
     bool layerC = inputs.nunchuk_c;
 
     if (layer0) {
-        outputs.a = inputs.a;
-        outputs.b = inputs.b;
-        outputs.buttonR = inputs.z;
-        outputs.buttonL = inputs.up;
-        outputs.start = inputs.start | inputs.nunchuk_z;
+        outputs->a = inputs.a;
+        outputs->b = inputs.b;
+        outputs->buttonR = inputs.z;
+        outputs->buttonL = inputs.up;
+        outputs->start = inputs.start | inputs.nunchuk_z;
     } else if (layerX) {
-        outputs.rightStickClick = inputs.a;
-        outputs.triggerRDigital = inputs.z;
-        outputs.triggerLDigital = inputs.up;
-        outputs.select = inputs.start;
+        outputs->rightStickClick = inputs.a;
+        outputs->triggerRDigital = inputs.z;
+        outputs->triggerLDigital = inputs.up;
+        outputs->select = inputs.start;
     } else if (layerC) {
-        outputs.a = inputs.a;
-        outputs.dpadLeft = inputs.b;
-        outputs.dpadDown = inputs.x;
-        outputs.dpadUp = inputs.z;
-        outputs.dpadRight = inputs.up;
-        outputs.select = inputs.nunchuk_z;
+        outputs->a = inputs.a;
+        outputs->dpadLeft = inputs.b;
+        outputs->dpadDown = inputs.x;
+        outputs->dpadUp = inputs.z;
+        outputs->dpadRight = inputs.up;
+        outputs->select = inputs.nunchuk_z;
     }
 }
 
-void DarkSouls::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
+void DarkSouls::UpdateAnalogOutputs(InputState &inputs) {
     UpdateDirections(
         inputs.left,
         inputs.right,
@@ -51,13 +51,12 @@ void DarkSouls::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         inputs.c_left,
         inputs.c_right,
         inputs.c_down,
-        inputs.c_up,
-        outputs
+        inputs.c_up
     );
 
     // Nunchuk overrides left stick.
     if (inputs.nunchuk_connected) {
-        outputs.leftStickX = inputs.nunchuk_x;
-        outputs.leftStickY = inputs.nunchuk_y;
+        outputs->leftStickX = inputs.nunchuk_x;
+        outputs->leftStickY = inputs.nunchuk_y;
     }
 }

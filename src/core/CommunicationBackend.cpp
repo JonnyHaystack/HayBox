@@ -36,7 +36,7 @@ void CommunicationBackend::ResetOutputs() {
 void CommunicationBackend::UpdateOutputs() {
     ResetOutputs();
     if (_gamemode != nullptr) {
-        _gamemode->UpdateOutputs(_inputs, _outputs);
+        _gamemode->UpdateOutputs(_inputs, &_outputs);
     }
 }
 

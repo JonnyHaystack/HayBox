@@ -10,21 +10,21 @@ HollowKnight::HollowKnight(socd::SocdType socd_type) : ControllerMode(socd_type)
     };
 }
 
-void HollowKnight::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
-    outputs.a = inputs.a; // Attack
-    outputs.b = inputs.b; // Dash
-    outputs.x = inputs.x; // Jump
-    outputs.y = inputs.mod_y; // Spell
-    outputs.triggerLDigital = inputs.r; // Focus/cast
-    outputs.triggerRDigital = inputs.z;
-    outputs.buttonR = inputs.up; // Dream nail
+void HollowKnight::UpdateDigitalOutputs(InputState &inputs) {
+    outputs->a = inputs.a; // Attack
+    outputs->b = inputs.b; // Dash
+    outputs->x = inputs.x; // Jump
+    outputs->y = inputs.mod_y; // Spell
+    outputs->triggerLDigital = inputs.r; // Focus/cast
+    outputs->triggerRDigital = inputs.z;
+    outputs->buttonR = inputs.up; // Dream nail
 
-    outputs.buttonL = inputs.lightshield; // Map
-    outputs.select = inputs.midshield; // Inventory
-    outputs.start = inputs.start; // Pause
+    outputs->buttonL = inputs.lightshield; // Map
+    outputs->select = inputs.midshield; // Inventory
+    outputs->start = inputs.start; // Pause
 }
 
-void HollowKnight::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
+void HollowKnight::UpdateAnalogOutputs(InputState &inputs) {
     UpdateDirections(
         inputs.left,
         inputs.right,
@@ -33,7 +33,6 @@ void HollowKnight::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs)
         inputs.c_left,
         inputs.c_right,
         inputs.c_down,
-        inputs.c_up,
-        outputs
+        inputs.c_up
     );
 }

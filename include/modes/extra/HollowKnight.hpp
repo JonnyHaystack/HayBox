@@ -11,8 +11,8 @@ class HollowKnight : public ControllerMode {
     HollowKnight(socd::SocdType socd_type);
 
   private:
-    void UpdateDigitalOutputs(InputState &inputs, OutputState &outputs);
-    void UpdateAnalogOutputs(InputState &inputs, OutputState &outputs);
+    void UpdateDigitalOutputs(InputState &inputs);
+    void UpdateAnalogOutputs(InputState &inputs);
 };
 
 #endif

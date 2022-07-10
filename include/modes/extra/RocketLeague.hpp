@@ -11,8 +11,8 @@ class RocketLeague : public ControllerMode {
 
   private:
     void HandleSocd(InputState &inputs);
-    void UpdateDigitalOutputs(InputState &inputs, OutputState &outputs);
-    void UpdateAnalogOutputs(InputState &inputs, OutputState &outputs);
+    void UpdateDigitalOutputs(InputState &inputs);
+    void UpdateAnalogOutputs(InputState &inputs);
 };
 
 #endif
