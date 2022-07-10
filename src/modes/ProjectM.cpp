@@ -122,10 +122,10 @@ void ProjectM::UpdateAnalogOutputs() {
 
     if (_inputs->mod_y) {
         if (directions.horizontal) {
-            _outputs->leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 35);
+            SetLeftStickX(3500);
         }
         if (directions.vertical) {
-            _outputs->leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 70);
+            SetLeftStickY(7000);
         }
 
         if (directions.diagonal) {
