@@ -1,7 +1,6 @@
 #include "MeleeLbx.hpp"
 
-#define ANALOG_STICK_MIN 48
-#define ANALOG_STICK_MAX 208
+#define ANALOG_STICK_LENGTH 80
 
 MeleeLbx::MeleeLbx(socd::SocdType socd_type) : Melee20Button(socd_type) {}
 

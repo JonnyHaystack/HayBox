@@ -1,7 +1,6 @@
 #include "modes/extra/RocketLeague.hpp"
 
-#define ANALOG_STICK_MIN 1
-#define ANALOG_STICK_MAX 255
+#define ANALOG_STICK_LENGTH 127
 
 RocketLeague::RocketLeague(socd::SocdType socd_type) : ControllerMode(socd_type) {
     _socd_pair_count = 3;

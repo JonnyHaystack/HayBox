@@ -1,8 +1,7 @@
 /* Ultimate profile by Taker */
 #include "modes/Ultimate.hpp"
 
-#define ANALOG_STICK_MIN 28
-#define ANALOG_STICK_MAX 228
+#define ANALOG_STICK_LENGTH 100
 
 Ultimate::Ultimate(socd::SocdType socd_type) : ControllerMode(socd_type) {
     _socd_pair_count = 4;
