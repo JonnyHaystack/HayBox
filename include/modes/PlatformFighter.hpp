@@ -13,6 +13,7 @@ class PlatformFighter : public ControllerMode {
     bool _horizontal_socd;
 
     void HandleSocd();
+    void UpdateDirections();
     void SetAxis(uint8_t* axis, const int8_t &direction, const uint16_t &value);
     void SetLeftStickX(const uint16_t &value);
     void SetLeftStickY(const uint16_t &value);

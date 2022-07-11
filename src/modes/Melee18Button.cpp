@@ -36,17 +36,7 @@ void Melee18Button::UpdateDigitalOutputs() {
 }
 
 void Melee18Button::UpdateAnalogOutputs() {
-    // Coordinate calculations to make modifier handling simpler.
-    UpdateDirections(
-        _inputs->left,
-        _inputs->right,
-        _inputs->down,
-        _inputs->up,
-        _inputs->c_left,
-        _inputs->c_right,
-        _inputs->c_down,
-        _inputs->c_up
-    );
+    UpdateDirections();
 
     bool shield_button_pressed = _inputs->l || _inputs->r;
 

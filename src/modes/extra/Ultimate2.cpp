@@ -29,17 +29,7 @@ void Ultimate2::UpdateDigitalOutputs(InputState &inputs) {
 }
 
 void Ultimate2::UpdateAnalogOutputs(InputState &inputs) {
-    // Coordinate calculations to make modifier handling simpler.
-    UpdateDirections(
-        inputs.left,
-        inputs.right,
-        inputs.down,
-        inputs.up,
-        inputs.c_left,
-        inputs.c_right,
-        inputs.c_down,
-        inputs.c_up
-    );
+    UpdateDirections();
 
     bool shield_button_pressed = inputs.l || inputs.r || inputs.lightshield || inputs.midshield;
 

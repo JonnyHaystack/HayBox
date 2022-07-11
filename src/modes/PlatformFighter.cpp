@@ -13,13 +13,26 @@ PlatformFighter::PlatformFighter(socd::SocdType socd_type, uint8_t analog_stick_
     _horizontal_socd = false;
 }
 
-void PlatformFighter::SetAxis(uint8_t* axis, const int8_t &direction, const uint16_t &value) {
-    *axis = ANALOG_STICK_NEUTRAL + direction * (uint8_t)(value / (10000 / _analog_stick_length));
-}
-
 void PlatformFighter::HandleSocd() {
     _horizontal_socd = _inputs->left && _inputs->right;
     InputMode::HandleSocd();
+}
+
+void PlatformFighter::UpdateDirections() {
+    ControllerMode::UpdateDirections(
+        _inputs->left,
+        _inputs->right,
+        _inputs->down,
+        _inputs->up,
+        _inputs->c_left,
+        _inputs->c_right,
+        _inputs->c_down,
+        _inputs->c_up
+    );
+}
+
+void PlatformFighter::SetAxis(uint8_t* axis, const int8_t &direction, const uint16_t &value) {
+    *axis = ANALOG_STICK_NEUTRAL + direction * (uint8_t)(value / (10000 / _analog_stick_length));
 }
 
 void PlatformFighter::SetLeftStickX(const uint16_t &value) {
