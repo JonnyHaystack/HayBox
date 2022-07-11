@@ -1,5 +1,5 @@
-#ifndef _MODES_ULTIMATE_HPP
-#define _MODES_ULTIMATE_HPP
+#ifndef _MODES_ULTIMATE2_HPP
+#define _MODES_ULTIMATE2_HPP
 
 #include "modes/PlatformFighter.hpp"
 #include "core/socd.hpp"
