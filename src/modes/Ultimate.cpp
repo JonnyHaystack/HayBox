@@ -144,7 +144,7 @@ void Ultimate::UpdateAnalogOutputs() {
                 SetLeftStick(4300, 5300); // 50.94686°
             }
             if (_inputs->c_left) {
-                SetLeftStick(3900, 5300); // 53.65254°
+                SetLeftStick(4900, 5300); // 47.24574°
             }
             if (_inputs->c_up) {
                 SetLeftStick(3100, 5300); // 59.67639°
