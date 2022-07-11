@@ -4,36 +4,36 @@
 Ultimate2::Ultimate2(socd::SocdType socd_type)
     : PlatformFighter(socd_type) { }
 
-void Ultimate2::UpdateDigitalOutputs(InputState &inputs) {
-    _outputs->a = inputs.a;
-    _outputs->b = inputs.b;
-    _outputs->x = inputs.x;
-    _outputs->y = inputs.y;
-    _outputs->buttonR = inputs.z;
-    _outputs->triggerLDigital = inputs.l;
-    _outputs->triggerRDigital = inputs.r;
-    _outputs->start = inputs.start;
+void Ultimate2::UpdateDigitalOutputs() {
+    _outputs->a = _inputs->a;
+    _outputs->b = _inputs->b;
+    _outputs->x = _inputs->x;
+    _outputs->y = _inputs->y;
+    _outputs->buttonR = _inputs->z;
+    _outputs->triggerLDigital = _inputs->l;
+    _outputs->triggerRDigital = _inputs->r;
+    _outputs->start = _inputs->start;
 
     // D-Pad
-    if (inputs.mod_x && inputs.mod_y) {
-        _outputs->dpadUp = inputs.c_up;
-        _outputs->dpadDown = inputs.c_down;
-        _outputs->dpadLeft = inputs.c_left;
-        _outputs->dpadRight = inputs.c_right;
+    if (_inputs->mod_x && _inputs->mod_y) {
+        _outputs->dpadUp = _inputs->c_up;
+        _outputs->dpadDown = _inputs->c_down;
+        _outputs->dpadLeft = _inputs->c_left;
+        _outputs->dpadRight = _inputs->c_right;
     }
 
-    if (inputs.select)
+    if (_inputs->select)
         _outputs->dpadLeft = true;
-    if (inputs.home)
+    if (_inputs->home)
         _outputs->dpadRight = true;
 }
 
-void Ultimate2::UpdateAnalogOutputs(InputState &inputs) {
+void Ultimate2::UpdateAnalogOutputs() {
     UpdateDirections();
 
-    bool shield_button_pressed = inputs.l || inputs.r || inputs.lightshield || inputs.midshield;
+    bool shield_button_pressed = _inputs->l || _inputs->r || _inputs->lightshield || _inputs->midshield;
 
-    if (inputs.mod_x) {
+    if (_inputs->mod_x) {
         // MX + Horizontal
         if (directions.horizontal) {
             SetLeftStickX(5300);
@@ -42,7 +42,7 @@ void Ultimate2::UpdateAnalogOutputs(InputState &inputs) {
                 SetLeftStickX(5100);
             }
             // Horizontal Tilts
-            if (inputs.a) {
+            if (_inputs->a) {
                 SetLeftStickX(3600);
             }
         }
@@ -72,18 +72,18 @@ void Ultimate2::UpdateAnalogOutputs(InputState &inputs) {
         if (directions.diagonal && !shield_button_pressed) {
             SetLeftStick(5300, 4000); // 37.04247°
             // Angled Ftilts
-            if (inputs.a) {
+            if (_inputs->a) {
                 SetLeftStick(3600, 2600); // 35.83765°
             }
         }
     }
 
-    if (inputs.mod_y) {
+    if (_inputs->mod_y) {
         // MY + Horizontal (even if shield is held)
         if (directions.horizontal) {
             SetLeftStickX(4100);
             // MY Horizontal Tilts
-            if (inputs.a) {
+            if (_inputs->a) {
                 SetLeftStickX(3600);
             }
         }
@@ -91,7 +91,7 @@ void Ultimate2::UpdateAnalogOutputs(InputState &inputs) {
         if (directions.vertical) {
             SetLeftStickY(4400);
             // MY Vertical Tilts
-            if (inputs.a) {
+            if (_inputs->a) {
                 SetLeftStickY(3600);
             }
         }
@@ -113,7 +113,7 @@ void Ultimate2::UpdateAnalogOutputs(InputState &inputs) {
             SetLeftStick(4100, 4400); // 47.02136°
 
             // MY Pivot Uptilt/Dtilt
-            if (inputs.a) {
+            if (_inputs->a) {
                 SetLeftStick(3400, 3800); // 48.17983°
             }
         }
@@ -125,22 +125,22 @@ void Ultimate2::UpdateAnalogOutputs(InputState &inputs) {
         SetRightStick(4200, 6800); // 58.29857°
     }
 
-    if (inputs.l) {
+    if (_inputs->l) {
         _outputs->triggerLAnalog = 140;
     }
 
-    if (inputs.r) {
+    if (_inputs->r) {
         _outputs->triggerRAnalog = 140;
     }
 
     // Shut off c-stick when using dpad layer.
-    if (inputs.mod_x && inputs.mod_y) {
+    if (_inputs->mod_x && _inputs->mod_y) {
         SetRightStick(0000, 0000); // 0°
     }
 
     // Nunchuk overrides left stick.
-    if (inputs.nunchuk_connected) {
-        _outputs->leftStickX = inputs.nunchuk_x;
-        _outputs->leftStickY = inputs.nunchuk_y;
+    if (_inputs->nunchuk_connected) {
+        _outputs->leftStickX = _inputs->nunchuk_x;
+        _outputs->leftStickY = _inputs->nunchuk_y;
     }
 }
