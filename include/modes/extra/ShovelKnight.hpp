@@ -10,8 +10,8 @@ class ShovelKnight : public ControllerMode {
     ShovelKnight(socd::SocdType socd_type);
 
   private:
-    virtual void UpdateDigitalOutputs(InputState &inputs);
-    virtual void UpdateAnalogOutputs(InputState &inputs);
+    virtual void UpdateDigitalOutputs();
+    virtual void UpdateAnalogOutputs();
 };
 
 #endif
