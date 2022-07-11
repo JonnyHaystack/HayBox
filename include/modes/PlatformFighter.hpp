@@ -19,7 +19,7 @@ class PlatformFighter : public ControllerMode {
     void SetLeftStickY(const uint16_t &value);
     void SetStick(uint8_t* xAxis, uint8_t* yAxis, const uint8_t &xDirection, const uint8_t &yDirection, const uint16_t &xValue, const uint16_t &yValue);
     void SetLeftStick(const uint16_t &xValue, const uint16_t &yValue);
-    void SetRightStick(const uint16_t &xValue, const uint16_t &yValue);
+    void SetCStick(const uint16_t &xValue, const uint16_t &yValue);
     void SetAngledFSmash(const uint16_t &xValue, const uint16_t yValue);
 };
 

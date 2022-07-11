@@ -165,7 +165,7 @@ void Melee20Button::UpdateAnalogOutputs() {
     // C-stick ASDI Slideoff angle overrides any other C-stick modifiers (such as
     // angled fsmash).
     if (directions.cx != 0 && directions.cy != 0) {
-        SetRightStick(5250, 8500); // 58.29857°
+        SetCStick(5250, 8500); // 58.29857°
     }
 
     // Horizontal SOCD overrides X-axis modifiers (for ledgedash maximum jump
@@ -191,7 +191,7 @@ void Melee20Button::UpdateAnalogOutputs() {
 
     // Shut off c-stick when using dpad layer.
     if (_inputs->mod_x && _inputs->mod_y) {
-        SetRightStick(0000, 0000); // 0°
+        SetCStick(0000, 0000); // 0°
     }
 
     // Nunchuk overrides left stick.

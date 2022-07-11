@@ -52,7 +52,7 @@ void PlatformFighter::SetLeftStick(const uint16_t &xValue, const uint16_t &yValu
     SetStick(&_outputs->leftStickX, &_outputs->leftStickY, directions.x, directions.y, xValue, yValue);
 }
 
-void PlatformFighter::SetRightStick(const uint16_t &xValue, const uint16_t &yValue) {
+void PlatformFighter::SetCStick(const uint16_t &xValue, const uint16_t &yValue) {
     SetStick(&_outputs->rightStickX, &_outputs->rightStickY, directions.x, directions.y, xValue, yValue);
 }
 

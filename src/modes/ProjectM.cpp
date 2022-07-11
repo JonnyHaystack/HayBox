@@ -171,7 +171,7 @@ void ProjectM::UpdateAnalogOutputs() {
 
     // Shut off c-stick when using dpad layer.
     if (_inputs->mod_x && _inputs->mod_y) {
-        SetRightStick(0000, 0000);
+        SetCStick(0000, 0000);
     }
 
     // Nunchuk overrides left stick.
