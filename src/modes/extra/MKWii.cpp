@@ -10,22 +10,22 @@ MKWii::MKWii(socd::SocdType socd_type) : ControllerMode(socd_type) {
     };
 }
 
-void MKWii::UpdateDigitalOutputs(InputState &inputs) {
-    _outputs->a = inputs.b;
-    _outputs->b = inputs.x;
-    _outputs->triggerLDigital = inputs.z;
-    _outputs->buttonR = inputs.up;
-    _outputs->dpadUp = inputs.a;
-    _outputs->start = inputs.start;
+void MKWii::UpdateDigitalOutputs() {
+    _outputs->a = _inputs->b;
+    _outputs->b = _inputs->x;
+    _outputs->triggerLDigital = _inputs->z;
+    _outputs->buttonR = _inputs->up;
+    _outputs->dpadUp = _inputs->a;
+    _outputs->start = _inputs->start;
 }
 
-void MKWii::UpdateAnalogOutputs(InputState &inputs) {
-    bool up = inputs.down || inputs.mod_x || inputs.mod_y;
+void MKWii::UpdateAnalogOutputs() {
+    bool up = _inputs->down || _inputs->mod_x || _inputs->mod_y;
 
     UpdateDirections(
-        inputs.left,
-        inputs.right,
-        inputs.l,
+        _inputs->left,
+        _inputs->right,
+        _inputs->l,
         up,
         false,
         false,
@@ -33,13 +33,13 @@ void MKWii::UpdateAnalogOutputs(InputState &inputs) {
         false
     );
 
-    if (inputs.z) {
+    if (_inputs->z) {
         _outputs->triggerLAnalog = 140;
     }
 
     // Nunchuk overrides left stick.
-    if (inputs.nunchuk_connected) {
-        _outputs->leftStickX = inputs.nunchuk_x;
-        _outputs->leftStickY = inputs.nunchuk_y;
+    if (_inputs->nunchuk_connected) {
+        _outputs->leftStickX = _inputs->nunchuk_x;
+        _outputs->leftStickY = _inputs->nunchuk_y;
     }
 }
