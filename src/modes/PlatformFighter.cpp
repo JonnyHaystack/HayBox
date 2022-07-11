@@ -53,7 +53,7 @@ void PlatformFighter::SetLeftStick(const uint16_t &xValue, const uint16_t &yValu
 }
 
 void PlatformFighter::SetRightStick(const uint16_t &xValue, const uint16_t &yValue) {
-    SetStick(&_outputs->rightStickX, &_outputs->leftStickY, directions.x, directions.y, xValue, yValue);
+    SetStick(&_outputs->rightStickX, &_outputs->rightStickY, directions.x, directions.y, xValue, yValue);
 }
 
 void PlatformFighter::SetAngledFSmash(const uint16_t &xValue, const uint16_t yValue) {
