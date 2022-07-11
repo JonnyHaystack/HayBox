@@ -65,8 +65,6 @@ void RocketLeague::UpdateAnalogOutputs() {
     if (_inputs->mod_y) {
         if (directions.diagonal) {
             _outputs->leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 70);
-            // outputs->leftStickY =
-            // ANALOG_STICK_NEUTRAL + (directions.y * 76);
         } else if (directions.horizontal) {
             _outputs->leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 35);
         } else if (directions.vertical) {
