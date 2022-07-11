@@ -1,7 +1,7 @@
 #include "core/ControllerMode.hpp"
 
 ControllerMode::ControllerMode(socd::SocdType socd_type, uint8_t analog_stick_length) : InputMode(socd_type) {
-    this->_analog_stick_length = _analog_stick_length;
+    _analog_stick_length = analog_stick_length;
 
     // Set up initial state.
     ResetDirections();
