@@ -80,27 +80,27 @@ void TUGamepad::buttons(uint16_t buttons) {
 }
 
 void TUGamepad::leftXAxis(uint8_t value) {
-    _report.x = (value << 8) + 127;
+    _report.x = ((value - 128) << 8) + 127;
 }
 
 void TUGamepad::leftYAxis(uint8_t value) {
-    _report.y = (value << 8) + 127;
+    _report.y = ((value - 128) << 8) + 127;
 }
 
 void TUGamepad::rightXAxis(uint8_t value) {
-    _report.rx = (value << 8) + 127;
+    _report.rx = ((value - 128) << 8) + 127;
 }
 
 void TUGamepad::rightYAxis(uint8_t value) {
-    _report.ry = (value << 8) + 127;
+    _report.ry = ((value - 128) << 8) + 127;
 }
 
 void TUGamepad::triggerLAnalog(uint8_t value) {
-    _report.z = (value << 8) + 127;
+    _report.z = ((value - 128) << 8) + 127;
 }
 
 void TUGamepad::triggerRAnalog(uint8_t value) {
-    _report.rz = (value << 8) + 127;
+    _report.rz = ((value - 128) << 8) + 127;
 }
 
 void TUGamepad::hatSwitch(hid_gamepad_hat_t direction) {

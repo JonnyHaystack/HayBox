@@ -48,12 +48,12 @@ void DInputBackend::SendReport() {
     _gamepad->setButton(12, _outputs.home);
 
     // Analog outputs
-    _gamepad->leftXAxis(_outputs.leftStickX + 128);
-    _gamepad->leftYAxis(128 - _outputs.leftStickY);
-    _gamepad->rightXAxis(_outputs.rightStickX + 128);
-    _gamepad->rightYAxis(128 - _outputs.rightStickY);
-    _gamepad->triggerLAnalog(_outputs.triggerLAnalog + 129);
-    _gamepad->triggerRAnalog(_outputs.triggerRAnalog + 129);
+    _gamepad->leftXAxis(_outputs.leftStickX);
+    _gamepad->leftYAxis(255 - _outputs.leftStickY);
+    _gamepad->rightXAxis(_outputs.rightStickX);
+    _gamepad->rightYAxis(255 - _outputs.rightStickY);
+    _gamepad->triggerLAnalog(_outputs.triggerLAnalog + 1);
+    _gamepad->triggerRAnalog(_outputs.triggerRAnalog + 1);
 
     // D-pad Hat Switch
     _gamepad->hatSwitch(_outputs.dpadLeft, _outputs.dpadRight, _outputs.dpadDown, _outputs.dpadUp);

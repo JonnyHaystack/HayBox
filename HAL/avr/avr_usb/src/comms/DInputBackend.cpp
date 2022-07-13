@@ -62,9 +62,9 @@ void DInputBackend::SendReport() {
 
     // Analog outputs
     _joystick->setXAxis(_outputs.leftStickX);
-    _joystick->setYAxis(256 - _outputs.leftStickY);
+    _joystick->setYAxis(255 - _outputs.leftStickY);
     _joystick->setRxAxis(_outputs.rightStickX);
-    _joystick->setRyAxis(256 - _outputs.rightStickY);
+    _joystick->setRyAxis(255 - _outputs.rightStickY);
     _joystick->setZAxis(_outputs.triggerLAnalog + 1);
     _joystick->setRzAxis(_outputs.triggerRAnalog + 1);
 
