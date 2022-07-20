@@ -27,6 +27,7 @@ void MultiVersus::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs)
     outputs.x = inputs.x;
     outputs.y = inputs.y;
     outputs.buttonR = inputs.z;
+    outputs.buttonL = inputs.lightshield;
     if (inputs.nunchuk_connected) {
         outputs.triggerLDigital = inputs.nunchuk_z;
     } else {
