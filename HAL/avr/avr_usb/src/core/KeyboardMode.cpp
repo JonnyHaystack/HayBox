@@ -8,6 +8,7 @@ KeyboardMode::KeyboardMode(socd::SocdType socd_type) : InputMode(socd_type) {}
 
 KeyboardMode::~KeyboardMode() {
     _keyboard.releaseAll();
+    _keyboard.sendReport();
 }
 
 void KeyboardMode::SendReport(InputState &inputs) {
