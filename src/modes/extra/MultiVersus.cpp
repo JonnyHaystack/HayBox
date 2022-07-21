@@ -69,8 +69,8 @@ void MultiVersus::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) 
     );
 
     if ((inputs.mod_x && inputs.mod_y) || inputs.nunchuk_c) {
-        outputs.rightStickX = 0;
-        outputs.rightStickY = 0;
+        outputs.rightStickX = ANALOG_STICK_NEUTRAL;
+        outputs.rightStickY = ANALOG_STICK_NEUTRAL;
     }
 
     if (inputs.l) {
