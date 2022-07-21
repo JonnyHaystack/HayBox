@@ -35,6 +35,8 @@ void MultiVersus::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs)
     }
     outputs.triggerRDigital = inputs.r;
     outputs.start = inputs.start;
+    outputs.select = inputs.select || inputs.midshield;
+    outputs.home = inputs.home;
 
     // D-Pad layer can be activated by holding Mod X + Mod Y, or by holding the C
     // button on a nunchuk.
@@ -44,11 +46,6 @@ void MultiVersus::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs)
         outputs.dpadLeft = inputs.c_left;
         outputs.dpadRight = inputs.c_right;
     }
-
-    if (inputs.select)
-        outputs.dpadLeft = true;
-    if (inputs.home)
-        outputs.dpadRight = true;
 }
 
 void MultiVersus::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
