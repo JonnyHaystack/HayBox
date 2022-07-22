@@ -53,7 +53,7 @@ void MultiVersus::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs)
         // MX + Z = D-Pad Down. Bind to "neutral evade" in-game.
         outputs.dpadDown = inputs.z;
 
-        // MX + LS = D-Pad Up (for taunt 1)
+        // MX + LS = D-Pad Up. Bind to "taunt 1" in-game.
         outputs.dpadUp = inputs.y;
     }
 
@@ -94,7 +94,6 @@ void MultiVersus::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) 
             // ⌊76 × √2/2⌋ = 53
             outputs.leftStickX = ANALOG_STICK_NEUTRAL + directions.x * 53;
             outputs.leftStickY = ANALOG_STICK_NEUTRAL + directions.y * 53;
-            
         }
 
         // Also shut off C-Stick for D-Pad conversion.
@@ -110,5 +109,11 @@ void MultiVersus::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) 
     // L or Nunchuk Z = LT. Bind to "dodge" in-game.
     if (inputs.l || (inputs.nunchuk_connected && inputs.nunchuk_z)) {
         outputs.triggerLAnalog = 140;
+    }
+
+    // Nunchuk overrides left stick.
+    if (inputs.nunchuk_connected) {
+        outputs.leftStickX = inputs.nunchuk_x;
+        outputs.leftStickY = inputs.nunchuk_y;
     }
 }
