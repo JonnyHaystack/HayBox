@@ -36,8 +36,8 @@ void Melee20Button::UpdateDigitalOutputs(InputState &inputs, OutputState &output
     outputs.start = inputs.start;
 
     // Turn on D-Pad layer by holding Mod X + Mod Y,
-    // or by holding the C button on a nunchuk if one is bound.
-    // keep in sync with above.
+    // or by holding nunchuck_c.
+    // keep in sync with below.
     if ((inputs.mod_x && inputs.mod_y) || inputs.nunchuk_c) {
         outputs.dpadUp = inputs.c_up;
         outputs.dpadDown = inputs.c_down;
@@ -278,7 +278,7 @@ void Melee20Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
     }
 
     // Shut off c-stick when D-Pad layer, activated by holding Mod X + Mod Y,
-    // or by holding the C button on a nunchuk if one is bound.
+    // or by holding nunchuck_c.
     // keep in sync with above.
     if ((inputs.mod_x && inputs.mod_y) || inputs.nunchuk_c) {
         outputs.rightStickX = 128;
