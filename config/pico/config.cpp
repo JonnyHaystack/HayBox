@@ -1,7 +1,7 @@
 #include "comms/B0XXInputViewer.hpp"
 #include "comms/DInputBackend.hpp"
 #include "comms/GamecubeBackend.hpp"
-// #include "comms/N64Backend.hpp"
+#include "comms/N64Backend.hpp"
 #include "config/mode_selection.hpp"
 #include "core/CommunicationBackend.hpp"
 #include "core/InputMode.hpp"
@@ -96,8 +96,7 @@ void setup() {
             primary_backend =
                 new GamecubeBackend(input_sources, input_source_count, pinout.joybus_data);
         } else if (console == ConnectedConsole::N64) {
-            // primary_backend =
-            //     new N64Backend(input_sources, input_source_count, 60, pinout.joybus_data);
+            primary_backend = new N64Backend(input_sources, input_source_count, pinout.joybus_data);
         }
 
         // If not DInput then only using 1 backend (no input viewer).
