@@ -22,29 +22,27 @@ void MultiVersus::HandleSocd(InputState &inputs) {
 }
 
 void MultiVersus::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
-    outputs.a = inputs.a;
-    outputs.b = inputs.b;
     outputs.x = inputs.x;
     outputs.y = inputs.y;
-    outputs.buttonR = inputs.z;
     outputs.buttonL = inputs.lightshield;
-    if (inputs.nunchuk_connected) {
-        outputs.triggerLDigital = inputs.nunchuk_z;
-    } else {
-        outputs.triggerLDigital = inputs.l;
-    }
     outputs.triggerRDigital = inputs.r;
     outputs.start = inputs.start;
     outputs.select = inputs.select || inputs.midshield;
     outputs.home = inputs.home;
 
-    // D-Pad layer can be activated by holding Mod X + Mod Y, or by holding the C
-    // button on a nunchuk.
-    if ((inputs.mod_x && inputs.mod_y) || inputs.nunchuk_c) {
-        outputs.dpadUp = inputs.c_up;
-        outputs.dpadDown = inputs.c_down;
-        outputs.dpadLeft = inputs.c_left;
-        outputs.dpadRight = inputs.c_right;
+    const bool l_pressed = (inputs.nunchuk_connected && inputs.nunchuk_z) || inputs.l;
+
+    // Use D-Pad as "neutral" binds
+    if (inputs.mod_x) {
+        outputs.dpadLeft = inputs.a;
+        outputs.dpadRight = inputs.b;
+        outputs.dpadDown = inputs.r || inputs.z || l_pressed;
+    } else {
+        outputs.a = inputs.a;
+        outputs.b = inputs.b;
+        outputs.triggerRDigital = inputs.r;
+        outputs.buttonR = inputs.z;
+        outputs.triggerLDigital = l_pressed;
     }
 }
 
@@ -65,15 +63,10 @@ void MultiVersus::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) 
         outputs
     );
 
-    if ((inputs.mod_x && inputs.mod_y) || inputs.nunchuk_c) {
-        outputs.rightStickX = ANALOG_STICK_NEUTRAL;
-        outputs.rightStickY = ANALOG_STICK_NEUTRAL;
-    }
-
-    if (inputs.l) {
+    if (outputs.triggerLDigital) {
         outputs.triggerLAnalog = 140;
     }
-    if (inputs.r) {
+    if (outputs.triggerRDigital) {
         outputs.triggerRAnalog = 140;
     }
 }
