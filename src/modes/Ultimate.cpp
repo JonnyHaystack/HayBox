@@ -27,7 +27,7 @@ void Ultimate::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
 
     // Turn on D-Pad layer by holding Mod X + Mod Y,
     // or by holding nunchuck_c.
-    // keep in sync with above.
+    // keep in sync with below.
     if ((inputs.mod_x && inputs.mod_y) || inputs.nunchuk_c) {
         outputs.dpadUp = inputs.c_up;
         outputs.dpadDown = inputs.c_down;
