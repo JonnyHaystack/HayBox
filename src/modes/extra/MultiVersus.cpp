@@ -85,6 +85,7 @@ void MultiVersus::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) 
 
     if (inputs.mod_y && !inputs.mod_x) {
         // MY slows down the cursor for easier menu navigation.
+        // Menu cursor speed can also be turned down in-game under "Interface" settings.
         // 128 ± 76 results in the slowest cursor that still actuates directional inputs in-game.
         outputs.leftStickX = ANALOG_STICK_NEUTRAL + directions.x * 76;
         outputs.leftStickY = ANALOG_STICK_NEUTRAL + directions.y * 76;
