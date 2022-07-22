@@ -12,13 +12,6 @@ MultiVersus::MultiVersus(socd::SocdType socd_type) : ControllerMode(socd_type) {
         socd::SocdPair{ &InputState::c_left, &InputState::c_right},
         socd::SocdPair{ &InputState::c_down, &InputState::c_up   },
     };
-
-    horizontal_socd = false;
-}
-
-void MultiVersus::HandleSocd(InputState &inputs) {
-    horizontal_socd = inputs.left && inputs.right;
-    InputMode::HandleSocd(inputs);
 }
 
 void MultiVersus::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
