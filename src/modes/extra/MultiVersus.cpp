@@ -44,6 +44,8 @@ void MultiVersus::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs)
         outputs.buttonR = inputs.z;
         outputs.triggerLDigital = l_pressed;
     }
+
+    outputs.dpadUp = inputs.mod_x && inputs.mod_y && inputs.c_up;
 }
 
 void MultiVersus::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
