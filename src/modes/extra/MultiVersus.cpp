@@ -54,7 +54,7 @@ void MultiVersus::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs)
         outputs.dpadDown = inputs.z;
 
         // MX + LS = D-Pad Up. Bind to "taunt 1" in-game.
-        outputs.dpadUp = inputs.y;
+        outputs.dpadUp = inputs.lightshield;
     }
 
     if (inputs.mod_y && !inputs.mod_x) {
