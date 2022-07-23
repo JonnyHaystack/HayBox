@@ -9,7 +9,6 @@
 #include "core/socd.hpp"
 #include "core/state.hpp"
 #include "input/GpioButtonInput.hpp"
-#include "modes/MeleeLbx.hpp"
 #include "stdlib.hpp"
 
 const int brook_up_pin = 17;
@@ -21,14 +20,14 @@ KeyboardMode *current_kb_mode = nullptr;
 bool brook_mode = false;
 
 GpioButtonMapping button_mappings[] = {
-    {&InputState::l,            11},
+    { &InputState::l,           11},
     { &InputState::left,        15},
     { &InputState::down,        16},
     { &InputState::right,       14},
 
     { &InputState::mod_x,       3 },
     { &InputState::mod_y,       0 },
-    { &InputState::select,      2 }, // Third mod button
+    { &InputState::nunchuk_c,   2 }, // Dpad Toggle button
 
     { &InputState::start,       A5},
 
@@ -49,6 +48,23 @@ GpioButtonMapping button_mappings[] = {
     { &InputState::midshield,   A3},
 };
 size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
+
+GpioButtonMapping brook_button_mappings[] = {
+  // These are the only buttons which aren't also bound on brook board directly.
+  // And so the only buttons which can be bound to dpad_up and l3 on brook
+  // WARNING: Bind as few of these as you need, since it increases latency
+    { &InputState::l,           11},
+
+    { &InputState::mod_x,       3 },
+    { &InputState::mod_y,       0 },
+    { &InputState::nunchuk_c,   2 },
+
+    { &InputState::c_left,      4 },
+    { &InputState::c_up,        8 },
+    { &InputState::c_down,      1 },
+    { &InputState::a,           12},
+    { &InputState::c_right,     6 },
+};
 
 Pinout pinout = {
     .joybus_data = 7,
@@ -71,10 +87,20 @@ void setup() {
     if (button_holds.b) {
         digitalWrite(pinout.mux, HIGH);
         brook_mode = true;
-    } else {
-        digitalWrite(pinout.mux, LOW);
-        brook_mode = false;
+        return;
+        // remaining code is no-op if brook is enabled.
+        // Brook Firmware takes control, so we can't control layout/gamemode/backend in this branch
+        // IN Addition, you can force the following brook modes by holding the corresponding button on connecting.
+        // If none are held, brook will auto-detect.
+        // 1P/X = PS3
+        // 2P/Y = PS4
+        // 3P/RB = XID-PC
+        // 4P/LB = Nintendo Switch
+        // These listed buttons correspond to the mapping in brook mode (so can't be remapped)
+        // So in the case of the default layout for lbx these correspond to R, Y, LightShield, MidShield
     }
+    digitalWrite(pinout.mux, LOW);
+    brook_mode = false;
 
     CommunicationBackend *primary_backend = new DInputBackend(input_sources, input_source_count);
     delay(500);
@@ -110,16 +136,16 @@ void setup() {
     }
 
     // Default to Melee mode.
-    primary_backend->SetGameMode(new MeleeLbx(socd::SOCD_2IP_NO_REAC));
+    primary_backend->SetGameMode(new Melee20Button(socd::SOCD_2IP_NO_REAC));
 }
 
 void loop() {
     if (brook_mode) {
-        bool button_l = digitalRead(button_mappings[0].pin);
-        bool button_mod_x = digitalRead(button_mappings[4].pin);
-        bool button_mod_y = digitalRead(button_mappings[5].pin);
-        bool button_cstick_down = digitalRead(button_mappings[10].pin);
-        bool button_a = digitalRead(button_mappings[11].pin);
+        bool button_l = digitalRead(brook_button_mappings[0].pin);
+        bool button_mod_x = digitalRead(brook_button_mappings[1].pin);
+        bool button_mod_y = digitalRead(brook_button_mappings[2].pin);
+        bool button_cstick_down = digitalRead(brook_button_mappings[6].pin);
+        bool button_a = digitalRead(brook_button_mappings[7].pin);
 
         digitalWrite(brook_up_pin, button_mod_x && button_mod_y && button_cstick_down && button_a);
         digitalWrite(brook_l_pin, button_l);
