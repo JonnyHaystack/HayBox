@@ -43,9 +43,7 @@ void ProjectM::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
     outputs.triggerRDigital = inputs.r;
     outputs.start = inputs.start;
 
-    // Shut off c-stick when D-Pad layer, activated by holding Mod X + Mod Y,
-    // or by holding nunchuck_c.
-    // keep in sync with below.
+    // Activate D-Pad layer by holding Mod X + Mod Y or Nunchuk C button.
     if ((inputs.mod_x && inputs.mod_y) || inputs.nunchuk_c) {
         outputs.dpadUp = inputs.c_up;
         outputs.dpadDown = inputs.c_down;
@@ -218,9 +216,7 @@ void ProjectM::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         outputs.triggerRAnalog = 140;
     }
 
-    // Shut off c-stick when using dpad layer which can be activated by holding Mod X + Mod Y,
-    // or by holding nunchuck_c.
-    // keep in sync with above.
+    // Shut off C-stick when using D-Pad layer.
     if ((inputs.mod_x && inputs.mod_y) || inputs.nunchuk_c) {
         outputs.rightStickX = 128;
         outputs.rightStickY = 128;

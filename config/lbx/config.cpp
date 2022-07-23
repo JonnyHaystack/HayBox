@@ -20,7 +20,7 @@ KeyboardMode *current_kb_mode = nullptr;
 bool brook_mode = false;
 
 GpioButtonMapping button_mappings[] = {
-    { &InputState::l,           11},
+    {&InputState::l,            11},
     { &InputState::left,        15},
     { &InputState::down,        16},
     { &InputState::right,       14},
@@ -53,17 +53,17 @@ GpioButtonMapping brook_button_mappings[] = {
   // These are the only buttons which aren't also bound on brook board directly.
   // And so the only buttons which can be bound to dpad_up and l3 on brook
   // WARNING: Bind as few of these as you need, since it increases latency
-    { &InputState::l,           11},
+    {&InputState::l,          11},
 
-    { &InputState::mod_x,       3 },
-    { &InputState::mod_y,       0 },
-    { &InputState::nunchuk_c,   2 },
+    { &InputState::mod_x,     3 },
+    { &InputState::mod_y,     0 },
+    { &InputState::nunchuk_c, 2 },
 
-    { &InputState::c_left,      4 },
-    { &InputState::c_up,        8 },
-    { &InputState::c_down,      1 },
-    { &InputState::a,           12},
-    { &InputState::c_right,     6 },
+    { &InputState::c_left,    4 },
+    { &InputState::c_up,      8 },
+    { &InputState::c_down,    1 },
+    { &InputState::a,         12},
+    { &InputState::c_right,   6 },
 };
 
 Pinout pinout = {
@@ -88,16 +88,13 @@ void setup() {
         digitalWrite(pinout.mux, HIGH);
         brook_mode = true;
         return;
-        // remaining code is no-op if brook is enabled.
+        // Remaining code is no-op if brook is enabled.
         // Brook Firmware takes control, so we can't control layout/gamemode/backend in this branch
-        // IN Addition, you can force the following brook modes by holding the corresponding button on connecting.
-        // If none are held, brook will auto-detect.
-        // 1P/X = PS3
-        // 2P/Y = PS4
-        // 3P/RB = XID-PC
-        // 4P/LB = Nintendo Switch
-        // These listed buttons correspond to the mapping in brook mode (so can't be remapped)
-        // So in the case of the default layout for lbx these correspond to R, Y, LightShield, MidShield
+        // IN Addition, you can force the following brook modes by holding the corresponding button
+        // on connecting. If none are held, brook will auto-detect. 1P/X = PS3 2P/Y = PS4 3P/RB =
+        // XID-PC 4P/LB = Nintendo Switch These listed buttons correspond to the mapping in brook
+        // mode (so can't be remapped) So in the case of the default layout for lbx these correspond
+        // to R, Y, LightShield, MidShield
     }
     digitalWrite(pinout.mux, LOW);
     brook_mode = false;

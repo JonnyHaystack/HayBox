@@ -39,7 +39,7 @@ void Melee18Button::UpdateDigitalOutputs(InputState &inputs, OutputState &output
     outputs.triggerRDigital = inputs.r;
     outputs.start = inputs.start;
 
-    /********* DPAD *********/
+    // Activate D-Pad layer by holding Mod X + Mod Y.
     if (inputs.mod_x && inputs.mod_y) {
         outputs.dpadUp = inputs.c_up;
         outputs.dpadDown = inputs.c_down;
@@ -276,7 +276,7 @@ void Melee18Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
         outputs.leftStickX = 128 + (directions.x * 80);
     }
 
-    // Shut off c-stick when using dpad layer.
+    // Shut off C-stick when using D-Pad layer.
     if (inputs.mod_x && inputs.mod_y) {
         outputs.rightStickX = 128;
         outputs.rightStickY = 128;
