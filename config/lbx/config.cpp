@@ -82,9 +82,9 @@ void setup() {
     static InputSource *input_sources[] = { gpio_input };
     size_t input_source_count = sizeof(input_sources) / sizeof(InputSource *);
 
-    // Hold start on plugin for Brook board mode.
+    // Hold B on plugin for Brook board mode.
     pinMode(pinout.mux, OUTPUT);
-    if (button_holds.start) {
+    if (button_holds.b) {
         digitalWrite(pinout.mux, HIGH);
         brook_mode = true;
         return;
