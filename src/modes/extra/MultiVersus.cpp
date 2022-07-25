@@ -19,10 +19,10 @@ void MultiVersus::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs)
     outputs.x = inputs.x;
     outputs.y = inputs.y;
 
-    outputs.start = inputs.start;
+    outputs.start = !inputs.mod_y && inputs.start;
 
-    // Select or MS for "Reset" in the Lab. Not supported by GameCube adapter.
-    outputs.select = inputs.select || inputs.midshield;
+    // Select, MS, or MY + Start for "Reset" in the Lab. Not supported by GameCube adapter.
+    outputs.select = inputs.select || inputs.midshield || (inputs.mod_y && inputs.start);
 
     // Home not supported by GameCube adapter.
     outputs.home = inputs.home;
