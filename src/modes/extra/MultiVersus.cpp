@@ -19,13 +19,23 @@ void MultiVersus::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs)
     outputs.x = inputs.x;
     outputs.y = inputs.y;
 
-    outputs.start = inputs.start;
+    outputs.start = !inputs.mod_y && inputs.start;
 
-    // Select or MS for "Reset" in the Lab. Not supported by GameCube adapter.
-    outputs.select = inputs.select || inputs.midshield;
+    // Select, MS, or MY + Start for "Reset" in the Lab. Not supported by GameCube adapter.
+    outputs.select = inputs.select || inputs.midshield || (inputs.mod_y && inputs.start);
 
     // Home not supported by GameCube adapter.
     outputs.home = inputs.home;
+
+    // L or Nunchuk Z = LT. Bind to "dodge" in-game.
+    if (inputs.nunchuk_connected) {
+        outputs.triggerLDigital = inputs.nunchuk_z;
+    } else {
+        outputs.triggerLDigital = inputs.l;
+    }
+
+    // R = RT. Can be bound to "pickup item" or left unbound.
+    outputs.triggerRDigital = inputs.r;
 
     if (!inputs.mod_x) {
         // Bind A to "attack" in-game.
@@ -41,9 +51,8 @@ void MultiVersus::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs)
         outputs.buttonL = inputs.lightshield;
     }
 
+    // MX activates a layer for "neutral" binds. Uses D-Pad buttons.
     if (inputs.mod_x && !inputs.mod_y) {
-        // MX activates a layer for "neutral" binds. Uses D-Pad buttons.
-
         // MX + A = D-Pad Left. Bind to "neutral attack" in-game.
         outputs.dpadLeft = inputs.a;
 
@@ -57,8 +66,8 @@ void MultiVersus::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs)
         outputs.dpadUp = inputs.lightshield;
     }
 
+    // MY activates C-Stick to D-Pad conversion.
     if (inputs.mod_y && !inputs.mod_x) {
-        // MY activates C-Stick to D-Pad conversion.
         outputs.dpadLeft = inputs.c_left;
         outputs.dpadRight = inputs.c_right;
         outputs.dpadDown = inputs.c_down;
@@ -102,14 +111,12 @@ void MultiVersus::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) 
         outputs.rightStickY = ANALOG_STICK_NEUTRAL;
     }
 
-    // R = RT. Can be bound to "pickup item" or left unbound.
-    if (inputs.r) {
-        outputs.triggerRAnalog = 140;
+    if (outputs.triggerLDigital) {
+        outputs.triggerLAnalog = 140;
     }
 
-    // L or Nunchuk Z = LT. Bind to "dodge" in-game.
-    if (inputs.l || (inputs.nunchuk_connected && inputs.nunchuk_z)) {
-        outputs.triggerLAnalog = 140;
+    if (outputs.triggerRDigital) {
+        outputs.triggerRAnalog = 140;
     }
 
     // Nunchuk overrides left stick.
