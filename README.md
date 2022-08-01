@@ -81,10 +81,11 @@ After that:
   
 4. If your controller has a different pinout than any of the existing configs, you may edit the button mappings and other pins at the top of the config (`config/<environment>/config.cpp`). Any buttons that your controller doesn't have can simply be deleted from the list.
 5. If you see a message in the bottom bar saying "Rebuilding IntelliSense Index" or "Loading Project Tasks", wait for it to disappear. For Pico especially it may take quite a while the first time because it has to download 2-3GB of dependencies.
-6. Click **Build** (in the bottom left) to make sure everything compiles without
+6. Click **Build** (in the bottom left) and make sure everything compiles without
   errors
-6. **For Pico-based controllers only**, the very first time you install this firmware you will have to hold the bootsel button while plugging it in and then drag and drop the file `HayBox/.pio/build/<environment>/firmware.uf2` onto the RPI-RP2 drive that comes up. For subsequent installs, only the following step is necessary.
-7. Plug in your controller via USB and click **Upload** (next to the Build button)
+7. This  next step differs depending on the microcontroller used in your controller.
+    - **For Pico-based controllers**: hold the bootsel button while plugging it in (or your Start button if you already have HayBox installed) and then drag and drop the file `HayBox/.pio/build/<environment>/firmware.uf2` onto the RPI-RP2 drive that comes up.
+    - **For Arduino-based controllers**: Plug in your controller via USB and click **Upload** (next to the Build button)
 
 ## Usage
 
