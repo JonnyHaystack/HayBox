@@ -11,7 +11,7 @@ Features include:
 - Cross platform support:
   - RP2040 (e.g. Raspberry Pi Pico)
   - 16MHz AVR MCUs (e.g. ATMega32U4 which several Arduinos are based on)
-- Supports many existing controllers/PCBs, e.g. B0XX, Smash Box, Crane's
+- Supports many existing controllers/PCBs, e.g. B0XX, LBX, Smash Box, Crane's
   GCCPCB/Model S
 - Melee mode up to date with B0XX V3 specifications
 - Supports a variety of communication backends which can be used either separately or in conjunction with each other:
@@ -97,7 +97,7 @@ To reboot Pico-based controllers into bootsel mode, hold Start on plugin.
 
 #### Brook board passthrough mode
 
-To switch to Brook board mode on GCCPCB2, GCCMX, or B0XX R2, hold B on
+To switch to Brook board mode on GCCPCB2, GCCMX, B0XX R2, or LBX, hold B on
 plugin.
 
 #### Communication backends (console selection)
