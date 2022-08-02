@@ -106,15 +106,13 @@ Communication backends are selected slightly differently depending on the type
 of microcontroller used in the controller.
 
 On Pico/RP2040, there are currently no button holds required on plugin. USB vs
-GameCube vs Nintendo 64* is detected automatically. 
+GameCube vs Nintendo 64 is detected automatically. 
 
 On Arduino/AVR, the DInput backend is selected if a USB connection is detected.
 Otherwise, it defaults to GameCube backend, unless another backend is manually
 selected by holding one of the following buttons on plugin:
 - A - GameCube backend with polling rate fix disabled (used for GCC adapters)
 - C-Left - Nintendo 64 backend (60Hz polling rate)
-
-\* Nintendo 64 is not supported on Pico yet, but will be very soon.
 
 #### Game mode selection
 
