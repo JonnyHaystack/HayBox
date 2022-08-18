@@ -27,7 +27,8 @@ GpioButtonMapping button_mappings[] = {
 
     { &InputState::mod_x,       3 },
     { &InputState::mod_y,       0 },
-    { &InputState::nunchuk_c,   2 }, // Dpad Toggle button
+    // { &InputState::nunchuk_c,   2 }, // Dpad Toggle button
+    { &InputState::nunchuk_c,   A3 }, // Dpad Toggle button
 
     { &InputState::start,       A5},
 
@@ -37,15 +38,19 @@ GpioButtonMapping button_mappings[] = {
     { &InputState::a,           12},
     { &InputState::c_right,     6 },
 
-    { &InputState::b,           13},
+    // { &InputState::b,           13},
+    { &InputState::b,           A0},
     { &InputState::x,           5 },
     { &InputState::z,           10},
     { &InputState::up,          9 },
 
-    { &InputState::r,           A0},
+    // { &InputState::r,           A0},
+    { &InputState::r,           13},
     { &InputState::y,           A1},
-    { &InputState::lightshield, A2},
-    { &InputState::midshield,   A3},
+    // { &InputState::lightshield, A2},
+    { &InputState::lightshield, 2 },
+    // { &InputState::midshield,   A3},
+    { &InputState::midshield,   A2 },
 };
 size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
 
