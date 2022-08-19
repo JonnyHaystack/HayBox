@@ -107,6 +107,16 @@ void SmashboxClone::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
         outputs.rightStickY = 128 + (directions.y * 42);
     }
 
+    if (directions.horizontal && mapped.c_up) {
+        outputs.rightStickX = 128 + (directions.x * 42);
+        outputs.rightStickY = 128 + (directions.cy * 68);
+    }
+
+    if (directions.horizontal && mapped.c_down) {
+        outputs.rightStickX = 128 + (directions.x * 42);
+        outputs.rightStickY = 128 + (directions.cy * 68);
+    }
+
     // Clean inputs on b2 to prevent polling error
     b2_counter = mapped.b2 ? b2_counter + 1 : 0;
     if (mapped.b2 && b2_counter < 3) {
