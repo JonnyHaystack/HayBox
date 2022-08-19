@@ -37,6 +37,41 @@ typedef struct inputstate {
     bool nunchuk_z = false;
 } InputState;
 
+typedef struct remappedinputstate {
+    // Rectangle inputs.
+    bool start = false;
+    bool select = false;
+    bool home = false;
+    bool y = false;
+    bool x = false;
+    bool b = false;
+    bool a = false;
+    bool l = false;
+    bool r = false;
+    bool z = false;
+    bool up = false;
+    bool down = false;
+    bool right = false;
+    bool left = false;
+    bool mod_x = false;
+    bool mod_y = false;
+    bool c_left = false;
+    bool c_right = false;
+    bool c_up = false;
+    bool c_down = false;
+    bool b2 = false;
+    bool mode = false;
+    bool dpad_up = false;
+    bool dpad_toggle = false;
+
+    // Nunchuk inputs.
+    bool nunchuk_connected = false;
+    int8_t nunchuk_x = 0;
+    int8_t nunchuk_y = 0;
+    bool nunchuk_c = false;
+    bool nunchuk_z = false;
+} RemappedInputState;
+
 // State describing stick direction at the quadrant level.
 typedef struct {
     bool horizontal;
