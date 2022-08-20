@@ -93,7 +93,8 @@ void SmashboxClone::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
 
     // handle standard modifiers
     if (mapped.mode) {
-        if(mapped.mod_x) outputs.leftStickX = 128 + directions.x * 35;
+        if(!directions.horizontal && directions.vertical) outputs.leftStickX = 169, outputs.leftStickY = 128;
+        else if(mapped.mod_x) outputs.leftStickX = 128 + directions.x * 35;
         else if (mapped.mod_y) outputs.leftStickY = 128 + directions.y * 35;
         else outputs.leftStickX = 128 + directions.x * 28;
     } else {
