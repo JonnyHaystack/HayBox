@@ -24,14 +24,26 @@ SOFTWARE.
 #ifndef _TUCOMPOSITE_TUGAMEPAD_HPP
 #define _TUCOMPOSITE_TUGAMEPAD_HPP
 
-#include "TUComposite.hpp"
-
 #include <Adafruit_TinyUSB.h>
 #include <Arduino.h>
+#include <TUCompositeHID.hpp>
+
+typedef struct TU_ATTR_PACKED {
+    uint16_t x; // X value of left analog stick
+    uint16_t y; // Y value of left analog stick
+    uint16_t z; // Value of analog left trigger
+    uint16_t rz; // Value of analog right trigger
+    uint16_t rx; // X value of right analog stick
+    uint16_t ry; // Y value of right analog stick
+    uint8_t hat; // Position value of the DPad/hat switch
+    uint16_t buttons; // Buttons mask for currently pressed buttons
+} gamepad_report_t;
 
 class TUGamepad {
   public:
     TUGamepad();
+
+    static void registerDescriptor();
 
     void begin();
     bool ready();
@@ -54,6 +66,9 @@ class TUGamepad {
     void hatSwitch(bool left, bool right, bool down, bool up);
 
   protected:
+    static const uint8_t _report_id = 1;
+    static uint8_t _descriptor[];
+
     gamepad_report_t _report;
 
   private:

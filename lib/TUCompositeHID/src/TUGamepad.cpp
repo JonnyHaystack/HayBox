@@ -23,26 +23,75 @@ SOFTWARE.
 *************************************************************************/
 #include "TUGamepad.hpp"
 
-#include "TUComposite.hpp"
-
 #include <Adafruit_TinyUSB.h>
 #include <Arduino.h>
+#include <TUCompositeHID.hpp>
+
+// clang-format off
+
+#define HID_REPORT_DESC(...) \
+    HID_USAGE_PAGE ( HID_USAGE_PAGE_DESKTOP     )                 ,\
+    HID_USAGE      ( HID_USAGE_DESKTOP_GAMEPAD  )                 ,\
+    HID_COLLECTION ( HID_COLLECTION_APPLICATION )                 ,\
+        /* Report ID if any */\
+        __VA_ARGS__ \
+        /* 16 bit X, Y, Z, Rz, Rx, Ry (min -32768 max 32767 ) */ \
+        HID_USAGE_PAGE     ( HID_USAGE_PAGE_DESKTOP                 ) ,\
+        HID_USAGE          ( HID_USAGE_DESKTOP_X                    ) ,\
+        HID_USAGE          ( HID_USAGE_DESKTOP_Y                    ) ,\
+        HID_USAGE          ( HID_USAGE_DESKTOP_Z                    ) ,\
+        HID_USAGE          ( HID_USAGE_DESKTOP_RZ                   ) ,\
+        HID_USAGE          ( HID_USAGE_DESKTOP_RX                   ) ,\
+        HID_USAGE          ( HID_USAGE_DESKTOP_RY                   ) ,\
+        HID_LOGICAL_MIN_N  ( INT16_MIN, 2                           ) ,\
+        HID_LOGICAL_MAX_N  ( INT16_MAX, 2                           ) ,\
+        HID_REPORT_COUNT   ( 6                                      ) ,\
+        HID_REPORT_SIZE    ( 16                                     ) ,\
+        HID_INPUT          ( HID_DATA | HID_VARIABLE | HID_ABSOLUTE ) ,\
+        /* 8 bit DPad/Hat Button Map  */ \
+        HID_USAGE_PAGE     ( HID_USAGE_PAGE_DESKTOP                 ) ,\
+        HID_USAGE          ( HID_USAGE_DESKTOP_HAT_SWITCH           ) ,\
+        HID_LOGICAL_MIN    ( 1                                      ) ,\
+        HID_LOGICAL_MAX    ( 8                                      ) ,\
+        HID_PHYSICAL_MIN   ( 0                                      ) ,\
+        HID_PHYSICAL_MAX_N ( 315, 2                                 ) ,\
+        HID_REPORT_COUNT   ( 1                                      ) ,\
+        HID_REPORT_SIZE    ( 8                                      ) ,\
+        HID_INPUT          ( HID_DATA | HID_VARIABLE | HID_ABSOLUTE ) ,\
+        /* 16 bit Button Map */ \
+        HID_USAGE_PAGE     ( HID_USAGE_PAGE_BUTTON                  ) ,\
+        HID_USAGE_MIN      ( 1                                      ) ,\
+        HID_USAGE_MAX      ( 16                                     ) ,\
+        HID_LOGICAL_MIN    ( 0                                      ) ,\
+        HID_LOGICAL_MAX    ( 1                                      ) ,\
+        HID_REPORT_COUNT   ( 16                                     ) ,\
+        HID_REPORT_SIZE    ( 1                                      ) ,\
+        HID_INPUT          ( HID_DATA | HID_VARIABLE | HID_ABSOLUTE ) ,\
+    HID_COLLECTION_END
+
+// clang-format on
+
+uint8_t TUGamepad::_descriptor[] = { HID_REPORT_DESC(HID_REPORT_ID(_report_id)) };
 
 TUGamepad::TUGamepad() {}
 
+void TUGamepad::registerDescriptor() {
+    TUCompositeHID::addDescriptor(_descriptor, sizeof(_descriptor));
+}
+
 void TUGamepad::begin() {
-    _usb_hid.begin();
+    TUCompositeHID::_usb_hid.begin();
 
     // Release all buttons, center all sticks, etc.
     resetInputs();
 }
 
 bool TUGamepad::ready() {
-    return _usb_hid.ready();
+    return TUCompositeHID::_usb_hid.ready();
 };
 
 bool TUGamepad::sendState() {
-    return _usb_hid.sendReport(RID_GAMEPAD, &_report, sizeof(gamepad_report_t));
+    return TUCompositeHID::_usb_hid.sendReport(_report_id, &_report, sizeof(gamepad_report_t));
 }
 
 void TUGamepad::resetInputs() {

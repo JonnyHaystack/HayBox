@@ -275,7 +275,7 @@ void Melee20Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
         outputs.triggerRAnalog = 140;
     }
 
-    // Shut off c-stick when using dpad layer.
+    // Shut off C-stick when using D-Pad layer.
     if ((inputs.mod_x && inputs.mod_y) || inputs.nunchuk_c) {
         outputs.rightStickX = 128;
         outputs.rightStickY = 128;
