@@ -32,8 +32,8 @@ void SmashboxClone::HandleSocd(InputState &inputs) {
     mapped.down = inputs.down;
     mapped.right = inputs.right;
     mapped.left = inputs.left;
-    mapped.mod_x = inputs.mod_y;
-    mapped.mod_y = inputs.mod_x;
+    mapped.mod_x = inputs.mod_x;
+    mapped.mod_y = inputs.mod_y;
     mapped.c_left = inputs.c_left;
     mapped.c_right = inputs.c_right;
     mapped.c_up = inputs.a;
@@ -98,7 +98,7 @@ void SmashboxClone::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
         else outputs.leftStickX = 128 + directions.x * 28;
     } else {
         if (mapped.mod_x) outputs.leftStickX = 128 + directions.x * 56;
-        if (mapped.mod_y) outputs.leftStickY = 128 + directions.y * 50;
+        if (mapped.mod_y) outputs.leftStickY = 128 + directions.y * 45;
     }
 
     // angled cstick ftilt
