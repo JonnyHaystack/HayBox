@@ -60,11 +60,6 @@ void SmashboxClone::UpdateDigitalOutputs(InputState &inputs, OutputState &output
         outputs.dpadLeft = mapped.c_left;
         outputs.dpadRight = mapped.c_right;
     }
-
-    /*if (inputs.select)
-        outputs.dpadLeft = true;
-    if (inputs.home)
-        outputs.dpadRight = true;*/
 }
 
 void SmashboxClone::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
@@ -95,11 +90,16 @@ void SmashboxClone::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
     if (mapped.mode) {
         if(!directions.horizontal && directions.vertical) outputs.leftStickX = 169, outputs.leftStickY = 128;
         else if(mapped.mod_x) outputs.leftStickX = 128 + directions.x * 35;
-        else if (mapped.mod_y) outputs.leftStickY = 128 + directions.y * 35;
-        else outputs.leftStickX = 128 + directions.x * 28;
+        else if (mapped.mod_y) {
+            outputs.leftStickY = 128 + directions.y * 30;
+            outputs.leftStickX = 128 + directions.x * 93;
+        } else outputs.leftStickX = 128 + directions.x * 28;
     } else {
         if (mapped.mod_x) outputs.leftStickX = 128 + directions.x * 56;
-        if (mapped.mod_y) outputs.leftStickY = 128 + directions.y * 45;
+        if (mapped.mod_y) {
+            outputs.leftStickY = 128 + directions.y * 47; 
+            outputs.leftStickX = 128 + directions.x * 88;
+        }
     }
 
     // angled cstick ftilt
