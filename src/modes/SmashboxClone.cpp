@@ -63,6 +63,16 @@ void SmashboxClone::UpdateDigitalOutputs(InputState &inputs, OutputState &output
 }
 
 void SmashboxClone::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
+    auto set_analog_stick = [&](int x_percent, int y_percent) {
+        outputs.leftStickX = 128 + directions.x * x_percent;
+        outputs.leftStickY = 128 + directions.y * y_percent;
+    };
+
+    auto force_analog_stick = [&](int x_value, int y_value) {
+        outputs.leftStickX = x_value;
+        outputs.leftStickY = y_value;
+    };
+
     // Coordinate calculations to make modifier handling simpler.
     UpdateDirections(
         mapped.left,
@@ -84,24 +94,26 @@ void SmashboxClone::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
     if (mapped.r) outputs.triggerRAnalog = 140;
 
     // Shut off C-stick when using D-Pad layer.
-    if (mapped.dpad_toggle) outputs.rightStickX = 128, outputs.rightStickY = 128;
+    if (mapped.dpad_toggle) force_analog_stick(128, 128);
 
-    // handle standard modifiers
-    if (mapped.mode) {
-        if(!directions.horizontal && directions.vertical) outputs.leftStickX = 169, outputs.leftStickY = 128;
-        else if(mapped.mod_x) outputs.leftStickX = 128 + directions.x * 35;
-        else if (mapped.mod_y) {
-            outputs.leftStickY = 128 + directions.y * 30;
-            outputs.leftStickX = 128 + directions.x * 93;
-        } else outputs.leftStickX = 128 + directions.x * 28;
-    } else {
-        if (mapped.mod_x) outputs.leftStickX = 128 + directions.x * 56;
-        else if (mapped.mod_y) {
-            outputs.leftStickY = 128 + directions.y * (mapped.b2 || mapped.z ? 47 : 49);
-            outputs.leftStickX = 128 + directions.x * (mapped.b2 || mapped.z ? 88 : 40);
-        }
+    // tilt modifiers
+    
+    if (mapped.mod_x) {
+        if (mapped.a) set_analog_stick(50, 50); // ftilt
+        else set_analog_stick(56, 100); // fast walk
+    } else if (mapped.mod_y) {
+        if (mapped.z || mapped.b2 || mapped.b) set_analog_stick(88, 47); // wavedash
+        else set_analog_stick(40, 49); // dtilt + uptilt
     }
 
+    // mode shift
+    if (mapped.mode) {
+        if(!directions.horizontal && directions.vertical) force_analog_stick(169, 128);
+        else if (mapped.mod_x) set_analog_stick(35, 100);
+        else if (mapped.mod_y) set_analog_stick(93, 30);
+        else set_analog_stick(28, 100);
+    }
+    
     // angled cstick ftilt
     if (directions.vertical && (mapped.c_left || mapped.c_right)) {
         outputs.rightStickX = 128 + (directions.cx * 68);

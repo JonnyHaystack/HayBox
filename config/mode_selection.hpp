@@ -9,6 +9,7 @@
 #include "modes/RivalsOfAether.hpp"
 #include "modes/Ultimate.hpp"
 #include "modes/SmashboxClone.hpp"
+#include "modes/UltPika.hpp"
 
 extern KeyboardMode *current_kb_mode;
 
@@ -34,23 +35,15 @@ void set_mode(CommunicationBackend *backend, KeyboardMode *mode) {
 void select_mode(CommunicationBackend *backend) {
     InputState &inputs = backend->GetInputs();
     if (inputs.mod_x && !inputs.mod_y && inputs.start) {
-        if (inputs.l) {
-            set_mode(backend, new Melee20Button(socd::SOCD_2IP_NO_REAC));
-        } else if (inputs.left) {
-            set_mode(backend, new ProjectM(socd::SOCD_2IP_NO_REAC, true, false));
-        } else if (inputs.down) {
-            set_mode(backend, new Ultimate(socd::SOCD_2IP));
-        } else if (inputs.right) {
-            set_mode(backend, new FgcMode(socd::SOCD_NEUTRAL));
-        } else if (inputs.b) {
-            set_mode(backend, new RivalsOfAether(socd::SOCD_2IP));
-        } else if (inputs.z) {
-            set_mode(backend, new SmashboxClone(socd::SOCD_2IP));
-        }
+        if (inputs.l) set_mode(backend, new Melee20Button(socd::SOCD_2IP_NO_REAC));
+        else if (inputs.left) set_mode(backend, new ProjectM(socd::SOCD_2IP_NO_REAC, true, false));
+        else if (inputs.down) set_mode(backend, new Ultimate(socd::SOCD_2IP));
+        else if (inputs.right) set_mode(backend, new FgcMode(socd::SOCD_NEUTRAL));
+        else if (inputs.b) set_mode(backend, new RivalsOfAether(socd::SOCD_2IP));
+        else if (inputs.x) set_mode(backend, new SmashboxClone(socd::SOCD_2IP));
+        else if (inputs.z) set_mode(backend, new UltPika(socd::SOCD_2IP));
     } else if (inputs.mod_y && !inputs.mod_x && inputs.start) {
-        if (inputs.l) {
-            set_mode(backend, new DefaultKeyboardMode(socd::SOCD_2IP));
-        }
+        if (inputs.l) set_mode(backend, new DefaultKeyboardMode(socd::SOCD_2IP));
     }
 }
 
