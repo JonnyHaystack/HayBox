@@ -2,6 +2,7 @@
 #include "comms/DInputBackend.hpp"
 #include "comms/GamecubeBackend.hpp"
 #include "comms/N64Backend.hpp"
+#include "comms/NintendoSwitchBackend.hpp"
 #include "config/mode_selection.hpp"
 #include "core/CommunicationBackend.hpp"
 #include "core/InputMode.hpp"
@@ -30,7 +31,9 @@ GpioButtonMapping button_mappings[] = {
     { &InputState::mod_x,       6 },
     { &InputState::mod_y,       7 },
 
+    { &InputState::select,      10},
     { &InputState::start,       0 },
+    { &InputState::home,        11},
 
     { &InputState::c_left,      13},
     { &InputState::c_up,        12},
@@ -54,8 +57,8 @@ const Pinout pinout = {
     .joybus_data = 28,
     .mux = -1,
     .nunchuk_detect = -1,
-    .nunchuk_sda = 8,
-    .nunchuk_scl = 9,
+    .nunchuk_sda = -1,
+    .nunchuk_scl = -1,
 };
 
 void setup() {
@@ -84,13 +87,24 @@ void setup() {
     /* Select communication backend. */
     CommunicationBackend *primary_backend;
     if (console == ConnectedConsole::NONE) {
-        // Default to DInput mode if no console detected.
-        // Input viewer only used when connected to PC i.e. when using DInput mode.
-        backend_count = 2;
-        primary_backend = new DInputBackend(input_sources, input_source_count);
-        backends = new CommunicationBackend *[backend_count] {
-            primary_backend, new B0XXInputViewer(input_sources, input_source_count)
-        };
+        if (button_holds.x) {
+            // If no console detected and X is held on plugin then use Switch USB backend.
+            NintendoSwitchBackend::RegisterDescriptor();
+            backend_count = 1;
+            primary_backend = new NintendoSwitchBackend(input_sources, input_source_count);
+            backends = new CommunicationBackend *[backend_count] { primary_backend };
+            primary_backend->SetGameMode(new Ultimate(socd::SOCD_2IP));
+        } else {
+            // Default to DInput mode if no console detected.
+            // Input viewer only used when connected to PC i.e. when using DInput mode.
+            TUGamepad::registerDescriptor();
+            TUKeyboard::registerDescriptor();
+            backend_count = 2;
+            primary_backend = new DInputBackend(input_sources, input_source_count);
+            backends = new CommunicationBackend *[backend_count] {
+                primary_backend, new B0XXInputViewer(input_sources, input_source_count)
+            };
+        }
     } else {
         if (console == ConnectedConsole::GAMECUBE) {
             primary_backend =
@@ -120,6 +134,7 @@ void loop() {
     }
 }
 
+/* Nunchuk code runs on the second core */
 NunchukInput *nunchuk = nullptr;
 
 void setup1() {

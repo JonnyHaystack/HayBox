@@ -16,7 +16,7 @@ DInputBackend::DInputBackend(InputSource **input_sources, size_t input_source_co
 }
 
 DInputBackend::~DInputBackend() {
-    _gamepad->releaseAll();
+    _gamepad->resetInputs();
     delete _gamepad;
 }
 

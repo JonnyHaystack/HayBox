@@ -2,7 +2,6 @@
 #define _COMMS_GAMECUBEBACKEND_HPP
 
 #include "core/CommunicationBackend.hpp"
-#include "core/state.hpp"
 
 #include <GamecubeConsole.hpp>
 #include <hardware/pio.h>

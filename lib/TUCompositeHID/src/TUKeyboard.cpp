@@ -1,15 +1,20 @@
 #include "TUKeyboard.hpp"
 
-#include "TUComposite.hpp"
-
 #include <Adafruit_TinyUSB.h>
+#include <TUCompositeHID.hpp>
+
+uint8_t TUKeyboard::_descriptor[] = { TUD_HID_REPORT_DESC_KEYBOARD(HID_REPORT_ID(_report_id)) };
 
 #define MODIFIER_MASK(mod_kc) (1 << (mod_kc & 0x0F))
 
 TUKeyboard::TUKeyboard() {}
 
+void TUKeyboard::registerDescriptor() {
+    TUCompositeHID::addDescriptor(_descriptor, sizeof(_descriptor));
+}
+
 void TUKeyboard::begin() {
-    _usb_hid.begin();
+    TUCompositeHID::_usb_hid.begin();
     releaseAll();
 }
 
@@ -74,8 +79,8 @@ void TUKeyboard::releaseAll() {
 }
 
 void TUKeyboard::sendState() {
-    while (!_usb_hid.ready()) {
+    while (!TUCompositeHID::_usb_hid.ready()) {
         tight_loop_contents();
     }
-    _usb_hid.sendReport(RID_KEYBOARD, &_report, sizeof(hid_keyboard_report_t));
+    TUCompositeHID::_usb_hid.sendReport(_report_id, &_report, sizeof(hid_keyboard_report_t));
 }
