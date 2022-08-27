@@ -31,7 +31,9 @@ GpioButtonMapping button_mappings[] = {
     { &InputState::mod_x,       6 },
     { &InputState::mod_y,       7 },
 
+    { &InputState::select,      10},
     { &InputState::start,       0 },
+    { &InputState::home,        11},
 
     { &InputState::c_left,      13},
     { &InputState::c_up,        12},
@@ -55,8 +57,8 @@ const Pinout pinout = {
     .joybus_data = 28,
     .mux = -1,
     .nunchuk_detect = -1,
-    .nunchuk_sda = 8,
-    .nunchuk_scl = 9,
+    .nunchuk_sda = -1,
+    .nunchuk_scl = -1,
 };
 
 void setup() {

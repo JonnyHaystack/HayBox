@@ -7,6 +7,11 @@
 NunchukInput::NunchukInput(TwoWire &wire, int detect_pin, int sda_pin, int scl_pin) {
     delay(50);
 
+    if (sda_pin < 0 || scl_pin < 0) {
+        _nunchuk = nullptr;
+        return;
+    }
+
     if (detect_pin > -1) {
         gpio::init_pin(detect_pin, gpio::GpioMode::GPIO_INPUT_PULLUP);
         if (gpio::read_digital(detect_pin)) {
@@ -15,10 +20,8 @@ NunchukInput::NunchukInput(TwoWire &wire, int detect_pin, int sda_pin, int scl_p
         }
     }
 
-    if (sda_pin > -1 && scl_pin > -1) {
-        wire.setSDA(sda_pin);
-        wire.setSCL(scl_pin);
-    }
+    wire.setSDA(sda_pin);
+    wire.setSCL(scl_pin);
 
     _nunchuk = new ArduinoNunchuk(wire);
 
