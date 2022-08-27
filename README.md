@@ -13,7 +13,6 @@ Features include:
   - 16MHz AVR MCUs (e.g. ATMega32U4 which several Arduinos are based on)
 - Supports many existing controllers/PCBs, e.g. B0XX, LBX, Smash Box, Crane's
   GCCPCB/Model S
-- Melee mode up to date with B0XX V3 specifications
 - Supports a variety of communication backends which can be used either separately or in conjunction with each other:
   - DInput (PC)
   - GameCube console
@@ -25,6 +24,7 @@ Features include:
   - Switch matrix (as typically found in keyboards)
   - Wii Nunchuk
   - GameCube controller
+- Melee mode up to date with B0XX V3 specifications
 - Existing modes for popular games (e.g. Melee, Project M, Ultimate, Rivals of Aether, traditional fighting games)
 - Easy to create new controller modes (or keyboard modes) for different games
 - USB keyboard game modes for games that lack gamepad support
@@ -32,7 +32,7 @@ Features include:
 - Switch modes on the fly without unplugging your controller
 - Automatically detects whether plugged into console or USB
 - Game modes and communication backends are independent entities, meaning you can use any game mode with any supported console without extra work
-- Easily switch between different GameCube/N64 polling rates in order to have optimal latency on console, overclocked adapter, etc. Not necessary for Pico/RP2040.
+- Easily switch between different GameCube/N64 polling rates in order to have optimal latency on console, overclocked adapter, etc. (not necessary for Pico/RP2040)
 
 [![GitHub issues](https://img.shields.io/github/issues/JonnyHaystack/HayBox)](https://github.com/JonnyHaystack/HayBox/issues)
 [![GitHub pull requests](https://img.shields.io/github/issues-pr/JonnyHaystack/HayBox)](https://github.com/JonnyHaystack/HayBox/pulls)
@@ -77,8 +77,8 @@ After that:
 3. Choose the appropriate build environment for your controller's PCB by
   clicking the environment selection button near the bottom left of the window
   
-  ![Screenshot 2021-10-19 003017](https://user-images.githubusercontent.com/1266473/137824617-4a282217-c6cc-48fb-a55c-1ca40d460538.png)
-  ![Screenshot 2021-10-19 003055](https://user-images.githubusercontent.com/1266473/137824641-4a21c8df-abe1-41fe-a15e-a6e9f5a95467.png)
+  ![image](https://user-images.githubusercontent.com/1266473/187039372-485c5f0d-60b3-4534-befb-e713f138a7c8.png)
+  ![image](https://user-images.githubusercontent.com/1266473/187039585-cea18994-fd12-45fb-b43f-427eb7affb81.png)
   
 4. If your controller has a different pinout than any of the existing configs, you may edit the button mappings and other pins at the top of the config (`config/<environment>/config.cpp`). Any buttons that your controller doesn't have can simply be deleted from the list.
 5. If you see a message in the bottom bar saying "Rebuilding IntelliSense Index" or "Loading Project Tasks", wait for it to disappear. For Pico especially it may take quite a while the first time because it has to download 2-3GB of dependencies.
@@ -106,9 +106,9 @@ plugin.
 Communication backends are selected slightly differently depending on the type
 of microcontroller used in the controller.
 
-On Pico/RP2040, USB vs GameCube vs Nintendo 64 is detected automatically. To
-select the Nintendo Switch USB mode, hold X on plugin. This will also set the
-initial game mode to Ultimate mode.
+On Pico/RP2040, USB vs GameCube vs Nintendo 64 is detected automatically.
+Other backends are selected by holding one of the following buttons on plugin:
+- X - Nintendo Switch USB mode (also sets initial game mode to Ultimate mode)
 
 On Arduino/AVR, the DInput backend is selected if a USB connection is detected.
 Otherwise, it defaults to GameCube backend, unless another backend is manually
