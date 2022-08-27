@@ -3,6 +3,18 @@
 
 #include "core/CommunicationBackend.hpp"
 
+typedef enum {
+    SWITCH_HAT_UP,
+    SWITCH_HAT_UP_RIGHT,
+    SWITCH_HAT_RIGHT,
+    SWITCH_HAT_DOWN_RIGHT,
+    SWITCH_HAT_DOWN,
+    SWITCH_HAT_DOWN_LEFT,
+    SWITCH_HAT_LEFT,
+    SWITCH_HAT_UP_LEFT,
+    SWITCH_HAT_CENTERED,
+} switch_gamepad_hat_t;
+
 typedef struct __attribute__((packed, aligned(1))) {
     bool y : 1;
     bool b : 1;
@@ -19,25 +31,13 @@ typedef struct __attribute__((packed, aligned(1))) {
     bool home : 1;
     bool capture : 1;
     uint8_t reserved0 : 2;
-    uint8_t hat;
+    switch_gamepad_hat_t hat;
     uint8_t lx;
     uint8_t ly;
     uint8_t rx;
     uint8_t ry;
     uint8_t reserved1;
 } switch_gamepad_report_t;
-
-typedef enum {
-    SWITCH_HAT_UP,
-    SWITCH_HAT_UP_RIGHT,
-    SWITCH_HAT_RIGHT,
-    SWITCH_HAT_DOWN_RIGHT,
-    SWITCH_HAT_DOWN,
-    SWITCH_HAT_DOWN_LEFT,
-    SWITCH_HAT_LEFT,
-    SWITCH_HAT_UP_LEFT,
-    SWITCH_HAT_CENTERED,
-} switch_gamepad_hat_t;
 
 class NintendoSwitchBackend : public CommunicationBackend {
   public:

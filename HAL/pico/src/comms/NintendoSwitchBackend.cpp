@@ -27,14 +27,14 @@
         HID_INPUT          ( HID_DATA | HID_VARIABLE | HID_ABSOLUTE ) ,\
         /* 8 bit DPad/Hat */ \
         HID_USAGE_PAGE     ( HID_USAGE_PAGE_DESKTOP                 ) ,\
-        HID_LOGICAL_MIN    ( 7                                      ) ,\
+        HID_LOGICAL_MAX    ( 7                                      ) ,\
         HID_PHYSICAL_MAX_N ( 315, 2                                 ) ,\
         HID_REPORT_SIZE    ( 4                                      ) ,\
         HID_REPORT_COUNT   ( 1                                      ) ,\
         HID_UNIT           ( 0x14                                   ) ,\
         HID_USAGE          ( HID_USAGE_DESKTOP_HAT_SWITCH           ) ,\
         HID_INPUT          ( HID_DATA | HID_VARIABLE | HID_ABSOLUTE | HID_NULL_STATE ) ,\
-        /* Not sure what this input is for */ \
+        /* Useless padding after hat switch */ \
         HID_UNIT           ( 0x00                                   ) ,\
         HID_REPORT_COUNT   ( 1                                      ) ,\
         HID_INPUT          ( HID_CONSTANT | HID_ARRAY | HID_ABSOLUTE ) ,\
@@ -84,7 +84,7 @@ NintendoSwitchBackend::NintendoSwitchBackend(InputSource **input_sources, size_t
         home: false,
         capture: false,
         reserved0: 0,
-        hat: 0,
+        hat: SWITCH_HAT_CENTERED,
         lx: 128,
         ly: 128,
         rx: 128,
@@ -128,9 +128,9 @@ void NintendoSwitchBackend::SendReport() {
 
     // Analog outputs
     _report.lx = _outputs.leftStickX;
-    _report.ly = 256 - _outputs.leftStickY;
+    _report.ly = 255 - _outputs.leftStickY;
     _report.rx = _outputs.rightStickX;
-    _report.ry = 256 - _outputs.rightStickY;
+    _report.ry = 255 - _outputs.rightStickY;
 
     // D-pad Hat Switch
     _report.hat =

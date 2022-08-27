@@ -10,7 +10,7 @@ namespace TUCompositeHID {
 
     Adafruit_USBD_HID _usb_hid = Adafruit_USBD_HID(
         _hid_report_desc,
-        sizeof(_current_descriptor_len),
+        _current_descriptor_len,
         HID_ITF_PROTOCOL_NONE,
         1,
         false
