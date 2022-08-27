@@ -15,9 +15,10 @@ Features include:
   GCCPCB/Model S
 - Melee mode up to date with B0XX V3 specifications
 - Supports a variety of communication backends which can be used either separately or in conjunction with each other:
-  - DInput
+  - DInput (PC)
   - GameCube console
   - Nintendo 64 console
+  - Nintendo Switch console
   - B0XX input viewer
 - Supports a variety of "input sources" which can be used in conjunction to create mixed input controllers:
   - Buttons/switches wired directly to GPIO pins
@@ -105,8 +106,9 @@ plugin.
 Communication backends are selected slightly differently depending on the type
 of microcontroller used in the controller.
 
-On Pico/RP2040, there are currently no button holds required on plugin. USB vs
-GameCube vs Nintendo 64 is detected automatically. 
+On Pico/RP2040, USB vs GameCube vs Nintendo 64 is detected automatically. To
+select the Nintendo Switch USB mode, hold X on plugin. This will also set the
+initial game mode to Ultimate mode.
 
 On Arduino/AVR, the DInput backend is selected if a USB connection is detected.
 Otherwise, it defaults to GameCube backend, unless another backend is manually
