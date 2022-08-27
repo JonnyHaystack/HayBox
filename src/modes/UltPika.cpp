@@ -66,8 +66,10 @@ void UltPika::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
     if (inputs.mod_x && inputs.mod_y) force_analog_stick(128, 128);
 
     // tilt modifiers
-    if (inputs.mod_x) set_analog_stick(50, 50); // walk/ftilt
-    if (inputs.mod_y) set_analog_stick(40, 49); // dtilt + uptilt
+    if (inputs.mod_x) {
+        if (inputs.a) set_analog_stick(50, 50);
+        else set_analog_stick(56, 100); // walk/ftilt
+    } else if (inputs.mod_y) set_analog_stick(40, 49); // dtilt + uptilt
 
     // light sheild modifers
     if (inputs.lightshield) {
