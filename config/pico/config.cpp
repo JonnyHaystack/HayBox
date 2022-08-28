@@ -93,18 +93,21 @@ void setup() {
             backend_count = 1;
             primary_backend = new NintendoSwitchBackend(input_sources, input_source_count);
             backends = new CommunicationBackend *[backend_count] { primary_backend };
+
+            // Default to Ultimate mode on Switch.
             primary_backend->SetGameMode(new Ultimate(socd::SOCD_2IP));
-        } else {
-            // Default to DInput mode if no console detected.
-            // Input viewer only used when connected to PC i.e. when using DInput mode.
-            TUGamepad::registerDescriptor();
-            TUKeyboard::registerDescriptor();
-            backend_count = 2;
-            primary_backend = new DInputBackend(input_sources, input_source_count);
-            backends = new CommunicationBackend *[backend_count] {
-                primary_backend, new B0XXInputViewer(input_sources, input_source_count)
-            };
+            return;
         }
+
+        // Default to DInput mode if no console detected.
+        // Input viewer only used when connected to PC i.e. when using DInput mode.
+        TUGamepad::registerDescriptor();
+        TUKeyboard::registerDescriptor();
+        backend_count = 2;
+        primary_backend = new DInputBackend(input_sources, input_source_count);
+        backends = new CommunicationBackend *[backend_count] {
+            primary_backend, new B0XXInputViewer(input_sources, input_source_count)
+        };
     } else {
         if (console == ConnectedConsole::GAMECUBE) {
             primary_backend =
