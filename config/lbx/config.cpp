@@ -27,8 +27,7 @@ GpioButtonMapping button_mappings[] = {
 
     { &InputState::mod_x,       3 },
     { &InputState::mod_y,       0 },
-    // { &InputState::nunchuk_c,   2 }, // Dpad Toggle button
-    { &InputState::nunchuk_c,   A3 }, // Dpad Toggle button
+    { &InputState::nunchuk_c,   2 }, // Dpad Toggle button
 
     { &InputState::start,       A5},
 
@@ -38,19 +37,15 @@ GpioButtonMapping button_mappings[] = {
     { &InputState::a,           12},
     { &InputState::c_right,     6 },
 
-    // { &InputState::b,           13},
-    { &InputState::b,           A0},
+    { &InputState::b,           13},
     { &InputState::x,           5 },
     { &InputState::z,           10},
     { &InputState::up,          9 },
 
-    // { &InputState::r,           A0},
-    { &InputState::r,           13},
+    { &InputState::r,           A0},
     { &InputState::y,           A1},
-    // { &InputState::lightshield, A2},
-    { &InputState::lightshield, 2 },
-    // { &InputState::midshield,   A3},
-    { &InputState::midshield,   A2 },
+    { &InputState::lightshield, A2},
+    { &InputState::midshield,   A3},
 };
 size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
 
@@ -122,8 +117,8 @@ void setup() {
             // Hold C-Left on plugin for N64.
             primary_backend =
                 new N64Backend(input_sources, input_source_count, 60, pinout.joybus_data);
-        } else if (button_holds.a) {
-            // Hold A on plugin for GameCube adapter.
+        } else if (button_holds.c_right) {
+            // Hold C right on plugin for GameCube adapter.
             primary_backend =
                 new GamecubeBackend(input_sources, input_source_count, 0, pinout.joybus_data);
         } else {
@@ -137,8 +132,13 @@ void setup() {
         backends = new CommunicationBackend *[backend_count] { primary_backend };
     }
 
-    // Default to Melee mode.
-    primary_backend->SetGameMode(new Melee20Button(socd::SOCD_2IP_NO_REAC));
+    if (button_holds.a) {
+        // Hold A on plugin for default melee mode.
+        primary_backend->SetGameMode(new Melee20Button(socd::SOCD_2IP_NO_REAC));
+        return;
+    }
+    // Default to custom Melee mode.
+    primary_backend->SetGameMode(new Melee20ButtonCustom(socd::SOCD_2IP_NO_REAC));
 }
 
 void loop() {

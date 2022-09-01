@@ -5,6 +5,7 @@
 #include "modes/DefaultKeyboardMode.hpp"
 #include "modes/FgcMode.hpp"
 #include "modes/Melee20Button.hpp"
+#include "modes/Melee20ButtonCustom.hpp"
 #include "modes/ProjectM.hpp"
 #include "modes/RivalsOfAether.hpp"
 #include "modes/Ultimate.hpp"
@@ -32,19 +33,21 @@ void set_mode(CommunicationBackend *backend, KeyboardMode *mode) {
 
 void select_mode(CommunicationBackend *backend) {
     InputState &inputs = backend->GetInputs();
-    if (inputs.mod_x && !inputs.mod_y && inputs.start) {
-        if (inputs.l) {
+    if (inputs.mod_x && !inputs.mod_y && inputs.start && inputs.midshield) {
+        if (inputs.l) { // Melee custom
+            set_mode(backend, new Melee20ButtonCustom(socd::SOCD_2IP_NO_REAC));
+        } else if (inputs.a) { // Melee default
             set_mode(backend, new Melee20Button(socd::SOCD_2IP_NO_REAC));
-        } else if (inputs.left) {
+        } else if (inputs.left) { // PM
             set_mode(backend, new ProjectM(socd::SOCD_2IP_NO_REAC, true, false));
-        } else if (inputs.down) {
+        } else if (inputs.down) { // Ultimate
             set_mode(backend, new Ultimate(socd::SOCD_2IP));
-        } else if (inputs.right) {
+        } else if (inputs.right) { // FGC
             set_mode(backend, new FgcMode(socd::SOCD_NEUTRAL));
-        } else if (inputs.b) {
+        } else if (inputs.b) {  // Rivals
             set_mode(backend, new RivalsOfAether(socd::SOCD_2IP));
         }
-    } else if (inputs.mod_y && !inputs.mod_x && inputs.start) {
+    } else if (inputs.mod_y && !inputs.mod_x && inputs.start && inputs.midshield) {
         if (inputs.l) {
             set_mode(backend, new DefaultKeyboardMode(socd::SOCD_2IP));
         }
