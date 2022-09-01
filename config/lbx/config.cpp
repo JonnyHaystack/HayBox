@@ -132,8 +132,8 @@ void setup() {
         backends = new CommunicationBackend *[backend_count] { primary_backend };
     }
 
-    // Default to Melee mode.
-    primary_backend->SetGameMode(new SmashboxClone(socd::SOCD_2IP));
+    // Default to My mode.
+    primary_backend->SetGameMode(new UltPika(socd::SOCD_2IP));
 }
 
 void loop() {

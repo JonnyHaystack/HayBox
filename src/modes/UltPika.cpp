@@ -18,13 +18,13 @@ UltPika::UltPika(socd::SocdType socd_type) : ControllerMode(socd_type) {
 void UltPika::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
     outputs.a = inputs.a;
     outputs.b = inputs.b || (inputs.lightshield && inputs.y);
-    outputs.x = inputs.x;
+    outputs.x = inputs.x || inputs.midshield;
     outputs.y = inputs.y;
     outputs.buttonR = inputs.z;
     outputs.start = inputs.start;
     outputs.dpadUp = inputs.nunchuk_c;
 
-    // Turn on D-Pad layer by holding Mod X + Mod Y or Nunchuk C button.
+    // Turn on D-Pad layer by holding Mod X + Mod Y.
     if (inputs.mod_x && inputs.mod_y) {
         outputs.dpadUp = inputs.c_down;
         outputs.dpadDown = inputs.c_up;
@@ -62,14 +62,19 @@ void UltPika::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         outputs
     );
 
-    // Shut off A-stick when using D-Pad layer.
-    if (inputs.mod_x && inputs.mod_y) force_analog_stick(128, 128);
-
     // tilt modifiers
-    if (inputs.mod_x) {
-        if (inputs.a) set_analog_stick(50, 50);
-        else set_analog_stick(56, 100); // walk/ftilt
-    } else if (inputs.mod_y) set_analog_stick(40, 49); // dtilt + uptilt
+    if (inputs.mod_y) {
+        if (inputs.a) set_analog_stick(50, 50); // ftilt
+        else set_analog_stick(35, 100); // slow walk
+    } else if (inputs.mod_x) {
+        if (inputs.z || inputs.r) set_analog_stick(88, 47); // wavedash 
+        else if (inputs.a) {
+            if (!directions.vertical) { // tilts
+                set_analog_stick(50, 50); // angle ftilt up
+                outputs.leftStickY = 178;
+            } else set_analog_stick(40, 49); // dtilt + uptilt
+        } else set_analog_stick(56, 100); // reduced walk
+    }
 
     // light sheild modifers
     if (inputs.lightshield) {
@@ -82,19 +87,16 @@ void UltPika::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         outputs.triggerRAnalog = 140;
         if (directions.diagonal) set_analog_stick(88, 47); // wavedash
     }
-    if (inputs.l) {
-        outputs.triggerLAnalog = 140;
-        if (!inputs.r && !inputs.y && !inputs.x) set_analog_stick(50, 50); // force shield tilt
-    }
+    if (inputs.l) outputs.triggerLAnalog = 140;
 
     // quick attack mode
     if (inputs.b) {
-        if (inputs.a) set_analog_stick(35, 100);
-        else if (inputs.mod_x) set_analog_stick(56, 100);
-        else if (inputs.c_down) {set_analog_stick(93, 30); outputs.rightStickY = 128;} 
-        else if (inputs.mod_y) set_analog_stick(88, 47);
+        if (inputs.mod_x) set_analog_stick(56, 100); //very steep angle
+        else if (inputs.mod_y) set_analog_stick(35, 100); // steep angle
+        else if (inputs.a) {set_analog_stick(88, 47); outputs.a = false;} // shallow
+        else if (inputs.c_down) {set_analog_stick(93, 30); outputs.rightStickY = 128;} // very shallow   
     }
 
-    // force neutral
-    if (inputs.midshield) force_analog_stick(128, 128);
+    // Shut off A-stick when using D-Pad layer.
+    if (inputs.mod_x && inputs.mod_y) force_analog_stick(128, 128);
 }
