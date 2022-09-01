@@ -18,7 +18,7 @@ UltPika::UltPika(socd::SocdType socd_type) : ControllerMode(socd_type) {
 void UltPika::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
     outputs.a = inputs.a;
     outputs.b = inputs.b || (inputs.lightshield && inputs.y);
-    outputs.x = inputs.x || inputs.midshield;
+    outputs.x = inputs.x;
     outputs.y = inputs.y;
     outputs.buttonR = inputs.z;
     outputs.start = inputs.start;
@@ -95,6 +95,12 @@ void UltPika::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         else if (inputs.mod_y) set_analog_stick(35, 100); // steep angle
         else if (inputs.a) {set_analog_stick(88, 47); outputs.a = false;} // shallow
         else if (inputs.c_down) {set_analog_stick(93, 30); outputs.rightStickY = 128;} // very shallow   
+    }
+
+    // Qa2 OS c-stick angles
+    if (inputs.midshield) {
+        outputs.rightStickY = 57;
+        outputs.rightStickX = 128 + directions.x * -57;
     }
 
     // Shut off A-stick when using D-Pad layer.
