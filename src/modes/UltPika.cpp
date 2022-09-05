@@ -1,5 +1,7 @@
 /* Ultimate profile by Nathan "Sleepy" Koenigsmark for expermenting with weird pika ideas*/
 #include "modes/UltPika.hpp"
+#include <stdlib.h>
+#include <time.h>
 
 #define ANALOG_STICK_MIN 28
 #define ANALOG_STICK_NEUTRAL 128
@@ -7,6 +9,7 @@
 
 UltPika::UltPika(socd::SocdType socd_type) : ControllerMode(socd_type) {
     _socd_pair_count = 4;
+    srand(time(NULL));
     _socd_pairs = new socd::SocdPair[_socd_pair_count]{
         socd::SocdPair{ &InputState::left,   &InputState::right  },
         socd::SocdPair{ &InputState::down,   &InputState::up     },
@@ -67,19 +70,11 @@ void UltPika::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         if (inputs.a) set_analog_stick(50, 50); // ftilt
         else set_analog_stick(35, 100); // slow walk
     } else if (inputs.mod_x) {
-        if (inputs.z || inputs.r) set_analog_stick(88, 47); // wavedash 
+        if (inputs.z) set_analog_stick(88, 47); // wavedash 
         else if (inputs.a) {
-            if (!directions.vertical) { // tilts
-                set_analog_stick(50, 50); // angle ftilt up
-                outputs.leftStickY = 178;
-            } else set_analog_stick(40, 49); // dtilt + uptilt
+            if (!directions.vertical) set_analog_stick(50, 50); // angle ftilt up
+            else set_analog_stick(40, 49); // dtilt + uptilt
         } else set_analog_stick(56, 100); // reduced walk
-    }
-
-    // light sheild modifers
-    if (inputs.lightshield) {
-        if (directions.vertical) force_analog_stick(169, 128); // double up zip
-        else set_analog_stick(28, 100); // force jolt
     }
 
     // set the shield triggers
@@ -91,16 +86,25 @@ void UltPika::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
 
     // quick attack mode
     if (inputs.b) {
-        if (inputs.mod_x) set_analog_stick(56, 100); //very steep angle
+        if (inputs.c_up) {force_analog_stick(169, 128); outputs.rightStickY = 128;} // double up zip
+        else if (inputs.mod_x) set_analog_stick(56, 100); // very steep angle
         else if (inputs.mod_y) set_analog_stick(35, 100); // steep angle
+        else if (inputs.c_left) {set_analog_stick(56, 83); outputs.rightStickX = 128;} // sliughtly steep
         else if (inputs.a) {set_analog_stick(88, 47); outputs.a = false;} // shallow
-        else if (inputs.c_down) {set_analog_stick(93, 30); outputs.rightStickY = 128;} // very shallow   
+        else if (inputs.c_down) {set_analog_stick(93, 30); outputs.rightStickY = 128;} // very shallow
+        else if (inputs.c_right) {set_analog_stick(83, 56); outputs.rightStickX = 128;} // slightly shallow
     }
 
     // Qa2 OS c-stick angles
     if (inputs.midshield) {
         outputs.rightStickY = 57;
         outputs.rightStickX = 128 + directions.x * -57;
+    }
+
+    // light sheild modifers
+    if (inputs.lightshield) {
+        if (directions.vertical) force_analog_stick(169, 128); // double up zip
+        else set_analog_stick(28, 100); // force jolt
     }
 
     // Shut off A-stick when using D-Pad layer.
