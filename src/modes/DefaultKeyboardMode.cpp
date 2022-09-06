@@ -26,7 +26,7 @@ void DefaultKeyboardMode::UpdateKeys(InputState &inputs) {
     Press(HID_KEY_R, inputs.c_up);
     Press(HID_KEY_Z, inputs.c_left);
     Press(HID_KEY_T, inputs.c_right);
-    Press(HID_KEY_N, inputs.a);
+    Press(HID_KEY_J, inputs.a);
     Press(HID_KEY_V, inputs.c_down);
     Press(HID_KEY_C, inputs.nunchuk_c);
 }
