@@ -127,10 +127,10 @@ void NintendoSwitchBackend::SendReport() {
     _report.home = _outputs.home;
 
     // Analog outputs
-    _report.lx = _outputs.leftStickX;
-    _report.ly = 255 - _outputs.leftStickY;
-    _report.rx = _outputs.rightStickX;
-    _report.ry = 255 - _outputs.rightStickY;
+    _report.lx = (_outputs.leftStickX - 128) * 1.25 + 128;
+    _report.ly = 255 - ((_outputs.leftStickY - 128) * 1.25 + 128);
+    _report.rx = (_outputs.rightStickX - 128) * 1.25 + 128;
+    _report.ry = 255 - ((_outputs.rightStickY - 128) * 1.25 + 128);
 
     // D-pad Hat Switch
     _report.hat =
@@ -139,8 +139,12 @@ void NintendoSwitchBackend::SendReport() {
     TUCompositeHID::_usb_hid.sendReport(_report_id, &_report, sizeof(switch_gamepad_report_t));
 }
 
-switch_gamepad_hat_t
-NintendoSwitchBackend::GetHatPosition(bool left, bool right, bool down, bool up) {
+switch_gamepad_hat_t NintendoSwitchBackend::GetHatPosition(
+    bool left,
+    bool right,
+    bool down,
+    bool up
+) {
     switch_gamepad_hat_t angle = SWITCH_HAT_CENTERED;
     if (right && !left) {
         angle = SWITCH_HAT_RIGHT;
