@@ -15,36 +15,36 @@ RivalsOfAether::RivalsOfAether(socd::SocdType socd_type) : ControllerMode(socd_t
 }
 
 void RivalsOfAether::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
-    outputs.a = inputs.a;
-    outputs.b = inputs.b;
+outputs.a = inputs.a;
+    outputs.b = inputs.b || inputs.y;
     outputs.x = inputs.x;
-    outputs.y = inputs.y;
+    outputs.y = inputs.midshield;
     outputs.buttonR = inputs.z;
-    if (inputs.nunchuk_connected) {
-        // Lightshield with C button.
-        if (inputs.nunchuk_c) {
-            outputs.triggerLAnalog = 49;
-        }
-        outputs.triggerLDigital = inputs.nunchuk_z;
-    } else {
-        outputs.triggerLDigital = inputs.l;
-    }
-    outputs.triggerRDigital = inputs.r;
     outputs.start = inputs.start;
+    outputs.dpadUp = inputs.nunchuk_c;
 
-    // Activate D-Pad layer by holding Mod X + Mod Y.
+    // Turn on D-Pad layer by holding Mod X + Mod Y.
     if (inputs.mod_x && inputs.mod_y) {
-        outputs.dpadUp = inputs.c_up;
-        outputs.dpadDown = inputs.c_down;
+        outputs.dpadUp = inputs.c_down;
+        outputs.dpadDown = inputs.c_up;
         outputs.dpadLeft = inputs.c_left;
         outputs.dpadRight = inputs.c_right;
     }
-
-    outputs.select = inputs.select;
-    outputs.home = inputs.home;
 }
 
-void RivalsOfAether::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
+void RivalsOfAether::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {    
+    // set a tilt modifer
+    auto set_analog_stick = [&](int x_percent, int y_percent) {
+        outputs.leftStickX = 128 + directions.x * x_percent;
+        outputs.leftStickY = 128 + directions.y * y_percent;
+    };
+
+    // set the left stick to a forced value
+    auto force_analog_stick = [&](int x_value, int y_value) {
+        outputs.leftStickX = x_value;
+        outputs.leftStickY = y_value;
+    };
+
     // Coordinate calculations to make modifier handling simpler.
     UpdateDirections(
         inputs.left,
@@ -53,117 +53,50 @@ void RivalsOfAether::UpdateAnalogOutputs(InputState &inputs, OutputState &output
         inputs.up,
         inputs.c_left,
         inputs.c_right,
+        inputs.c_up, // swapped up and down
         inputs.c_down,
-        inputs.c_up,
         ANALOG_STICK_MIN,
         ANALOG_STICK_NEUTRAL,
         ANALOG_STICK_MAX,
         outputs
     );
 
-    bool shield_button_pressed = inputs.l || inputs.r;
-
-    if (inputs.mod_x) {
-        if (directions.horizontal) {
-            outputs.leftStickX = 128 + (directions.x * 66);
-        }
-
-        // Angled fsmash
-        if (directions.cx != 0) {
-            outputs.rightStickX = 128 + (directions.cx * 65);
-            outputs.rightStickY = 128 + (directions.y * 23);
-        }
-
-        // Need to check coord system in RoA
-
-        /* Up B angles */
-        if (directions.diagonal && !shield_button_pressed) {
-            outputs.leftStickX = 128 + (directions.x * 59);
-            outputs.leftStickY = 128 + (directions.y * 23);
-
-            if (inputs.c_down) {
-                outputs.leftStickX = 128 + (directions.x * 49);
-                outputs.leftStickY = 128 + (directions.y * 24);
-            }
-
-            if (inputs.c_left) {
-                outputs.leftStickX = 128 + (directions.x * 52);
-                outputs.leftStickY = 128 + (directions.y * 31);
-            }
-
-            if (inputs.c_up) {
-                outputs.leftStickX = 128 + (directions.x * 49);
-                outputs.leftStickY = 128 + (directions.y * 35);
-            }
-
-            if (inputs.c_right) {
-                outputs.leftStickX = 128 + (directions.x * 51);
-                outputs.leftStickY = 128 + (directions.y * 43);
-            }
-        }
-    }
-
+    // tilt modifiers
     if (inputs.mod_y) {
-        if (directions.horizontal) {
-            outputs.leftStickX = 128 + (directions.x * 44);
-        }
-
-        /* Up B angles */
-        if (directions.diagonal && !shield_button_pressed) {
-            outputs.leftStickX = 128 + (directions.x * 44);
-            outputs.leftStickY = 128 + (directions.y * 113);
-
-            if (inputs.c_down) {
-                outputs.leftStickX = 128 + (directions.x * 44);
-                outputs.leftStickY = 128 + (directions.y * 90);
-            }
-
-            if (inputs.c_left) {
-                outputs.leftStickX = 128 + (directions.x * 44);
-                outputs.leftStickY = 128 + (directions.y * 74);
-            }
-
-            if (inputs.c_up) {
-                outputs.leftStickX = 128 + (directions.x * 45);
-                outputs.leftStickY = 128 + (directions.y * 63);
-            }
-
-            if (inputs.c_right) {
-                outputs.leftStickX = 128 + (directions.x * 47);
-                outputs.leftStickY = 128 + (directions.y * 57);
-            }
-        }
+        if (inputs.a) set_analog_stick(50, 50); // ftilt
+        else set_analog_stick(35, 100); // slow walk
+    } else if (inputs.mod_x) {
+        if (inputs.z) set_analog_stick(88, 47); // wavedash 
+        else if (inputs.a) {
+            if (!directions.vertical) set_analog_stick(50, 50); // angle ftilt up
+            else set_analog_stick(40, 49); // dtilt + uptilt
+        } else set_analog_stick(56, 100); // reduced walk
     }
 
-    if (inputs.l) {
-        if (directions.horizontal)
-            outputs.leftStickX = 128 + (directions.x * 100);
-        if (directions.vertical)
-            outputs.leftStickY = 128 + (directions.y * 100);
-        if (directions.horizontal && (directions.y == -1)) {
-            outputs.leftStickX = 128 + (directions.x * 100);
-            outputs.leftStickY = ANALOG_STICK_MIN;
-        }
-    }
-
+    // set the shield triggers
     if (inputs.r) {
-        if (directions.diagonal) {
-            if (inputs.mod_y) {
-                outputs.leftStickX = 128 + (directions.x * 40);
-                outputs.leftStickY = 128 + (directions.y * 68);
-            }
-        }
+        outputs.triggerRAnalog = 140;
+        if (directions.diagonal) set_analog_stick(88, 47); // wavedash
+    }
+    if (inputs.l) outputs.triggerLAnalog = 140;
+
+    // quick attack mode
+    if (inputs.b) {
+        if (inputs.c_up) {force_analog_stick(169, 128); outputs.rightStickY = 128;} // double up zip
+        else if (inputs.mod_x) set_analog_stick(56, 100); // very steep angle
+        else if (inputs.mod_y) set_analog_stick(35, 100); // steep angle
+        else if (inputs.c_left) {set_analog_stick(56, 83); outputs.rightStickX = 128;} // sliughtly steep
+        else if (inputs.a) {set_analog_stick(88, 47); outputs.a = false;} // shallow
+        else if (inputs.c_down) {set_analog_stick(93, 30); outputs.rightStickY = 128;} // very shallow
+        else if (inputs.c_right) {set_analog_stick(83, 56); outputs.rightStickX = 128;} // slightly shallow
     }
 
-    // Shut off C-stick when using D-Pad layer.
-    if (inputs.mod_x && inputs.mod_y) {
-        outputs.rightStickX = 128;
-        outputs.rightStickY = 128;
+    // light sheild modifers
+    if (inputs.lightshield) {
+        set_analog_stick(28, 100); // force jolt
     }
 
-    // Nunchuk overrides left stick.
-    if (inputs.nunchuk_connected) {
-        outputs.leftStickX = inputs.nunchuk_x;
-        outputs.leftStickY = inputs.nunchuk_y;
-    }
+    // Shut off A-stick when using D-Pad layer.
+    if (inputs.mod_x && inputs.mod_y) force_analog_stick(128, 128);
+
 }
