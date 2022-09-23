@@ -87,12 +87,12 @@ void UltPika::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
     // quick attack mode
     if (inputs.b) {
         if (inputs.c_up) {force_analog_stick(169, 128); outputs.rightStickY = 128;} // double up zip
-        else if (inputs.mod_x) set_analog_stick(56, 100); // very steep angle
-        else if (inputs.mod_y) set_analog_stick(35, 100); // steep angle
         else if (inputs.c_left) {set_analog_stick(56, 83); outputs.rightStickX = 128;} // sliughtly steep
         else if (inputs.a) {set_analog_stick(88, 47); outputs.a = false;} // shallow
         else if (inputs.c_down) {set_analog_stick(93, 30); outputs.rightStickY = 128;} // very shallow
         else if (inputs.c_right) {set_analog_stick(83, 56); outputs.rightStickX = 128;} // slightly shallow
+        else if (inputs.mod_x) set_analog_stick(56, 100); // very steep angle
+        else if (inputs.mod_y) set_analog_stick(35, 100); // steep angle 
     }
 
     // Qa2 OS c-stick angles
@@ -108,5 +108,5 @@ void UltPika::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
     }
 
     // Shut off A-stick when using D-Pad layer.
-    if (inputs.mod_x && inputs.mod_y) force_analog_stick(128, 128);
+    if (inputs.mod_x && inputs.mod_y) outputs.rightStickX = 128, outputs.rightStickY = 128;
 }
