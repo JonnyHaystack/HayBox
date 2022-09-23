@@ -44,7 +44,7 @@ SOFTWARE.
         HID_USAGE          ( HID_USAGE_DESKTOP_RX                   ) ,\
         HID_USAGE          ( HID_USAGE_DESKTOP_RY                   ) ,\
         HID_LOGICAL_MIN    ( 0                                      ) ,\
-        HID_LOGICAL_MAX_N  ( 0xffff, 4                              ) ,\
+        HID_LOGICAL_MAX_N  ( 0xffff, 3                              ) ,\
         HID_REPORT_COUNT   ( 6                                      ) ,\
         HID_REPORT_SIZE    ( 16                                     ) ,\
         HID_INPUT          ( HID_DATA | HID_VARIABLE | HID_ABSOLUTE ) ,\
