@@ -97,8 +97,9 @@ void UltPika::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
 
     // Qa2 OS c-stick angles
     if (inputs.midshield) {
-        outputs.rightStickY = 57;
-        outputs.rightStickX = 128 + directions.x * -57;
+        outputs.rightStickY = 28; outputs.rightStickX = 128;
+        // outputs.rightStickY = 57;
+        // outputs.rightStickX = 128 + directions.x * -57;
     }
 
     // light sheild modifers
