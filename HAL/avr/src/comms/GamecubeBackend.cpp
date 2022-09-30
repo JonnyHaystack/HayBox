@@ -45,8 +45,8 @@ void GamecubeBackend::SendReport() {
     _data.report.l = _outputs.triggerLDigital;
     _data.report.r = _outputs.triggerRDigital;
     _data.report.start = _outputs.start;
-    _data.report.dleft = _outputs.dpadLeft;
-    _data.report.dright = _outputs.dpadRight;
+    _data.report.dleft = _outputs.dpadLeft | _outputs.select;
+    _data.report.dright = _outputs.dpadRight | _outputs.home;
     _data.report.ddown = _outputs.dpadDown;
     _data.report.dup = _outputs.dpadUp;
 
