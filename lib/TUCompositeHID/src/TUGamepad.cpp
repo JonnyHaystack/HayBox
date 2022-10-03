@@ -43,8 +43,8 @@ SOFTWARE.
         HID_USAGE          ( HID_USAGE_DESKTOP_RZ                   ) ,\
         HID_USAGE          ( HID_USAGE_DESKTOP_RX                   ) ,\
         HID_USAGE          ( HID_USAGE_DESKTOP_RY                   ) ,\
-        HID_LOGICAL_MIN_N  ( INT16_MIN, 2                           ) ,\
-        HID_LOGICAL_MAX_N  ( INT16_MAX, 2                           ) ,\
+        HID_LOGICAL_MIN    ( 0                                      ) ,\
+        HID_LOGICAL_MAX_N  ( 0xffff, 3                              ) ,\
         HID_REPORT_COUNT   ( 6                                      ) ,\
         HID_REPORT_SIZE    ( 16                                     ) ,\
         HID_INPUT          ( HID_DATA | HID_VARIABLE | HID_ABSOLUTE ) ,\
@@ -129,27 +129,27 @@ void TUGamepad::buttons(uint16_t buttons) {
 }
 
 void TUGamepad::leftXAxis(uint8_t value) {
-    _report.x = ((value - 128) << 8) + 127;
+    _report.x = value * 257;
 }
 
 void TUGamepad::leftYAxis(uint8_t value) {
-    _report.y = ((value - 128) << 8) + 127;
+    _report.y = value * 257;
 }
 
 void TUGamepad::rightXAxis(uint8_t value) {
-    _report.rx = ((value - 128) << 8) + 127;
+    _report.rx = value * 257;
 }
 
 void TUGamepad::rightYAxis(uint8_t value) {
-    _report.ry = ((value - 128) << 8) + 127;
+    _report.ry = value * 257;
 }
 
 void TUGamepad::triggerLAnalog(uint8_t value) {
-    _report.z = ((value - 128) << 8) + 127;
+    _report.z = value * 257;
 }
 
 void TUGamepad::triggerRAnalog(uint8_t value) {
-    _report.rz = ((value - 128) << 8) + 127;
+    _report.rz = value * 257;
 }
 
 void TUGamepad::hatSwitch(hid_gamepad_hat_t direction) {
