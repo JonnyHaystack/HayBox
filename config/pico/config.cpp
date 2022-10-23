@@ -3,6 +3,7 @@
 #include "comms/GamecubeBackend.hpp"
 #include "comms/N64Backend.hpp"
 #include "comms/NintendoSwitchBackend.hpp"
+#include "comms/XInputBackend.hpp"
 #include "config/mode_selection.hpp"
 #include "core/CommunicationBackend.hpp"
 #include "core/InputMode.hpp"
@@ -97,17 +98,23 @@ void setup() {
             // Default to Ultimate mode on Switch.
             primary_backend->SetGameMode(new Ultimate(socd::SOCD_2IP));
             return;
+        } else if (button_holds.z) {
+            // If no console detected and Z is held on plugin then use DInput backend.
+            TUGamepad::registerDescriptor();
+            TUKeyboard::registerDescriptor();
+            backend_count = 2;
+            primary_backend = new DInputBackend(input_sources, input_source_count);
+            backends = new CommunicationBackend *[backend_count] {
+                primary_backend, new B0XXInputViewer(input_sources, input_source_count)
+            };
+        } else {
+            // Default to XInput mode if no console detected and no other mode forced.
+            backend_count = 2;
+            primary_backend = new XInputBackend(input_sources, input_source_count);
+            backends = new CommunicationBackend *[backend_count] {
+                primary_backend, new B0XXInputViewer(input_sources, input_source_count)
+            };
         }
-
-        // Default to DInput mode if no console detected.
-        // Input viewer only used when connected to PC i.e. when using DInput mode.
-        TUGamepad::registerDescriptor();
-        TUKeyboard::registerDescriptor();
-        backend_count = 2;
-        primary_backend = new DInputBackend(input_sources, input_source_count);
-        backends = new CommunicationBackend *[backend_count] {
-            primary_backend, new B0XXInputViewer(input_sources, input_source_count)
-        };
     } else {
         if (console == ConnectedConsole::GAMECUBE) {
             primary_backend =
@@ -116,7 +123,7 @@ void setup() {
             primary_backend = new N64Backend(input_sources, input_source_count, pinout.joybus_data);
         }
 
-        // If not DInput then only using 1 backend (no input viewer).
+        // If console then only using 1 backend (no input viewer).
         backend_count = 1;
         backends = new CommunicationBackend *[backend_count] { primary_backend };
     }
