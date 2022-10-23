@@ -4,7 +4,8 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 208
 
-Melee20Button::Melee20Button(socd::SocdType socd_type) : ControllerMode(socd_type) {
+Melee20Button::Melee20Button(socd::SocdType socd_type, Melee20ButtonOptions options)
+    : ControllerMode(socd_type) {
     _socd_pair_count = 4;
     _socd_pairs = new socd::SocdPair[_socd_pair_count]{
         socd::SocdPair{&InputState::left,    &InputState::right  },
@@ -13,11 +14,12 @@ Melee20Button::Melee20Button(socd::SocdType socd_type) : ControllerMode(socd_typ
         socd::SocdPair{ &InputState::c_down, &InputState::c_up   },
     };
 
-    horizontal_socd = false;
+    _options = options;
+    _horizontal_socd = false;
 }
 
 void Melee20Button::HandleSocd(InputState &inputs) {
-    horizontal_socd = inputs.left && inputs.right;
+    _horizontal_socd = inputs.left && inputs.right;
     InputMode::HandleSocd(inputs);
 }
 
@@ -68,12 +70,13 @@ void Melee20Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
 
     bool shield_button_pressed = inputs.l || inputs.r || inputs.lightshield || inputs.midshield;
     if (directions.diagonal) {
-        // L, R, LS, and MS + q1/2 = 7000 7000
+        // q1/2 = 7000 7000
         outputs.leftStickX = 128 + (directions.x * 56);
         outputs.leftStickY = 128 + (directions.y * 56);
         // L, R, LS, and MS + q3/4 = 7000 6875 (For vanilla shield drop. Gives 44.5
-        // degree wavedash).
-        if (directions.y == -1 && shield_button_pressed) {
+        // degree wavedash). Also used as default q3/4 diagonal if crouch walk option select is
+        // enabled.
+        if (directions.y == -1 && (shield_button_pressed || _options.crouch_walk_os)) {
             outputs.leftStickX = 128 + (directions.x * 56);
             outputs.leftStickY = 128 + (directions.y * 55);
         }
@@ -256,7 +259,7 @@ void Melee20Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
 
     // Horizontal SOCD overrides X-axis modifiers (for ledgedash maximum jump
     // trajectory).
-    if (horizontal_socd && !directions.vertical) {
+    if (_horizontal_socd && !directions.vertical) {
         outputs.leftStickX = 128 + (directions.x * 80);
     }
 
