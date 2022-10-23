@@ -4,8 +4,7 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 228
 
-ProjectM::ProjectM(socd::SocdType socd_type, bool ledgedash_max_jump_traj, bool true_z_press)
-    : ControllerMode(socd_type) {
+ProjectM::ProjectM(socd::SocdType socd_type, ProjectMOptions options) : ControllerMode(socd_type) {
     _socd_pair_count = 4;
     _socd_pairs = new socd::SocdPair[_socd_pair_count]{
         socd::SocdPair{&InputState::left,    &InputState::right  },
@@ -14,13 +13,12 @@ ProjectM::ProjectM(socd::SocdType socd_type, bool ledgedash_max_jump_traj, bool 
         socd::SocdPair{ &InputState::c_down, &InputState::c_up   },
     };
 
-    this->ledgedash_max_jump_traj = ledgedash_max_jump_traj;
-    this->true_z_press = true_z_press;
-    horizontal_socd = false;
+    _options = options;
+    _horizontal_socd = false;
 }
 
 void ProjectM::HandleSocd(InputState &inputs) {
-    horizontal_socd = inputs.left && inputs.right;
+    _horizontal_socd = inputs.left && inputs.right;
     InputMode::HandleSocd(inputs);
 }
 
@@ -30,7 +28,7 @@ void ProjectM::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
     outputs.x = inputs.x;
     outputs.y = inputs.y;
     // True Z press vs macro lightshield + A.
-    if (true_z_press || inputs.mod_x) {
+    if (_options.true_z_press || inputs.mod_x) {
         outputs.buttonR = inputs.z;
     } else {
         outputs.a = inputs.a || inputs.z;
@@ -191,7 +189,7 @@ void ProjectM::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
 
     // Horizontal SOCD overrides X-axis modifiers (for ledgedash maximum jump
     // trajectory).
-    if (ledgedash_max_jump_traj && horizontal_socd && !directions.vertical &&
+    if (_options.ledgedash_max_jump_traj && _horizontal_socd && !directions.vertical &&
         !shield_button_pressed) {
         outputs.leftStickX = 128 + (directions.x * 100);
     }
@@ -201,7 +199,7 @@ void ProjectM::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
     }
 
     // Send lightshield input if we are using Z = lightshield + A macro.
-    if (inputs.z && !(inputs.mod_x || true_z_press)) {
+    if (inputs.z && !(inputs.mod_x || _options.true_z_press)) {
         outputs.triggerRAnalog = 49;
     }
 
