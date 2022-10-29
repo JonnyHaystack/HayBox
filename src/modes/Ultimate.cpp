@@ -20,9 +20,10 @@ void Ultimate::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
     outputs.b = inputs.b;
     outputs.x = inputs.x;
     outputs.y = inputs.y;
-    outputs.buttonR = inputs.z;
-    outputs.triggerLDigital = inputs.l;
-    outputs.triggerRDigital = inputs.r;
+    outputs.buttonR = inputs.z; // Switch: R
+    outputs.buttonL = inputs.lightshield; // Switch: L
+    outputs.triggerLDigital = inputs.l; // Switch: ZL
+    outputs.triggerRDigital = inputs.r; // Switch:ZR
     outputs.start = inputs.start;
     outputs.select = inputs.select;
     outputs.home = inputs.home;
