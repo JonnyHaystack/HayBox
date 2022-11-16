@@ -78,7 +78,7 @@ void UltPika::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         if (inputs.a) set_analog_stick(50, 50); // ftilt
         else set_analog_stick(35, 100); // slow walk
     } else if (inputs.mod_x) {
-        if (inputs.z) set_analog_stick(88, 47); // wavedash 
+        if (inputs.z || inputs.r) set_analog_stick(88, 47); // wavedash 
         else if (inputs.a) {
             if (!directions.vertical) set_analog_stick(50, 50); // angle ftilt up
             else set_analog_stick(40, 49); // dtilt + uptilt
@@ -86,10 +86,7 @@ void UltPika::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
     }
 
     // set the shield triggers
-    if (inputs.r) {
-        outputs.triggerRAnalog = 140;
-        if (directions.diagonal) set_analog_stick(88, 47); // wavedash
-    }
+    if (inputs.r) outputs.triggerRAnalog = 140;
     if (inputs.l) outputs.triggerLAnalog = 140;
 
     // light sheild modifers
