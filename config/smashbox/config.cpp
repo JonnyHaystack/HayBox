@@ -1,3 +1,5 @@
+#define SMASHBOX
+
 #include "comms/GamecubeBackend.hpp"
 #include "comms/N64Backend.hpp"
 #include "config/mode_selection.hpp"
@@ -17,33 +19,43 @@ size_t backend_count;
 KeyboardMode *current_kb_mode = nullptr;
 
 GpioButtonMapping button_mappings[] = {
-    {&InputState::l,            47},
-    { &InputState::left,        24},
-    { &InputState::down,        23},
-    { &InputState::right,       25},
+    {&InputState::l,              47},
+    { &InputState::left,          24},
+    { &InputState::down,          23},
+    { &InputState::right,         25},
 
-    { &InputState::mod_x,       28},
-    { &InputState::mod_y,       29},
-    { &InputState::select,      30},
-    { &InputState::home,        31},
+    { &InputState::mod_x,         28},
+    { &InputState::mod_y,         29},
+    { &InputState::select,        30},
+    { &InputState::home,          31},
 
-    { &InputState::start,       50},
+    { &InputState::start,         50},
 
-    { &InputState::c_left,      36},
-    { &InputState::c_up,        34},
-    { &InputState::c_down,      46},
-    { &InputState::a,           35},
-    { &InputState::c_right,     37},
+    { &InputState::c_left,        36},
+    { &InputState::c_up,          34},
+    { &InputState::c_down,        46},
+    { &InputState::a,             35},
+    { &InputState::c_right,       37},
 
-    { &InputState::b,           44},
-    { &InputState::x,           42},
-    { &InputState::z,           7 },
-    { &InputState::up,          45},
+    { &InputState::b,             44},
+    { &InputState::x,             42},
+    { &InputState::z,             7 },
+    { &InputState::up,            45},
 
-    { &InputState::r,           41},
-    { &InputState::y,           43},
-    { &InputState::lightshield, 40},
-    { &InputState::midshield,   12},
+    { &InputState::r,             41},
+    { &InputState::y,             43},
+    { &InputState::lightshield,   40},
+    { &InputState::midshield,     12},
+
+ // D-Pad toggle is either on or off.
+    { &InputState::toggle_dpad,   51},
+
+ /* Ternary profile rocker acts like two independent buttons.
+  * Together, they provide up to four states, although the hardware can only produce three.
+  * 0b00, 0b01, 0b10
+  */
+    { &InputState::toggle_mode_1, 38},
+    { &InputState::toggle_mode_2, 39}
 };
 size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
 

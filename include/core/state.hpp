@@ -35,6 +35,13 @@ typedef struct inputstate {
     int8_t nunchuk_y = 0;
     bool nunchuk_c = false;
     bool nunchuk_z = false;
+
+#ifdef SMASHBOX
+    // Smash Box rocker toggles.
+    bool toggle_dpad = false;
+    bool toggle_mode_1 = false;
+    bool toggle_mode_2 = false;
+#endif
 } InputState;
 
 // State describing stick direction at the quadrant level.
