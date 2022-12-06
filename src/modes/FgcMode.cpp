@@ -44,4 +44,6 @@ void FgcMode::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
     outputs.leftStickY = 128;
     outputs.rightStickX = 128;
     outputs.rightStickY = 128;
+    outputs.triggerLAnalog = outputs.triggerLDigital ? 255 : 0;
+    outputs.triggerRAnalog = outputs.triggerRDigital ? 255 : 0;
 }
