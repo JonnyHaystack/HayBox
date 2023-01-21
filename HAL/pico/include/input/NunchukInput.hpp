@@ -8,7 +8,7 @@
 
 class NunchukInput : public InputSource {
   public:
-    NunchukInput(TwoWire &wire = Wire, int detect_pin = -1, int sda_pin = -1, int scl_pin = -1);
+    NunchukInput(TwoWire &wire = Wire, int detect_pin = -1, int sda_pin = 4, int scl_pin = 5);
     ~NunchukInput();
     InputScanSpeed ScanSpeed();
     void UpdateInputs(InputState &inputs);

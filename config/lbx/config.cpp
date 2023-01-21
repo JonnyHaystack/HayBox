@@ -9,6 +9,7 @@
 #include "core/socd.hpp"
 #include "core/state.hpp"
 #include "input/GpioButtonInput.hpp"
+#include "modes/Melee20Button.hpp"
 #include "stdlib.hpp"
 
 const int brook_up_pin = 17;
@@ -139,6 +140,7 @@ void setup() {
     }
     // Default to custom Melee mode.
     primary_backend->SetGameMode(new Melee20ButtonCustom(socd::SOCD_2IP_NO_REAC));
+
 }
 
 void loop() {

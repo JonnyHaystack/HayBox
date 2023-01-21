@@ -2,7 +2,6 @@
 #define _COMMS_N64BACKEND_HPP
 
 #include "core/CommunicationBackend.hpp"
-#include "core/state.hpp"
 
 #include <N64Console.hpp>
 #include <hardware/pio.h>

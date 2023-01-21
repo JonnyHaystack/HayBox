@@ -2,7 +2,6 @@
 #define _COMMS_DINPUTBACKEND_HPP
 
 #include "core/CommunicationBackend.hpp"
-#include "core/ControllerMode.hpp"
 #include "core/InputSource.hpp"
 #include "stdlib.hpp"
 
@@ -15,7 +14,6 @@ class DInputBackend : public CommunicationBackend {
     void SendReport();
 
   private:
-    hid_gamepad_hat_t GetDpadAngle(bool left, bool right, bool down, bool up);
     TUGamepad *_gamepad;
 };
 
