@@ -22,13 +22,6 @@ void Melee20Button::HandleSocd(InputState &inputs) {
 }
 
 void Melee20Button::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
-    auto swap_inputs = [](bool &a, bool &b) {
-        bool temp = a;
-        a = b;
-        b = temp;
-    };
-    
-    swap_inputs(inputs.c_up, inputs.c_down);
     outputs.a = inputs.a;
     outputs.b = inputs.b;
     outputs.x = inputs.x;

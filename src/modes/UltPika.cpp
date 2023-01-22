@@ -1,4 +1,4 @@
-/* Ultimate profile by Nathan "Sleepy" Koenigsmark for expermenting with weird pika ideas*/
+/* Ultimate profile by Nathan "Sleepy" Koenigsmark for pika bs*/
 #include "modes/UltPika.hpp"
 #include <stdlib.h>
 #include <time.h>
@@ -19,7 +19,7 @@ UltPika::UltPika(socd::SocdType socd_type) : ControllerMode(socd_type) {
 }
 
 void UltPika::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
-    outputs.a = inputs.a;
+    outputs.a = inputs.a || inputs.midshield;
     outputs.b = inputs.b || (inputs.lightshield && inputs.y);
     outputs.x = inputs.x;
     outputs.y = inputs.y;
@@ -65,8 +65,8 @@ void UltPika::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         inputs.up,
         inputs.c_left,
         inputs.c_right,
-        inputs.c_up, // swapped up and down
         inputs.c_down,
+        inputs.c_up,
         ANALOG_STICK_MIN,
         ANALOG_STICK_NEUTRAL,
         ANALOG_STICK_MAX,
@@ -91,8 +91,8 @@ void UltPika::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
 
     // light sheild modifers
     if (inputs.lightshield) { 
-        if (directions.vertical) force_analog_stick(169, 128); // double up zip
-        else set_analog_stick(28, 100); // force jolt
+        if (!directions.horizontal || directions.y > 0) force_analog_stick(169, 128); // double up zip
+        else set_analog_stick(28, 0); // force jolt
     }
 
     // quick attack mode
