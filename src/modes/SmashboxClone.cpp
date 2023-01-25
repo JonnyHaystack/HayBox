@@ -1,4 +1,9 @@
-/* Ultimate profile by Nathan "Sleepy" Koenigsmark */
+/* 
+    Ultimate profile by Nathan "Sleepy" Koenigsmark
+
+    This attempted to mactch my old smashbox profile While i got use to a 20 button layout
+    I wont not advice anyone use this, as even I do not 
+*/
 #include "modes/SmashboxClone.hpp"
 
 #define ANALOG_STICK_MIN 28

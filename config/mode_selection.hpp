@@ -10,6 +10,7 @@
 #include "modes/Ultimate.hpp"
 #include "modes/SmashboxClone.hpp"
 #include "modes/UltPika.hpp"
+#include "modes/UltPikaV2.hpp"
 
 extern KeyboardMode *current_kb_mode;
 
@@ -59,6 +60,8 @@ void select_mode(CommunicationBackend *backend) {
             set_mode(backend, new SmashboxClone(socd::SOCD_2IP));
         } else if (inputs.z) {
             set_mode(backend, new UltPika(socd::SOCD_2IP));
+        } else if (inputs.up) {
+            set_mode(backend, new UltPikaV2(socd::SOCD_2IP));
         }
     } else if (inputs.mod_y && !inputs.mod_x && inputs.start) {
         if (inputs.l) set_mode(backend, new DefaultKeyboardMode(socd::SOCD_2IP));
