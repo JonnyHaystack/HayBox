@@ -1,4 +1,17 @@
-/* Ultimate profile by Nathan "Sleepy" Koenigsmark for pika bs*/
+/* 
+Ultimate profile by Nathan "Sleepy" Koenigsmark for pika bs
+
+attempts to closely mirror melee profile
+hold B for more angles, try lightsheild for "magic" second zip
+
+plink y->ls for jump jolt
+plink ls->y for no jump jolt
+Hold a direction while doing either of these inputs fast for free wavebounce
+
+dash + (ls or ms) for cdash, follow with mod_X + dash back + l for approving reverse shield
+
+turn around up/down tilt is on mod_x instead of mod_y because I like that
+*/
 #include "modes/UltPikaV2.hpp"
 #include <stdlib.h>
 #include <time.h>
@@ -104,24 +117,25 @@ void UltPikaV2::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
             if (inputs.c_right) { // slightly shallow
                 set_analog_stick(83, 56); 
                 mode_set_stick(35, 100, false);
-                outputs.rightStickY = 128; 
+                outputs.rightStickX = 128; 
             } else if (inputs.c_left) { // shallow
                 set_analog_stick(88, 47); 
                 mode_set_stick(93, -30, false);
-                outputs.rightStickY = 128; 
+                outputs.rightStickX = 128; 
             } else { // very shallow
                 set_analog_stick(93, 30);
                 mode_set_stick(88, -47, false);
             }
-        } else if (inputs.mod_x) {  //steep angles
+        } else if (inputs.mod_y) {  //steep angles
             if (inputs.c_right) { // slightly steep
                 set_analog_stick(56, 83); 
                 mode_set_stick(88, 47, false);
+                mode_set_stick(93, 30, false);
                 outputs.rightStickX = 128;
             } else if (inputs.c_left) { // steep
                 set_analog_stick(56, 100);
                 mode_set_stick(-35, 100, true);
-                outputs.rightStickY = 128; 
+                outputs.rightStickX = 128; 
             } else { // very steep
                 set_analog_stick(35, 100);
                 mode_set_stick(-56, 100, true);
