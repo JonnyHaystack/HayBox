@@ -9,6 +9,7 @@
 #include "core/socd.hpp"
 #include "core/state.hpp"
 #include "input/GpioButtonInput.hpp"
+#include "modes/Melee20Button.hpp"
 #include "stdlib.hpp"
 
 const int brook_up_pin = 17;
@@ -132,8 +133,10 @@ void setup() {
         backends = new CommunicationBackend *[backend_count] { primary_backend };
     }
 
-    // Default to My mode.
-    primary_backend->SetGameMode(new UltPika(socd::SOCD_2IP));
+    // Default to Melee mode.
+    primary_backend->SetGameMode(
+        new Melee20Button(socd::SOCD_2IP_NO_REAC, { .crouch_walk_os = false })
+    );
 }
 
 void loop() {

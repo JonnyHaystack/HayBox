@@ -21,7 +21,10 @@ outputs.a = inputs.a;
     outputs.y = inputs.midshield;
     outputs.buttonR = inputs.z;
     outputs.start = inputs.start;
-    outputs.dpadUp = inputs.nunchuk_c;
+    outputs.select = inputs.select;
+    outputs.home = inputs.home;
+    outputs.leftStickClick = inputs.lightshield;
+    outputs.rightStickClick = inputs.midshield;
 
     // Turn on D-Pad layer by holding Mod X + Mod Y.
     if (inputs.mod_x && inputs.mod_y) {
@@ -61,34 +64,91 @@ void RivalsOfAether::UpdateAnalogOutputs(InputState &inputs, OutputState &output
         outputs
     );
 
-    // tilt modifiers
+    bool shield_button_pressed = inputs.l || inputs.r;
+
+
+    // 48 total DI angles, 24 total Up b angles, 16 total airdodge angles
+
+    if (inputs.mod_x) {
+        if (directions.horizontal) {
+            outputs.leftStickX = 128 + (directions.x * 66);
+        }
+
+        if(directions.vertical) {
+            outputs.leftStickY = 128 + (directions.y * 44);
+        }
+
+        /* Extra DI, Air Dodge, and Up B angles */
+        if (directions.diagonal) {
+            outputs.leftStickX = 128 + (directions.x * 59);
+            outputs.leftStickY = 128 + (directions.y * 23);
+
+            // Angles just for DI and Up B
+            if (inputs.c_down) {
+                outputs.leftStickX = 128 + (directions.x * 49);
+                outputs.leftStickY = 128 + (directions.y * 24);
+            }
+
+            // Angles just for DI
+            if (inputs.c_left) {
+                outputs.leftStickX = 128 + (directions.x * 52);
+                outputs.leftStickY = 128 + (directions.y * 31);
+            }
+      
+            if (inputs.c_up) {
+                outputs.leftStickX = 128 + (directions.x * 49);
+                outputs.leftStickY = 128 + (directions.y * 35);
+            }
+     
+            if (inputs.c_right) {
+                outputs.leftStickX = 128 + (directions.x * 51);
+                outputs.leftStickY = 128 + (directions.y * 43);
+            }
+        }
+    }
+
     if (inputs.mod_y) {
-        if (inputs.a) set_analog_stick(50, 50); // ftilt
-        else set_analog_stick(35, 100); // slow walk
-    } else if (inputs.mod_x) {
-        if (inputs.z) set_analog_stick(88, 47); // wavedash 
-        else if (inputs.a) {
-            if (!directions.vertical) set_analog_stick(50, 50); // angle ftilt up
-            else set_analog_stick(40, 49); // dtilt + uptilt
-        } else set_analog_stick(56, 100); // reduced walk
+        if (directions.horizontal) {
+            outputs.leftStickX = 128 + (directions.x * 44);
+        }
+
+        if(directions.vertical) {
+            outputs.leftStickY = 128 + (directions.y * 67);
+        }
+
+        /* Extra DI, Air Dodge, and Up B angles */
+        if (directions.diagonal) {
+            outputs.leftStickX = 128 + (directions.x * 44);
+            outputs.leftStickY = 128 + (directions.y * 113);
+
+            // Angles just for DI and Up B
+            if (inputs.c_down) {
+                outputs.leftStickX = 128 + (directions.x * 44);
+                outputs.leftStickY = 128 + (directions.y * 90);
+            }
+
+            // Angles just for DI
+            if (inputs.c_left) {
+                outputs.leftStickX = 128 + (directions.x * 44);
+                outputs.leftStickY = 128 + (directions.y * 90);
+            }
+      
+            if (inputs.c_up) {
+                outputs.leftStickX = 128 + (directions.x * 45);
+                outputs.leftStickY = 128 + (directions.y * 63);
+            }
+     
+            if (inputs.c_right) {
+                outputs.leftStickX = 128 + (directions.x * 47);
+                outputs.leftStickY = 128 + (directions.y * 57);
+            }
+        }
     }
 
-    // set the shield triggers
-    if (inputs.r) {
-        outputs.triggerRAnalog = 140;
-        if (directions.diagonal) set_analog_stick(88, 47); // wavedash
-    }
-    if (inputs.l) outputs.triggerLAnalog = 140;
-
-    // quick attack mode
-    if (inputs.b) {
-        if (inputs.c_up) {force_analog_stick(169, 128); outputs.rightStickY = 128;} // double up zip
-        else if (inputs.mod_x) set_analog_stick(56, 100); // very steep angle
-        else if (inputs.mod_y) set_analog_stick(35, 100); // steep angle
-        else if (inputs.c_left) {set_analog_stick(56, 83); outputs.rightStickX = 128;} // sliughtly steep
-        else if (inputs.a) {set_analog_stick(88, 47); outputs.a = false;} // shallow
-        else if (inputs.c_down) {set_analog_stick(93, 30); outputs.rightStickY = 128;} // very shallow
-        else if (inputs.c_right) {set_analog_stick(83, 56); outputs.rightStickX = 128;} // slightly shallow
+    // Shut off C-stick when using D-Pad layer.
+    if (inputs.mod_x && inputs.mod_y) {
+        outputs.rightStickX = 128;
+        outputs.rightStickY = 128;
     }
 
     // light sheild modifers

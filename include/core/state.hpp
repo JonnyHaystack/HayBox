@@ -6,28 +6,28 @@
 // Button state.
 typedef struct inputstate {
     // Rectangle inputs.
-    bool start = false;
-    bool select = false;
-    bool home = false;
-    bool y = false;
-    bool x = false;
-    bool b = false;
+    bool left = false;
+    bool right = false;
+    bool down = false;
+    bool up = false;
+    bool c_left = false;
+    bool c_right = false;
+    bool c_down = false;
+    bool c_up = false;
     bool a = false;
+    bool b = false;
+    bool x = false;
+    bool y = false;
     bool l = false;
     bool r = false;
     bool z = false;
     bool lightshield = false;
     bool midshield = false;
-    bool up = false;
-    bool down = false;
-    bool right = false;
-    bool left = false;
+    bool select = false;
+    bool start = false;
+    bool home = false;
     bool mod_x = false;
     bool mod_y = false;
-    bool c_left = false;
-    bool c_right = false;
-    bool c_up = false;
-    bool c_down = false;
 
     // Nunchuk inputs.
     bool nunchuk_connected = false;

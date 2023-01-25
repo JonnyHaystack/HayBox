@@ -1,11 +1,34 @@
 # HayBox
 
-HayBox is a modular, cross-platform firmware for digital or mixed analog/digital controllers, primarily targeted at [B0XX](https://b0xx.com)-style
-controllers. Supported microcontrollers are Raspberry Pi Pico/RP2040 and 16MHz AVR microcontrollers. It was originally
-based on Crane's
-[DIYB0XX/GCCPCB code](https://github.com/Crane1195/GCCPCB/tree/master/code) for Arduinos,
-but I ended up doing a complete rewrite and made things much more maintainable
-and extensible.
+HayBox is a modular, cross-platform firmware for digital or mixed analog/digital controllers, primarily targeted at [B0XX](https://b0xx.com)-style controllers.
+
+[![GitHub issues](https://img.shields.io/github/issues/JonnyHaystack/HayBox)](https://github.com/JonnyHaystack/HayBox/issues)
+[![GitHub pull requests](https://img.shields.io/github/issues-pr/JonnyHaystack/HayBox)](https://github.com/JonnyHaystack/HayBox/pulls)
+
+## Table of Contents
+
+* [Features](#features)
+* [Getting Started](#getting-started)
+  * [Requirements](#requirements)
+  * [Installation](#installation)
+* [Usage](#usage)
+  * [Default button holds](#default-button-holds)
+  * [Dolphin setup](#dolphin-setup)
+* [Customisation](#customisation)
+  * [Console/gamemode selection bindings](#consolegamemode-selection-bindings)
+  * [Creating custom input modes](#creating-custom-input-modes)
+  * [Mod X lightshield and R shield tilt](#mod-x-lightshield-and-r-shield-tilt)
+  * [Mode-specific optional features](#mode-specific-optional-features)
+    * [Melee modes](#melee-modes)
+    * [Project M/Project+ mode](#project-mproject-mode)
+  * [Input sources](#input-sources)
+  * [Using the Pico's second core](#using-the-picos-second-core)
+* [Troubleshooting](#troubleshooting)
+* [Contributing](#contributing)
+* [Contributors](#contributors)
+* [License](#license)
+
+## Features
 
 Features include:
 - Cross platform support:
@@ -13,17 +36,19 @@ Features include:
   - 16MHz AVR MCUs (e.g. ATMega32U4 which several Arduinos are based on)
 - Supports many existing controllers/PCBs, e.g. B0XX, LBX, Smash Box, Crane's
   GCCPCB/Model S
-- Melee mode up to date with B0XX V3 specifications
 - Supports a variety of communication backends which can be used either separately or in conjunction with each other:
+  - XInput
   - DInput
   - GameCube console
   - Nintendo 64 console
+  - Nintendo Switch console
   - B0XX input viewer
 - Supports a variety of "input sources" which can be used in conjunction to create mixed input controllers:
   - Buttons/switches wired directly to GPIO pins
   - Switch matrix (as typically found in keyboards)
   - Wii Nunchuk
   - GameCube controller
+- Melee mode up to date with B0XX V3 specifications
 - Existing modes for popular games (e.g. Melee, Project M, Ultimate, Rivals of Aether, traditional fighting games)
 - Easy to create new controller modes (or keyboard modes) for different games
 - USB keyboard game modes for games that lack gamepad support
@@ -31,30 +56,7 @@ Features include:
 - Switch modes on the fly without unplugging your controller
 - Automatically detects whether plugged into console or USB
 - Game modes and communication backends are independent entities, meaning you can use any game mode with any supported console without extra work
-- Easily switch between different GameCube/N64 polling rates in order to have optimal latency on console, overclocked adapter, etc. Not necessary for Pico/RP2040.
-
-[![GitHub issues](https://img.shields.io/github/issues/JonnyHaystack/HayBox)](https://github.com/JonnyHaystack/HayBox/issues)
-[![GitHub pull requests](https://img.shields.io/github/issues-pr/JonnyHaystack/HayBox)](https://github.com/JonnyHaystack/HayBox/pulls)
-
-## Table of Contents
-
-* [Getting Started](#getting-started)
-  * [Requirements](#requirements)
-  * [Installation](#installation)
-* [Usage](#usage)
-  * [Default button holds](#default-button-holds)
-  * [Dolphin setup](#dolphin-setup)
-* [Configuration](#configuration)
-  * [Console/gamemode selection bindings](#consolegamemode-selection-bindings)
-  * [Creating custom input modes](#creating-custom-input-modes)
-  * [Mod X lightshield and R shield tilt](#mod-x-lightshield-and-r-shield-tilt)
-  * [Project M/Project+ mode](#project-mproject-mode)
-  * [Input sources](#input-sources)
-  * [Using the Pico's second core](#using-the-picos-second-core)
-* [Troubleshooting](#troubleshooting)
-* [Contributing](#contributing)
-* [Contributors](#contributors)
-* [License](#license)
+- Easily switch between different GameCube/N64 polling rates in order to have optimal latency on console, overclocked adapter, etc. (not necessary for Pico/RP2040)
 
 ## Getting Started
 
@@ -76,8 +78,8 @@ After that:
 3. Choose the appropriate build environment for your controller's PCB by
   clicking the environment selection button near the bottom left of the window
   
-  ![Screenshot 2021-10-19 003017](https://user-images.githubusercontent.com/1266473/137824617-4a282217-c6cc-48fb-a55c-1ca40d460538.png)
-  ![Screenshot 2021-10-19 003055](https://user-images.githubusercontent.com/1266473/137824641-4a21c8df-abe1-41fe-a15e-a6e9f5a95467.png)
+  ![image](https://user-images.githubusercontent.com/1266473/187039372-485c5f0d-60b3-4534-befb-e713f138a7c8.png)
+  ![image](https://user-images.githubusercontent.com/1266473/187039585-cea18994-fd12-45fb-b43f-427eb7affb81.png)
   
 4. If your controller has a different pinout than any of the existing configs, you may edit the button mappings and other pins at the top of the config (`config/<environment>/config.cpp`). Any buttons that your controller doesn't have can simply be deleted from the list.
 5. If you see a message in the bottom bar saying "Rebuilding IntelliSense Index" or "Loading Project Tasks", wait for it to disappear. For Pico especially it may take quite a while the first time because it has to download 2-3GB of dependencies.
@@ -105,10 +107,14 @@ plugin.
 Communication backends are selected slightly differently depending on the type
 of microcontroller used in the controller.
 
-On Pico/RP2040, there are currently no button holds required on plugin. USB vs
-GameCube vs Nintendo 64 is detected automatically. 
+On Pico/RP2040, USB vs GameCube vs Nintendo 64 is detected automatically. If
+not plugged into a console, the default is **XInput**, which should work
+plug-and-play with most PC games.
+Other backends are selected by holding one of the following buttons on plugin:
+- X - Nintendo Switch USB mode (also sets initial game mode to Ultimate mode)
+- Z - DInput mode (only recommended for games which don't support XInput)
 
-On Arduino/AVR, the DInput backend is selected if a USB connection is detected.
+On Arduino/AVR, the **DInput** backend is selected if a USB connection is detected.
 Otherwise, it defaults to GameCube backend, unless another backend is manually
 selected by holding one of the following buttons on plugin:
 - A - GameCube backend with polling rate fix disabled (used for GCC adapters)
@@ -129,22 +135,41 @@ The default controller mode button combinations are:
 - Mod X + Start + Right - FGC mode (Hitbox style fighting game layout)
 - Mod X + Start + B - Rivals of Aether mode
 
-Default keyboard mode button combinations:
+Default keyboard mode button combinations (only available when using DInput backend, **not** with XInput):
 - Mod Y + Start + L - Default keyboard mode
 
 ### Dolphin setup
 
 HayBox needs a different Dolphin controller profile than the official B0XX firmware, as it
-uses different DInput mappings that make more sense for use across multiple games. To install
-the profile:
-1. Copy the .ini file corresponding to your operating system from the `profiles/` to the folder `<YourDolphinInstallation>\User\Config\Profiles\GCPad` (create it if it does not exist)
+uses different DInput mappings that make more sense for use across multiple games. These
+can be found in the `dolphin` folder in the HayBox repo. The profile files are named to
+indicate what communication backend and operating system they are for:
+- For Windows:
+  - HayBox_XInput.ini - For Pico/RP2040-based controllers (e.g. B0XX R4)
+  - HayBox_DInput.ini - For Arduino/AVR-based controllers (e.g. B0XX R1-3, LBX)
+- For Linux:
+  - HayBox_XInput_Linux.ini - For Pico/RP2040-based controllers (e.g. B0XX R4)
+  - HayBox_DInput_Linux.ini - For Arduino/AVR-based controllers (e.g. B0XX R1-3, LBX)
+- For macOS (unsupported*):
+  - HayBox_DInput_macOS.ini
+
+To install the profile:
+1. Copy the appropriate .ini file from the `dolphin` folder within HayBox to the folder `<YourDolphinInstallation>\User\Config\Profiles\GCPad\` (create it if it does not exist)
+- For Slippi this should be
+  - On Windows: `%appdata%\Slippi Launcher\netplay\User\Config\Profiles\GCPad\`
+  - On Linux: `~/.config/SlippiOnline/Config/Profiles/GCPad/`
+- For vanilla Dolphin: 
+  - On Windows: `%userprofile%\Documents\Dolphin Emulator\Config\Profiles\GCPad\`
+  - On Linux: `~/.config/dolphin-emu/Profiles/GCPad/`
 2. Plug in your controller, and configure a "Standard Controller" in Dolphin
 3. Click **Refresh** next to the Device dropdown
 4. Select the HayBox profile from the profile dropdown, and click **Load** (NOT Save)
 5. Make sure the correct device is selected in the device dropdown
 6. Click **Close**
 
-## Configuration
+\* macOS only supports DInput (and not very well), so if using a Pico/RP2040-based controller you will have to force DInput mode by holding Z on plugin, and even then it may not work. I can't really do anything about Apple's poor controller support (which they seem to break with every other update) and I don't own any Apple devices, so this will also be considered unsupported usage of HayBox.
+
+## Customisation
 
 ### Console/gamemode selection bindings
 
@@ -210,6 +235,8 @@ create input layers (like the D-Pad layer in Melee mode that is activated when
 holding Mod X and Mod Y), or other types of conditional inputs.
 
 The list of available keycodes can be found [here](https://github.com/JonnyHaystack/ArduinoKeyboard/blob/master/include/keycodes.h).
+
+Remember that keyboard modes can only be activated when using the **DInput** communication backend (**not** XInput).
 
 #### Controller modes
 
@@ -287,27 +314,50 @@ If your controller has no lightshield buttons, you may want to use Mod X for
 lightshield and put shield tilt on R instead. You can do this by using the
 Melee18Button mode instead of Melee20Button.
 
-### Project M/Project+ mode
+### Mode-specific optional features
 
-The ProjectM mode has some extra options to configure certain behaviours. See
-the constructor signature below for reference.
+#### Melee modes
+
+The Melee20Button and Melee18Button modes provide a choice of which coordinates to use
+when pressing down + right. By default, holding down + back will allow you to do automatic
+jab-cancels, which is a useful technique for some characters.
+
+Another popular technique that uses the down + right diagonal is the so-called crouch/walk
+option-select. This technique involves holding down + forward at a certain angle while
+crouching, such that after crouch-cancelling an attack you will automatically start
+walking towards your opponent instead of going back into crouch. This can be very useful
+for tech-chasing, but the coordinates used for this technique do not allow you to auto
+jab-cancel.
+
+This can be configured as seen in `config/mode_selection.hpp` by setting the `crouch_walk_os` option to true:
 
 ```
-ProjectM(socd::SocdType socd_type, bool ledgedash_max_jump_traj, bool true_z_press);
+new Melee20Button(socd::SOCD_2IP_NO_REAC, { .crouch_walk_os = false })
 ```
 
-These options are configured by setting the relevant constructor parameter to
-`true` or `false` in `config/mode_selection.hpp`.
+You will also have to change this in your `config/<environment>/config.cpp` in order for it to be applied on plugin, as `mode_selection.hpp` only controls what happens when you *switch* mode.
 
-Firstly, this allows you to enable or disable the behaviour borrowed from Melee
-mode where holding left and right (and no vertical directions) will give a 1.0 
-cardinal regardless of modifiers being held. This is controlled using the
-`ledgedash_max_jump_traj` parameter.
+#### Project M/Project+ mode
+
+The ProjectM mode has some extra options to configure certain behaviours. As seen
+in `config/mode_selection.hpp`:
+
+```
+new ProjectM(
+    socd::SOCD_2IP_NO_REAC,
+    { .true_z_press = false, .ledgedash_max_jump_traj = true }
+)
+```
+
+Firstly, the `ledgedash_max_jump_traj` option allows you to enable or disable the behaviour
+borrowed from Melee mode where holding left and right (and no vertical directions)
+will give a 1.0 cardinal regardless of modifiers being held.
 
 If you change the SOCD mode to 2IP (with reactivation), you should also change
 this option to false if you want a smooth gameplay experience.
 
-Secondly, Project M/Project+ do not handle Z presses the same way as Melee does.
+Secondly, the `true_z_press` option exists because Project M/Project+ do not handle
+Z presses the same way Melee does.
 Melee interprets a Z press as lightshield + A, and thus it can be used for L
 cancelling without locking you out of techs. In PM/P+, a Z press will trigger a
 tech and thus cause unwanted tech lockouts if used to L cancel.
@@ -317,7 +367,7 @@ enable you to use tether/grapple attacks or grab items. To workaround this, you
 can press Mod X + Z to send a true Z input.
 
 If this bothers you, and you just want to send a true Z input by default when
-pressing Z, you can set the `true_z_press` parameter to true.
+pressing Z, you can set the `true_z_press` option to true.
 
 ### Input sources
 
@@ -393,7 +443,7 @@ see the [tags on this repository](https://github.com/JonnyHaystack/HayBox/tags).
 ## Contributors
 
 * **Jonathan Haylett** - *Creator* - [@JonnyHaystack](https://github.com/JonnyHaystack)
-* **Crane** - *Creator of the original DIYB0XX firmware* - [@Crane1195](https://github.com/Crane1195)
+* **Crane** - *Creator of the DIYB0XX firmware, which served as a great reference/starting point* - [@Crane1195](https://github.com/Crane1195)
 
 See also the list of [contributors](https://github.com/JonnyHaystack/HayBox/contributors) who participated in this project.
 
