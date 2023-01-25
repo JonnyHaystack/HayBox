@@ -412,6 +412,25 @@ The `while` loop makes sure we wait until `setup()` on core0 has finished settin
 
 As a slightly crazier hypothetical example, one could even power all the controls for a two person arcade cabinet using a single Pico by creating two switch matrix input sources using say 10 pins each, and two GameCube backends, both on separate cores. The possibilities are endless.
 
+## Sleepy's pikachu profiles
+
+mx + start + z is what I use for the rat
+mx + start + up is one with all of the features of my profile but the angles are much closer to melee angles so it should be less of pain to learn
+
+both attempt to closely mirror melee profile for easy transition
+hold B for more angles, while QA'ing
+try lightsheild for "magic" second zip angle selection
+
+plink y->ls for jump jolt/jump reverse jolt
+plink ls->y for no jump jolt/reverse jolt
+Hold a direction while doing either of these inputs fast for a free wavebounce
+
+dash + (ls or ms) for cdash, follow with mod_X + dash back + l for approaching reverse shield
+
+turn around up/down tilt is on mod_x instead of mod_y because I like that and pika's f-tilt is a bit rubish
+
+dm Sleepy!#8817 on discord if you have questions or @nathankoen on twitter
+
 ## Troubleshooting
 
 ### Controller not working with console or GameCube adapter
