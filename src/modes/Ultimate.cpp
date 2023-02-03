@@ -154,14 +154,18 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         }
     }
 
+    // TODO: Get values from stock firmware, apply here.
+    // Stock values: -29789 -19735 -9681 0 9680 19734 29788
+    // HayBox values: -32768 -17367 -13435 13434 17366 32767
     if (inputs.mod_y) {
         // MY + Horizontal (even if shield is held) = 41
         if (directions.horizontal) {
-            outputs.leftStickX = 128 + (directions.x * 41);
+            /* outputs.leftStickX = 128 + (directions.x * 41); */
+            outputs.leftStickX = 128 + (directions.x * 29);
             // MY Horizontal Tilts
-            if (inputs.a) {
-                outputs.leftStickX = 128 + (directions.x * 36);
-            }
+            /* if (inputs.a) { */
+            /*     outputs.leftStickX = 128 + (directions.x * 35); */
+            /* } */
         }
         // MY + Vertical (even if shield is held) = 53
         if (directions.vertical) {

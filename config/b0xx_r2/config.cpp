@@ -18,7 +18,7 @@ size_t backend_count;
 KeyboardMode *current_kb_mode = nullptr;
 
 GpioButtonMapping button_mappings[] = {
-    {&InputState::l,            9 },
+    { &InputState::l,           9 },
     { &InputState::left,        15},
     { &InputState::down,        16},
     { &InputState::right,       14},
@@ -69,12 +69,8 @@ void setup() {
     static InputSource *input_sources[] = { gpio_input, nunchuk };
     size_t input_source_count = sizeof(input_sources) / sizeof(InputSource *);
 
-    // Hold B on plugin for Brook board mode.
     pinMode(pinout.mux, OUTPUT);
-    if (button_holds.b)
-        digitalWrite(pinout.mux, LOW);
-    else
-        digitalWrite(pinout.mux, HIGH);
+    digitalWrite(pinout.mux, HIGH);
 
     CommunicationBackend *primary_backend = new DInputBackend(input_sources, input_source_count);
     delay(500);
@@ -95,13 +91,13 @@ void setup() {
             primary_backend =
                 new N64Backend(input_sources, input_source_count, 60, pinout.joybus_data);
         } else if (button_holds.a) {
-            // Hold A on plugin for GameCube adapter.
-            primary_backend =
-                new GamecubeBackend(input_sources, input_source_count, 0, pinout.joybus_data);
-        } else {
-            // Default to GameCube/Wii.
+            // Hold A for native GameCube/Wii.
             primary_backend =
                 new GamecubeBackend(input_sources, input_source_count, 125, pinout.joybus_data);
+        } else {
+            // Default to GameCube adapter.
+            primary_backend =
+                new GamecubeBackend(input_sources, input_source_count, 0, pinout.joybus_data);
         }
 
         // If not DInput then only using 1 backend (no input viewer).
@@ -109,10 +105,14 @@ void setup() {
         backends = new CommunicationBackend *[backend_count] { primary_backend };
     }
 
-    // Default to Melee mode.
-    primary_backend->SetGameMode(
-        new Melee20Button(socd::SOCD_2IP_NO_REAC, { .crouch_walk_os = false })
-    );
+    if (button_holds.b) {
+      primary_backend->SetGameMode(
+          new Melee20Button(socd::SOCD_2IP_NO_REAC, { .crouch_walk_os = false })
+      );
+    } else {
+    // Default to Ultimate mode with SOCD reactivation.
+    primary_backend->SetGameMode(new Ultimate(socd::SOCD_2IP));
+  }
 }
 
 void loop() {
