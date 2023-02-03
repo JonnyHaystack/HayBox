@@ -56,13 +56,9 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
     bool shield_button_pressed = inputs.l || inputs.r || inputs.lightshield || inputs.midshield;
 
     if (inputs.mod_x) {
-        // MX + Horizontal = 6625 = 53
+        // MX + Horizontal = 51 for shield tilt and tink/yink walk shield
         if (directions.horizontal) {
-            outputs.leftStickX = 128 + (directions.x * 53);
-            // Horizontal Shield tilt = 51
-            if (shield_button_pressed) {
-                outputs.leftStickX = 128 + (directions.x * 51);
-            }
+            outputs.leftStickX = 128 + (directions.x * 51);
             // Horizontal Tilts = 36
             if (inputs.a) {
                 outputs.leftStickX = 128 + (directions.x * 36);
@@ -154,18 +150,11 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         }
     }
 
-    // TODO: Get values from stock firmware, apply here.
-    // Stock values: -29789 -19735 -9681 0 9680 19734 29788
-    // HayBox values: -32768 -17367 -13435 13434 17366 32767
     if (inputs.mod_y) {
-        // MY + Horizontal (even if shield is held) = 41
+        // MY + Horizontal = 28
         if (directions.horizontal) {
-            /* outputs.leftStickX = 128 + (directions.x * 41); */
-            outputs.leftStickX = 128 + (directions.x * 29);
-            // MY Horizontal Tilts
-            /* if (inputs.a) { */
-            /*     outputs.leftStickX = 128 + (directions.x * 35); */
-            /* } */
+            // Turn-around jab, shield tilt
+            outputs.leftStickX = 128 + (directions.x * 28);
         }
         // MY + Vertical (even if shield is held) = 53
         if (directions.vertical) {
@@ -180,14 +169,9 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
             outputs.leftStickX = 128 + (directions.x * 35);
             outputs.leftStickY = 128 + (directions.y * 53);
             if (shield_button_pressed) {
-                // MY + L, R, LS, and MS + q1/2 = 38 70
-                outputs.leftStickX = 128 + (directions.x * 38);
-                outputs.leftStickY = 128 + (directions.y * 70);
-                // MY + L, R, LS, and MS + q3/4 = 40 68
-                if (directions.x == -1) {
-                    outputs.leftStickX = 128 + (directions.x * 40);
-                    outputs.leftStickY = 128 + (directions.y * 68);
-                }
+                // MY + L, R, LS, and MS + q1/2 = 40 68 (prevents up smash)
+                outputs.leftStickX = 128 + (directions.x * 40);
+                outputs.leftStickY = 128 + (directions.y * 68);
             }
         }
 
@@ -246,6 +230,7 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
 
             // MY Pivot Uptilt/Dtilt
             if (inputs.a) {
+                // 34 38 for consistent pivot dtilt
                 outputs.leftStickX = 128 + (directions.x * 34);
                 outputs.leftStickY = 128 + (directions.y * 38);
             }
