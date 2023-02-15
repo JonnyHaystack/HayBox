@@ -63,17 +63,13 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
             // Fastest walking speed before run
             outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 53);
           }
-        }
-
-        if (directions.vertical) {
+        } else if (directions.vertical) {
             // Vertical Shield Tilt and crouch with mod_x = 50
             outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 50);
-        }
-
-        if (directions.diagonal) {
+        } else if (directions.diagonal) {
             // MX + q1/2/3/4 = 53 35
             outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 53);
-            outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 35);
+            outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 34);
             if (shield_button_pressed) {
                 // MX + L, R, LS, and MS + q1/2/3/4 = 6375 3750 = 51 30
                 outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 51);
@@ -89,9 +85,6 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
 
         /* Up B angles */
         if (directions.diagonal && !shield_button_pressed) {
-            // (33.44) = 53 35
-            outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 53);
-            outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 35);
             // (39.05) = 53 43
             if (inputs.c_down) {
                 outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 53);
@@ -156,16 +149,12 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
             // Allow tink/yink walk shield
             outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 28);
           }
-        }
-
-        if (directions.vertical) {
+        } else if (directions.vertical) {
             // Vertical Shield Tilt and crouch with mod_x = 50
             outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 50);
-        }
-
-        if (directions.diagonal) {
+        } else if (directions.diagonal) {
             outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 53);
-            outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 35);
+            outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 34);
             if (shield_button_pressed) {
                 outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 51);
                 outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 30);
@@ -174,9 +163,6 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
 
         /* Up B angles */
         if (directions.diagonal && !shield_button_pressed) {
-            // (56.56) = 35 53
-            outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 35);
-            outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 53);
             // (50.95) = 43 53
             if (inputs.c_down) {
                 outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 43);
