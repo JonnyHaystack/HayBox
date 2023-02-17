@@ -1,4 +1,6 @@
-/* Ultimate profile by Taker */
+/* Ultimate2 profile by Taker */
+/* Ultimate profile rework by Zeronia*/
+
 #include "modes/Ultimate.hpp"
 
 #define ANALOG_STICK_MIN 28
@@ -15,6 +17,8 @@ Ultimate::Ultimate(socd::SocdType socd_type) : ControllerMode(socd_type) {
     };
 }
 
+    /* ---------------------------------------------- Button Config --------------------------------------------- */
+
 void Ultimate::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
     outputs.a = inputs.a;
     outputs.b = inputs.b;
@@ -27,7 +31,7 @@ void Ultimate::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
     outputs.select = inputs.select;
     outputs.home = inputs.home;
 
-    // Turn on D-Pad layer by holding Mod X + Mod Y or Nunchuk C button.
+    // Turn on D-Pad layer by holding Mod X + Mod Y, or Nunchuk C button.
     if ((inputs.mod_x && inputs.mod_y) || inputs.nunchuk_c) {
         outputs.dpadUp = inputs.c_up;
         outputs.dpadDown = inputs.c_down;
@@ -53,213 +57,200 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         outputs
     );
 
-    bool shield_button_pressed = inputs.l || inputs.r || inputs.lightshield || inputs.midshield;
+    // Different shield buttons
+    bool shield_1 = inputs.r;    // Shield normally. Airdodge normally. Affected by ModX/ModY.
+
+    bool shield_2 = inputs.l;    // Shield with low tilt. Unaffected by ModX/ModY.
+                                 // Mostly for neutral airdodge with drift, and tech with Low LSI. 
+
+    // Button "duplicates" to make modifier handling simpler.
+    bool shield_button_pressed = shield_1 || shield_2;
+    bool attack_pressed = inputs.a || inputs.c_left || inputs.c_right || inputs.c_down || inputs.c_up;
+    bool jump_pressed   = inputs.x || inputs.y;
+
+    // Wavedash buttons
+    bool wavedash_button_pressed = inputs.z || shield_1;
+    // Z recommended due to Ultimate's SH-macro: https://youtu.be/1tOuq-dO85I?t=30.
+    // R still needed for fighters who Zair.
+    // L excluded. Useful for "neutral airdodge" with drift.
+
+    /* ------------------ Shield Modifiers ------------------ */
+
+        // Lock Shield_1 diagonally (even without ModX/ModY)
+        if (shield_1 && directions.diagonal) {
+            outputs.leftStickX = 128 + (directions.x * 65);         // Prevents roll when attempting reverse-UpB OoS,
+            outputs.leftStickY = 128 + (directions.y * 65);         // or when reacting with shield mid-slingshot.
+        }
+
+    /* ---------------------------------------------- MOD X Values ----------------------------------------------- */
 
     if (inputs.mod_x) {
-        // MX + Horizontal = 6625 = 53
-        if (directions.horizontal) {
-            outputs.leftStickX = 128 + (directions.x * 53);
-            // Horizontal Shield tilt = 51
-            if (shield_button_pressed) {
-                outputs.leftStickX = 128 + (directions.x * 51);
-            }
-            // Horizontal Tilts = 36
-            if (inputs.a) {
-                outputs.leftStickX = 128 + (directions.x * 36);
-            }
-        }
-        // MX + Vertical = 44
+        // MX + Horizontal
+        if (directions.horizontal) {                            // Max value for Tink/Yink passive shield 
+            outputs.leftStickX = 128 + (directions.x * 40);     // Also max value for FTilt out-of-dash
+        }                                                       // (going higher will dash attack).
+        // MX + Vertical
         if (directions.vertical) {
-            outputs.leftStickY = 128 + (directions.y * 44);
-            // Vertical Shield Tilt = 51
-            if (shield_button_pressed) {
-                outputs.leftStickY = 128 + (directions.y * 51);
-            }
+            outputs.leftStickY = 128 + (directions.y * 33);     // One-third upward/downward (like B0XX).
         }
-        if (directions.diagonal) {
-            // MX + q1/2/3/4 = 53 35
-            outputs.leftStickX = 128 + (directions.x * 53);
-            outputs.leftStickY = 128 + (directions.y * 35);
-            if (shield_button_pressed) {
-                // MX + L, R, LS, and MS + q1/2/3/4 = 6375 3750 = 51 30
-                outputs.leftStickX = 128 + (directions.x * 51);
+        // MX Wavedash / Shield Tilt
+        if (directions.diagonal && wavedash_button_pressed) {
+            outputs.leftStickX = 128 + (directions.x * 68);     // Close to CL-FW and Arte's firmware.
+            outputs.leftStickY = 128 + (directions.y * 28);
+        }
+
+        // MX Angled Horizontal Attacks
+        if (directions.diagonal && inputs.a) {
+            outputs.leftStickY  = 128 + (directions.y * 44);    // Most vertical FTilt/FAir/BAir.
+        }
+        // MX Shortend Up B
+        if (directions.vertical && inputs.b) {
+            outputs.leftStickY = 128 + (directions.y * 51);     // Least vertical UpB (like B0XX).
+        }
+        // MX Angled Horizontal Tilt Specials
+        if (directions.horizontal && inputs.b) {
+            outputs.leftStickX = 128 + (directions.x * 65);     // Most horizontal for tilt-SideB.
+            outputs.leftStickY = 128 + (directions.y * 28);     // Steepest angle for Link/Yink boomerang (must hold B).
+        }                                                       // 5 angles: 1 straight, 2 up, 2 down.
+
+        /* ----------------- Angled Up B (ModX) ----------------- */
+        if (directions.diagonal && inputs.b) {
+            // MX + CDN = 54°
+            if (inputs.c_down) {
+                outputs.leftStickX = 128 + (directions.x * 80);
+                outputs.leftStickY = 128 + (directions.y * 58);
+            }
+            // MX + CLT = 63°
+            if (inputs.c_left) {
+                outputs.leftStickX = 128 + (directions.x * 86);
+                outputs.leftStickY = 128 + (directions.y * 44);
+            }
+            // MX + CUP = 72°
+            if (inputs.c_up) {
+                outputs.leftStickX = 128 + (directions.x * 92);
                 outputs.leftStickY = 128 + (directions.y * 30);
             }
-        }
-
-        // Angled fsmash/ftilt with C-Stick + MX
-        if (directions.cx != 0) {
-            outputs.rightStickX = 128 + (directions.cx * 127);
-            outputs.rightStickY = 128 + (directions.y * 59);
-        }
-
-        /* Up B angles */
-        if (directions.diagonal && !shield_button_pressed) {
-            // (33.44) = 53 35
-            outputs.leftStickX = 128 + (directions.x * 53);
-            outputs.leftStickY = 128 + (directions.y * 35);
-            // (39.05) = 53 43
-            if (inputs.c_down) {
-                outputs.leftStickX = 128 + (directions.x * 53);
-                outputs.leftStickY = 128 + (directions.y * 43);
-            }
-            // (36.35) = 53 39
-            if (inputs.c_left) {
-                outputs.leftStickX = 128 + (directions.x * 53);
-                outputs.leftStickY = 128 + (directions.y * 39);
-            }
-            // (30.32) = 56 41
-            if (inputs.c_up) {
-                outputs.leftStickX = 128 + (directions.x * 53);
-                outputs.leftStickY = 128 + (directions.y * 31);
-            }
-            // (27.85) = 49 42
+            // MX + CRT = 81°
             if (inputs.c_right) {
-                outputs.leftStickX = 128 + (directions.x * 53);
-                outputs.leftStickY = 128 + (directions.y * 28);
-            }
-
-            /* Extended Up B Angles */
-            if (inputs.b) {
-                // (33.29) = 67 44
-                outputs.leftStickX = 128 + (directions.x * 67);
-                outputs.leftStickY = 128 + (directions.y * 44);
-                // (39.38) = 67 55
-                if (inputs.c_down) {
-                    outputs.leftStickX = 128 + (directions.x * 67);
-                    outputs.leftStickY = 128 + (directions.y * 55);
-                }
-                // (36.18) = 67 49
-                if (inputs.c_left) {
-                    outputs.leftStickX = 128 + (directions.x * 67);
-                    outputs.leftStickY = 128 + (directions.y * 49);
-                }
-                // (30.2) = 67 39
-                if (inputs.c_up) {
-                    outputs.leftStickX = 128 + (directions.x * 67);
-                    outputs.leftStickY = 128 + (directions.y * 39);
-                }
-                // (27.58) = 67 35
-                if (inputs.c_right) {
-                    outputs.leftStickX = 128 + (directions.x * 67);
-                    outputs.leftStickY = 128 + (directions.y * 35);
-                }
-            }
-
-            // Angled Ftilts
-            if (inputs.a) {
-                outputs.leftStickX = 128 + (directions.x * 36);
-                outputs.leftStickY = 128 + (directions.y * 26);
+                outputs.leftStickX = 128 + (directions.x * 98);
+                outputs.leftStickY = 128 + (directions.y * 16);
             }
         }
     }
+
+    /* ---------------------------------------------- MOD Y Values ---------------------------------------------- */
 
     if (inputs.mod_y) {
-        // MY + Horizontal (even if shield is held) = 41
+        // MY + Horizontal
         if (directions.horizontal) {
-            outputs.leftStickX = 128 + (directions.x * 41);
-            // MY Horizontal Tilts
-            if (inputs.a) {
-                outputs.leftStickX = 128 + (directions.x * 36);
+            outputs.leftStickX = 128 + (directions.x * 26);         // Slowest walk.
             }
+            // MY + Up
+            if (directions.y == +1) {
+                outputs.leftStickY = 128 + (directions.y * 51);     // Mirrors MX Horizontal (like B0XX?).
+            }
+            // MY + Down
+            if (directions.y == -1) {
+                outputs.leftStickY = 128 + (directions.y * 68);     // Minimum for crouch/FF.
+            }
+            // MY + Diagonal
+            if (directions.diagonal) {
+                outputs.leftStickX = 128 + (directions.x * 33);     // One-third left/rightwards (like B0XX).
+                outputs.leftStickY = 128 + (directions.y * 51);     // Prevents FF when attemping reverse DownB
+            }                                                       // (Overrides crawl. Let go of MY to crawl).
+
+        // MY Shield_1 Tilt
+        if (shield_1) {                                         // 26 = more consistent UpB OoS.
+            outputs.leftStickY = 128 + (directions.y * 26);     // Most vertical, no jump = 65.
         }
-        // MY + Vertical (even if shield is held) = 53
-        if (directions.vertical) {
-            outputs.leftStickY = 128 + (directions.y * 53);
-            // MY Vertical Tilts
-            if (inputs.a) {
-                outputs.leftStickY = 128 + (directions.y * 36);
-            }
+        // MY Reverse UpTilt/Dtilt
+        if (directions.diagonal && inputs.a) {
+            outputs.leftStickX = 128 + (directions.x * 38);     // Minimum horizontal for Reverse Dtilt.
         }
-        if (directions.diagonal) {
-            // MY + q1/2/3/4 = 35 59
-            outputs.leftStickX = 128 + (directions.x * 35);
-            outputs.leftStickY = 128 + (directions.y * 53);
-            if (shield_button_pressed) {
-                // MY + L, R, LS, and MS + q1/2 = 38 70
-                outputs.leftStickX = 128 + (directions.x * 38);
-                outputs.leftStickY = 128 + (directions.y * 70);
-                // MY + L, R, LS, and MS + q3/4 = 40 68
-                if (directions.x == -1) {
-                    outputs.leftStickX = 128 + (directions.x * 40);
-                    outputs.leftStickY = 128 + (directions.y * 68);
-                }
-            }
+        // MY Reverse Specials (Neutral)
+        if (directions.horizontal && inputs.b) {
+            outputs.leftStickX = 128 + (directions.x * 38);     // Most horizontal for NeutralB.
+        }
+        // MY Reverse Specials (Up/Down)
+        if (directions.vertical && inputs.b) {
+            outputs.leftStickX = 128 + (directions.x * 59);     // Most horizontal for Up/DownB.
+            outputs.leftStickY = 128 + (directions.y * 65);     // Medium vertical for Up/DownB (like B0XX).
         }
 
-        /* Up B angles */
-        if (directions.diagonal && !shield_button_pressed) {
-            // (56.56) = 35 53
-            outputs.leftStickX = 128 + (directions.x * 35);
-            outputs.leftStickY = 128 + (directions.y * 53);
-            // (50.95) = 43 53
-            if (inputs.c_down) {
-                outputs.leftStickX = 128 + (directions.x * 43);
-                outputs.leftStickY = 128 + (directions.y * 53);
-            }
-            // (53.65) = 39 53
-            if (inputs.c_left) {
-                outputs.leftStickX = 128 + (directions.x * 49);
-                outputs.leftStickY = 128 + (directions.y * 53);
-            }
-            // (59.68) = 31 53
-            if (inputs.c_up) {
-                outputs.leftStickX = 128 + (directions.x * 31);
-                outputs.leftStickY = 128 + (directions.y * 53);
-            }
-            // (62.15) = 28 53
+        /* ----------------- Angled Up B (ModY) ----------------- */
+        if (directions.diagonal && inputs.b) {
+            // MY + CRT = 9°
             if (inputs.c_right) {
-                outputs.leftStickX = 128 + (directions.x * 28);
-                outputs.leftStickY = 128 + (directions.y * 53);
+                outputs.leftStickX = 128 + (directions.x * 16);
+                outputs.leftStickY = 128 + (directions.y * 98);
             }
-
-            /* Extended Up B Angles */
-            if (inputs.b) {
-                // (56.71) = 44 67
+            // MY + CUP = 18°
+            if (inputs.c_up) {
+                outputs.leftStickX = 128 + (directions.x * 30);
+                outputs.leftStickY = 128 + (directions.y * 92);
+            }
+            // MY + CLT = 27°
+            if (inputs.c_left) {
                 outputs.leftStickX = 128 + (directions.x * 44);
-                outputs.leftStickY = 128 + (directions.y * 67);
-                // (50.62) = 55 67
-                if (inputs.c_down) {
-                    outputs.leftStickX = 128 + (directions.x * 55);
-                    outputs.leftStickY = 128 + (directions.y * 67);
-                }
-                // (53.82) = 49 67
-                if (inputs.c_left) {
-                    outputs.leftStickX = 128 + (directions.x * 49);
-                    outputs.leftStickY = 128 + (directions.y * 67);
-                }
-                // (59.8) = 39 67
-                if (inputs.c_up) {
-                    outputs.leftStickX = 128 + (directions.x * 39);
-                    outputs.leftStickY = 128 + (directions.y * 67);
-                }
-                // (62.42) = 35 67
-                if (inputs.c_right) {
-                    outputs.leftStickX = 128 + (directions.x * 35);
-                    outputs.leftStickY = 128 + (directions.y * 67);
-                }
+                outputs.leftStickY = 128 + (directions.y * 86);
             }
-
-            // MY Pivot Uptilt/Dtilt
-            if (inputs.a) {
-                outputs.leftStickX = 128 + (directions.x * 34);
-                outputs.leftStickY = 128 + (directions.y * 38);
+            // MY + CDN = 36°
+            if (inputs.c_down) {
+                outputs.leftStickX = 128 + (directions.x * 58);
+                outputs.leftStickY = 128 + (directions.y * 80);
             }
         }
     }
 
-    // C-stick ASDI Slideoff angle overrides any other C-stick modifiers (such as
-    // angled fsmash).
-    if (directions.cx != 0 && directions.cy != 0) {
-        // 5250 8500 = 42 68
-        outputs.rightStickX = 128 + (directions.cx * 42);
-        outputs.rightStickY = 128 + (directions.cy * 68);
+
+
+    /* ----------------------------------------------- Other Stuff ---------------------------------------------- */
+
+    /* ----------------- Shield 2 Modifiers ----------------- */
+
+    // Shield2 = Neutral Airdodge
+    if (shield_2) {
+        outputs.leftStickX = 128 + (directions.x * 36);            // Outmost for neutral airdodge. 
+        outputs.leftStickY = 128 + (directions.y * 36);            // Downmost for neutral airdodge.
+        
+        // Shield2 + Special/Attack = Survival LSI (for tech OS: https://youtu.be/xG-O_Baj-wM?t=178)
+        if (inputs.b | inputs.a) {
+            // Shield2 SideB
+            if (directions.horizontal) {
+                outputs.leftStickX = 128 + (directions.x * 65);     // Outmost for tilt SideB (high DI).
+            }
+            // Shield2 UpB
+            if (directions.y == +1) {
+                outputs.leftStickX = 128 + (directions.x * 59);     // Outmost for UpB/DownB (max DI).
+                outputs.leftStickY = 128 + (directions.y * 51);     // Downmost for UpB (minimizes LSI).
+            }
+            // Shield2 DownB
+            if (directions.y == -1) {
+                outputs.leftStickX = 128 + (directions.x * 59);     // Outmost for UpB/DownB (max DI).
+                outputs.leftStickY = 128 + (directions.y * 65);     // Downmost for DownB, no FF (minimizes LSI).
+            }
+        }
+        // Shield 1+2 unlocks full tilt
+        if (shield_1) {                                            // L+R activates Ultimate's shield lock mechanic:
+            outputs.leftStickX = 128 + (directions.x * 100);       // https://youtu.be/HFYtrdcbDJI?t=66
+            outputs.leftStickY = 128 + (directions.y * 100);       // (UpB/SH-aerials can still buffer OoS).
+        }
+    }
+    
+    // Angled Horizontal Attacks (with C-Stick diagonal)
+    if (directions.cx && directions.cy) {                       // Not consistent.       
+        outputs.rightStickX = 128 + (directions.cx * 70);       // Tbh, just do Angled Fsmash with the A button 
+        outputs.rightStickY = 128 + (directions.cy * 59);       // like the B0XX manual says to.
+    }
+    // Angled Horizontal Attacks (with C-Stick + L-Stick)       // Diagonal Up   + C Horizontal = Upward angled.
+    if (directions.diagonal && directions.cx) {                 // Diagonal Down + C Horizontal = Downward angled.
+        outputs.rightStickY = (outputs.leftStickY);             // C-Left/Right copies the Y-axis of L-stick.
     }
 
+    // GCC analog trigger values
     if (inputs.l) {
         outputs.triggerLAnalog = 140;
     }
-
     if (inputs.r) {
         outputs.triggerRAnalog = 140;
     }
@@ -269,10 +260,39 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         outputs.rightStickX = 128;
         outputs.rightStickY = 128;
     }
-
-    // Nunchuk overrides left stick.
+    // Shut off L-stick when using Nunchuk.
     if (inputs.nunchuk_connected) {
         outputs.leftStickX = inputs.nunchuk_x;
         outputs.leftStickY = inputs.nunchuk_y;
     }
 }
+
+
+// Todo: 
+// - Check if MY + CRT is even useful.
+// - Make L+R shield tilt overriden by ModX/ModY. But L alone overrides ModX/ModY. 
+
+// - Scale the GCC cords to match to Pro Controller. (The Pro Controller is fine. 100 = Max. Makes values easier to config)
+// - Check if value 50 is half way.
+
+
+/* Change C-Stick modifiers (for Extended Up B Angles) order to: 
+CUp, CLeft, CRight, CDown.
+Also make CLeft/CRight swap if L-stick is leftwards?
+
+Basically:
+ 9° = CUp = Slighest horizontal (most upward)
+18° = CLeft = slight more 
+27° = CRight = even more horizontal
+36° = CDown = most horizontal (most downward)
+*/
+
+
+// Done:
+// - Add Extended Up B Angles magnitude adjustment (like B0XX).
+// - Make L only neutral airdodge horizontaly and downwards. 
+// - Optimze L for teching upwards, like B0XX. (Maybe give it best Survival LSI?)
+// - Test Link/Yink's boomerang angles (there's 5 of them... at least?).
+// - Move "MX Angled Horizontal Attacks with C-Stick" to "Other Stuff", removing the need for MX.
+// - Fix outward Shield2+Special coords.
+// - Update the Neutral airdodge coords.
