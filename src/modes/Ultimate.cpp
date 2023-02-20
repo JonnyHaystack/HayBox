@@ -1,4 +1,3 @@
-/* Ultimate2 profile by Taker */
 /* Ultimate profile rework by Zeronia*/
 
 #include "modes/Ultimate.hpp"
@@ -57,6 +56,8 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         outputs
     );
 
+    /* ------------------- Alike Buttons ------------------- */
+
     // Different shield buttons
     bool shield_1 = inputs.r;    // Shield normally. Airdodge normally. Affected by ModX/ModY.
 
@@ -76,18 +77,23 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
 
     /* ------------------ Shield Modifiers ------------------ */
 
-        // Lock Shield_1 diagonally (even without ModX/ModY)
-        if (shield_1 && directions.diagonal) {
+        // Lock Shield_1 diagonally (without modifiers)
+        if (shield_1 && directions.diagonal) {                      // Most vertical, no jump = 65.
             outputs.leftStickX = 128 + (directions.x * 65);         // Prevents roll when attempting reverse-UpB OoS,
             outputs.leftStickY = 128 + (directions.y * 65);         // or when reacting with shield mid-slingshot.
         }
+        // Shield release on SH-Aerial
+        if (shield_button_pressed && jump_pressed && attack_pressed) {
+            outputs.triggerLDigital = false;                        // Prevents Zair instead of SH-Aerial OoS with A.
+            outputs.triggerRDigital = false;                        // This is more so an issue with Smash Ultimate.
+        }                                                           // Should only affect fighters with a Zair.
 
     /* ---------------------------------------------- MOD X Values ----------------------------------------------- */
 
     if (inputs.mod_x) {
         // MX + Horizontal
-        if (directions.horizontal) {                            // Max value for Tink/Yink passive shield 
-            outputs.leftStickX = 128 + (directions.x * 40);     // Also max value for FTilt out-of-dash
+        if (directions.horizontal) {                            // Max value for Tink/Yink passive shield = 51.
+            outputs.leftStickX = 128 + (directions.x * 50);     // Max value for FTilt out-of-dash = 50
         }                                                       // (going higher will dash attack).
         // MX + Vertical
         if (directions.vertical) {
@@ -99,18 +105,18 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
             outputs.leftStickY = 128 + (directions.y * 28);
         }
 
-        // MX Angled Horizontal Attacks
+        // MX Angled Horizontal Tilts/Aerials
         if (directions.diagonal && inputs.a) {
-            outputs.leftStickY  = 128 + (directions.y * 44);    // Most vertical FTilt/FAir/BAir.
+            outputs.leftStickY  = 128 + (directions.y * 57);    // Most vertical FTilt/FAir/BAir = (X,Y: 51,59 or 50,57)
         }
-        // MX Shortend Up B
-        if (directions.vertical && inputs.b) {
+        // MX Shortend Up B                                     // Diagonal overriden by Angled Tilt Specials.
+        if (directions.vertical && inputs.b) {                  // For Diagonal UpB: press UpB, then MX diagonal.
             outputs.leftStickY = 128 + (directions.y * 51);     // Least vertical UpB (like B0XX).
         }
         // MX Angled Horizontal Tilt Specials
         if (directions.horizontal && inputs.b) {
-            outputs.leftStickX = 128 + (directions.x * 65);     // Most horizontal for tilt-SideB.
-            outputs.leftStickY = 128 + (directions.y * 28);     // Steepest angle for Link/Yink boomerang (must hold B).
+            outputs.leftStickX = 128 + (directions.x * 80);     // Most horizontal for tilt-SideB.
+            outputs.leftStickY = 128 + (directions.y * 26);     // Least vertical for BotW/Yink boomerang (must hold B).
         }                                                       // 5 angles: 1 straight, 2 up, 2 down.
 
         /* ----------------- Angled Up B (ModX) ----------------- */
@@ -143,25 +149,25 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
     if (inputs.mod_y) {
         // MY + Horizontal
         if (directions.horizontal) {
-            outputs.leftStickX = 128 + (directions.x * 26);         // Slowest walk.
+            outputs.leftStickX = 128 + (directions.x * 25);         // Slowest walk.
             }
             // MY + Up
             if (directions.y == +1) {
-                outputs.leftStickY = 128 + (directions.y * 51);     // Mirrors MX Horizontal (like B0XX?).
+                outputs.leftStickY = 128 + (directions.y * 50);     // Mirrors MX Horizontal (like B0XX?).
             }
             // MY + Down
             if (directions.y == -1) {
-                outputs.leftStickY = 128 + (directions.y * 68);     // Minimum for crouch/FF.
+                outputs.leftStickY = 128 + (directions.y * 65);     // Minimum for crouch/FF.
             }
             // MY + Diagonal
             if (directions.diagonal) {
                 outputs.leftStickX = 128 + (directions.x * 33);     // One-third left/rightwards (like B0XX).
-                outputs.leftStickY = 128 + (directions.y * 51);     // Prevents FF when attemping reverse DownB
+                outputs.leftStickY = 128 + (directions.y * 50);     // Prevents FF when attemping reverse DownB
             }                                                       // (Overrides crawl. Let go of MY to crawl).
 
         // MY Shield_1 Tilt
-        if (shield_1) {                                         // 26 = more consistent UpB OoS.
-            outputs.leftStickY = 128 + (directions.y * 26);     // Most vertical, no jump = 65.
+        if (shield_1) {                                         // 29 = more consistent UpB OoS.
+            outputs.leftStickY = 128 + (directions.y * 29);     // Most vertical, no jump = 65.
         }
         // MY Reverse UpTilt/Dtilt
         if (directions.diagonal && inputs.a) {
@@ -169,12 +175,12 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         }
         // MY Reverse Specials (Neutral)
         if (directions.horizontal && inputs.b) {
-            outputs.leftStickX = 128 + (directions.x * 38);     // Most horizontal for NeutralB.
+            outputs.leftStickX = 128 + (directions.x * 59);     // Most horizontal for NeutralB.
         }
         // MY Reverse Specials (Up/Down)
         if (directions.vertical && inputs.b) {
-            outputs.leftStickX = 128 + (directions.x * 59);     // Most horizontal for Up/DownB.
-            outputs.leftStickY = 128 + (directions.y * 65);     // Medium vertical for Up/DownB (like B0XX).
+            outputs.leftStickX = 128 + (directions.x * 100);    // Most horizontal for Up/DownB.
+            outputs.leftStickY = 128 + (directions.y *  65);    // Medium vertical for Up/DownB (like B0XX).
         }
 
         /* ----------------- Angled Up B (ModY) ----------------- */
@@ -210,9 +216,13 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
 
     // Shield2 = Neutral Airdodge
     if (shield_2) {
-        outputs.leftStickX = 128 + (directions.x * 36);            // Outmost for neutral airdodge. 
-        outputs.leftStickY = 128 + (directions.y * 36);            // Downmost for neutral airdodge.
-        
+        outputs.leftStickX = 128 + (directions.x * 65);            // Outmost for neutral airdodge = 65. 
+        outputs.leftStickY = 128 + (directions.y * 64);            // Downmost for neutral airdodge = 64.
+        // Neutral Airdodge diagonal input
+        if(directions.diagonal)
+        outputs.leftStickX = 128 + (directions.x * 48);            // Most diagonal for neutral airdodge = 48.
+        outputs.leftStickY = 128 + (directions.y * 48);
+
         // Shield2 + Special/Attack = Survival LSI (for tech OS: https://youtu.be/xG-O_Baj-wM?t=178)
         if (inputs.b | inputs.a) {
             // Shield2 SideB
@@ -221,13 +231,13 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
             }
             // Shield2 UpB
             if (directions.y == +1) {
-                outputs.leftStickX = 128 + (directions.x * 59);     // Outmost for UpB/DownB (max DI).
-                outputs.leftStickY = 128 + (directions.y * 51);     // Downmost for UpB (minimizes LSI).
+                outputs.leftStickX = 128 + (directions.x * 100);     // Outmost for UpB/DownB (max DI).
+                outputs.leftStickY = 128 + (directions.y *  51);     // Downmost for UpB (minimizes LSI).
             }
             // Shield2 DownB
             if (directions.y == -1) {
-                outputs.leftStickX = 128 + (directions.x * 59);     // Outmost for UpB/DownB (max DI).
-                outputs.leftStickY = 128 + (directions.y * 65);     // Downmost for DownB, no FF (minimizes LSI).
+                outputs.leftStickX = 128 + (directions.x * 100);     // Outmost for UpB/DownB (max DI).
+                outputs.leftStickY = 128 + (directions.y *  64);     // Downmost for DownB, no FF (minimizes LSI).
             }
         }
         // Shield 1+2 unlocks full tilt
@@ -242,10 +252,13 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         outputs.rightStickX = 128 + (directions.cx * 70);       // Tbh, just do Angled Fsmash with the A button 
         outputs.rightStickY = 128 + (directions.cy * 59);       // like the B0XX manual says to.
     }
-    // Angled Horizontal Attacks (with C-Stick + L-Stick)       // Diagonal Up   + C Horizontal = Upward angled.
-    if (directions.diagonal && directions.cx) {                 // Diagonal Down + C Horizontal = Downward angled.
-        outputs.rightStickY = (outputs.leftStickY);             // C-Left/Right copies the Y-axis of L-stick.
-    }
+    // Angled Horizontal Attacks (with C-Stick + L-Stick)       // Up   + C Horizontal = Upward angled.
+    if (directions.vertical && directions.cx) {                 // Down + C Horizontal = Downward angled.
+        outputs.rightStickY = (outputs.leftStickY);             // Inputting C-Left/Right outputs Y-axis of L-stick.
+        if(inputs.mod_x) {
+        outputs.rightStickX = 128 + (directions.cx * 50);       // Allows this to also work with ModX. 
+        }                                                       // Issue: Reverse down-angled Ftilt while
+    }                                                           // fully crouched does reverse Dtilt?
 
     // GCC analog trigger values
     if (inputs.l) {
@@ -269,30 +282,35 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
 
 
 // Todo: 
-// - Check if MY + CRT is even useful.
+// - Check if MY + CRT is even useful. Angle is picked up by Switch, but firefox just goes straight up.
 // - Make L+R shield tilt overriden by ModX/ModY. But L alone overrides ModX/ModY. 
+// - Check if SwitchBackend's right stick scaling is equal to left stick.
+// - Make "Shield release on SH-Aerial" work with GameCubeBackend.
+// - Scale the GamecubeBackend to match to SwitchBackend (0 = Min. 100 = Max).
 
-// - Scale the GCC cords to match to Pro Controller. (The Pro Controller is fine. 100 = Max. Makes values easier to config)
-// - Check if value 50 is half way.
 
 
-/* Change C-Stick modifiers (for Extended Up B Angles) order to: 
+/* 
+Todo for later:
+ 
+Change C-Stick modifiers (for Extended Up B Angles) order to: 
 CUp, CLeft, CRight, CDown.
-Also make CLeft/CRight swap if L-stick is leftwards?
 
 Basically:
  9° = CUp = Slighest horizontal (most upward)
 18° = CLeft = slight more 
 27° = CRight = even more horizontal
 36° = CDown = most horizontal (most downward)
+
+Also make Left/Right swap if stick is leftwards?
+And make Up/Down swap if stick is downwards?
+
+
+Or cut down on angles to remove need of MX:
+15° = CUp
+30° = CLeft
+45°
+60° = CRight
+75° = CDown
+90°
 */
-
-
-// Done:
-// - Add Extended Up B Angles magnitude adjustment (like B0XX).
-// - Make L only neutral airdodge horizontaly and downwards. 
-// - Optimze L for teching upwards, like B0XX. (Maybe give it best Survival LSI?)
-// - Test Link/Yink's boomerang angles (there's 5 of them... at least?).
-// - Move "MX Angled Horizontal Attacks with C-Stick" to "Other Stuff", removing the need for MX.
-// - Fix outward Shield2+Special coords.
-// - Update the Neutral airdodge coords.
