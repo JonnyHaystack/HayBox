@@ -126,11 +126,16 @@ void NintendoSwitchBackend::SendReport() {
     _report.r3 = _outputs.rightStickClick;
     _report.home = _outputs.home;
 
-    // Analog outputs
-    _report.lx = (_outputs.leftStickX - 128) * 1.25 + 128;
-    _report.ly = 255 - ((_outputs.leftStickY - 128) * 1.25 + 128);
-    _report.rx = (_outputs.rightStickX - 128) * 1.25 + 128;
-    _report.ry = 255 - ((_outputs.rightStickY - 128) * 1.25 + 128);
+    // Left Stick outputs                             ||     Scaling    ||    || Offset ||
+    _report.lx =        ((_outputs.leftStickX  - 128)   * 1.266  + 128)         + 0.49;     // Rightwards
+    _report.ly = (255 - ((_outputs.leftStickY  - 128)   * 1.256  + 128))        + 1.49;     // Downwards
+    // Right Stick outputs
+    _report.rx =        ((_outputs.rightStickX - 128)   * 1.266  + 128)         + 0.49;
+    _report.ry = (255 - ((_outputs.rightStickY - 128)   * 1.256  + 128))        + 1.49;
+
+    // Note: Despite the Y-Axis being scaled less than the X-Axis, the Y-Axis is still more sensivitive...
+    // It only affects game profiles by like 0.01, so whatever. 
+
 
     // D-pad Hat Switch
     _report.hat =
