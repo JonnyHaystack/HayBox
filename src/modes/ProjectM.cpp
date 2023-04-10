@@ -11,6 +11,7 @@ ProjectM::ProjectM(socd::SocdType socd_type, ProjectMOptions options) : Controll
         socd::SocdPair{ &InputState::down,   &InputState::up     },
         socd::SocdPair{ &InputState::c_left, &InputState::c_right},
         socd::SocdPair{ &InputState::c_down, &InputState::c_up   },
+        socd::SocdPair{ &InputState::down,   &InputState::up2    }
     };
 
     _options = options;
