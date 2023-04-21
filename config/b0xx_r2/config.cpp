@@ -107,7 +107,7 @@ void setup() {
 
     if (button_holds.b) {
       primary_backend->SetGameMode(
-          new Melee20Button(socd::SOCD_2IP_NO_REAC, { .crouch_walk_os = false })
+          new Melee20Button(socd::SOCD_2IP, { .crouch_walk_os = false })
       );
     } else {
     // Default to Ultimate mode with SOCD reactivation.
