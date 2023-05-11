@@ -29,12 +29,12 @@ SOFTWARE.
 #include <TUCompositeHID.hpp>
 
 typedef struct TU_ATTR_PACKED {
-    uint16_t x; // X value of left analog stick
-    uint16_t y; // Y value of left analog stick
-    uint16_t z; // Value of analog left trigger
-    uint16_t rz; // Value of analog right trigger
-    uint16_t rx; // X value of right analog stick
-    uint16_t ry; // Y value of right analog stick
+    uint16_t x;  // X value of left analog stick
+    uint16_t y;  // Y value of left analog stick
+    uint16_t z;  // X value of right analog stick
+    uint16_t rz; // Y value of right analog stick
+    uint16_t rx; // Value of analog left trigger
+    uint16_t ry; // Value of analog right trigger
     uint8_t hat; // Position value of the DPad/hat switch
     uint16_t buttons; // Buttons mask for currently pressed buttons
 } gamepad_report_t;

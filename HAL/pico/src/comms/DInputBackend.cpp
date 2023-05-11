@@ -52,8 +52,12 @@ void DInputBackend::SendReport() {
     _gamepad->leftYAxis(255 - _outputs.leftStickY);
     _gamepad->rightXAxis(_outputs.rightStickX);
     _gamepad->rightYAxis(255 - _outputs.rightStickY);
-    _gamepad->triggerLAnalog(_outputs.triggerLAnalog + 1);
-    _gamepad->triggerRAnalog(_outputs.triggerRAnalog + 1);
+    /* _gamepad->triggerLAnalog(_outputs.triggerLAnalog + 1); */
+    /* _gamepad->triggerRAnalog(_outputs.triggerRAnalog + 1); */
+    // NOTE: This is wrong! ...But works for my needs.
+    // Not sure why L and R aren't working in yuzu with triggerLAnalog and triggerRAnalog.
+    _gamepad->triggerLAnalog(_outputs.triggerLDigital + 1);
+    _gamepad->triggerRAnalog(_outputs.triggerRDigital + 1);
 
     // D-pad Hat Switch
     _gamepad->hatSwitch(_outputs.dpadLeft, _outputs.dpadRight, _outputs.dpadDown, _outputs.dpadUp);

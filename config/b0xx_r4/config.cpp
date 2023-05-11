@@ -62,37 +62,47 @@ const Pinout pinout = {
 };
 
 void setup() {
-    // Create GPIO input source and use it to read button states for checking button holds.
-    GpioButtonInput *gpio_input = new GpioButtonInput(button_mappings, button_count);
+  // Create GPIO input source and use it to read button states for checking button holds.
+  GpioButtonInput *gpio_input = new GpioButtonInput(button_mappings, button_count);
 
-    InputState button_holds;
-    gpio_input->UpdateInputs(button_holds);
+  InputState button_holds;
+  gpio_input->UpdateInputs(button_holds);
 
-    // Bootsel button hold as early as possible for safety.
-    if (button_holds.start) {
-        reset_usb_boot(0, 0);
-    }
+  // Bootsel button hold as early as possible for safety.
+  if (button_holds.start) {
+    reset_usb_boot(0, 0);
+  }
 
-    // Turn on LED to indicate firmware booted.
-    gpio_init(PICO_DEFAULT_LED_PIN);
-    gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
-    gpio_put(PICO_DEFAULT_LED_PIN, 1);
+  // Turn on LED to indicate firmware booted.
+  gpio_init(PICO_DEFAULT_LED_PIN);
+  gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
+  gpio_put(PICO_DEFAULT_LED_PIN, 1);
 
-    // Create array of input sources to be used.
-    static InputSource *input_sources[] = { gpio_input };
-    size_t input_source_count = sizeof(input_sources) / sizeof(InputSource *);
+  // Create array of input sources to be used.
+  static InputSource *input_sources[] = { gpio_input };
+  size_t input_source_count = sizeof(input_sources) / sizeof(InputSource *);
 
-    ConnectedConsole console = detect_console(pinout.joybus_data);
+  /* Select communication backend. */
+  CommunicationBackend *primary_backend;
 
-    /* Select communication backend. */
-    /* CommunicationBackend *primary_backend; */
+  if (button_holds.z) {
+    // If no console detected and Z is held on plugin then use DInput backend.
+    TUGamepad::registerDescriptor();
+    TUKeyboard::registerDescriptor();
+    backend_count = 2;
+    primary_backend = new DInputBackend(input_sources, input_source_count);
+    backends = new CommunicationBackend *[backend_count] {
+        primary_backend, new B0XXInputViewer(input_sources, input_source_count)
+    };
+  } else {
     NintendoSwitchBackend::RegisterDescriptor();
     backend_count = 1;
-    CommunicationBackend *primary_backend = new NintendoSwitchBackend(input_sources, input_source_count);
+    primary_backend = new NintendoSwitchBackend(input_sources, input_source_count);
     backends = new CommunicationBackend *[backend_count] { primary_backend };
+  }
 
-    // Default to Ultimate mode.
-    primary_backend->SetGameMode(new UltimateR4(socd::SOCD_2IP));
+  // Default to Ultimate mode.
+  primary_backend->SetGameMode(new UltimateR4(socd::SOCD_2IP));
 }
 
 void loop() {

@@ -137,19 +137,19 @@ void TUGamepad::leftYAxis(uint8_t value) {
 }
 
 void TUGamepad::rightXAxis(uint8_t value) {
-    _report.rx = value * 257;
-}
-
-void TUGamepad::rightYAxis(uint8_t value) {
-    _report.ry = value * 257;
-}
-
-void TUGamepad::triggerLAnalog(uint8_t value) {
     _report.z = value * 257;
 }
 
-void TUGamepad::triggerRAnalog(uint8_t value) {
+void TUGamepad::rightYAxis(uint8_t value) {
     _report.rz = value * 257;
+}
+
+void TUGamepad::triggerLAnalog(uint8_t value) {
+    _report.rx = value * 257;
+}
+
+void TUGamepad::triggerRAnalog(uint8_t value) {
+    _report.ry = value * 257;
 }
 
 void TUGamepad::hatSwitch(hid_gamepad_hat_t direction) {
