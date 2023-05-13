@@ -241,12 +241,17 @@ void UltimateR4::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         outputs.rightStickX = ANALOG_STICK_NEUTRAL;
         outputs.rightStickY = ANALOG_STICK_NEUTRAL;
       
-        if (inputs.midshield) {
+        if (inputs.lightshield) {
             outputs.select = true;
         }
 
         if (inputs.midshield) {
             outputs.home = true;
+        }
+
+        if (inputs.start) {
+            outputs.home = true;
+            outputs.start = false;
         }
     }
 
