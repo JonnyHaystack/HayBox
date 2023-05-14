@@ -1,5 +1,5 @@
 #include "comms/B0XXInputViewer.hpp"
-#include "comms/DInputBackend.hpp"
+#include "comms/XInputBackend.hpp"
 #include "comms/GamecubeBackend.hpp"
 #include "comms/N64Backend.hpp"
 #include "comms/NintendoSwitchBackend.hpp"
@@ -86,11 +86,9 @@ void setup() {
   CommunicationBackend *primary_backend;
 
   if (button_holds.z) {
-    // If no console detected and Z is held on plugin then use DInput backend.
-    TUGamepad::registerDescriptor();
-    TUKeyboard::registerDescriptor();
+    // If no console detected and Z is held on plugin then use XInput backend.
     backend_count = 2;
-    primary_backend = new DInputBackend(input_sources, input_source_count);
+    primary_backend = new XInputBackend(input_sources, input_source_count);
     backends = new CommunicationBackend *[backend_count] {
         primary_backend, new B0XXInputViewer(input_sources, input_source_count)
     };

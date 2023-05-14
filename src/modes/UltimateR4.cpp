@@ -80,7 +80,7 @@ void UltimateR4::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
 
         // Angled fsmash/ftilt with C-Stick + MX
         if (directions.cx != 0) {
-            outputs.rightStickX = ANALOG_STICK_NEUTRAL + (directions.cx * 127);
+            outputs.rightStickX = ANALOG_STICK_NEUTRAL + (directions.cx * 100);
             outputs.rightStickY = ANALOG_STICK_NEUTRAL + (directions.y * 59);
         }
 
