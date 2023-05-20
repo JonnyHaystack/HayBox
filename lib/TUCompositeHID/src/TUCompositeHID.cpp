@@ -16,7 +16,7 @@ namespace TUCompositeHID {
         false
     );
 
-    bool addDescriptor(uint8_t *descriptor, size_t descriptor_len) {
+    bool addDescriptor(const uint8_t *descriptor, size_t descriptor_len) {
         if (_current_descriptor_len + descriptor_len > HID_DESCRIPTOR_BUFSIZE) {
             return false;
         }

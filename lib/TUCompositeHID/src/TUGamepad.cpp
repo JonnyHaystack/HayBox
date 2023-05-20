@@ -71,7 +71,7 @@ SOFTWARE.
 
 // clang-format on
 
-uint8_t TUGamepad::_descriptor[] = { HID_REPORT_DESC(HID_REPORT_ID(_report_id)) };
+const uint8_t TUGamepad::_descriptor[] = { HID_REPORT_DESC(HID_REPORT_ID(_report_id)) };
 
 TUGamepad::TUGamepad() {}
 

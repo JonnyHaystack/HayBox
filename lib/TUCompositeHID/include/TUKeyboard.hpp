@@ -20,7 +20,7 @@ class TUKeyboard {
 
   private:
     static const uint8_t _report_id = 2;
-    static uint8_t _descriptor[];
+    static const uint8_t _descriptor[];
 
     hid_keyboard_report_t _report;
 };

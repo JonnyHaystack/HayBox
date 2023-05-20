@@ -55,7 +55,7 @@ class NintendoSwitchBackend : public CommunicationBackend {
 
   protected:
     static const uint8_t _report_id = 0;
-    static uint8_t _descriptor[];
+    static const uint8_t _descriptor[];
 
     switch_gamepad_report_t _report;
 

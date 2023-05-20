@@ -7,7 +7,7 @@
 namespace TUCompositeHID {
     extern Adafruit_USBD_HID _usb_hid;
 
-    bool addDescriptor(uint8_t *descriptor, size_t descriptor_len);
+    bool addDescriptor(const uint8_t *descriptor, size_t descriptor_len);
 }
 
 #endif

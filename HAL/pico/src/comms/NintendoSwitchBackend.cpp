@@ -2,6 +2,7 @@
 
 #include "core/CommunicationBackend.hpp"
 #include "core/state.hpp"
+#include "util/analog_filters.hpp"
 
 #include <Adafruit_TinyUSB.h>
 #include <TUCompositeHID.hpp>
@@ -61,7 +62,10 @@
 
 // clang-format on
 
-uint8_t NintendoSwitchBackend::_descriptor[] = { HID_REPORT_DESC() };
+const uint8_t NintendoSwitchBackend::_descriptor[] = { HID_REPORT_DESC() };
+
+const uint8_t DEADZONE = 11;
+const int RADIUS = 256;
 
 NintendoSwitchBackend::NintendoSwitchBackend(
     InputState &inputs,
@@ -139,10 +143,10 @@ void NintendoSwitchBackend::SendReport() {
     _report.home = _outputs.home;
 
     // Analog outputs
-    _report.lx = (_outputs.leftStickX - 128) * 1.25 + 128;
-    _report.ly = 255 - ((_outputs.leftStickY - 128) * 1.25 + 128);
-    _report.rx = (_outputs.rightStickX - 128) * 1.25 + 128;
-    _report.ry = 255 - ((_outputs.rightStickY - 128) * 1.25 + 128);
+    _report.lx = apply_radius(apply_deadzone(_outputs.leftStickX, DEADZONE, true), RADIUS);
+    _report.ly = 255 - apply_radius(apply_deadzone(_outputs.leftStickY, DEADZONE, true), RADIUS);
+    _report.rx = apply_radius(apply_deadzone(_outputs.rightStickX, DEADZONE, true), RADIUS);
+    _report.ry = 255 - apply_radius(apply_deadzone(_outputs.rightStickY, DEADZONE, true), RADIUS);
 
     // D-pad Hat Switch
     _report.hat =
