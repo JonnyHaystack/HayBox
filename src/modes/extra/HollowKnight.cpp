@@ -18,10 +18,10 @@ void HollowKnight::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs
     outputs.a = inputs.a; // Attack
     outputs.b = inputs.b; // Dash
     outputs.x = inputs.x; // Jump
-    outputs.y = inputs.mod_y; // Spell
-    outputs.triggerLDigital = inputs.r; // Focus/cast
-    outputs.triggerRDigital = inputs.z;
-    outputs.buttonR = inputs.up; // Dream nail
+    outputs.y = inputs.mod_y; // Quick Cast
+    outputs.triggerLDigital = inputs.r; // Focus / Cast
+    outputs.triggerRDigital = inputs.z; // C-Dash
+    outputs.buttonR = inputs.up; // Dream Nail
 
     outputs.buttonL = inputs.lightshield; // Map
     outputs.select = inputs.midshield; // Inventory
