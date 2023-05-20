@@ -34,7 +34,7 @@ jobs:
       BIN_EXT: ${{ matrix.bin_ext }}
     strategy:
       fail-fast: false
-      matrix: 
+      matrix:
         include: ${{ fromJson(needs.metadata.outputs.meta_json).build }}
 
     steps:

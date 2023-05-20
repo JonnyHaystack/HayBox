@@ -67,7 +67,7 @@ class TUGamepad {
 
   protected:
     static const uint8_t _report_id = 1;
-    static uint8_t _descriptor[];
+    static const uint8_t _descriptor[];
 
     gamepad_report_t _report;
 
