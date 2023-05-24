@@ -21,7 +21,8 @@ void Ultimate::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
     outputs.b = inputs.b;
     outputs.x = inputs.x;
     outputs.y = inputs.y;
-    outputs.buttonR = inputs.z;
+    outputs.buttonL = inputs.lightshield;
+    outputs.buttonR = inputs.z || inputs.midshield;
     outputs.triggerLDigital = inputs.l;
     outputs.triggerRDigital = inputs.r;
     outputs.start = inputs.start;
@@ -55,7 +56,7 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         outputs
     );
 
-    bool shield_button_pressed = inputs.l || inputs.r || inputs.lightshield || inputs.midshield;
+    bool shield_button_pressed = inputs.l || inputs.r;
 
     if (inputs.mod_x) {
         // MX + Horizontal = 6625 = 53

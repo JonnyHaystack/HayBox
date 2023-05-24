@@ -158,6 +158,7 @@ To install the profile:
 - For Slippi this should be
   - On Windows: `%appdata%\Slippi Launcher\netplay\User\Config\Profiles\GCPad\`
   - On Linux: `~/.config/SlippiOnline/Config/Profiles/GCPad/`
+  - On Mac: `Cmd + Shift + G` and enter the path `/Users/<USER>/Library/Application Support/Slippi Launcher/netplay/Slippi Dolphin.app/Contents/Resources/Sys/Config/Profiles/GCPad`
 - For vanilla Dolphin: 
   - On Windows: `%userprofile%\Documents\Dolphin Emulator\Config\Profiles\GCPad\`
   - On Linux: `~/.config/dolphin-emu/Profiles/GCPad/`
