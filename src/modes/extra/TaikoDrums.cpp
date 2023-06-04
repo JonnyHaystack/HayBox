@@ -1,7 +1,35 @@
 /** TaikoDrums profile by VAMOS ( github.com/colonket )
 *   Designed for "Taiko no Tatsujin: Drum 'n' Fun!"
 *   on Nintendo Switch
+*
+*   NOTICE
+*   Taiko no Tatsujin uses a different button scheme in-game
+*   compared to the typical Nintendo Pro Controller scheme
+*   since the game's button layout were meant for Joy-Cons
+*
+*   TO NAVIGATE THE IN-GAME MENU
+*   UP and DOWN is like FGC mode, where Down is DOWN, and Mod_X is UP
+*   A and B are normal
+*   LEFT and RIGHT are ZL and ZR (The farthest left and farthest right buttons )
+
+*   ==========================================================================
+*   INPUT  | OUTPUT (Normal) | OUTPUT (In-Game Menu) | DRUM 
+*   ==========================================================================
+*    Down  | DPAD Down       | Down                  |  LEFT RED
+*    ModX  | DPAD Up         | Up                    |  LEFT BLUE
+*    Left  | DPAD Left       | Left                  |  LEFT BLUE
+*    Right | DPAD Right      | Left                  |  LEFT RED
+*    L     | ZL              | Left                  |  LEFT BLUE
+*    Up    | ZR              | Right                 |  RIGHT BLUE
+*    A     | A               | A                     |  RIGHT BLUE
+*    B     | B               | B                     |  RIGHT RED
+*    Y     | Y               | Y                     |  RIGHT RED
+*    Z     | R               | R                     |  RIGHT BLUE
+*    Y     | X               | Random Song           |  Right Blue (Unintended)
+*    LS    | MINUS / SELECT  | Option                |  N/A
+*    MS    | HOME            | HOME                  |  N/A
 **/
+
 #include "modes/extra/TaikoDrums.hpp"
 
 #define ANALOG_STICK_MIN 1
