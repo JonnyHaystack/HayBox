@@ -29,6 +29,12 @@ void GamecubeControllerInput::UpdateInputs(InputState &inputs) {
         inputs.nunchuk_x = _report.stick_x;
         inputs.nunchuk_y = _report.stick_y;
         inputs.nunchuk_z = _report.l;
+        inputs.nunchuk_start = _report.start;
+        inputs.nunchuk_dleft = _report.dpad_left;
+        inputs.nunchuk_dright = _report.dpad_right;
+        inputs.nunchuk_dup = _report.dpad_up;
+        inputs.nunchuk_ddown = _report.dpad_down;
+        inputs.l_analog = _report.l_analog;
     }
 }
 

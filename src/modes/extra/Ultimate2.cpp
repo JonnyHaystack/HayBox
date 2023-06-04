@@ -55,7 +55,8 @@ void Ultimate2::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         ANALOG_STICK_MAX,
         outputs
     );
-
+//Output L analog from controller along with Right side LSMS
+    outputs.triggerLAnalog = inputs.l_analog;
     bool shield_button_pressed = inputs.l || inputs.r || inputs.lightshield || inputs.midshield;
 
     if (inputs.mod_x) {

@@ -44,6 +44,13 @@ void Melee20Button::UpdateDigitalOutputs(InputState &inputs, OutputState &output
         outputs.dpadLeft = inputs.c_left;
         outputs.dpadRight = inputs.c_right;
     }
+     if (inputs.nunchuk_connected) {
+        outputs.start = inputs.nunchuk_start;
+        outputs.dpadLeft = inputs.nunchuk_dleft;
+        outputs.dpadRight = inputs.nunchuk_dright;
+        outputs.dpadUp = inputs.nunchuk_dup;
+        outputs.dpadDown = inputs.nunchuk_ddown;
+     }
 
     if (inputs.select)
         outputs.dpadLeft = true;
@@ -67,6 +74,8 @@ void Melee20Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
         ANALOG_STICK_MAX,
         outputs
     );
+    //Output L analog from controller along with Right side LSMS
+    outputs.triggerLAnalog = inputs.l_analog;
 
     bool shield_button_pressed = inputs.l || inputs.r || inputs.lightshield || inputs.midshield;
     if (directions.diagonal) {
@@ -288,5 +297,6 @@ void Melee20Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
     if (inputs.nunchuk_connected) {
         outputs.leftStickX = inputs.nunchuk_x;
         outputs.leftStickY = inputs.nunchuk_y;
+        
     }
 }

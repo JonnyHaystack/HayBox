@@ -91,7 +91,8 @@ void MultiVersus::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) 
         ANALOG_STICK_MAX,
         outputs
     );
-
+//Output L analog from controller along with Right side LSMS
+    outputs.triggerLAnalog = inputs.l_analog;
     if (inputs.mod_y && !inputs.mod_x) {
         // MY slows down the cursor for easier menu navigation.
         // Menu cursor speed can also be turned down in-game under "Interface" settings.

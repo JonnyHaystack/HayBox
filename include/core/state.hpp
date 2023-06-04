@@ -35,6 +35,12 @@ typedef struct inputstate {
     int8_t nunchuk_y = 0;
     bool nunchuk_c = false;
     bool nunchuk_z = false;
+    bool nunchuk_dleft = false;
+    bool nunchuk_dright = false;
+    bool nunchuk_ddown = false;
+    bool nunchuk_dup = false;
+    bool nunchuk_start = false;
+    uint8_t l_analog = 0;
 } InputState;
 
 // State describing stick direction at the quadrant level.

@@ -21,6 +21,7 @@ void MKWii::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
     outputs.buttonR = inputs.up;
     outputs.dpadUp = inputs.a;
     outputs.start = inputs.start;
+    
 }
 
 void MKWii::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
@@ -49,5 +50,7 @@ void MKWii::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
     if (inputs.nunchuk_connected) {
         outputs.leftStickX = inputs.nunchuk_x;
         outputs.leftStickY = inputs.nunchuk_y;
+        //Output L analog from controller along with Right side LSMS
+    outputs.triggerLAnalog = inputs.l_analog;
     }
 }

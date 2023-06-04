@@ -43,6 +43,14 @@ void RivalsOfAether::UpdateDigitalOutputs(InputState &inputs, OutputState &outpu
         outputs.dpadLeft = inputs.c_left;
         outputs.dpadRight = inputs.c_right;
     }
+
+     if (inputs.nunchuk_connected) {
+        outputs.start = inputs.nunchuk_start;
+        outputs.dpadLeft = inputs.nunchuk_dleft;
+        outputs.dpadRight = inputs.nunchuk_dright;
+        outputs.dpadUp = inputs.nunchuk_dup;
+        outputs.dpadDown = inputs.nunchuk_ddown;
+     }    
 }
 
 void RivalsOfAether::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
@@ -61,7 +69,8 @@ void RivalsOfAether::UpdateAnalogOutputs(InputState &inputs, OutputState &output
         ANALOG_STICK_MAX,
         outputs
     );
-
+//Output L analog from controller along with Right side LSMS
+    outputs.triggerLAnalog = inputs.l_analog;
     bool shield_button_pressed = inputs.l || inputs.r;
 
 

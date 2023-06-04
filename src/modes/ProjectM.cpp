@@ -49,6 +49,14 @@ void ProjectM::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
         outputs.dpadRight = inputs.c_right;
     }
 
+     if (inputs.nunchuk_connected) {
+        outputs.start = inputs.nunchuk_start;
+        outputs.dpadLeft = inputs.nunchuk_dleft;
+        outputs.dpadRight = inputs.nunchuk_dright;
+        outputs.dpadUp = inputs.nunchuk_dup;
+        outputs.dpadDown = inputs.nunchuk_ddown;
+     }    
+
     // Don't override dpad up if it's already pressed using the MX + MY dpad
     // layer.
     outputs.dpadUp = outputs.dpadUp || inputs.midshield;
@@ -74,7 +82,8 @@ void ProjectM::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         ANALOG_STICK_MAX,
         outputs
     );
-
+//Output L analog from controller along with Right side LSMS
+    outputs.triggerLAnalog = inputs.l_analog;
     bool shield_button_pressed = inputs.l || inputs.lightshield;
 
     if (directions.diagonal) {

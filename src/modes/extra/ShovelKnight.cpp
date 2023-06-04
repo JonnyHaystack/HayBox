@@ -29,6 +29,8 @@ void ShovelKnight::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs
 
     outputs.select = inputs.lightshield; // Inventory
     outputs.start = inputs.start; // Pause
+    //Output L analog from controller along with Right side LSMS
+    outputs.triggerLAnalog = inputs.l_analog;
 }
 
 void ShovelKnight::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {

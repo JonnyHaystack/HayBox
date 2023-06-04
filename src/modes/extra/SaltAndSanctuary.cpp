@@ -47,6 +47,8 @@ void SaltAndSanctuary::UpdateAnalogOutputs(InputState &inputs, OutputState &outp
         ANALOG_STICK_MIN,
         ANALOG_STICK_NEUTRAL,
         ANALOG_STICK_MAX,
+        
         outputs
+        
     );
 }

@@ -26,6 +26,8 @@ void HollowKnight::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs
     outputs.buttonL = inputs.lightshield; // Map
     outputs.select = inputs.midshield; // Inventory
     outputs.start = inputs.start; // Pause
+    //Output L analog from controller along with Right side LSMS
+    outputs.triggerLAnalog = inputs.l_analog;
 }
 
 void HollowKnight::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {

@@ -69,7 +69,8 @@ void RocketLeague::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs)
         ANALOG_STICK_MAX,
         outputs
     );
-
+//Output L analog from controller along with Right side LSMS
+    outputs.triggerLAnalog = inputs.l_analog;
     if (inputs.mod_y) {
         if (directions.diagonal) {
             outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 70);

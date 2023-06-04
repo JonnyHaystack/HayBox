@@ -61,7 +61,8 @@ void DarkSouls::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         ANALOG_STICK_MAX,
         outputs
     );
-
+//Output L analog from controller along with Right side LSMS
+    outputs.triggerLAnalog = inputs.l_analog;
     // Nunchuk overrides left stick.
     if (inputs.nunchuk_connected) {
         outputs.leftStickX = inputs.nunchuk_x;

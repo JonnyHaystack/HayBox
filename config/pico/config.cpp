@@ -16,14 +16,45 @@
 #include "joybus_utils.hpp"
 #include "modes/Melee20Button.hpp"
 #include "stdlib.hpp"
+#include "HAL/pico/include/input/GamecubeControllerInput.hpp"
+
 
 #include <pico/bootrom.h>
 
 CommunicationBackend **backends = nullptr;
 size_t backend_count;
 KeyboardMode *current_kb_mode = nullptr;
+GamecubeControllerInput *gcc = nullptr;
 
 GpioButtonMapping button_mappings[] = {
+    // {&InputState::l,            5 },
+    // { &InputState::left,        4 },
+    // { &InputState::down,        3 },
+    // { &InputState::right,       2 },
+
+    // { &InputState::mod_x,       6 },
+    // { &InputState::mod_y,       7 },
+
+    // { &InputState::select,      10},
+    // { &InputState::start,       0 },
+    // { &InputState::home,        11},
+
+    // { &InputState::c_left,      13},
+    // { &InputState::c_up,        12},
+    // { &InputState::c_down,      15},
+    // { &InputState::a,           14},
+    // { &InputState::c_right,     16},
+ 
+    // { &InputState::b,           26},
+    // { &InputState::x,           21},
+    // { &InputState::z,           19},
+    // { &InputState::up,          17},
+
+    // { &InputState::r,           27},
+    // { &InputState::y,           22},
+    // { &InputState::lightshield, 20},
+    // { &InputState::midshield,   18},
+
     {&InputState::l,            5 },
     { &InputState::left,        4 },
     { &InputState::down,        3 },
@@ -41,7 +72,7 @@ GpioButtonMapping button_mappings[] = {
     { &InputState::c_down,      15},
     { &InputState::a,           14},
     { &InputState::c_right,     16},
-
+ 
     { &InputState::b,           26},
     { &InputState::x,           21},
     { &InputState::z,           19},
@@ -51,6 +82,35 @@ GpioButtonMapping button_mappings[] = {
     { &InputState::y,           22},
     { &InputState::lightshield, 20},
     { &InputState::midshield,   18},
+    
+    //Swifts layout
+
+    // {&InputState::l,            5 },
+    // { &InputState::left,        4 },
+    // { &InputState::down,        3 },
+    // { &InputState::right,       2 },
+    // { &InputState::mod_x,       6 },
+    // { &InputState::mod_y,       7 },
+
+    // { &InputState::select,      10},
+    // { &InputState::start,       0 },
+    // { &InputState::home,        11},
+
+    // { &InputState::c_left,      13},
+    // { &InputState::c_up,        12},
+    // { &InputState::c_down,      15},
+    // { &InputState::a,           14},
+    // { &InputState::c_right,     16},
+
+    // { &InputState::b,           26},
+    // { &InputState::x,           17},
+    // { &InputState::z,           20},
+    // { &InputState::up,          19},
+
+    // { &InputState::r,           27},
+    // { &InputState::y,           22},
+    // { &InputState::lightshield, 21},
+    // { &InputState::midshield,   18},
 };
 size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
 
@@ -154,13 +214,11 @@ void setup1() {
         tight_loop_contents();
     }
 
-    // Create Nunchuk input source.
-    nunchuk = new NunchukInput(Wire, pinout.nunchuk_detect, pinout.nunchuk_sda, pinout.nunchuk_scl);
+    gcc = new GamecubeControllerInput(9, 2500, pio1);
 }
 
 void loop1() {
     if (backends != nullptr) {
-        nunchuk->UpdateInputs(backends[0]->GetInputs());
-        busy_wait_us(50);
+        gcc->UpdateInputs(backends[0]->GetInputs());
     }
 }

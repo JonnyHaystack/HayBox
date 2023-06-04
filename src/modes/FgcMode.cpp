@@ -46,4 +46,6 @@ void FgcMode::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
     outputs.rightStickY = 128;
     outputs.triggerLAnalog = outputs.triggerLDigital ? 255 : 0;
     outputs.triggerRAnalog = outputs.triggerRDigital ? 255 : 0;
+    //Output L analog from controller along with Right side LSMS
+    outputs.triggerLAnalog = inputs.l_analog;
 }
