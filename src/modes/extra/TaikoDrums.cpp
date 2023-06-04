@@ -2,6 +2,17 @@
 *   Designed for "Taiko no Tatsujin: Drum 'n' Fun!"
 *   on Nintendo Switch
 *
+*   To add this mode to your controller, edit `config/mode_selection.hpp`
+*   
+*   After the include statements, add:
+*   #include "modes/extra/TaikoDrums.hpp"
+*
+*   To select this mode with ModX+Start+A : 
+*   After the mode selection if statements, (reccomended after Rivals) add:
+*   } else if (inputs.a) {
+            set_mode(backend, new TaikoDrums(socd::SOCD_NEUTRAL));
+    }
+*
 *   NOTICE
 *   Taiko no Tatsujin uses a different button scheme in-game
 *   compared to the typical Nintendo Pro Controller scheme
@@ -23,11 +34,37 @@
 *    Up    | ZR              | Right                 |  RIGHT BLUE
 *    A     | A               | A                     |  RIGHT BLUE
 *    B     | B               | B                     |  RIGHT RED
-*    Y     | Y               | Y                     |  RIGHT RED
+*    X     | Y               | Y                     |  RIGHT RED
 *    Z     | R               | R                     |  RIGHT BLUE
 *    Y     | X               | Random Song           |  Right Blue (Unintended)
 *    LS    | MINUS / SELECT  | Option                |  N/A
 *    MS    | HOME            | HOME                  |  N/A
+*
+=============IN SONG================ (B)lue, (R)ed
+                        X minus
+                      /     home 
+      B R               R B
+    B     R           R     B
+              start   /
+          B          /B/
+           /         /
+=============IN MENU================
+                            X minus
+                          /     home 
+      Left Down             Y R
+    Left     Left         B     Right
+                start     /
+             Up          /A/
+              /         /
+=============SWITCH CONTROLS=========
+                           X minus
+                         /     home 
+      Left Down            Y R
+    ZL      Right        B     ZR
+                start    /
+            Up          /A/
+             /          /
+=====================================
 **/
 
 #include "modes/extra/TaikoDrums.hpp"
