@@ -4,6 +4,10 @@
 **/
 #include "modes/extra/TaikoDrums.hpp"
 
+#define ANALOG_STICK_MIN 1
+#define ANALOG_STICK_NEUTRAL 128
+#define ANALOG_STICK_MAX 255
+
 TaikoDrums::TaikoDrums(socd::SocdType socd_type) : ControllerMode(socd_type) {
     _socd_pair_count = 2;
     _socd_pairs = new socd::SocdPair[_socd_pair_count]{
@@ -44,4 +48,22 @@ void TaikoDrums::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) 
     outputs.x = inputs.y;
     outputs.select = inputs.lightshield;
     outputs.home = inputs.midshield;
+}
+
+void TaikoDrums::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
+    // Coordinate calculations to make modifier handling simpler.
+    UpdateDirections(
+        inputs.left,
+        inputs.right,
+        inputs.down,
+        inputs.mod_x,
+        inputs.c_left,
+        inputs.c_right,
+        inputs.c_down,
+        inputs.c_up,
+        ANALOG_STICK_MIN,
+        ANALOG_STICK_NEUTRAL,
+        ANALOG_STICK_MAX,
+        outputs
+    );
 }
