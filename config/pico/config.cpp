@@ -214,7 +214,7 @@ void setup1() {
         tight_loop_contents();
     }
 
-    gcc = new GamecubeControllerInput(9, 2500, pio1);
+    gcc = new GamecubeControllerInput(9, 1000, pio1);
 }
 
 void loop1() {
