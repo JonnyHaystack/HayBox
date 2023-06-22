@@ -100,59 +100,51 @@ void NintendoSwitchBackend::RegisterDescriptor() {
 }
 
 void NintendoSwitchBackend::SendReport() {
-    ScanInputs(InputScanSpeed::SLOW);
-    ScanInputs(InputScanSpeed::MEDIUM);
+  ScanInputs(InputScanSpeed::SLOW);
+  ScanInputs(InputScanSpeed::MEDIUM);
 
-    while (!TUCompositeHID::_usb_hid.ready()) {
-        tight_loop_contents();
-    }
+  while (!TUCompositeHID::_usb_hid.ready()) {
+      tight_loop_contents();
+  }
 
-    ScanInputs(InputScanSpeed::FAST);
+  ScanInputs(InputScanSpeed::FAST);
 
-    UpdateOutputs();
+  UpdateOutputs();
 
-    // Digital outputs
-    _report.y = _outputs.y;
-    _report.b = _outputs.b;
-    _report.a = _outputs.a;
-    _report.x = _outputs.x;
+  // Digital outputs
+  _report.y = _outputs.y;
+  _report.b = _outputs.b;
+  _report.a = _outputs.a;
+  _report.x = _outputs.x;
 
-    /* _report.l = _outputs.buttonL; */
-    /* _report.r = _outputs.buttonR; */
-    /* _report.zl = _outputs.triggerLDigital; */
-    /* _report.zr = _outputs.triggerRDigital; */
+  // TODO: This flips R1/R2 and L1/L2 but the game actually sees b0xx L and R as the triggers.
+  // Maybe the pinout needs to change? Unsure.
+  _report.l = _outputs.triggerLDigital;
+  _report.r = _outputs.triggerRDigital;
+  _report.zl = _outputs.buttonL;
+  _report.zr = _outputs.buttonR;
 
-    // TODO: This flips R1/R2 and L1/L2 but the game actually sees b0xx L and R as the triggers.
-    // Maybe the pinout needs to change? Unsure.
-    _report.l = _outputs.triggerLDigital;
-    _report.r = _outputs.triggerRDigital;
-    _report.zl = _outputs.buttonL;
-    _report.zr = _outputs.buttonR;
+  _report.minus = _outputs.select;
+  _report.plus = _outputs.start;
+  _report.l3 = _outputs.leftStickClick;
+  _report.r3 = _outputs.rightStickClick;
+  _report.home = _outputs.home;
 
-    _report.minus = _outputs.select;
-    _report.plus = _outputs.start;
-    _report.l3 = _outputs.leftStickClick;
-    _report.r3 = _outputs.rightStickClick;
-    _report.home = _outputs.home;
+  // Analog outputs
 
-    // Analog outputs
-    /* _report.lx = (_outputs.leftStickX - 128) * 1.25 + 128; */
-    /* _report.ly = 255 - ((_outputs.leftStickY - 128) * 1.25 + 128); */
-    /* _report.rx = (_outputs.rightStickX - 128) * 1.25 + 128; */
-    /* _report.ry = 255 - ((_outputs.rightStickY - 128) * 1.25 + 128); */
+  // Left Stick outputs                             ||     Scaling    ||    || Offset ||
+  _report.lx =        ((_outputs.leftStickX  - 128)   * 1.266  + 128)         + 0.49;     // Rightwards
+  _report.ly = (255 - ((_outputs.leftStickY  - 128)   * 1.256  + 128))        + 1.48;     // Downwards
 
-      // Left Stick outputs                             ||     Scaling    ||    || Offset ||
-    _report.lx =        ((_outputs.leftStickX  - 128)   * 1.266  + 128)         + 0.49;     // Rightwards
-    _report.ly = (255 - ((_outputs.leftStickY  - 128)   * 1.256  + 128))        + 1.48;     // Downwards
-    // Right Stick outputs
-    _report.rx =        ((_outputs.rightStickX - 128)   * 1.266  + 128)         + 0.49;
-    _report.ry = (255 - ((_outputs.rightStickY - 128)   * 1.256  + 128))        + 1.48;
+  // Right Stick outputs
+  _report.rx =        ((_outputs.rightStickX - 128)   * 1.266  + 128)         + 0.49;
+  _report.ry = (255 - ((_outputs.rightStickY - 128)   * 1.256  + 128))        + 1.48;
 
-    // D-pad Hat Switch
-    _report.hat =
-        GetHatPosition(_outputs.dpadLeft, _outputs.dpadRight, _outputs.dpadDown, _outputs.dpadUp);
+  // D-pad Hat Switch
+  _report.hat =
+      GetHatPosition(_outputs.dpadLeft, _outputs.dpadRight, _outputs.dpadDown, _outputs.dpadUp);
 
-    TUCompositeHID::_usb_hid.sendReport(_report_id, &_report, sizeof(switch_gamepad_report_t));
+  TUCompositeHID::_usb_hid.sendReport(_report_id, &_report, sizeof(switch_gamepad_report_t));
 }
 
 switch_gamepad_hat_t NintendoSwitchBackend::GetHatPosition(

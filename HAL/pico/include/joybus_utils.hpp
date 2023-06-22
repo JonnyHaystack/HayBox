@@ -6,6 +6,7 @@
 enum class ConnectedConsole {
     GAMECUBE,
     N64,
+    SWITCH,
     NONE,
 };
 

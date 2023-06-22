@@ -3,7 +3,6 @@
 #include "comms/GamecubeBackend.hpp"
 #include "comms/N64Backend.hpp"
 #include "comms/NintendoSwitchBackend.hpp"
-#include "comms/XInputBackend.hpp"
 #include "config/mode_selection.hpp"
 #include "core/CommunicationBackend.hpp"
 #include "core/InputMode.hpp"
@@ -20,6 +19,7 @@
 #include <pico/bootrom.h>
 
 CommunicationBackend **backends = nullptr;
+CommunicationBackend *primary_backend = nullptr;
 size_t backend_count;
 KeyboardMode *current_kb_mode = nullptr;
 
@@ -83,10 +83,7 @@ void setup() {
   size_t input_source_count = sizeof(input_sources) / sizeof(InputSource *);
 
   /* Select communication backend. */
-  CommunicationBackend *primary_backend;
-
   if (button_holds.z) {
-    // If no console detected and Z is held on plugin then use XInput backend.
     backend_count = 2;
     primary_backend = new XInputBackend(input_sources, input_source_count);
     backends = new CommunicationBackend *[backend_count] {
@@ -104,14 +101,8 @@ void setup() {
 }
 
 void loop() {
-    select_mode(backends[0]);
+  select_mode(primary_backend);
+  primary_backend->SendReport();
 
-    for (size_t i = 0; i < backend_count; i++) {
-        backends[i]->SendReport();
-    }
-
-    if (current_kb_mode != nullptr) {
-        current_kb_mode->SendReport(backends[0]->GetInputs());
-    }
 }
 

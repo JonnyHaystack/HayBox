@@ -56,8 +56,10 @@ void XInputBackend::SendReport() {
 
     _report.lx = (_outputs.leftStickX - 128) * 65535 / 255 + 128;
     _report.ly = (_outputs.leftStickY - 128) * 65535 / 255 + 128;
+
     _report.rx = (_outputs.rightStickX - 128) * 65535 / 255 + 128;
     _report.ry = (_outputs.rightStickY - 128) * 65535 / 255 + 128;
 
     _xinput->sendReport(&_report);
 }
+

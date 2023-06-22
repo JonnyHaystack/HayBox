@@ -13,6 +13,7 @@ ConnectedConsole detect_console(uint joybus_pin) {
     if (GamecubeConsole(joybus_pin).Detect()) {
         return ConnectedConsole::GAMECUBE;
     }
+
     // 5V is not connected when plugged into N64 so we check that first to save time.
     if (!vbus_powered && N64Console(joybus_pin).Detect()) {
         return ConnectedConsole::N64;
