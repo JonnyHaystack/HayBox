@@ -53,7 +53,7 @@ GpioButtonMapping button_mappings[] = {
 size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
 
 Pinout pinout = {
-    .joybus_data = 28,
+    .joybus_data = 2,
     .mux = -1,
     .nunchuk_detect = -1,
     .nunchuk_sda = -1,
