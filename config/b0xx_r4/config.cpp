@@ -19,7 +19,6 @@
 #include <pico/bootrom.h>
 
 CommunicationBackend **backends = nullptr;
-CommunicationBackend *primary_backend = nullptr;
 size_t backend_count;
 KeyboardMode *current_kb_mode = nullptr;
 
@@ -53,7 +52,7 @@ GpioButtonMapping button_mappings[] = {
 
 size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
 
-const Pinout pinout = {
+Pinout pinout = {
     .joybus_data = 28,
     .mux = -1,
     .nunchuk_detect = -1,
@@ -82,27 +81,45 @@ void setup() {
   static InputSource *input_sources[] = { gpio_input };
   size_t input_source_count = sizeof(input_sources) / sizeof(InputSource *);
 
+  ConnectedConsole console = detect_console(pinout.joybus_data);
+
   /* Select communication backend. */
-  if (button_holds.z) {
-    backend_count = 2;
-    primary_backend = new XInputBackend(input_sources, input_source_count);
-    backends = new CommunicationBackend *[backend_count] {
-        primary_backend, new B0XXInputViewer(input_sources, input_source_count)
-    };
+  CommunicationBackend *primary_backend;
+  if (console == ConnectedConsole::NONE) {
+    if (button_holds.x) {
+      // Hold X for XInput
+      backend_count = 2;
+      primary_backend = new XInputBackend(input_sources, input_source_count);
+      backends = new CommunicationBackend *[backend_count] {
+          primary_backend, new B0XXInputViewer(input_sources, input_source_count)
+      };
+      primary_backend->SetGameMode(new UltimateR4(socd::SOCD_2IP));
+    } else {
+      // Default to Switch (detect_console returns NONE for the Switch!)
+      NintendoSwitchBackend::RegisterDescriptor();
+      backend_count = 1;
+      primary_backend = new NintendoSwitchBackend(input_sources, input_source_count);
+      backends = new CommunicationBackend *[backend_count] { primary_backend };
+      primary_backend->SetGameMode(new UltimateR4(socd::SOCD_2IP));
+    }
   } else {
-    NintendoSwitchBackend::RegisterDescriptor();
+    if (console == ConnectedConsole::GAMECUBE) {
+      primary_backend = new GamecubeBackend(input_sources, input_source_count, pinout.joybus_data);
+      primary_backend->SetGameMode(new Melee20Button(socd::SOCD_2IP_NO_REAC, { .crouch_walk_os = false }));
+    } else if (console == ConnectedConsole::N64) {
+      primary_backend = new N64Backend(input_sources, input_source_count, pinout.joybus_data);
+      primary_backend->SetGameMode(new UltimateR4(socd::SOCD_2IP));
+    }
+    // If console then only using 1 backend (no input viewer).
     backend_count = 1;
-    primary_backend = new NintendoSwitchBackend(input_sources, input_source_count);
     backends = new CommunicationBackend *[backend_count] { primary_backend };
   }
-
-  // Default to Ultimate mode.
-  primary_backend->SetGameMode(new UltimateR4(socd::SOCD_2IP));
 }
 
 void loop() {
-  select_mode(primary_backend);
-  primary_backend->SendReport();
-
+  select_mode(backends[0]);
+  for (size_t i = 0; i < backend_count; i++) {
+      backends[i]->SendReport();
+  }
 }
 
