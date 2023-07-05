@@ -105,7 +105,8 @@ void setup() {
   } else {
     if (console == ConnectedConsole::GAMECUBE) {
       primary_backend = new GamecubeBackend(input_sources, input_source_count, pinout.joybus_data);
-      primary_backend->SetGameMode(new Melee20Button(socd::SOCD_2IP_NO_REAC, { .crouch_walk_os = false }));
+      socd::SocdType socdType = (button_holds.r && button_holds.y) ? socd::SOCD_2IP_NO_REAC : socd::SOCD_2IP;
+      primary_backend->SetGameMode(new Melee20Button(socdType, { .crouch_walk_os = false }));
     } else if (console == ConnectedConsole::N64) {
       primary_backend = new N64Backend(input_sources, input_source_count, pinout.joybus_data);
       primary_backend->SetGameMode(new UltimateR4(socd::SOCD_2IP));
