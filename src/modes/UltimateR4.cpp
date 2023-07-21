@@ -214,9 +214,8 @@ void UltimateR4::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
 
             // MY Pivot Uptilt/Dtilt
             if (inputs.a) {
-                // 34 38 for consistent pivot dtilt
-                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 34);
-                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 38);
+                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 50);
+                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 65);
             }
         }
     }
