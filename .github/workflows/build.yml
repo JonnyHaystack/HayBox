@@ -5,6 +5,8 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     env:
       VERSION_REF: ${{ github.ref_type == 'tag' && github.ref_name || github.sha }}
     strategy:
