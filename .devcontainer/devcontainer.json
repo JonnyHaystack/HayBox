@@ -1,7 +1,11 @@
 {
 	"name": "HayBox",
 	"image": "mcr.microsoft.com/devcontainers/universal:2-linux",
-    "features": {},
+    "features": {
+		"ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
+			"packages": "clang-format"
+		}
+	},
 	"onCreateCommand": "python -m pip install -U platformio && pio pkg install && pio pkg update -g -p https://github.com/maxgerhardt/platform-raspberrypi",
     "customizations": {
         "vscode": {
