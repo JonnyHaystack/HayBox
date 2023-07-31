@@ -1,6 +1,6 @@
 {
 	"name": "HayBox",
-	"image": "mcr.microsoft.com/devcontainers/universal:2-linux",
+	"image": "mcr.microsoft.com/devcontainers/base:debian",
     "features": {
 		"ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
 			"packages": "clang-format"
@@ -9,7 +9,10 @@
 	"onCreateCommand": "python -m pip install -U platformio && pio pkg install && pio pkg update -g -p https://github.com/maxgerhardt/platform-raspberrypi",
     "customizations": {
         "vscode": {
-            "settings": {},
+            "settings": {
+                "workbench.colorTheme": "Default Dark+",
+                "git.autofetch": true
+            },
             "extensions": [
                 "ms-vscode.cpptools",
                 "platformio.platformio-ide",
