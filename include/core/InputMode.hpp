@@ -6,15 +6,12 @@
 
 class InputMode {
   public:
-    InputMode(socd::SocdType socd_type);
+    InputMode();
     virtual ~InputMode();
 
   protected:
     socd::SocdPair *_socd_pairs = nullptr;
     size_t _socd_pair_count = 0;
-    /* Exposed to child classes so that game modes are able to have different behaviour depending on
-     * SOCD cleaning mode. */
-    socd::SocdType _socd_type;
 
     virtual void HandleSocd(InputState &inputs);
 

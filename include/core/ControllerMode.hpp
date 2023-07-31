@@ -7,7 +7,7 @@
 
 class ControllerMode : public InputMode {
   public:
-    ControllerMode(socd::SocdType socd_type);
+    ControllerMode();
     void UpdateOutputs(InputState &inputs, OutputState &outputs);
     void ResetDirections();
     virtual void UpdateDirections(

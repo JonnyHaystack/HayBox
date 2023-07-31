@@ -52,7 +52,7 @@ Features include:
 - Existing modes for popular games (e.g. Melee, Project M, Ultimate, Rivals of Aether, traditional fighting games)
 - Easy to create new controller modes (or keyboard modes) for different games
 - USB keyboard game modes for games that lack gamepad support
-- Fully customisable SOCD cleaning, allowing you to configure SOCD button pairs (e.g. left/right, up/down) for each controller/keyboard mode, and also easily change the SOCD resolution method
+- Fully customisable SOCD cleaning, allowing you to configure SOCD button pairs (e.g. left/right, up/down) for each controller/keyboard mode, and also easily change the SOCD resolution method for each SOCD pair
 - Switch modes on the fly without unplugging your controller
 - Automatically detects whether plugged into console or USB
 - Game modes and communication backends are independent entities, meaning you can use any game mode with any supported console without extra work
@@ -210,9 +210,8 @@ To configure the button holds for input modes (controller/keyboard modes), edit
 the `select_mode()` function in `config/mode_selection.hpp`. Each `if`
 statement is a button combination to select an input mode.
 
-All input modes support passing in a SOCD cleaning mode, e.g.
-`socd::2IP_NO_REAC`. You can see the other available modes in
-`src/include/socd.hpp`.
+Most input modes support passing in an SOCD cleaning mode, e.g.
+`socd::2IP_NO_REAC`. See [here](#socd) for the other available modes.
 
 ### Creating custom input modes
 
@@ -281,7 +280,7 @@ along with the other analog outputs.
 Also note: You don't need to worry about resetting the output state or clearing
 anything from it. This is done automatically at the start of each iteration.
 
-#### SOCD
+### SOCD
 
 In the constructor of each mode (for controller modes *and* keyboard modes), you
 can configure pairs of opposing direction inputs to apply SOCD cleaning to.
@@ -290,10 +289,10 @@ For example, in `src/modes/Melee20Button.cpp`:
 ```
 _socd_pair_count = 4;
 _socd_pairs = new socd::SocdPair[_socd_pair_count]{
-    socd::SocdPair{&InputState::left,    &InputState::right  },
-    socd::SocdPair{ &InputState::down,   &InputState::up     },
-    socd::SocdPair{ &InputState::c_left, &InputState::c_right},
-    socd::SocdPair{ &InputState::c_down, &InputState::c_up   },
+    socd::SocdPair{&InputState::left,    &InputState::right,   socd_type},
+    socd::SocdPair{ &InputState::down,   &InputState::up,      socd_type},
+    socd::SocdPair{ &InputState::c_left, &InputState::c_right, socd_type},
+    socd::SocdPair{ &InputState::c_down, &InputState::c_up,    socd_type},
 };
 ```
 
@@ -303,8 +302,22 @@ cleaning is automatically done before `UpdateDigitalOutputs()` and
 `UpdateAnalogOutputs()`, and you do not need to worry about it any further than
 that.
 
-Note that you do not have to write a `HandleSocd()` function like in the
-Melee20Button and Melee18Button modes. It is only overridden in these two modes
+For each `SocdPair` you can pass in an `SocdType` of your choosing. By default
+for most modes this is passed in as a single constructor parameter, but it is
+possible to pass in multiple parameters, or simply use a hardcoded value. Both
+of these approaches are exemplified in `src/modes/FgcMode.cpp`.
+
+| `SocdType` | Description |
+| ---------- | ----------- |
+| `SOCD_NEUTRAL` | Left + right = neutral - the default if no `SocdType` specified in the `SocdPair` |
+| `SOCD_2IP` | Second input priority - left -> left + right = right, and vice versa. Releasing the second direction gives the original direction |
+| `SOCD_2IP_NO_REAC` | Second input priority without reactivation - same as above, except releasing the second direction results in neutral. The original direction must be physically reactuated. |
+| `SOCD_DIR1_PRIORITY` | The first button in the `SocdPair` always takes priority over the second |
+| `SOCD_DIR2_PRIORITY` | The second button in the `SocdPair` always takes priority over the first |
+| `SOCD_NONE` | No SOCD resolution - the game decides |
+
+Note that you do not have to implement a `HandleSocd()` function like in the
+Melee20Button and Melee18Button modes. It is only overridden in these modes
 so that we can check if left and right are both held *before* SOCD cleaning,
 because when they are both held (without a vertical direction being held) we
 need to override all modifiers.

@@ -4,13 +4,13 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 255
 
-MKWii::MKWii(socd::SocdType socd_type) : ControllerMode(socd_type) {
+MKWii::MKWii(socd::SocdType socd_type) {
     _socd_pair_count = 4;
     _socd_pairs = new socd::SocdPair[_socd_pair_count]{
-        socd::SocdPair{&InputState::left, &InputState::right},
-        socd::SocdPair{ &InputState::l,   &InputState::down },
-        socd::SocdPair{ &InputState::l,   &InputState::mod_x},
-        socd::SocdPair{ &InputState::l,   &InputState::mod_y},
+        socd::SocdPair{&InputState::left, &InputState::right, socd_type},
+        socd::SocdPair{ &InputState::l,   &InputState::down,  socd_type},
+        socd::SocdPair{ &InputState::l,   &InputState::mod_x, socd_type},
+        socd::SocdPair{ &InputState::l,   &InputState::mod_y, socd_type},
     };
 }
 
