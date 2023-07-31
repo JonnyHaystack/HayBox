@@ -11,7 +11,10 @@
         "vscode": {
             "settings": {
                 "workbench.colorTheme": "Default Dark+",
-                "git.autofetch": true
+                "git.autofetch": true,
+                "editor.defaultFormatter": "xaver.clang-format",
+                "clang-format.executable": "clang-format-14",
+                "editor.formatOnSave": true
             },
             "extensions": [
                 "ms-vscode.cpptools",
