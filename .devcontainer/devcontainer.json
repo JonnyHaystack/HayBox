@@ -1,0 +1,26 @@
+{
+    "name": "HayBox",
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+    "features": {
+        "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
+            "packages": "python3-pip,python3-venv,clang-format-14"
+        }
+    },
+    "onCreateCommand": "python3 -m pip install -U platformio && pio pkg install && pio pkg update -g -p https://github.com/maxgerhardt/platform-raspberrypi",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "workbench.colorTheme": "Default Dark+",
+                "git.autofetch": true,
+                "editor.defaultFormatter": "xaver.clang-format",
+                "clang-format.executable": "clang-format-14",
+                "editor.formatOnSave": true
+            },
+            "extensions": [
+                "ms-vscode.cpptools",
+                "platformio.platformio-ide",
+                "xaver.clang-format"
+            ]
+        }
+    }
+}
