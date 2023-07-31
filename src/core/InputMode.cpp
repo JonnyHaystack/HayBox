@@ -42,10 +42,10 @@ void InputMode::HandleSocd(InputState &inputs) {
                 );
                 break;
             case socd::SOCD_DIR1_PRIORITY:
-                socd::dir1Priority(inputs.*(pair.input_dir1), inputs.*(pair.input_dir2));
+                socd::dir1_priority(inputs.*(pair.input_dir1), inputs.*(pair.input_dir2));
                 break;
             case socd::SOCD_DIR2_PRIORITY:
-                socd::dir1Priority(inputs.*(pair.input_dir2), inputs.*(pair.input_dir1));
+                socd::dir1_priority(inputs.*(pair.input_dir2), inputs.*(pair.input_dir1));
                 break;
             case socd::SOCD_NONE:
                 break;
