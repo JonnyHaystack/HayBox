@@ -1,4 +1,5 @@
 {
     "editor.defaultFormatter": "xaver.clang-format",
+    "clang-format.executable": "clang-format-14",
     "editor.formatOnSave": true
 }

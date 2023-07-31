@@ -1,12 +1,12 @@
 {
 	"name": "HayBox",
-	"image": "mcr.microsoft.com/devcontainers/base:debian",
+	"image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
     "features": {
 		"ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
-			"packages": "clang-format"
+			"packages": "python3-pip,python3-venv,clang-format-14"
 		}
 	},
-	"onCreateCommand": "python -m pip install -U platformio && pio pkg install && pio pkg update -g -p https://github.com/maxgerhardt/platform-raspberrypi",
+	"onCreateCommand": "python3 -m pip install -U platformio && pio pkg install && pio pkg update -g -p https://github.com/maxgerhardt/platform-raspberrypi",
     "customizations": {
         "vscode": {
             "settings": {
