@@ -1,6 +1,6 @@
 #include "core/ControllerMode.hpp"
 
-ControllerMode::ControllerMode(socd::SocdType socd_type) : InputMode(socd_type) {
+ControllerMode::ControllerMode() {
     // Set up initial state.
     ResetDirections();
 }
