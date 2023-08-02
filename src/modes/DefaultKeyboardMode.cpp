@@ -3,7 +3,7 @@
 #include "core/socd.hpp"
 #include "core/state.hpp"
 
-DefaultKeyboardMode::DefaultKeyboardMode(socd::SocdType socd_type) : KeyboardMode(socd_type) {}
+DefaultKeyboardMode::DefaultKeyboardMode(socd::SocdType socd_type) {}
 
 void DefaultKeyboardMode::UpdateKeys(InputState &inputs) {
     Press(HID_KEY_A, inputs.l);
