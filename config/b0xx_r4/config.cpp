@@ -94,6 +94,14 @@ void setup() {
           primary_backend, new B0XXInputViewer(input_sources, input_source_count)
       };
       primary_backend->SetGameMode(new UltimateR4(socd::SOCD_2IP));
+    } else if (button_holds.y) {
+      // Hold Y for FGC Mode
+      backend_count = 2;
+      primary_backend = new XInputBackend(input_sources, input_source_count);
+      backends = new CommunicationBackend *[backend_count] {
+          primary_backend, new B0XXInputViewer(input_sources, input_source_count)
+      };
+      primary_backend->SetGameMode(new FgcMode(socd::SOCD_NEUTRAL));
     } else {
       // Default to Switch (detect_console returns NONE for the Switch!)
       NintendoSwitchBackend::RegisterDescriptor();
