@@ -19,6 +19,7 @@ void UltimateR4::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) 
     outputs.b = inputs.b;
     outputs.x = inputs.x;
     outputs.y = inputs.y;
+    outputs.buttonL = inputs.midshield;
     outputs.buttonR = inputs.z;
     outputs.triggerLDigital = inputs.l;
     outputs.triggerRDigital = inputs.r;
