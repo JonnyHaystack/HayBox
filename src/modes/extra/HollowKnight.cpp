@@ -4,13 +4,13 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 255
 
-HollowKnight::HollowKnight(socd::SocdType socd_type) : ControllerMode(socd_type) {
+HollowKnight::HollowKnight(socd::SocdType socd_type) {
     _socd_pair_count = 4;
     _socd_pairs = new socd::SocdPair[_socd_pair_count]{
-        socd::SocdPair{&InputState::left,    &InputState::right  },
-        socd::SocdPair{ &InputState::down,   &InputState::mod_x  },
-        socd::SocdPair{ &InputState::c_left, &InputState::c_right},
-        socd::SocdPair{ &InputState::c_down, &InputState::c_up   },
+        socd::SocdPair{&InputState::left,    &InputState::right,   socd_type},
+        socd::SocdPair{ &InputState::down,   &InputState::mod_x,   socd_type},
+        socd::SocdPair{ &InputState::c_left, &InputState::c_right, socd_type},
+        socd::SocdPair{ &InputState::c_down, &InputState::c_up,    socd_type},
     };
 }
 
@@ -18,10 +18,10 @@ void HollowKnight::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs
     outputs.a = inputs.a; // Attack
     outputs.b = inputs.b; // Dash
     outputs.x = inputs.x; // Jump
-    outputs.y = inputs.mod_y; // Spell
-    outputs.triggerLDigital = inputs.r; // Focus/cast
-    outputs.triggerRDigital = inputs.z;
-    outputs.buttonR = inputs.up; // Dream nail
+    outputs.y = inputs.mod_y; // Quick Cast
+    outputs.triggerLDigital = inputs.r; // Focus / Cast
+    outputs.triggerRDigital = inputs.z; // C-Dash
+    outputs.buttonR = inputs.up; // Dream Nail
 
     outputs.buttonL = inputs.lightshield; // Map
     outputs.select = inputs.midshield; // Inventory

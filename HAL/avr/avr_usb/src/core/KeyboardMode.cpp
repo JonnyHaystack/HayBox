@@ -4,7 +4,7 @@
 
 #include <ArduinoKeyboard.hpp>
 
-KeyboardMode::KeyboardMode(socd::SocdType socd_type) : InputMode(socd_type) {}
+KeyboardMode::KeyboardMode() {}
 
 KeyboardMode::~KeyboardMode() {
     _keyboard.releaseAll();

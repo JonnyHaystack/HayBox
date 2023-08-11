@@ -3,9 +3,7 @@
 #include "core/socd.hpp"
 #include "core/state.hpp"
 
-InputMode::InputMode(socd::SocdType socd_type) {
-    _socd_type = socd_type;
-}
+InputMode::InputMode() {}
 
 InputMode::~InputMode() {
     delete[] _socd_pairs;
@@ -25,21 +23,31 @@ void InputMode::HandleSocd(InputState &inputs) {
     // Handle SOCD resolution for each SOCD button pair.
     for (size_t i = 0; i < _socd_pair_count; i++) {
         socd::SocdPair pair = _socd_pairs[i];
-        switch (_socd_type) {
+        switch (pair.socd_type) {
             case socd::SOCD_NEUTRAL:
                 socd::neutral(inputs.*(pair.input_dir1), inputs.*(pair.input_dir2));
                 break;
             case socd::SOCD_2IP:
-                socd::twoIP(inputs.*(pair.input_dir1), inputs.*(pair.input_dir2), _socd_states[i]);
-                break;
-            case socd::SOCD_2IP_NO_REAC:
-                socd::twoIPNoReactivate(
+                socd::second_input_priority(
                     inputs.*(pair.input_dir1),
                     inputs.*(pair.input_dir2),
                     _socd_states[i]
                 );
                 break;
-            case socd::SOCD_KEYBOARD:
+            case socd::SOCD_2IP_NO_REAC:
+                socd::second_input_priority_no_reactivation(
+                    inputs.*(pair.input_dir1),
+                    inputs.*(pair.input_dir2),
+                    _socd_states[i]
+                );
+                break;
+            case socd::SOCD_DIR1_PRIORITY:
+                socd::dir1_priority(inputs.*(pair.input_dir1), inputs.*(pair.input_dir2));
+                break;
+            case socd::SOCD_DIR2_PRIORITY:
+                socd::dir1_priority(inputs.*(pair.input_dir2), inputs.*(pair.input_dir1));
+                break;
+            case socd::SOCD_NONE:
                 break;
         }
     }

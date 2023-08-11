@@ -8,7 +8,7 @@
 
 class KeyboardMode : public InputMode {
   public:
-    KeyboardMode(socd::SocdType socd_type);
+    KeyboardMode();
     ~KeyboardMode();
     void SendReport(InputState &inputs);
 

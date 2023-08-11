@@ -4,20 +4,14 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 255
 
-RocketLeague::RocketLeague(socd::SocdType socd_type) : ControllerMode(socd_type) {
-    _socd_pair_count = 3;
+RocketLeague::RocketLeague(socd::SocdType socd_type) {
+    _socd_pair_count = 4;
     _socd_pairs = new socd::SocdPair[_socd_pair_count]{
-        socd::SocdPair{&InputState::left,    &InputState::right  },
-        socd::SocdPair{ &InputState::c_left, &InputState::c_right},
-        socd::SocdPair{ &InputState::c_down, &InputState::c_up   },
+        socd::SocdPair{&InputState::left,    &InputState::right,   socd_type               },
+        socd::SocdPair{ &InputState::down,   &InputState::mod_x,   socd::SOCD_DIR2_PRIORITY},
+        socd::SocdPair{ &InputState::c_left, &InputState::c_right, socd_type               },
+        socd::SocdPair{ &InputState::c_down, &InputState::c_up,    socd_type               },
     };
-}
-
-void RocketLeague::HandleSocd(InputState &inputs) {
-    if (inputs.mod_x && inputs.down) {
-        inputs.down = false;
-    }
-    InputMode::HandleSocd(inputs);
 }
 
 void RocketLeague::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {

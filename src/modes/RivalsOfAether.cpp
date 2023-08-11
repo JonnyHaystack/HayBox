@@ -4,13 +4,13 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 228
 
-RivalsOfAether::RivalsOfAether(socd::SocdType socd_type) : ControllerMode(socd_type) {
+RivalsOfAether::RivalsOfAether(socd::SocdType socd_type) {
     _socd_pair_count = 4;
     _socd_pairs = new socd::SocdPair[_socd_pair_count]{
-        socd::SocdPair{&InputState::left,    &InputState::right  },
-        socd::SocdPair{ &InputState::down,   &InputState::up     },
-        socd::SocdPair{ &InputState::c_left, &InputState::c_right},
-        socd::SocdPair{ &InputState::c_down, &InputState::c_up   },
+        socd::SocdPair{&InputState::left,    &InputState::right,   socd_type},
+        socd::SocdPair{ &InputState::down,   &InputState::up,      socd_type},
+        socd::SocdPair{ &InputState::c_left, &InputState::c_right, socd_type},
+        socd::SocdPair{ &InputState::c_down, &InputState::c_up,    socd_type},
     };
 }
 
@@ -70,10 +70,18 @@ void RivalsOfAether::UpdateAnalogOutputs(InputState &inputs, OutputState &output
     if (inputs.mod_x) {
         if (directions.horizontal) {
             outputs.leftStickX = 128 + (directions.x * 66);
+            // MX Horizontal Tilts
+            if (inputs.a) {
+                outputs.leftStickX = 128 + (directions.x * 44);
+            }
         }
 
         if(directions.vertical) {
             outputs.leftStickY = 128 + (directions.y * 44);
+            // MX Vertical Tilts
+            if (inputs.a) {
+                outputs.leftStickY = 128 + (directions.y * 67);
+            }
         }
 
         /* Extra DI, Air Dodge, and Up B angles */
@@ -128,7 +136,7 @@ void RivalsOfAether::UpdateAnalogOutputs(InputState &inputs, OutputState &output
             // Angles just for DI
             if (inputs.c_left) {
                 outputs.leftStickX = 128 + (directions.x * 44);
-                outputs.leftStickY = 128 + (directions.y * 90);
+                outputs.leftStickY = 128 + (directions.y * 74);
             }
       
             if (inputs.c_up) {
