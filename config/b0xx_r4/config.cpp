@@ -101,7 +101,7 @@ void setup() {
       backends = new CommunicationBackend *[backend_count] {
           primary_backend, new B0XXInputViewer(input_sources, input_source_count)
       };
-      primary_backend->SetGameMode(new FgcMode(socd::SOCD_NEUTRAL));
+      primary_backend->SetGameMode(new FgcMode(socd::SOCD_NEUTRAL, socd::SOCD_NEUTRAL));
     } else {
       // Default to Switch (detect_console returns NONE for the Switch!)
       NintendoSwitchBackend::RegisterDescriptor();
