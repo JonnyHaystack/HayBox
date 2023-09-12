@@ -8,9 +8,9 @@ HayBox is a modular, cross-platform firmware for digital or mixed analog/digital
 ## Table of Contents
 
 * [Features](#features)
-* [Getting Started](#getting-started)
-  * [Requirements](#requirements)
-  * [Installation](#installation)
+* [Installation](#installation)
+  * [Pre-built binaries](#pre-built-binaries)
+  * [Building from source](#building-from-source)
 * [Usage](#usage)
   * [Default button holds](#default-button-holds)
   * [Dolphin setup](#dolphin-setup)
@@ -58,16 +58,34 @@ Features include:
 - Game modes and communication backends are independent entities, meaning you can use any game mode with any supported console without extra work
 - Easily switch between different GameCube/N64 polling rates in order to have optimal latency on console, overclocked adapter, etc. (not necessary for Pico/RP2040)
 
-## Getting Started
+## Installation
 
-### Requirements
+If you want to simply use a pre-built firmware with default pin mappings and configuration, refer to the [pre-built binaries](#pre-built-binaries) section. If you want to make any changes to the code, refer to the [building from source](#building-from-source) section.
 
-- [Git](https://git-scm.com/downloads) - required only if you are using a Pico. May become unnecessary at some point in the future.
+### Pre-built binaries
+
+1. Browse the [existing configs](https://github.com/JonnyHaystack/HayBox/tree/master/config) to determine which config is appropriate for your hardware
+2. Download the corresponding artifact from either the [latest HayBox release](https://github.com/JonnyHaystack/HayBox/releases), or from a [workflow run](https://github.com/JonnyHaystack/HayBox/actions) if you want the latest development version (unstable).
+3. Flash the firmware to your microcontroller in the usual way
+   - If you are using a Pico/RP2040 build (`.uf2` file), simply put it into bootsel mode while plugging it into your PC, and drag and drop the `.uf2` file onto the RPI-RP2 drive that comes up
+   - If you are using Arduino/AVR build (`.hex` file), you can use a program like [QMK Toolbox](https://github.com/qmk/qmk_toolbox) to flash the `.hex` file to it
+
+### Building from source
+
+There are currently three main ways to build HayBox:
+- Locally using PlatformIO IDE for VSCode or PlatformIO CLI
+- In the cloud using GitHub Codespaces
+- In the cloud using GitHub Actions
+
+Both GitHub Actions and GitHub Codespaces require you to create a GitHub account, but do not require you to install any dependencies on your local machine.
+
+#### Building locally
+
+The following dependencies are required when building locally:
+- [Git](https://git-scm.com/downloads) - required only if you are using a Pico
 - [PlatformIO IDE for VSCode](https://platformio.org/install/ide?install=vscode)
 
-### Installation
-
-Download and extract the
+After installing all of the requirements, download and extract the
 [latest HayBox release](https://github.com/JonnyHaystack/HayBox/releases),
 or clone the repository if you have git installed (which makes it easier for you
 to pull updates).
@@ -85,9 +103,23 @@ After that:
 5. If you see a message in the bottom bar saying "Rebuilding IntelliSense Index" or "Loading Project Tasks", wait for it to disappear. For Pico especially it may take quite a while the first time because it has to download 2-3GB of dependencies.
 6. Click **Build** (in the bottom left) and make sure everything compiles without
   errors
-7. This  next step differs depending on the microcontroller used in your controller.
+7. This next step differs depending on the microcontroller used in your controller.
     - **For Pico-based controllers**: hold the bootsel button while plugging it in (or your Start button if you already have HayBox installed) and then drag and drop the file `HayBox/.pio/build/<environment>/firmware.uf2` onto the RPI-RP2 drive that comes up.
     - **For Arduino-based controllers**: Plug in your controller via USB and click **Upload** (next to the Build button)
+
+#### Building using GitHub Codespaces
+
+This is probably the most convenient way to modify and rebuild HayBox, but bear in mind that GitHub's free tier places [some limitations](https://docs.github.com/en/billing/managing-billing-for-github-codespaces/about-billing-for-github-codespaces#monthly-included-storage-and-core-hours-for-personal-accounts) on how much you can use Codespaces each month. Because of this, you will want to make sure you shut down your Codespaces when you aren't using them, in order to maximise what you can get from your quota.
+
+First, create a GitHub account or just log in if you already have one, then [fork this repository](https://github.com/JonnyHaystack/HayBox/fork) and open your fork in a new Codespace by clicking the green Code button -> Codespaces -> Create codespace on master. This should open VS Code in your browser with all of the necessary extensions and dependencies pre-installed. From here, the process is much the same as [building locally](#building-locally), except you can't use the Upload button to flash the firmware. You will instead have to download the compiled binary from `HayBox/.pio/build/<environment>/` and flash it manually (see [here](#pre-built-binaries) for more on that).
+
+#### Building using GitHub Actions
+
+This repository contains a GitHub Actions workflow definition that builds each PlatformIO environment [specified in the matrix](https://github.com/JonnyHaystack/HayBox/blob/master/.github/workflows/build.yml#L13) on every push, and uploads firmware binaries as artifacts which you can download by clicking a specific workflow run from the [history](https://github.com/JonnyHaystack/HayBox/actions). You can create a fork of this repository and enable Actions by clicking Settings -> Actions -> General -> Select "Allow all actions and reusable workflows" -> Save.
+
+The fastest way to make changes if you only want to build via GitHub Actions is to use [github.dev](https://github.dev). You can do so by simply pressing `.` on your keyboard while you have your fork of this repository open, and it will open a VS Code editor in your browser. This does not give you the same development capabilities that you'd get in a Codespace, but it does allow you to make changes and commit them directly from your browser. Change whatever you'd like, then use the Source Control tab on the left to add, commit, and push your changes. Finally, go back to the repository and click on the Actions tab, click on your workflow run, and wait for it to build the artifact.
+
+If you are adding a new device config/PlatformIO environment, you will have to add the environment to the [matrix](https://github.com/JonnyHaystack/HayBox/blob/master/.github/workflows/build.yml#L13) in order for it to be built by the GitHub Actions workflow. You can also remove any environments from the matrix that you don't care about in order to reduce resource usage and potentially speed up your builds.
 
 ## Usage
 
