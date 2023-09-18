@@ -3,9 +3,8 @@ import subprocess
 Import("env")
 
 
-def before_build(source, target, env):
+def before_build():
     subprocess.run(["git", "config", "--global", "core.longpaths", "true"])
 
 
-env.AddPreAction("buildprog", before_build)
-env.AddPreAction("upload", before_build)
+before_build()
