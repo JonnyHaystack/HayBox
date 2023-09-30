@@ -7,7 +7,7 @@
 
 class RocketLeague : public ControllerMode {
   public:
-    RocketLeague(socd::SocdType socd_type);
+    RocketLeague(GameModeConfig &config);
 
   private:
     void HandleSocd(InputState &inputs);

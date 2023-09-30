@@ -4,15 +4,7 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 228
 
-RivalsOfAether::RivalsOfAether(socd::SocdType socd_type) {
-    _socd_pair_count = 4;
-    _socd_pairs = new socd::SocdPair[_socd_pair_count]{
-        socd::SocdPair{&InputState::left,    &InputState::right,   socd_type},
-        socd::SocdPair{ &InputState::down,   &InputState::up,      socd_type},
-        socd::SocdPair{ &InputState::c_left, &InputState::c_right, socd_type},
-        socd::SocdPair{ &InputState::c_down, &InputState::c_up,    socd_type},
-    };
-}
+RivalsOfAether::RivalsOfAether(GameModeConfig &config) : ControllerMode(config) {}
 
 void RivalsOfAether::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
     outputs.a = inputs.a;

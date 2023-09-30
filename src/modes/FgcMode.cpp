@@ -1,18 +1,6 @@
 #include "modes/FgcMode.hpp"
 
-FgcMode::FgcMode(socd::SocdType horizontal_socd, socd::SocdType vertical_socd) {
-    _socd_pair_count = 4;
-    _socd_pairs = new socd::SocdPair[_socd_pair_count]{
-        socd::SocdPair{&InputState::left,   &InputState::right, horizontal_socd         },
- /* Mod X override C-Up input if both are pressed. Without this, neutral SOCD doesn't work
-  properly if Down and both Up buttons are pressed, because it first resolves Down + Mod X
-  to set both as unpressed, and then it sees C-Up as pressed but not Down, so you get an up
-  input instead of neutral. */
-        socd::SocdPair{ &InputState::mod_x, &InputState::c_up,  socd::SOCD_DIR1_PRIORITY},
-        socd::SocdPair{ &InputState::down,  &InputState::mod_x, vertical_socd           },
-        socd::SocdPair{ &InputState::down,  &InputState::c_up,  vertical_socd           },
-    };
-}
+FgcMode::FgcMode(GameModeConfig &config) : ControllerMode(config) {}
 
 void FgcMode::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
     // Directions

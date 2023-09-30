@@ -7,7 +7,7 @@
 
 class Ultimate2 : public ControllerMode {
   public:
-    Ultimate2(socd::SocdType socd_type);
+    Ultimate2(GameModeConfig &config);
 
   private:
     void UpdateDigitalOutputs(InputState &inputs, OutputState &outputs);

@@ -7,7 +7,7 @@
 
 class ShovelKnight : public ControllerMode {
   public:
-    ShovelKnight(socd::SocdType socd_type);
+    ShovelKnight(GameModeConfig &config);
 
   private:
     virtual void UpdateDigitalOutputs(InputState &inputs, OutputState &outputs);

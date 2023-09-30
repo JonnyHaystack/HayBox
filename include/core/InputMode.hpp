@@ -4,16 +4,18 @@
 #include "socd.hpp"
 #include "state.hpp"
 
+#include <config.pb.h>
+
 class InputMode {
   public:
-    InputMode();
+    InputMode(GameModeConfig &config);
     virtual ~InputMode();
 
   protected:
-    socd::SocdPair *_socd_pairs = nullptr;
-    size_t _socd_pair_count = 0;
+    GameModeConfig &_config;
 
     virtual void HandleSocd(InputState &inputs);
+    virtual void HandleRemap(InputState &original_inputs, InputState &remapped_inputs);
 
   private:
     socd::SocdState *_socd_states = nullptr;

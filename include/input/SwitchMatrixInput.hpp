@@ -13,14 +13,12 @@ enum class DiodeDirection {
     COL2ROW,
 };
 
-typedef bool InputState::*SwitchMatrixElement;
-
 template <size_t num_rows, size_t num_cols> class SwitchMatrixInput : public InputSource {
   public:
     SwitchMatrixInput(
         uint row_pins[num_rows],
         uint col_pins[num_cols],
-        SwitchMatrixElement (&matrix)[num_rows][num_cols],
+        Button (&matrix)[num_rows][num_cols],
         DiodeDirection direction
     )
         : _matrix(matrix) {
@@ -66,10 +64,10 @@ template <size_t num_rows, size_t num_cols> class SwitchMatrixInput : public Inp
 
             // Read each cell in the column/row.
             for (size_t j = 0; j < _num_inputs; j++) {
-                SwitchMatrixElement button =
+                Button button =
                     _direction == DiodeDirection::ROW2COL ? _matrix[j][i] : _matrix[i][j];
                 if (button != nullptr) {
-                    inputs.*button = !gpio::read_digital(_input_pins[j]);
+                    set_button(inputs.buttons, button, !gpio::read_digital(_input_pins[j]));
                 }
             }
 
@@ -83,7 +81,7 @@ template <size_t num_rows, size_t num_cols> class SwitchMatrixInput : public Inp
     size_t _num_inputs;
     uint *_output_pins;
     uint *_input_pins;
-    SwitchMatrixElement (&_matrix)[num_rows][num_cols];
+    Button (&_matrix)[num_rows][num_cols];
     DiodeDirection _direction;
 };
 

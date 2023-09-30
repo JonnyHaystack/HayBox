@@ -7,7 +7,7 @@
 
 class SaltAndSanctuary : public ControllerMode {
   public:
-    SaltAndSanctuary(socd::SocdType socd_type);
+    SaltAndSanctuary(GameModeConfig &config);
 
   private:
     void UpdateDigitalOutputs(InputState &inputs, OutputState &outputs);

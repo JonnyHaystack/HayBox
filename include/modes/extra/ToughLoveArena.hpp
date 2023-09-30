@@ -7,7 +7,7 @@
 
 class ToughLoveArena : public KeyboardMode {
   public:
-    ToughLoveArena(socd::SocdType socd_type);
+    ToughLoveArena(GameModeConfig &config);
 
   private:
     void UpdateKeys(InputState &inputs);

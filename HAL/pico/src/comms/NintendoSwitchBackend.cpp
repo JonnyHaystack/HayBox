@@ -48,9 +48,13 @@
         HID_REPORT_SIZE    ( 8                                      ) ,\
         HID_REPORT_COUNT   ( 4                                      ) ,\
         HID_INPUT          ( HID_DATA | HID_VARIABLE | HID_ABSOLUTE ) ,\
-        /* Some output from the host idk */ \
+        /* Some random vendor input idk */ \
         HID_USAGE_PAGE_N   ( HID_USAGE_PAGE_VENDOR, 2               ) ,\
         HID_USAGE          ( 0x20                                   ) ,\
+        HID_REPORT_COUNT   ( 1                                      ) ,\
+        HID_INPUT          ( HID_DATA | HID_VARIABLE | HID_ABSOLUTE ) ,\
+        /* Some output from the host idk */ \
+        0x0A, 0x21, 0x26, \
         HID_REPORT_COUNT   ( 8                                      ) ,\
         HID_OUTPUT         ( HID_DATA | HID_VARIABLE | HID_ABSOLUTE ) ,\
     HID_COLLECTION_END

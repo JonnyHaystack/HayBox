@@ -3,52 +3,78 @@
 #include "core/socd.hpp"
 #include "core/state.hpp"
 
-InputMode::InputMode() {}
+InputMode::InputMode(GameModeConfig &config) : _config(config) {
+    _socd_states = new socd::SocdState[_config.socd_pairs_count];
+}
 
 InputMode::~InputMode() {
-    delete[] _socd_pairs;
     delete[] _socd_states;
 }
 
 void InputMode::HandleSocd(InputState &inputs) {
-    if (_socd_pairs == nullptr) {
-        return;
-    }
-
-    // Initialize SOCD states if they aren't initialized.
-    if (_socd_states == nullptr) {
-        _socd_states = new socd::SocdState[_socd_pair_count];
-    }
-
     // Handle SOCD resolution for each SOCD button pair.
-    for (size_t i = 0; i < _socd_pair_count; i++) {
-        socd::SocdPair pair = _socd_pairs[i];
+    for (size_t i = 0; i < _config.socd_pairs_count; i++) {
+        SocdPair &pair = _config.socd_pairs[i];
         switch (pair.socd_type) {
-            case socd::SOCD_NEUTRAL:
-                socd::neutral(inputs.*(pair.input_dir1), inputs.*(pair.input_dir2));
+            case SOCD_NEUTRAL:
+                socd::neutral(inputs, pair.button_dir1, pair.button_dir2);
                 break;
-            case socd::SOCD_2IP:
+            case SOCD_2IP:
                 socd::second_input_priority(
-                    inputs.*(pair.input_dir1),
-                    inputs.*(pair.input_dir2),
+                    inputs,
+                    pair.button_dir1,
+                    pair.button_dir2,
                     _socd_states[i]
                 );
                 break;
-            case socd::SOCD_2IP_NO_REAC:
+            case SOCD_2IP_NO_REAC:
                 socd::second_input_priority_no_reactivation(
-                    inputs.*(pair.input_dir1),
-                    inputs.*(pair.input_dir2),
+                    inputs,
+                    pair.button_dir1,
+                    pair.button_dir2,
                     _socd_states[i]
                 );
                 break;
-            case socd::SOCD_DIR1_PRIORITY:
-                socd::dir1_priority(inputs.*(pair.input_dir1), inputs.*(pair.input_dir2));
+            case SOCD_DIR1_PRIORITY:
+                socd::dir1_priority(inputs, pair.button_dir1, pair.button_dir2);
                 break;
-            case socd::SOCD_DIR2_PRIORITY:
-                socd::dir1_priority(inputs.*(pair.input_dir2), inputs.*(pair.input_dir1));
+            case SOCD_DIR2_PRIORITY:
+                socd::dir1_priority(inputs, pair.button_dir2, pair.button_dir1);
                 break;
-            case socd::SOCD_NONE:
+            case SOCD_UNSPECIFIED:
+            default:
                 break;
         }
+    }
+}
+
+void InputMode::HandleRemap(InputState &original_inputs, InputState &remapped_inputs) {
+    // Keep track of which buttons have been remapped so that we can avoid conflicts for buttons
+    // that are remapped to multiple buttons and prevent macro remapping.
+    uint64_t physical_buttons_already_remapped = 0;
+    uint64_t buttons_already_mapped_to = 0;
+    for (size_t i = 0; i < _config.button_remapping_count; i++) {
+        ButtonRemap &remapping = _config.button_remapping[i];
+        // If this physical button was already mapped to something else, ignore this remapping. This
+        // is to prevent creating macro behaviour through remapping.
+        if (get_button(physical_buttons_already_remapped, remapping.physical_button)) {
+            continue;
+        }
+        // If physical button has not been mapped to yet, set it to false.
+        if (!get_button(buttons_already_mapped_to, remapping.physical_button)) {
+            set_button(remapped_inputs.buttons, remapping.physical_button, false);
+        }
+
+        // Either use the value of the physical button, or if the physical button is not pressed,
+        // but the target button has another physical button remapped to it, and is considered to be
+        // pressed, leave it as pressed.
+        bool should_be_pressed = get_button(original_inputs.buttons, remapping.physical_button) ||
+                                 (get_button(buttons_already_mapped_to, remapping.activates) &&
+                                  get_button(remapped_inputs.buttons, remapping.activates));
+        set_button(remapped_inputs.buttons, remapping.activates, should_be_pressed);
+
+        // Track which buttons have been mapped from/to.
+        set_button(physical_buttons_already_remapped, remapping.physical_button, true);
+        set_button(buttons_already_mapped_to, remapping.activates, true);
     }
 }

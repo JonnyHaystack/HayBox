@@ -7,7 +7,7 @@
 
 class MultiVersus : public ControllerMode {
   public:
-    MultiVersus(socd::SocdType socd_type);
+    MultiVersus(GameModeConfig &config);
 
   protected:
     virtual void UpdateDigitalOutputs(InputState &inputs, OutputState &outputs);

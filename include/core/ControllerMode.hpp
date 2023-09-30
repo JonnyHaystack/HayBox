@@ -5,9 +5,11 @@
 #include "core/socd.hpp"
 #include "core/state.hpp"
 
+#include <config.pb.h>
+
 class ControllerMode : public InputMode {
   public:
-    ControllerMode();
+    ControllerMode(GameModeConfig &config);
     void UpdateOutputs(InputState &inputs, OutputState &outputs);
     void ResetDirections();
     virtual void UpdateDirections(

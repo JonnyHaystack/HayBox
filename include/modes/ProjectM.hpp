@@ -2,7 +2,6 @@
 #define _MODES_PROJECTM_HPP
 
 #include "core/ControllerMode.hpp"
-#include "core/socd.hpp"
 #include "core/state.hpp"
 
 typedef struct {
@@ -12,7 +11,7 @@ typedef struct {
 
 class ProjectM : public ControllerMode {
   public:
-    ProjectM(socd::SocdType socd_type, ProjectMOptions options = {});
+    ProjectM(GameModeConfig &config, ProjectMOptions options = {});
 
   private:
     ProjectMOptions _options;

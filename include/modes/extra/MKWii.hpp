@@ -7,7 +7,7 @@
 
 class MKWii : public ControllerMode {
   public:
-    MKWii(socd::SocdType socd_type);
+    MKWii(GameModeConfig &config);
 
   private:
     void UpdateDigitalOutputs(InputState &inputs, OutputState &outputs);

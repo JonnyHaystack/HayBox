@@ -8,7 +8,7 @@
 
 class HollowKnight : public ControllerMode {
   public:
-    HollowKnight(socd::SocdType socd_type);
+    HollowKnight(GameModeConfig &config);
 
   private:
     void UpdateDigitalOutputs(InputState &inputs, OutputState &outputs);

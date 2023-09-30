@@ -5,8 +5,10 @@
 #include "core/state.hpp"
 #include "stdlib.hpp"
 
+#include <config.pb.h>
+
 typedef struct {
-    bool InputState::*button;
+    Button button;
     uint pin;
 } GpioButtonMapping;
 

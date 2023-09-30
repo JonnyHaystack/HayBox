@@ -6,10 +6,11 @@
 #include "core/state.hpp"
 
 #include <TUKeyboard.hpp>
+#include <config.pb.h>
 
 class KeyboardMode : public InputMode {
   public:
-    KeyboardMode();
+    KeyboardMode(GameModeConfig &config);
     ~KeyboardMode();
     void SendReport(InputState &inputs);
 

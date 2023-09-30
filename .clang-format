@@ -1,3 +1,4 @@
+---
 DisableFormat: false
 AlignAfterOpenBracket: BlockIndent
 AlignArrayOfStructures: Left
@@ -57,3 +58,5 @@ SpaceBeforeCtorInitializerColon: true
 SpacesInContainerLiterals: false
 TabWidth: 4
 UseTab: Never
+---
+Language: Proto

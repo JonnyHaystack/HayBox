@@ -7,7 +7,7 @@
 
 class DarkSouls : public ControllerMode {
   public:
-    DarkSouls(socd::SocdType socd_type);
+    DarkSouls(GameModeConfig &config);
 
   private:
     void UpdateDigitalOutputs(InputState &inputs, OutputState &outputs);

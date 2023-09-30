@@ -2,7 +2,6 @@
 #define _MODES_MELEE18BUTTON_HPP
 
 #include "core/ControllerMode.hpp"
-#include "core/socd.hpp"
 #include "core/state.hpp"
 
 typedef struct {
@@ -11,7 +10,7 @@ typedef struct {
 
 class Melee18Button : public ControllerMode {
   public:
-    Melee18Button(socd::SocdType socd_type, Melee18ButtonOptions options = {});
+    Melee18Button(GameModeConfig &config, Melee18ButtonOptions options = {});
 
   private:
     Melee18ButtonOptions _options;

@@ -12,7 +12,9 @@ KeyboardMode::~KeyboardMode() {
 }
 
 void KeyboardMode::SendReport(InputState &inputs) {
-    HandleSocd(inputs);
+    InputState remapped_inputs = inputs;
+    HandleRemap(inputs, remapped_inputs);
+    HandleSocd(remapped_inputs);
     UpdateKeys(inputs);
     _keyboard.sendReport();
 }
