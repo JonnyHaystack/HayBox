@@ -1,29 +1,34 @@
 #include "comms/ConfiguratorBackend.hpp"
 
 #include "core/InputSource.hpp"
-#include "core/persistence.hpp"
 #include "serial.hpp"
 
 #include <pb_decode.h>
 #include <pb_encode.h>
 
-ConfiguratorBackend::ConfiguratorBackend(InputSource **input_sources, size_t input_source_count)
-    : CommunicationBackend(input_sources, input_source_count) {
+ConfiguratorBackend::ConfiguratorBackend(
+    InputSource **input_sources,
+    size_t input_source_count,
+    Config &config
+)
+    : CommunicationBackend(input_sources, input_source_count),
+      _config(config) {
     _in = new packetio::COBSStream(Serial);
     _out = new packetio::COBSPrint(Serial);
     serial::init(115200);
+    _persistence = new Persistence();
 }
 
 ConfiguratorBackend::~ConfiguratorBackend() {
     serial::close();
+    delete _persistence;
     delete _in;
     delete _out;
 }
 
 void ConfiguratorBackend::SendReport() {
-    uint8_t buffer[EEPROM_SIZE];
-    size_t packet_len = ReadPacket(buffer, sizeof(buffer));
-    Command command = (Command)buffer[0];
+    size_t packet_len = ReadPacket(_cmd_buffer, sizeof(_cmd_buffer));
+    Command command = (Command)_cmd_buffer[0];
     switch (command) {
         case CMD_GET_DEVICE_INFO:
             HandleGetDeviceInfo();
@@ -32,16 +37,13 @@ void ConfiguratorBackend::SendReport() {
             HandleGetConfig();
             break;
         case CMD_SET_CONFIG:
-            HandleSetConfig(buffer, packet_len);
+            HandleSetConfig(_cmd_buffer, packet_len);
             break;
         case CMD_REBOOT_FIRMWARE:
-            watchdog_enable(1, 1);
-            while (1) {
-                tight_loop_contents();
-            }
+            rp2040.reboot();
             break;
         case CMD_REBOOT_BOOTLOADER:
-            reset_usb_boot(0, 0);
+            rp2040.rebootToBootloader();
             break;
         case CMD_UNSPECIFIED:
         default:
@@ -92,7 +94,7 @@ bool ConfiguratorBackend::HandleGetDeviceInfo() {
     uint8_t buffer[sizeof(DeviceInfo)];
     pb_ostream_t ostream = pb_ostream_from_buffer(buffer, sizeof(buffer));
 
-    if (!pb_encode(&ostream, &DeviceInfo_msg, &device_info)) {
+    if (!pb_encode(&ostream, DeviceInfo_fields, &device_info)) {
         char errmsg[] = "Failed to encode device info";
         WritePacket(CMD_ERROR, (uint8_t *)errmsg, sizeof(errmsg));
         return false;
@@ -102,22 +104,20 @@ bool ConfiguratorBackend::HandleGetDeviceInfo() {
 }
 
 bool ConfiguratorBackend::HandleGetConfig() {
-    uint8_t buffer[EEPROM_SIZE - CONFIG_OFFSET];
-    size_t config_size = persistence::load_config_raw(buffer, sizeof(buffer));
-    return WritePacket(CMD_SET_CONFIG, buffer, config_size);
+    size_t config_size = _persistence->LoadConfigRaw(_cmd_buffer, sizeof(_cmd_buffer));
+    return WritePacket(CMD_SET_CONFIG, _cmd_buffer, config_size);
 }
 
 bool ConfiguratorBackend::HandleSetConfig(uint8_t *buffer, size_t len) {
-    Config config = Config_init_zero;
     pb_istream_t istream = pb_istream_from_buffer(&buffer[1], len - 1);
 
-    if (!pb_decode(&istream, &Config_msg, &config)) {
+    if (!pb_decode(&istream, Config_fields, &_config)) {
         char errmsg[] = "Failed to decode config";
         WritePacket(CMD_ERROR, (uint8_t *)errmsg, sizeof(errmsg));
         return false;
     }
 
-    if (!persistence::save_config(config)) {
+    if (!_persistence->SaveConfig(_config)) {
         char errmsg[] = "Failed to save config to memory";
         WritePacket(CMD_ERROR, (uint8_t *)errmsg, sizeof(errmsg));
         return false;

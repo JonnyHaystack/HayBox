@@ -9,7 +9,7 @@
 #include "core/CommunicationBackend.hpp"
 #include "core/InputMode.hpp"
 #include "core/KeyboardMode.hpp"
-#include "core/persistence.hpp"
+#include "core/Persistence.hpp"
 #include "core/pinout.hpp"
 #include "core/socd.hpp"
 #include "core/state.hpp"
@@ -21,7 +21,6 @@
 
 #include <EEPROM.h>
 #include <config.pb.h>
-#include <pico/bootrom.h>
 
 Config config = {
     .default_backend = COMMS_BACKEND_XINPUT,
@@ -101,6 +100,7 @@ Config config = {
         }
     },
 };
+
 CommunicationBackend **backends = nullptr;
 size_t backend_count;
 KeyboardMode *current_kb_mode = nullptr;
@@ -160,7 +160,7 @@ void setup() {
 
     // Bootsel button hold as early as possible for safety.
     if (button_holds.start) {
-        reset_usb_boot(0, 0);
+        rp2040.rebootToBootloader();
     }
 
     // Turn on LED to indicate firmware booted.
@@ -168,10 +168,11 @@ void setup() {
     gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
     gpio_put(PICO_DEFAULT_LED_PIN, 1);
 
-    EEPROM.begin(EEPROM_SIZE);
-    if (!persistence::load_config(config)) {
-        persistence::save_config(config);
+    Persistence *persistence = new Persistence();
+    if (!persistence->LoadConfig(config)) {
+        persistence->SaveConfig(config);
     }
+    delete persistence;
 
     // Create array of input sources to be used.
     static InputSource *input_sources[] = { gpio_input };
@@ -275,65 +276,13 @@ void set_comms_backend(
         case COMMS_BACKEND_UNSPECIFIED: // Fall back to configurator if invalid backend selected.
         case COMMS_BACKEND_CONFIGURATOR:
         default:
-            primary_backend = new ConfiguratorBackend(input_sources, input_source_count);
+            primary_backend = new ConfiguratorBackend(input_sources, input_source_count, config);
             backend_count = 1;
             backends = new CommunicationBackend *[backend_count] { primary_backend };
     }
 
     set_mode(primary_backend, mode_id);
 }
-
-#ifdef DEFINITELY_NOT_DEFINED
-void old_main_stuff() {
-    /* Select communication backend. */
-    if (console == ConnectedConsole::NONE) {
-        if (button_holds.x) {
-            // If no console detected and X is held on plugin then use Switch USB backend.
-            NintendoSwitchBackend::RegisterDescriptor();
-            backend_count = 1;
-            primary_backend = new NintendoSwitchBackend(input_sources, input_source_count);
-            backends = new CommunicationBackend *[backend_count] { primary_backend };
-
-            // Default to Ultimate mode on Switch.
-            set_mode(primary_backend, new Ultimate(socd::SOCD_2IP));
-            return;
-        } else if (button_holds.z) {
-            // If no console detected and Z is held on plugin then use DInput backend.
-            TUGamepad::registerDescriptor();
-            TUKeyboard::registerDescriptor();
-            backend_count = 2;
-            primary_backend = new DInputBackend(input_sources, input_source_count);
-            backends = new CommunicationBackend *[backend_count] {
-                primary_backend, new B0XXInputViewer(input_sources, input_source_count)
-            };
-        } else {
-            // Default to XInput mode if no console detected and no other mode forced.
-            backend_count = 2;
-            primary_backend = new XInputBackend(input_sources, input_source_count);
-            backends = new CommunicationBackend *[backend_count] {
-                primary_backend, new B0XXInputViewer(input_sources, input_source_count)
-            };
-        }
-    } else {
-        if (console == ConnectedConsole::GAMECUBE) {
-            primary_backend =
-                new GamecubeBackend(input_sources, input_source_count, pinout.joybus_data);
-        } else if (console == ConnectedConsole::N64) {
-            primary_backend = new N64Backend(input_sources, input_source_count, pinout.joybus_data);
-        }
-
-        // If console then only using 1 backend (no input viewer).
-        backend_count = 1;
-        backends = new CommunicationBackend *[backend_count] { primary_backend };
-    }
-
-    // Default to Melee mode.
-    set_mode(
-        primary_backend,
-        new Melee20Button(socd::SOCD_2IP_NO_REAC, { .crouch_walk_os = false })
-    );
-}
-#endif
 
 void loop() {
     select_mode(backends[0]);
