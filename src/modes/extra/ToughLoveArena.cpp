@@ -1,6 +1,6 @@
 #include "modes/extra/ToughLoveArena.hpp"
 
-ToughLoveArena::ToughLoveArena(GameModeConfig &config) : ControllerMode(config) {}
+ToughLoveArena::ToughLoveArena(GameModeConfig &config) : KeyboardMode(config) {}
 
 void ToughLoveArena::UpdateKeys(InputState &inputs) {
     Press(HID_KEY_S, inputs.left);
