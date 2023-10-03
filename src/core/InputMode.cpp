@@ -60,7 +60,8 @@ void InputMode::HandleRemap(InputState &original_inputs, InputState &remapped_in
         if (get_button(physical_buttons_already_remapped, remapping.physical_button)) {
             continue;
         }
-        // If physical button has not been mapped to yet, set it to false.
+        // If physical button has not been mapped to yet, set it to false. This too is intended to
+        // prevent creating macro behaviour through remapping.
         if (!get_button(buttons_already_mapped_to, remapping.physical_button)) {
             set_button(remapped_inputs.buttons, remapping.physical_button, false);
         }
@@ -69,8 +70,7 @@ void InputMode::HandleRemap(InputState &original_inputs, InputState &remapped_in
         // but the target button has another physical button remapped to it, and is considered to be
         // pressed, leave it as pressed.
         bool should_be_pressed = get_button(original_inputs.buttons, remapping.physical_button) ||
-                                 (get_button(buttons_already_mapped_to, remapping.activates) &&
-                                  get_button(remapped_inputs.buttons, remapping.activates));
+                                 get_button(remapped_inputs.buttons, remapping.activates);
         set_button(remapped_inputs.buttons, remapping.activates, should_be_pressed);
 
         // Track which buttons have been mapped from/to.
