@@ -1,25 +1,14 @@
-#include "comms/B0XXInputViewer.hpp"
-#include "comms/ConfiguratorBackend.hpp"
-#include "comms/DInputBackend.hpp"
-#include "comms/GamecubeBackend.hpp"
-#include "comms/N64Backend.hpp"
-#include "comms/NintendoSwitchBackend.hpp"
-#include "comms/XInputBackend.hpp"
-#include "config/mode_selection.hpp"
+#include "comms/backend_init.hpp"
 #include "core/CommunicationBackend.hpp"
-#include "core/InputMode.hpp"
 #include "core/KeyboardMode.hpp"
 #include "core/Persistence.hpp"
+#include "core/mode_selection.hpp"
 #include "core/pinout.hpp"
-#include "core/socd.hpp"
 #include "core/state.hpp"
 #include "input/GpioButtonInput.hpp"
 #include "input/NunchukInput.hpp"
-#include "joybus_utils.hpp"
-#include "modes/Melee20Button.hpp"
 #include "stdlib.hpp"
 
-#include <EEPROM.h>
 #include <config.pb.h>
 
 Config config = {
@@ -101,10 +90,6 @@ Config config = {
     },
 };
 
-CommunicationBackend **backends = nullptr;
-size_t backend_count;
-KeyboardMode *current_kb_mode = nullptr;
-
 GpioButtonMapping button_mappings[] = {
     {BTN_L,            5 },
     { BTN_LEFT,        4 },
@@ -144,22 +129,19 @@ const Pinout pinout = {
     .nunchuk_scl = -1,
 };
 
-void set_comms_backend(
-    CommunicationBackendId backend_id,
-    GameModeId mode_id,
-    InputSource **input_sources,
-    size_t input_source_count
-);
+CommunicationBackend **backends = nullptr;
+size_t backend_count;
+KeyboardMode *current_kb_mode = nullptr;
 
 void setup() {
+    static InputState inputs;
+
     // Create GPIO input source and use it to read button states for checking button holds.
-    GpioButtonInput *gpio_input = new GpioButtonInput(button_mappings, button_count);
+    static GpioButtonInput gpio_input(button_mappings, button_count);
+    gpio_input.UpdateInputs(inputs);
 
-    InputState button_holds;
-    gpio_input->UpdateInputs(button_holds);
-
-    // Bootsel button hold as early as possible for safety.
-    if (button_holds.start) {
+    // Check bootsel button hold as early as possible for safety.
+    if (inputs.start) {
         rp2040.rebootToBootloader();
     }
 
@@ -168,6 +150,7 @@ void setup() {
     gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
     gpio_put(PICO_DEFAULT_LED_PIN, 1);
 
+    // Attempt to load config, or write default config to flash if failed to load config.
     Persistence *persistence = new Persistence();
     if (!persistence->LoadConfig(config)) {
         persistence->SaveConfig(config);
@@ -175,117 +158,17 @@ void setup() {
     delete persistence;
 
     // Create array of input sources to be used.
-    static InputSource *input_sources[] = { gpio_input };
+    static InputSource *input_sources[] = { &gpio_input };
     size_t input_source_count = sizeof(input_sources) / sizeof(InputSource *);
 
-    for (size_t i = 0; i < config.communication_backend_configs_count; i++) {
-        CommunicationBackendConfig &backend_config = config.communication_backend_configs[i];
-        // Build bit mask for checking for matching button hold.
-        uint64_t button_hold_mask = make_button_mask(
-            backend_config.activation_binding,
-            backend_config.activation_binding_count
-        );
+    backend_count =
+        initialize_backends(backends, inputs, input_sources, input_source_count, config, pinout);
 
-        // Check if button hold matches.
-        if (all_buttons_held(button_holds.buttons, button_hold_mask)) {
-            set_comms_backend(
-                backend_config.backend_id,
-                backend_config.default_mode,
-                input_sources,
-                input_source_count
-            );
-            return;
-        }
-    }
-
-    // If no backend selected using button holds, run auto detection.
-    ConnectedConsole console = detect_console(pinout.joybus_data);
-    CommunicationBackendId backend_id = COMMS_BACKEND_UNSPECIFIED;
-    switch (console) {
-        case ConnectedConsole::GAMECUBE:
-            backend_id = COMMS_BACKEND_GAMECUBE;
-            break;
-        case ConnectedConsole::N64:
-            backend_id = COMMS_BACKEND_N64;
-            break;
-        case ConnectedConsole::NONE:
-        default:
-            backend_id = config.default_backend;
-    }
-
-    // No button hold was matched to a comms backend so we need to find a backend config that
-    // matches the detected console so we can check what the configured default gamemode is.
-    // Fall back to Melee mode if no other match found.
-    GameModeId mode_id = MODE_MELEE;
-    for (size_t i = 0; i < config.communication_backend_configs_count; i++) {
-        CommunicationBackendConfig &backend_config = config.communication_backend_configs[i];
-        if (backend_config.backend_id == backend_id) {
-            mode_id = backend_config.default_mode;
-        }
-    }
-
-    set_comms_backend(backend_id, mode_id, input_sources, input_source_count);
-}
-
-void set_comms_backend(
-    CommunicationBackendId backend_id,
-    GameModeId mode_id,
-    InputSource **input_sources,
-    size_t input_source_count
-) {
-    if (mode_id == MODE_UNSPECIFIED) {
-        mode_id = MODE_MELEE;
-    }
-
-    CommunicationBackend *primary_backend;
-
-    switch (backend_id) {
-        case COMMS_BACKEND_DINPUT:
-            TUGamepad::registerDescriptor();
-            TUKeyboard::registerDescriptor();
-            primary_backend = new DInputBackend(input_sources, input_source_count);
-            backend_count = 2;
-            backends = new CommunicationBackend *[backend_count] {
-                primary_backend, new B0XXInputViewer(input_sources, input_source_count)
-            };
-            break;
-        case COMMS_BACKEND_XINPUT:
-            primary_backend = new XInputBackend(input_sources, input_source_count);
-            backend_count = 2;
-            backends = new CommunicationBackend *[backend_count] {
-                primary_backend, new B0XXInputViewer(input_sources, input_source_count)
-            };
-            break;
-        case COMMS_BACKEND_GAMECUBE:
-            primary_backend =
-                new GamecubeBackend(input_sources, input_source_count, pinout.joybus_data);
-            backend_count = 1;
-            backends = new CommunicationBackend *[backend_count] { primary_backend };
-            break;
-        case COMMS_BACKEND_N64:
-            primary_backend = new N64Backend(input_sources, input_source_count, pinout.joybus_data);
-            backend_count = 1;
-            backends = new CommunicationBackend *[backend_count] { primary_backend };
-            break;
-        case COMMS_BACKEND_NINTENDO_SWITCH:
-            NintendoSwitchBackend::RegisterDescriptor();
-            primary_backend = new NintendoSwitchBackend(input_sources, input_source_count);
-            backend_count = 1;
-            backends = new CommunicationBackend *[backend_count] { primary_backend };
-            break;
-        case COMMS_BACKEND_UNSPECIFIED: // Fall back to configurator if invalid backend selected.
-        case COMMS_BACKEND_CONFIGURATOR:
-        default:
-            primary_backend = new ConfiguratorBackend(input_sources, input_source_count, config);
-            backend_count = 1;
-            backends = new CommunicationBackend *[backend_count] { primary_backend };
-    }
-
-    set_mode(primary_backend, mode_id);
+    setup_mode_activation_bindings(config.game_mode_configs, config.game_mode_configs_count);
 }
 
 void loop() {
-    select_mode(backends[0]);
+    select_mode(backends[0], config.game_mode_configs, config.game_mode_configs_count);
 
     for (size_t i = 0; i < backend_count; i++) {
         backends[i]->SendReport();

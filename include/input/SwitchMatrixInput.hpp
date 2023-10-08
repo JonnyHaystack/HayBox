@@ -4,9 +4,11 @@
 #include "core/InputSource.hpp"
 #include "core/state.hpp"
 #include "gpio.hpp"
+#include "util/state_util.hpp"
 
-#define BTN(x) &InputState::x
-#define NA nullptr
+#include <config.pb.h>
+
+#define NA BTN_UNSPECIFIED
 
 enum class DiodeDirection {
     ROW2COL,
@@ -16,9 +18,9 @@ enum class DiodeDirection {
 template <size_t num_rows, size_t num_cols> class SwitchMatrixInput : public InputSource {
   public:
     SwitchMatrixInput(
-        uint row_pins[num_rows],
-        uint col_pins[num_cols],
-        Button (&matrix)[num_rows][num_cols],
+        const uint row_pins[num_rows],
+        const uint col_pins[num_cols],
+        const Button (&matrix)[num_rows][num_cols],
         DiodeDirection direction
     )
         : _matrix(matrix) {
@@ -66,9 +68,7 @@ template <size_t num_rows, size_t num_cols> class SwitchMatrixInput : public Inp
             for (size_t j = 0; j < _num_inputs; j++) {
                 Button button =
                     _direction == DiodeDirection::ROW2COL ? _matrix[j][i] : _matrix[i][j];
-                if (button != nullptr) {
-                    set_button(inputs.buttons, button, !gpio::read_digital(_input_pins[j]));
-                }
+                set_button(inputs.buttons, button, !gpio::read_digital(_input_pins[j]));
             }
 
             // Deactivate the column/row.
@@ -79,9 +79,9 @@ template <size_t num_rows, size_t num_cols> class SwitchMatrixInput : public Inp
   protected:
     size_t _num_outputs;
     size_t _num_inputs;
-    uint *_output_pins;
-    uint *_input_pins;
-    Button (&_matrix)[num_rows][num_cols];
+    const uint *_output_pins;
+    const uint *_input_pins;
+    const Button (&_matrix)[num_rows][num_cols];
     DiodeDirection _direction;
 };
 

@@ -91,7 +91,7 @@ size_t initialize_backends(
         mode_id = MODE_MELEE;
     }
 
-    set_mode(primary_backend, mode_id);
+    set_mode(primary_backend, mode_id, config.game_mode_configs, config.game_mode_configs_count);
 
     return backend_count;
 }
