@@ -16,7 +16,6 @@ class DInputBackend : public CommunicationBackend {
     void SendReport();
 
   private:
-    int16_t GetDpadAngle(bool left, bool right, bool down, bool up);
     Joystick_ *_joystick;
 };
 

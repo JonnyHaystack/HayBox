@@ -2,6 +2,7 @@
 
 #include "core/socd.hpp"
 #include "core/state.hpp"
+#include "util/state_util.hpp"
 
 InputMode::InputMode(const GameModeConfig &config) : _config(config) {
     _socd_states = new socd::SocdState[_config.socd_pairs_count];

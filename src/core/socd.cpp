@@ -1,5 +1,7 @@
 #include "core/socd.hpp"
 
+#include "util/state_util.hpp"
+
 void socd::second_input_priority_no_reactivation(
     InputState &inputs,
     Button button_dir1,

@@ -7,6 +7,7 @@
 #include "modes/ProjectM.hpp"
 #include "modes/RivalsOfAether.hpp"
 #include "modes/Ultimate.hpp"
+#include "util/state_util.hpp"
 
 #include <config.pb.h>
 

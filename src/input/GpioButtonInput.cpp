@@ -1,8 +1,9 @@
 #include "input/GpioButtonInput.hpp"
 
 #include "gpio.hpp"
+#include "util/state_util.hpp"
 
-GpioButtonInput::GpioButtonInput(GpioButtonMapping *button_mappings, size_t button_count) {
+GpioButtonInput::GpioButtonInput(const GpioButtonMapping *button_mappings, size_t button_count) {
     _button_mappings = button_mappings;
     _button_count = button_count;
 

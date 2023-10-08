@@ -1,6 +1,7 @@
 #include "core/config_utils.hpp"
 
 #include "core/state.hpp"
+#include "util/state_util.hpp"
 
 #include <config.pb.h>
 

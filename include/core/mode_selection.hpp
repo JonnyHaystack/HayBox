@@ -7,7 +7,6 @@
 
 #include <config.pb.h>
 
-// extern Config config;
 extern KeyboardMode *current_kb_mode;
 
 void set_mode(CommunicationBackend *backend, ControllerMode *mode);
