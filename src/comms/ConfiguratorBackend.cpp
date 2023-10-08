@@ -1,17 +1,19 @@
 #include "comms/ConfiguratorBackend.hpp"
 
 #include "core/InputSource.hpp"
+#include "reboot.hpp"
 #include "serial.hpp"
 
 #include <pb_decode.h>
 #include <pb_encode.h>
 
 ConfiguratorBackend::ConfiguratorBackend(
+    InputState &inputs,
     InputSource **input_sources,
     size_t input_source_count,
     Config &config
 )
-    : CommunicationBackend(input_sources, input_source_count),
+    : CommunicationBackend(inputs, input_sources, input_source_count),
       _config(config) {
     _in = new packetio::COBSStream(Serial);
     _out = new packetio::COBSPrint(Serial);
@@ -40,10 +42,10 @@ void ConfiguratorBackend::SendReport() {
             HandleSetConfig(_cmd_buffer, packet_len);
             break;
         case CMD_REBOOT_FIRMWARE:
-            rp2040.reboot();
+            reboot_firmware();
             break;
         case CMD_REBOOT_BOOTLOADER:
-            rp2040.rebootToBootloader();
+            reboot_bootloader();
             break;
         case CMD_UNSPECIFIED:
         default:

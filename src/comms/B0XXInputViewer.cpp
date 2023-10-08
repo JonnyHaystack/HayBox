@@ -5,8 +5,12 @@
 
 #define ASCII_BIT(x) (x ? '1' : '0');
 
-B0XXInputViewer::B0XXInputViewer(InputSource **input_sources, size_t input_source_count)
-    : CommunicationBackend(input_sources, input_source_count) {
+B0XXInputViewer::B0XXInputViewer(
+    InputState &inputs,
+    InputSource **input_sources,
+    size_t input_source_count
+)
+    : CommunicationBackend(inputs, input_sources, input_source_count) {
     serial::init(115200);
 }
 
@@ -29,8 +33,6 @@ void B0XXInputViewer::SendReport() {
 
     // Only scan fast input sources because we don't want to waste any more time than necessary
     // on the input viewer and we can't afford to read from something like a Nunchuk twice.
-    ScanInputs(InputScanSpeed::FAST);
-
     _report[0] = ASCII_BIT(_inputs.start);
     _report[1] = ASCII_BIT(_inputs.y);
     _report[2] = ASCII_BIT(_inputs.x);

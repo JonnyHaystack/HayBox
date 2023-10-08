@@ -10,9 +10,10 @@
 
 #include <config.pb.h>
 
-extern const Config config;
+// extern const Config config;
 
-uint64_t gamemode_activation_masks[sizeof(config.game_mode_configs) / sizeof(GameModeConfig)];
+// uint64_t gamemode_activation_masks[sizeof(config.game_mode_configs) / sizeof(GameModeConfig)];
+uint64_t mode_activation_masks[10];
 
 void set_mode(CommunicationBackend *backend, ControllerMode *mode) {
     // Delete keyboard mode in case one is set, so we don't end up getting both controller and
@@ -62,11 +63,18 @@ void set_mode(CommunicationBackend *backend, const GameModeConfig &mode_config) 
     }
 }
 
-void set_mode(CommunicationBackend *backend, GameModeId mode_id) {
+// TODO: Maybe remove this overload in favour of looking up the gamemode outside of here using a
+// config_utils function.
+void set_mode(
+    CommunicationBackend *backend,
+    GameModeId mode_id,
+    const GameModeConfig *mode_configs,
+    size_t mode_configs_count
+) {
     // In this overload we only know the mode id so we need to find a mode config that matches this
     // ID.
-    for (size_t i = 0; i < config.game_mode_configs_count; i++) {
-        const GameModeConfig &mode = config.game_mode_configs[i];
+    for (size_t i = 0; i < mode_configs_count; i++) {
+        const GameModeConfig &mode = mode_configs[i];
         if (mode.mode_id == mode_id) {
             set_mode(backend, mode);
             return;
@@ -76,25 +84,31 @@ void set_mode(CommunicationBackend *backend, GameModeId mode_id) {
 
 void select_mode(
     CommunicationBackend *backend,
-    const GameModeConfig *game_mode_configs,
-    const size_t game_mode_configs_count
+    const GameModeConfig *mode_configs,
+    size_t mode_configs_count
 ) {
     // TODO: Use a counter variable to only run the contents of this function every x iterations
     // rather than on every single poll.
 
     InputState &inputs = backend->GetInputs();
+    // uint64_t buttons = backend->GetInputs().buttons;
 
-    for (size_t i = 0; i < game_mode_configs_count; i++) {
-        const GameModeConfig &mode_config = game_mode_configs[i];
-        // TODO: Cache gamemode activation binding masks globally so they aren't rebuilt in main
-        // loop.
-        // Build bit mask for checking for matching button hold.
-        uint64_t activation_binding_mask =
-            make_button_mask(mode_config.activation_binding, mode_config.activation_binding_count);
-
-        if (all_buttons_held(inputs.buttons, activation_binding_mask)) {
+    for (size_t i = 0; i < mode_configs_count; i++) {
+        const GameModeConfig &mode_config = mode_configs[i];
+        // if (all_buttons_held(buttons, mode_activation_masks[i])) {
+        if (all_buttons_held(inputs.buttons, mode_activation_masks[i])) {
             set_mode(backend, mode_config);
             return;
         }
+    }
+}
+
+void setup_mode_activation_bindings(const GameModeConfig *mode_configs, size_t mode_configs_count) {
+    // Build bit masks for checking for matching button holds.
+    for (size_t i = 0; i < mode_configs_count; i++) {
+        mode_activation_masks[i] = make_button_mask(
+            mode_configs[i].activation_binding,
+            mode_configs[i].activation_binding_count
+        );
     }
 }
