@@ -10,7 +10,12 @@
 
 class ConfiguratorBackend : public CommunicationBackend {
   public:
-    ConfiguratorBackend(InputSource **input_sources, size_t input_source_count, Config &config);
+    ConfiguratorBackend(
+        InputState &inputs,
+        InputSource **input_sources,
+        size_t input_source_count,
+        Config &config
+    );
     ~ConfiguratorBackend();
     void SendReport();
 

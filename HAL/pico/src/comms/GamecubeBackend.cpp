@@ -7,6 +7,7 @@
 #include <hardware/timer.h>
 
 GamecubeBackend::GamecubeBackend(
+    InputState &inputs,
     InputSource **input_sources,
     size_t input_source_count,
     uint data_pin,
@@ -14,7 +15,7 @@ GamecubeBackend::GamecubeBackend(
     int sm,
     int offset
 )
-    : CommunicationBackend(input_sources, input_source_count) {
+    : CommunicationBackend(inputs, input_sources, input_source_count) {
     _gamecube = new GamecubeConsole(data_pin, pio, sm, offset);
     _report = default_gc_report;
 }

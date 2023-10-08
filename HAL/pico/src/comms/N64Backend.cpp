@@ -6,6 +6,7 @@
 #include <hardware/pio.h>
 
 N64Backend::N64Backend(
+    InputState &inputs,
     InputSource **input_sources,
     size_t input_source_count,
     uint data_pin,
@@ -13,7 +14,7 @@ N64Backend::N64Backend(
     int sm,
     int offset
 )
-    : CommunicationBackend(input_sources, input_source_count) {
+    : CommunicationBackend(inputs, input_sources, input_source_count) {
     _n64 = new N64Console(data_pin, pio, sm, offset);
     _report = default_n64_report;
 }

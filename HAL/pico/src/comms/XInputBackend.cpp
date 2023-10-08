@@ -5,8 +5,12 @@
 
 #include <Adafruit_USBD_XInput.hpp>
 
-XInputBackend::XInputBackend(InputSource **input_sources, size_t input_source_count)
-    : CommunicationBackend(input_sources, input_source_count) {
+XInputBackend::XInputBackend(
+    InputState &inputs,
+    InputSource **input_sources,
+    size_t input_source_count
+)
+    : CommunicationBackend(inputs, input_sources, input_source_count) {
     Serial.end();
     _xinput = new Adafruit_USBD_XInput();
     _xinput->begin();

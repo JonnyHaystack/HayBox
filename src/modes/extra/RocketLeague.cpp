@@ -4,9 +4,9 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 255
 
-RocketLeague::RocketLeague(GameModeConfig &config) : ControllerMode(config) {}
+RocketLeague::RocketLeague(const GameModeConfig &config) : ControllerMode(config) {}
 
-void RocketLeague::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
+void RocketLeague::UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs) {
     outputs.a = inputs.a;
     outputs.b = inputs.b;
     outputs.x = inputs.midshield;
@@ -39,7 +39,7 @@ void RocketLeague::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs
     }
 }
 
-void RocketLeague::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
+void RocketLeague::UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs) {
     // Coordinate calculations to make modifier handling simpler.
     UpdateDirections(
         inputs.left,

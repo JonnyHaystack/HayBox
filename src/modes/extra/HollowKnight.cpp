@@ -4,9 +4,9 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 255
 
-HollowKnight::HollowKnight(GameModeConfig &config) : ControllerMode(config) {}
+HollowKnight::HollowKnight(const GameModeConfig &config) : ControllerMode(config) {}
 
-void HollowKnight::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
+void HollowKnight::UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs) {
     outputs.a = inputs.a; // Attack
     outputs.b = inputs.b; // Dash
     outputs.x = inputs.x; // Jump
@@ -20,7 +20,7 @@ void HollowKnight::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs
     outputs.start = inputs.start; // Pause
 }
 
-void HollowKnight::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
+void HollowKnight::UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs) {
     UpdateDirections(
         inputs.left,
         inputs.right,

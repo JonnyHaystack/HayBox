@@ -5,9 +5,9 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 228
 
-Ultimate2::Ultimate2(GameModeConfig &config) : ControllerMode(config) {}
+Ultimate2::Ultimate2(const GameModeConfig &config) : ControllerMode(config) {}
 
-void Ultimate2::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
+void Ultimate2::UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs) {
     outputs.a = inputs.a;
     outputs.b = inputs.b;
     outputs.x = inputs.x;
@@ -31,7 +31,7 @@ void Ultimate2::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
         outputs.dpadRight = true;
 }
 
-void Ultimate2::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
+void Ultimate2::UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs) {
     // Coordinate calculations to make modifier handling simpler.
     UpdateDirections(
         inputs.left,

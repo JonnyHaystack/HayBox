@@ -4,7 +4,7 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 228
 
-ProjectM::ProjectM(GameModeConfig &config, ProjectMOptions options) : ControllerMode(config) {
+ProjectM::ProjectM(const GameModeConfig &config, ProjectMOptions options) : ControllerMode(config) {
     _options = options;
     _horizontal_socd = false;
 }
@@ -14,7 +14,7 @@ void ProjectM::HandleSocd(InputState &inputs) {
     InputMode::HandleSocd(inputs);
 }
 
-void ProjectM::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
+void ProjectM::UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs) {
     outputs.a = inputs.a;
     outputs.b = inputs.b;
     outputs.x = inputs.x;
@@ -51,7 +51,7 @@ void ProjectM::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
         outputs.dpadRight = true;
 }
 
-void ProjectM::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
+void ProjectM::UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs) {
     UpdateDirections(
         inputs.left,
         inputs.right,

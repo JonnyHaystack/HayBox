@@ -2,7 +2,7 @@
 
 #include "core/InputMode.hpp"
 
-KeyboardMode::KeyboardMode() {}
+KeyboardMode::KeyboardMode(const GameModeConfig &config) : InputMode(config) {}
 
 KeyboardMode::~KeyboardMode() {}
 

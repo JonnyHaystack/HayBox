@@ -5,8 +5,12 @@
 
 #include <Joystick.h>
 
-DInputBackend::DInputBackend(InputSource **input_sources, size_t input_source_count)
-    : CommunicationBackend(input_sources, input_source_count) {
+DInputBackend::DInputBackend(
+    InputState &inputs,
+    InputSource **input_sources,
+    size_t input_source_count
+)
+    : CommunicationBackend(inputs, input_sources, input_source_count) {
     _joystick = new Joystick_(
         JOYSTICK_DEFAULT_REPORT_ID,
         JOYSTICK_TYPE_GAMEPAD,

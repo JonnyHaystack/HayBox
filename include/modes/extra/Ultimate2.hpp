@@ -7,11 +7,11 @@
 
 class Ultimate2 : public ControllerMode {
   public:
-    Ultimate2(GameModeConfig &config);
+    Ultimate2(const GameModeConfig &config);
 
   private:
-    void UpdateDigitalOutputs(InputState &inputs, OutputState &outputs);
-    void UpdateAnalogOutputs(InputState &inputs, OutputState &outputs);
+    void UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs);
+    void UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs);
 };
 
 #endif

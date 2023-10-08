@@ -7,12 +7,12 @@
 
 class RocketLeague : public ControllerMode {
   public:
-    RocketLeague(GameModeConfig &config);
+    RocketLeague(const GameModeConfig &config);
 
   private:
     void HandleSocd(InputState &inputs);
-    void UpdateDigitalOutputs(InputState &inputs, OutputState &outputs);
-    void UpdateAnalogOutputs(InputState &inputs, OutputState &outputs);
+    void UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs);
+    void UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs);
 };
 
 #endif

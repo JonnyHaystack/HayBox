@@ -52,31 +52,31 @@ typedef struct _InputState {
     int8_t nunchuk_y = 0;
 } InputState;
 
-inline static void set_button(uint64_t &buttons, Button button_index, bool pressed) {
+inline void set_button(uint64_t &buttons, Button button_index, bool pressed) {
     if (button_index == BTN_UNSPECIFIED) {
         return;
     }
     Button button_index_adjusted = (Button)(button_index - 1);
-    buttons = (buttons & ~(1UL << button_index_adjusted)) | (pressed << button_index_adjusted);
+    buttons =
+        (buttons & ~(1ULL << button_index_adjusted)) | ((uint64_t)pressed << button_index_adjusted);
 }
 
-inline static bool get_button(uint64_t &buttons, Button button_index) {
+inline bool get_button(const uint64_t &buttons, Button button_index) {
     if (button_index == BTN_UNSPECIFIED) {
         return false;
     }
-    return buttons & (1UL << (button_index - 1));
+    return buttons & (1ULL << (button_index - 1));
 }
 
-inline static uint64_t make_button_mask(Button *buttons, size_t buttons_count) {
+inline uint64_t make_button_mask(const Button *buttons, size_t buttons_count) {
     uint64_t button_mask = 0;
     for (size_t j = 0; j < buttons_count; j++) {
-        // TODO: Cache gamemode activation binding masks globally.
-        button_mask |= (1UL << (buttons[j] - 1));
+        button_mask |= (1ULL << (buttons[j] - 1));
     }
     return button_mask;
 }
 
-inline static bool all_buttons_held(uint64_t &buttons, uint64_t button_mask) {
+inline bool all_buttons_held(const uint64_t &buttons, uint64_t button_mask) {
     return button_mask != 0 && (buttons & button_mask) == button_mask;
 }
 

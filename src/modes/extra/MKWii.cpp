@@ -4,9 +4,9 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 255
 
-MKWii::MKWii(GameModeConfig &config) : ControllerMode(config) {}
+MKWii::MKWii(const GameModeConfig &config) : ControllerMode(config) {}
 
-void MKWii::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
+void MKWii::UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs) {
     outputs.a = inputs.b;
     outputs.b = inputs.x;
     outputs.triggerLDigital = inputs.z;
@@ -15,7 +15,7 @@ void MKWii::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
     outputs.start = inputs.start;
 }
 
-void MKWii::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
+void MKWii::UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs) {
     bool up = inputs.down || inputs.mod_x || inputs.mod_y;
 
     UpdateDirections(

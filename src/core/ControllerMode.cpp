@@ -1,11 +1,11 @@
 #include "core/ControllerMode.hpp"
 
-ControllerMode::ControllerMode(GameModeConfig &config) : InputMode(config) {
+ControllerMode::ControllerMode(const GameModeConfig &config) : InputMode(config) {
     // Set up initial state.
     ResetDirections();
 }
 
-void ControllerMode::UpdateOutputs(InputState &inputs, OutputState &outputs) {
+void ControllerMode::UpdateOutputs(const InputState &inputs, OutputState &outputs) {
     // Create a copy of the input state here so remapping can be many-to-one (many physical buttons
     // to one activated button).
     InputState remapped_inputs = inputs;

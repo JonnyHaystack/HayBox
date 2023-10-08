@@ -1,8 +1,8 @@
 #include "modes/FgcMode.hpp"
 
-FgcMode::FgcMode(GameModeConfig &config) : ControllerMode(config) {}
+FgcMode::FgcMode(const GameModeConfig &config) : ControllerMode(config) {}
 
-void FgcMode::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
+void FgcMode::UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs) {
     // Directions
     outputs.dpadLeft = inputs.left;
     outputs.dpadRight = inputs.right;
@@ -27,7 +27,7 @@ void FgcMode::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
     outputs.buttonL = inputs.midshield;
 }
 
-void FgcMode::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
+void FgcMode::UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs) {
     outputs.leftStickX = 128;
     outputs.leftStickY = 128;
     outputs.rightStickX = 128;

@@ -4,7 +4,12 @@
 #include "core/InputSource.hpp"
 #include "core/state.hpp"
 
-CommunicationBackend::CommunicationBackend(InputSource **input_sources, size_t input_source_count) {
+CommunicationBackend::CommunicationBackend(
+    InputState &inputs,
+    InputSource **input_sources,
+    size_t input_source_count
+)
+    : _inputs(inputs) {
     _gamemode = nullptr;
     _input_sources = input_sources;
     _input_source_count = input_source_count;

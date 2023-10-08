@@ -8,14 +8,14 @@
 
 class InputMode {
   public:
-    InputMode(GameModeConfig &config);
+    InputMode(const GameModeConfig &config);
     virtual ~InputMode();
 
   protected:
-    GameModeConfig &_config;
+    const GameModeConfig &_config;
 
     virtual void HandleSocd(InputState &inputs);
-    virtual void HandleRemap(InputState &original_inputs, InputState &remapped_inputs);
+    virtual void HandleRemap(const InputState &original_inputs, InputState &remapped_inputs);
 
   private:
     socd::SocdState *_socd_states = nullptr;

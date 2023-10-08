@@ -11,15 +11,15 @@ typedef struct {
 
 class ProjectM : public ControllerMode {
   public:
-    ProjectM(GameModeConfig &config, ProjectMOptions options = {});
+    ProjectM(const GameModeConfig &config, ProjectMOptions options = {});
 
   private:
     ProjectMOptions _options;
     bool _horizontal_socd;
 
     void HandleSocd(InputState &inputs);
-    void UpdateDigitalOutputs(InputState &inputs, OutputState &outputs);
-    void UpdateAnalogOutputs(InputState &inputs, OutputState &outputs);
+    void UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs);
+    void UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs);
 };
 
 #endif

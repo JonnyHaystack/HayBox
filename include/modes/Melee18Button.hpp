@@ -10,15 +10,15 @@ typedef struct {
 
 class Melee18Button : public ControllerMode {
   public:
-    Melee18Button(GameModeConfig &config, Melee18ButtonOptions options = {});
+    Melee18Button(const GameModeConfig &config, Melee18ButtonOptions options = {});
 
   private:
     Melee18ButtonOptions _options;
     bool horizontal_socd;
 
     void HandleSocd(InputState &inputs);
-    void UpdateDigitalOutputs(InputState &inputs, OutputState &outputs);
-    void UpdateAnalogOutputs(InputState &inputs, OutputState &outputs);
+    void UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs);
+    void UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs);
 };
 
 #endif

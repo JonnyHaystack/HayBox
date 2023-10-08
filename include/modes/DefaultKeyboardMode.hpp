@@ -6,7 +6,7 @@
 
 class DefaultKeyboardMode : public KeyboardMode {
   public:
-    DefaultKeyboardMode(GameModeConfig &config);
+    DefaultKeyboardMode(const GameModeConfig &config);
 
   private:
     void UpdateKeys(InputState &inputs);

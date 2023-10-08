@@ -9,7 +9,7 @@
 
 class XInputBackend : public CommunicationBackend {
   public:
-    XInputBackend(InputSource **input_sources, size_t input_source_count);
+    XInputBackend(InputState &inputs, InputSource **input_sources, size_t input_source_count);
     ~XInputBackend();
     void SendReport();
 

@@ -9,8 +9,8 @@
 
 class ControllerMode : public InputMode {
   public:
-    ControllerMode(GameModeConfig &config);
-    void UpdateOutputs(InputState &inputs, OutputState &outputs);
+    ControllerMode(const GameModeConfig &config);
+    void UpdateOutputs(const InputState &inputs, OutputState &outputs);
     void ResetDirections();
     virtual void UpdateDirections(
         bool lsLeft,
@@ -31,8 +31,8 @@ class ControllerMode : public InputMode {
     StickDirections directions;
 
   private:
-    virtual void UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) = 0;
-    virtual void UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) = 0;
+    virtual void UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs) = 0;
+    virtual void UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs) = 0;
 };
 
 #endif

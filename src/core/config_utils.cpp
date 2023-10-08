@@ -6,10 +6,9 @@
 
 CommunicationBackendConfig backend_config_from_buttons(
     const InputState &inputs,
-    const Config &config
+    const CommunicationBackendConfig *backend_configs,
+    size_t backend_configs_count
 ) {
-    const CommunicationBackendConfig *backend_configs = config.communication_backend_configs;
-    size_t backend_configs_count = config.communication_backend_configs_count;
     for (size_t i = 0; i < backend_configs_count; i++) {
         const CommunicationBackendConfig &backend_config = backend_configs[i];
         // Build bit mask for checking for matching button hold.
@@ -32,10 +31,9 @@ CommunicationBackendConfig backend_config_from_buttons(
 
 CommunicationBackendConfig backend_config_from_id(
     CommunicationBackendId backend_id,
-    const Config &config
+    const CommunicationBackendConfig *backend_configs,
+    size_t backend_configs_count
 ) {
-    const CommunicationBackendConfig *backend_configs = config.communication_backend_configs;
-    size_t backend_configs_count = config.communication_backend_configs_count;
     // Find the first backend config that matches the detected console so we can check what the
     // configured default gamemode is.
     for (size_t i = 0; i < backend_configs_count; i++) {

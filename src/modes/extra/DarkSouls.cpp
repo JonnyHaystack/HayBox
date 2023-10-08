@@ -4,9 +4,9 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 255
 
-DarkSouls::DarkSouls(GameModeConfig &config) : ControllerMode(config) {}
+DarkSouls::DarkSouls(const GameModeConfig &config) : ControllerMode(config) {}
 
-void DarkSouls::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
+void DarkSouls::UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs) {
     outputs.y = inputs.y;
     outputs.x = inputs.r;
 
@@ -38,7 +38,7 @@ void DarkSouls::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
     }
 }
 
-void DarkSouls::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
+void DarkSouls::UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs) {
     UpdateDirections(
         inputs.left,
         inputs.right,

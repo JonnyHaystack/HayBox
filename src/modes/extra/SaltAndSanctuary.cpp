@@ -4,9 +4,9 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 255
 
-SaltAndSanctuary::SaltAndSanctuary(GameModeConfig &config) : ControllerMode(config) {}
+SaltAndSanctuary::SaltAndSanctuary(const GameModeConfig &config) : ControllerMode(config) {}
 
-void SaltAndSanctuary::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
+void SaltAndSanctuary::UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs) {
     outputs.dpadRight = inputs.l; // Block
     outputs.b = inputs.b; // Roll
     outputs.a = inputs.a; // Attack
@@ -25,7 +25,7 @@ void SaltAndSanctuary::UpdateDigitalOutputs(InputState &inputs, OutputState &out
     outputs.start = inputs.start; // Inventory
 }
 
-void SaltAndSanctuary::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
+void SaltAndSanctuary::UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs) {
     // Coordinate calculations to make modifier handling simpler.
     UpdateDirections(
         inputs.left,

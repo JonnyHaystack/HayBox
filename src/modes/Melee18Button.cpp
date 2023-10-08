@@ -4,7 +4,7 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 208
 
-Melee18Button::Melee18Button(GameModeConfig &config, Melee18ButtonOptions options)
+Melee18Button::Melee18Button(const GameModeConfig &config, Melee18ButtonOptions options)
     : ControllerMode(config) {
     _options = options;
     horizontal_socd = false;
@@ -15,7 +15,7 @@ void Melee18Button::HandleSocd(InputState &inputs) {
     InputMode::HandleSocd(inputs);
 }
 
-void Melee18Button::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
+void Melee18Button::UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs) {
     outputs.a = inputs.a;
     outputs.b = inputs.b;
     outputs.x = inputs.x;
@@ -47,7 +47,7 @@ void Melee18Button::UpdateDigitalOutputs(InputState &inputs, OutputState &output
         outputs.dpadRight = true;
 }
 
-void Melee18Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
+void Melee18Button::UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs) {
     // Coordinate calculations to make modifier handling simpler.
     UpdateDirections(
         inputs.left,

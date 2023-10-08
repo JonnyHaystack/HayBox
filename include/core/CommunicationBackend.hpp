@@ -7,7 +7,11 @@
 
 class CommunicationBackend {
   public:
-    CommunicationBackend(InputSource **input_sources, size_t input_source_count);
+    CommunicationBackend(
+        InputState &inputs,
+        InputSource **input_sources,
+        size_t input_source_count
+    );
     virtual ~CommunicationBackend(){};
 
     InputState &GetInputs();
@@ -20,7 +24,7 @@ class CommunicationBackend {
     virtual void SendReport() = 0;
 
   protected:
-    InputState _inputs;
+    InputState &_inputs;
     InputSource **_input_sources;
     size_t _input_source_count;
 

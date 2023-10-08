@@ -4,9 +4,9 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 228
 
-RivalsOfAether::RivalsOfAether(GameModeConfig &config) : ControllerMode(config) {}
+RivalsOfAether::RivalsOfAether(const GameModeConfig &config) : ControllerMode(config) {}
 
-void RivalsOfAether::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
+void RivalsOfAether::UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs) {
     outputs.a = inputs.a;
     outputs.b = inputs.b;
     outputs.x = inputs.x;
@@ -37,7 +37,7 @@ void RivalsOfAether::UpdateDigitalOutputs(InputState &inputs, OutputState &outpu
     }
 }
 
-void RivalsOfAether::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
+void RivalsOfAether::UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs) {
     // Coordinate calculations to make modifier handling simpler.
     UpdateDirections(
         inputs.left,

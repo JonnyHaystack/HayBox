@@ -13,11 +13,17 @@ extern KeyboardMode *current_kb_mode;
 void set_mode(CommunicationBackend *backend, ControllerMode *mode);
 void set_mode(CommunicationBackend *backend, KeyboardMode *mode);
 void set_mode(CommunicationBackend *backend, const GameModeConfig &mode_config);
-void set_mode(CommunicationBackend *backend, GameModeId mode_id);
+void set_mode(
+    CommunicationBackend *backend,
+    GameModeId mode_id,
+    const GameModeConfig *mode_configs,
+    size_t mode_configs_count
+);
 void select_mode(
     CommunicationBackend *backend,
-    const GameModeConfig *game_mode_configs,
-    const size_t game_mode_configs_count
+    const GameModeConfig *mode_configs,
+    size_t mode_configs_count
 );
+void setup_mode_activation_bindings(const GameModeConfig *mode_configs, size_t mode_configs_count);
 
 #endif

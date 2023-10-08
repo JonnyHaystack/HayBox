@@ -4,9 +4,9 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 255
 
-ShovelKnight::ShovelKnight(GameModeConfig &config) : ControllerMode(config) {}
+ShovelKnight::ShovelKnight(const GameModeConfig &config) : ControllerMode(config) {}
 
-void ShovelKnight::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
+void ShovelKnight::UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs) {
     outputs.dpadLeft = inputs.left;
     outputs.dpadRight = inputs.right;
     outputs.dpadDown = inputs.down;
@@ -23,7 +23,7 @@ void ShovelKnight::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs
     outputs.start = inputs.start; // Pause
 }
 
-void ShovelKnight::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
+void ShovelKnight::UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs) {
     UpdateDirections(
         inputs.left,
         inputs.right,

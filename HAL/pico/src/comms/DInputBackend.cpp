@@ -5,8 +5,12 @@
 
 #include <TUGamepad.hpp>
 
-DInputBackend::DInputBackend(InputSource **input_sources, size_t input_source_count)
-    : CommunicationBackend(input_sources, input_source_count) {
+DInputBackend::DInputBackend(
+    InputState &inputs,
+    InputSource **input_sources,
+    size_t input_source_count
+)
+    : CommunicationBackend(inputs, input_sources, input_source_count) {
     _gamepad = new TUGamepad();
     _gamepad->begin();
 

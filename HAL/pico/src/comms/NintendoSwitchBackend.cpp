@@ -63,8 +63,12 @@
 
 uint8_t NintendoSwitchBackend::_descriptor[] = { HID_REPORT_DESC() };
 
-NintendoSwitchBackend::NintendoSwitchBackend(InputSource **input_sources, size_t input_source_count)
-    : CommunicationBackend(input_sources, input_source_count) {
+NintendoSwitchBackend::NintendoSwitchBackend(
+    InputState &inputs,
+    InputSource **input_sources,
+    size_t input_source_count
+)
+    : CommunicationBackend(inputs, input_sources, input_source_count) {
     USBDevice.setManufacturerDescriptor("HORI CO.,LTD.");
     USBDevice.setProductDescriptor("POKKEN CONTROLLER");
     USBDevice.setSerialDescriptor("1.0");

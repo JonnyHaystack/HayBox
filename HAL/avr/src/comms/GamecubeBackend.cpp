@@ -6,12 +6,13 @@
 #include <Nintendo.h>
 
 GamecubeBackend::GamecubeBackend(
+    InputState &inputs,
     InputSource **input_sources,
     size_t input_source_count,
     int polling_rate,
     int data_pin
 )
-    : CommunicationBackend(input_sources, input_source_count) {
+    : CommunicationBackend(inputs, input_sources, input_source_count) {
     _gamecube = new CGamecubeConsole(data_pin);
     _data = defaultGamecubeData;
 

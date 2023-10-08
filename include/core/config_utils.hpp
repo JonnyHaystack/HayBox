@@ -7,12 +7,14 @@
 
 CommunicationBackendConfig backend_config_from_buttons(
     const InputState &inputs,
-    const Config &config
+    const CommunicationBackendConfig *backend_configs,
+    size_t backend_configs_count
 );
 
 CommunicationBackendConfig backend_config_from_id(
     CommunicationBackendId backend_id,
-    const Config &config
+    const CommunicationBackendConfig *backend_configs,
+    size_t backend_configs_count
 );
 
 #endif
