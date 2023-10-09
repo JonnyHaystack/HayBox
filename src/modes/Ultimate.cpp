@@ -8,47 +8,47 @@
 Ultimate::Ultimate(const GameModeConfig &config) : ControllerMode(config) {}
 
 void Ultimate::UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs) {
-    outputs.a = inputs.a;
-    outputs.b = inputs.b;
-    outputs.x = inputs.x;
-    outputs.y = inputs.y;
-    outputs.buttonL = inputs.lightshield;
-    outputs.buttonR = inputs.z || inputs.midshield;
-    outputs.triggerLDigital = inputs.l;
-    outputs.triggerRDigital = inputs.r;
-    outputs.start = inputs.start;
-    outputs.select = inputs.select;
-    outputs.home = inputs.home;
+    outputs.a = inputs.rt1;
+    outputs.b = inputs.rf1;
+    outputs.x = inputs.rf2;
+    outputs.y = inputs.rf6;
+    outputs.buttonL = inputs.rf7;
+    outputs.buttonR = inputs.rf3 || inputs.rf8;
+    outputs.triggerLDigital = inputs.lf4;
+    outputs.triggerRDigital = inputs.rf5;
+    outputs.start = inputs.mb1;
+    outputs.select = inputs.mb3;
+    outputs.home = inputs.mb2;
 
     // Turn on D-Pad layer by holding Mod X + Mod Y or Nunchuk C button.
-    if ((inputs.mod_x && inputs.mod_y) || inputs.nunchuk_c) {
-        outputs.dpadUp = inputs.c_up;
-        outputs.dpadDown = inputs.c_down;
-        outputs.dpadLeft = inputs.c_left;
-        outputs.dpadRight = inputs.c_right;
+    if ((inputs.lt1 && inputs.lt2) || inputs.nunchuk_c) {
+        outputs.dpadUp = inputs.rt4;
+        outputs.dpadDown = inputs.rt2;
+        outputs.dpadLeft = inputs.rt3;
+        outputs.dpadRight = inputs.rt5;
     }
 }
 
 void Ultimate::UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs) {
     // Coordinate calculations to make modifier handling simpler.
     UpdateDirections(
-        inputs.left,
-        inputs.right,
-        inputs.down,
-        inputs.up,
-        inputs.c_left,
-        inputs.c_right,
-        inputs.c_down,
-        inputs.c_up,
+        inputs.lf3, // Left
+        inputs.lf1, // Right
+        inputs.lf2, // Down
+        inputs.rf4, // Up
+        inputs.rt3, // C-Left
+        inputs.rt5, // C-Right
+        inputs.rt2, // C-Down
+        inputs.rt4, // C-Up
         ANALOG_STICK_MIN,
         ANALOG_STICK_NEUTRAL,
         ANALOG_STICK_MAX,
         outputs
     );
 
-    bool shield_button_pressed = inputs.l || inputs.r;
+    bool shield_button_pressed = inputs.lf4 || inputs.rf5;
 
-    if (inputs.mod_x) {
+    if (inputs.lt1) {
         // MX + Horizontal = 6625 = 53
         if (directions.horizontal) {
             outputs.leftStickX = 128 + (directions.x * 53);
@@ -57,7 +57,7 @@ void Ultimate::UpdateAnalogOutputs(const InputState &inputs, OutputState &output
                 outputs.leftStickX = 128 + (directions.x * 51);
             }
             // Horizontal Tilts = 36
-            if (inputs.a) {
+            if (inputs.rt1) {
                 outputs.leftStickX = 128 + (directions.x * 36);
             }
         }
@@ -92,67 +92,67 @@ void Ultimate::UpdateAnalogOutputs(const InputState &inputs, OutputState &output
             outputs.leftStickX = 128 + (directions.x * 53);
             outputs.leftStickY = 128 + (directions.y * 35);
             // (39.05) = 53 43
-            if (inputs.c_down) {
+            if (inputs.rt2) {
                 outputs.leftStickX = 128 + (directions.x * 53);
                 outputs.leftStickY = 128 + (directions.y * 43);
             }
             // (36.35) = 53 39
-            if (inputs.c_left) {
+            if (inputs.rt3) {
                 outputs.leftStickX = 128 + (directions.x * 53);
                 outputs.leftStickY = 128 + (directions.y * 39);
             }
             // (30.32) = 56 41
-            if (inputs.c_up) {
+            if (inputs.rt4) {
                 outputs.leftStickX = 128 + (directions.x * 53);
                 outputs.leftStickY = 128 + (directions.y * 31);
             }
             // (27.85) = 49 42
-            if (inputs.c_right) {
+            if (inputs.rt5) {
                 outputs.leftStickX = 128 + (directions.x * 53);
                 outputs.leftStickY = 128 + (directions.y * 28);
             }
 
             /* Extended Up B Angles */
-            if (inputs.b) {
+            if (inputs.rf1) {
                 // (33.29) = 67 44
                 outputs.leftStickX = 128 + (directions.x * 67);
                 outputs.leftStickY = 128 + (directions.y * 44);
                 // (39.38) = 67 55
-                if (inputs.c_down) {
+                if (inputs.rt2) {
                     outputs.leftStickX = 128 + (directions.x * 67);
                     outputs.leftStickY = 128 + (directions.y * 55);
                 }
                 // (36.18) = 67 49
-                if (inputs.c_left) {
+                if (inputs.rt3) {
                     outputs.leftStickX = 128 + (directions.x * 67);
                     outputs.leftStickY = 128 + (directions.y * 49);
                 }
                 // (30.2) = 67 39
-                if (inputs.c_up) {
+                if (inputs.rt4) {
                     outputs.leftStickX = 128 + (directions.x * 67);
                     outputs.leftStickY = 128 + (directions.y * 39);
                 }
                 // (27.58) = 67 35
-                if (inputs.c_right) {
+                if (inputs.rt5) {
                     outputs.leftStickX = 128 + (directions.x * 67);
                     outputs.leftStickY = 128 + (directions.y * 35);
                 }
             }
 
             // Angled Ftilts
-            if (inputs.a) {
+            if (inputs.rt1) {
                 outputs.leftStickX = 128 + (directions.x * 36);
                 outputs.leftStickY = 128 + (directions.y * 26);
             }
         }
     }
 
-    if (inputs.mod_y) {
+    if (inputs.lt2) {
         // MY + Horizontal (even if shield is held) = 41
         if (directions.horizontal) {
             outputs.leftStickX = 128 + (directions.x * 41);
             // MY Horizontal Tilts
-            if (inputs.a) {
+            if (inputs.rt1) {
                 outputs.leftStickX = 128 + (directions.x * 36);
             }
         }
@@ -160,7 +160,7 @@ void Ultimate::UpdateAnalogOutputs(const InputState &inputs, OutputState &output
         if (directions.vertical) {
             outputs.leftStickY = 128 + (directions.y * 53);
             // MY Vertical Tilts
-            if (inputs.a) {
+            if (inputs.rt1) {
                 outputs.leftStickY = 128 + (directions.y * 36);
             }
         }
@@ -186,55 +186,55 @@ void Ultimate::UpdateAnalogOutputs(const InputState &inputs, OutputState &output
             outputs.leftStickX = 128 + (directions.x * 35);
             outputs.leftStickY = 128 + (directions.y * 53);
             // (50.95) = 43 53
-            if (inputs.c_down) {
+            if (inputs.rt2) {
                 outputs.leftStickX = 128 + (directions.x * 43);
                 outputs.leftStickY = 128 + (directions.y * 53);
             }
             // (53.65) = 39 53
-            if (inputs.c_left) {
+            if (inputs.rt3) {
                 outputs.leftStickX = 128 + (directions.x * 49);
                 outputs.leftStickY = 128 + (directions.y * 53);
             }
             // (59.68) = 31 53
-            if (inputs.c_up) {
+            if (inputs.rt4) {
                 outputs.leftStickX = 128 + (directions.x * 31);
                 outputs.leftStickY = 128 + (directions.y * 53);
             }
             // (62.15) = 28 53
-            if (inputs.c_right) {
+            if (inputs.rt5) {
                 outputs.leftStickX = 128 + (directions.x * 28);
                 outputs.leftStickY = 128 + (directions.y * 53);
             }
 
             /* Extended Up B Angles */
-            if (inputs.b) {
+            if (inputs.rf1) {
                 // (56.71) = 44 67
                 outputs.leftStickX = 128 + (directions.x * 44);
                 outputs.leftStickY = 128 + (directions.y * 67);
                 // (50.62) = 55 67
-                if (inputs.c_down) {
+                if (inputs.rt2) {
                     outputs.leftStickX = 128 + (directions.x * 55);
                     outputs.leftStickY = 128 + (directions.y * 67);
                 }
                 // (53.82) = 49 67
-                if (inputs.c_left) {
+                if (inputs.rt3) {
                     outputs.leftStickX = 128 + (directions.x * 49);
                     outputs.leftStickY = 128 + (directions.y * 67);
                 }
                 // (59.8) = 39 67
-                if (inputs.c_up) {
+                if (inputs.rt4) {
                     outputs.leftStickX = 128 + (directions.x * 39);
                     outputs.leftStickY = 128 + (directions.y * 67);
                 }
                 // (62.42) = 35 67
-                if (inputs.c_right) {
+                if (inputs.rt5) {
                     outputs.leftStickX = 128 + (directions.x * 35);
                     outputs.leftStickY = 128 + (directions.y * 67);
                 }
             }
 
             // MY Pivot Uptilt/Dtilt
-            if (inputs.a) {
+            if (inputs.rt1) {
                 outputs.leftStickX = 128 + (directions.x * 34);
                 outputs.leftStickY = 128 + (directions.y * 38);
             }
@@ -249,16 +249,16 @@ void Ultimate::UpdateAnalogOutputs(const InputState &inputs, OutputState &output
         outputs.rightStickY = 128 + (directions.cy * 68);
     }
 
-    if (inputs.l) {
+    if (inputs.lf4) {
         outputs.triggerLAnalog = 140;
     }
 
-    if (inputs.r) {
+    if (inputs.rf5) {
         outputs.triggerRAnalog = 140;
     }
 
     // Shut off C-stick when using D-Pad layer.
-    if ((inputs.mod_x && inputs.mod_y) || inputs.nunchuk_c) {
+    if ((inputs.lt1 && inputs.lt2) || inputs.nunchuk_c) {
         outputs.rightStickX = 128;
         outputs.rightStickY = 128;
     }

@@ -17,53 +17,54 @@ Config config = {
             .mode_id = MODE_MELEE,
             .socd_pairs_count = 4,
             .socd_pairs = {
-                SocdPair { .button_dir1 = BTN_LEFT, .button_dir2 = BTN_RIGHT, .socd_type = SOCD_2IP_NO_REAC },
-                SocdPair { .button_dir1 = BTN_DOWN, .button_dir2 = BTN_UP, .socd_type = SOCD_2IP_NO_REAC },
-                SocdPair { .button_dir1 = BTN_C_LEFT, .button_dir2 = BTN_C_RIGHT, .socd_type = SOCD_2IP_NO_REAC },
-                SocdPair { .button_dir1 = BTN_C_DOWN, .button_dir2 = BTN_C_UP, .socd_type = SOCD_2IP_NO_REAC },
+                SocdPair { .button_dir1 = BTN_LF3, .button_dir2 = BTN_LF1, .socd_type = SOCD_2IP_NO_REAC },
+                SocdPair { .button_dir1 = BTN_LF2, .button_dir2 = BTN_RF4, .socd_type = SOCD_2IP_NO_REAC },
+                SocdPair { .button_dir1 = BTN_RT3, .button_dir2 = BTN_RT5, .socd_type = SOCD_2IP_NO_REAC },
+                SocdPair { .button_dir1 = BTN_RT2, .button_dir2 = BTN_RT4, .socd_type = SOCD_2IP_NO_REAC },
             },
             .button_remapping_count = 0,
             .activation_binding_count = 3,
-            .activation_binding = { BTN_MOD_X, BTN_START, BTN_L },
+            .activation_binding = { BTN_LT1, BTN_MB1, BTN_LF4 },
         },
         GameModeConfig {
             .mode_id = MODE_PROJECT_M,
             .socd_pairs_count = 4,
             .socd_pairs = {
-                SocdPair { .button_dir1 = BTN_LEFT, .button_dir2 = BTN_RIGHT, .socd_type = SOCD_2IP_NO_REAC },
-                SocdPair { .button_dir1 = BTN_DOWN, .button_dir2 = BTN_UP, .socd_type = SOCD_2IP_NO_REAC },
-                SocdPair { .button_dir1 = BTN_C_LEFT, .button_dir2 = BTN_C_RIGHT, .socd_type = SOCD_2IP_NO_REAC },
-                SocdPair { .button_dir1 = BTN_C_DOWN, .button_dir2 = BTN_C_UP, .socd_type = SOCD_2IP_NO_REAC },
+                SocdPair { .button_dir1 = BTN_LF3, .button_dir2 = BTN_LF1, .socd_type = SOCD_2IP_NO_REAC },
+                SocdPair { .button_dir1 = BTN_LF2, .button_dir2 = BTN_RF4, .socd_type = SOCD_2IP_NO_REAC },
+                SocdPair { .button_dir1 = BTN_RT3, .button_dir2 = BTN_RT5, .socd_type = SOCD_2IP_NO_REAC },
+                SocdPair { .button_dir1 = BTN_RT2, .button_dir2 = BTN_RT4, .socd_type = SOCD_2IP_NO_REAC },
             },
             .button_remapping_count = 0,
             .activation_binding_count = 3,
-            .activation_binding = { BTN_MOD_X, BTN_START, BTN_LEFT },
+            .activation_binding = { BTN_LT1, BTN_MB1, BTN_LF3 },
         },
         GameModeConfig {
             .mode_id = MODE_ULTIMATE,
             .socd_pairs_count = 4,
             .socd_pairs = {
-                SocdPair { .button_dir1 = BTN_LEFT, .button_dir2 = BTN_RIGHT, .socd_type = SOCD_2IP },
-                SocdPair { .button_dir1 = BTN_DOWN, .button_dir2 = BTN_UP, .socd_type = SOCD_2IP },
-                SocdPair { .button_dir1 = BTN_C_LEFT, .button_dir2 = BTN_C_RIGHT, .socd_type = SOCD_2IP },
-                SocdPair { .button_dir1 = BTN_C_DOWN, .button_dir2 = BTN_C_UP, .socd_type = SOCD_2IP },
+                SocdPair { .button_dir1 = BTN_LF3, .button_dir2 = BTN_LF1, .socd_type = SOCD_2IP },
+                SocdPair { .button_dir1 = BTN_LF2, .button_dir2 = BTN_RF4, .socd_type = SOCD_2IP },
+                SocdPair { .button_dir1 = BTN_RT3, .button_dir2 = BTN_RT5, .socd_type = SOCD_2IP },
+                SocdPair { .button_dir1 = BTN_RT2, .button_dir2 = BTN_RT4, .socd_type = SOCD_2IP },
             },
             .button_remapping_count = 0,
             .activation_binding_count = 3,
-            .activation_binding = { BTN_MOD_X, BTN_START, BTN_DOWN },
+            .activation_binding = { BTN_LT1, BTN_MB1, BTN_LF2 },
         },
         GameModeConfig {
             .mode_id = MODE_FGC,
-            .socd_pairs_count = 4,
+            .socd_pairs_count = 2,
             .socd_pairs = {
-                SocdPair { .button_dir1 = BTN_LEFT, .button_dir2 = BTN_RIGHT, .socd_type = SOCD_NEUTRAL },
-                SocdPair { .button_dir1 = BTN_MOD_X, .button_dir2 = BTN_C_UP, .socd_type = SOCD_DIR1_PRIORITY },
-                SocdPair { .button_dir1 = BTN_DOWN, .button_dir2 = BTN_MOD_X, .socd_type = SOCD_NEUTRAL },
-                SocdPair { .button_dir1 = BTN_DOWN, .button_dir2 = BTN_C_UP, .socd_type = SOCD_NEUTRAL },
+                SocdPair { .button_dir1 = BTN_LF3, .button_dir2 = BTN_LF1, .socd_type = SOCD_NEUTRAL },
+                SocdPair { .button_dir1 = BTN_LT1, .button_dir2 = BTN_RT4, .socd_type = SOCD_NEUTRAL },
             },
-            .button_remapping_count = 0,
+            .button_remapping_count = 1,
+            .button_remapping = {
+                ButtonRemap { .physical_button = BTN_RT4, .activates = BTN_LT1 },
+            },
             .activation_binding_count = 3,
-            .activation_binding = { BTN_MOD_X, BTN_START, BTN_RIGHT },
+            .activation_binding = { BTN_LT1, BTN_MB1, BTN_LF1 },
         },
     },
     .communication_backend_configs_count = 3,
@@ -77,13 +78,13 @@ Config config = {
             .backend_id = COMMS_BACKEND_DINPUT,
             .default_mode = MODE_MELEE,
             .activation_binding_count = 1,
-            .activation_binding = { BTN_Z },
+            .activation_binding = { BTN_RF3 },
         },
         CommunicationBackendConfig {
             .backend_id = COMMS_BACKEND_CONFIGURATOR,
             .default_mode = MODE_UNSPECIFIED,
             .activation_binding_count = 1,
-            .activation_binding = { BTN_C_DOWN },
+            .activation_binding = { BTN_RT2 },
         }
     },
 };
@@ -98,11 +99,11 @@ const uint row_pins[num_rows] = { 20, 19, 18, 17, 16 };
 const uint col_pins[num_cols] = { 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 };
 // clang-format off
 const Button matrix[num_rows][num_cols] = {
-    {NA,      NA,       NA,       NA,         NA, BTN_SELECT, BTN_START, BTN_HOME, NA, BTN_R,      BTN_Y,    BTN_LIGHTSHIELD, BTN_MIDSHIELD},
-    { BTN_L,  BTN_LEFT, BTN_DOWN, BTN_RIGHT,  NA, NA,         NA,         NA,      NA, BTN_B,      BTN_X,    BTN_Z,           BTN_UP       },
-    { NA,     NA,       NA,       NA,         NA, NA,         NA,         NA,      NA, NA,         NA,       NA,              NA           },
-    { NA,     NA,       NA,       NA,         NA, NA,         NA,         NA,      NA, BTN_C_LEFT, BTN_C_UP, BTN_C_RIGHT,     NA           },
-    { NA,     NA,       BTN_MOD_X, BTN_MOD_Y, NA, NA,         NA,         NA,      NA, BTN_C_DOWN, BTN_A,    NA,              NA           },
+    {BTN_LF8,   BTN_LF7,  BTN_LF6,  BTN_LF5, NA, BTN_MB3,  BTN_MB1,  BTN_MB2,  NA, BTN_RF5, BTN_RF6,  BTN_RF7,  BTN_RF8 },
+    { BTN_LF4,  BTN_LF3,  BTN_LF2,  BTN_LF1, NA, BTN_MB4,  BTN_MB5,  BTN_MB6,  NA, BTN_RT1, BTN_RT2,  BTN_RF3,  BTN_RF4 },
+    { BTN_LF12, BTN_LF11, BTN_LF10, BTN_LF9, NA, BTN_MB7,  BTN_MB8,  BTN_MB9,  NA, BTN_RF9, BTN_RF10, BTN_RF11, BTN_RF12},
+    { NA,       BTN_LT5,  BTN_LT4,  BTN_LT3, NA, BTN_MB10, BTN_MB11, BTN_MB12, NA, BTN_RT3, BTN_RT4,  BTN_RT5,  NA      },
+    { NA,       NA,       BTN_LT1,  BTN_LT2, NA, BTN_LT6,  BTN_RT7,  BTN_RT6,  NA, BTN_RT2, BTN_RT1,  NA,       NA      },
 };
 // clang-format on
 DiodeDirection diode_direction = DiodeDirection::COL2ROW;
@@ -123,7 +124,7 @@ void setup() {
     matrix_input.UpdateInputs(inputs);
 
     // Bootsel button hold as early as possible for safety.
-    if (inputs.start) {
+    if (inputs.mb1) {
         reboot_bootloader();
     }
 

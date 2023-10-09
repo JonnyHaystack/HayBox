@@ -10,64 +10,64 @@ ProjectM::ProjectM(const GameModeConfig &config, ProjectMOptions options) : Cont
 }
 
 void ProjectM::HandleSocd(InputState &inputs) {
-    _horizontal_socd = inputs.left && inputs.right;
+    _horizontal_socd = inputs.lf3 && inputs.lf1;
     InputMode::HandleSocd(inputs);
 }
 
 void ProjectM::UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs) {
-    outputs.a = inputs.a;
-    outputs.b = inputs.b;
-    outputs.x = inputs.x;
-    outputs.y = inputs.y;
+    outputs.a = inputs.rt1;
+    outputs.b = inputs.rf1;
+    outputs.x = inputs.rf2;
+    outputs.y = inputs.rf6;
     // True Z press vs macro lightshield + A.
-    if (_options.true_z_press || inputs.mod_x) {
-        outputs.buttonR = inputs.z;
+    if (_options.true_z_press || inputs.lt1) {
+        outputs.buttonR = inputs.rf3;
     } else {
-        outputs.a = inputs.a || inputs.z;
+        outputs.a = inputs.rt1 || inputs.rf3;
     }
     if (inputs.nunchuk_connected) {
         outputs.triggerLDigital = inputs.nunchuk_z;
     } else {
-        outputs.triggerLDigital = inputs.l;
+        outputs.triggerLDigital = inputs.lf4;
     }
-    outputs.triggerRDigital = inputs.r;
-    outputs.start = inputs.start;
+    outputs.triggerRDigital = inputs.rf5;
+    outputs.start = inputs.mb1;
 
     // Activate D-Pad layer by holding Mod X + Mod Y or Nunchuk C button.
-    if ((inputs.mod_x && inputs.mod_y) || inputs.nunchuk_c) {
-        outputs.dpadUp = inputs.c_up;
-        outputs.dpadDown = inputs.c_down;
-        outputs.dpadLeft = inputs.c_left;
-        outputs.dpadRight = inputs.c_right;
+    if ((inputs.lt1 && inputs.lt2) || inputs.nunchuk_c) {
+        outputs.dpadUp = inputs.rt4;
+        outputs.dpadDown = inputs.rt2;
+        outputs.dpadLeft = inputs.rt3;
+        outputs.dpadRight = inputs.rt5;
     }
 
     // Don't override dpad up if it's already pressed using the MX + MY dpad
     // layer.
-    outputs.dpadUp = outputs.dpadUp || inputs.midshield;
+    outputs.dpadUp = outputs.dpadUp || inputs.rf8;
 
-    if (inputs.select)
+    if (inputs.mb3)
         outputs.dpadLeft = true;
-    if (inputs.home)
+    if (inputs.mb2)
         outputs.dpadRight = true;
 }
 
 void ProjectM::UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs) {
     UpdateDirections(
-        inputs.left,
-        inputs.right,
-        inputs.down,
-        inputs.up,
-        inputs.c_left,
-        inputs.c_right,
-        inputs.c_down,
-        inputs.c_up,
+        inputs.lf3, // Left
+        inputs.lf1, // Right
+        inputs.lf2, // Down
+        inputs.rf4, // Up
+        inputs.rt3, // C-Left
+        inputs.rt5, // C-Right
+        inputs.rt2, // C-Down
+        inputs.rt4, // C-Up
         ANALOG_STICK_MIN,
         ANALOG_STICK_NEUTRAL,
         ANALOG_STICK_MAX,
         outputs
     );
 
-    bool shield_button_pressed = inputs.l || inputs.lightshield;
+    bool shield_button_pressed = inputs.lf4 || inputs.rf7;
 
     if (directions.diagonal) {
         if (directions.y == 1) {
@@ -76,7 +76,7 @@ void ProjectM::UpdateAnalogOutputs(const InputState &inputs, OutputState &output
         }
     }
 
-    if (inputs.mod_x) {
+    if (inputs.lt1) {
         if (directions.horizontal) {
             outputs.leftStickX = 128 + (directions.x * 70);
         }
@@ -93,39 +93,39 @@ void ProjectM::UpdateAnalogOutputs(const InputState &inputs, OutputState &output
             outputs.leftStickX = 128 + (directions.x * 70);
             outputs.leftStickY = 128 + (directions.y * 34);
 
-            if (inputs.b) {
+            if (inputs.rf1) {
                 outputs.leftStickX = 128 + (directions.x * 85);
                 outputs.leftStickY = 128 + (directions.y * 31);
             }
 
-            if (inputs.r) {
+            if (inputs.rf5) {
                 outputs.leftStickX = 128 + (directions.x * 82);
                 outputs.leftStickY = 128 + (directions.y * 35);
             }
 
-            if (inputs.c_up) {
+            if (inputs.rt4) {
                 outputs.leftStickX = 128 + (directions.x * 77);
                 outputs.leftStickY = 128 + (directions.y * 55);
             }
 
-            if (inputs.c_down) {
+            if (inputs.rt2) {
                 outputs.leftStickX = 128 + (directions.x * 82);
                 outputs.leftStickY = 128 + (directions.y * 36);
             }
 
-            if (inputs.c_left) {
+            if (inputs.rt3) {
                 outputs.leftStickX = 128 + (directions.x * 84);
                 outputs.leftStickY = 128 + (directions.y * 50);
             }
 
-            if (inputs.c_right) {
+            if (inputs.rt5) {
                 outputs.leftStickX = 128 + (directions.x * 72);
                 outputs.leftStickY = 128 + (directions.y * 61);
             }
         }
     }
 
-    if (inputs.mod_y) {
+    if (inputs.lt2) {
         if (directions.horizontal) {
             outputs.leftStickX = 128 + (directions.x * 35);
         }
@@ -137,32 +137,32 @@ void ProjectM::UpdateAnalogOutputs(const InputState &inputs, OutputState &output
             outputs.leftStickX = 128 + (directions.x * 28);
             outputs.leftStickY = 128 + (directions.y * 58);
 
-            if (inputs.b) {
+            if (inputs.rf1) {
                 outputs.leftStickX = 128 + (directions.x * 28);
                 outputs.leftStickY = 128 + (directions.y * 85);
             }
 
-            if (inputs.r) {
+            if (inputs.rf5) {
                 outputs.leftStickX = 128 + (directions.x * 51);
                 outputs.leftStickY = 128 + (directions.y * 82);
             }
 
-            if (inputs.c_up) {
+            if (inputs.rt4) {
                 outputs.leftStickX = 128 + (directions.x * 55);
                 outputs.leftStickY = 128 + (directions.y * 77);
             }
 
-            if (inputs.c_down) {
+            if (inputs.rt2) {
                 outputs.leftStickX = 128 + (directions.x * 34);
                 outputs.leftStickY = 128 + (directions.y * 82);
             }
 
-            if (inputs.c_left) {
+            if (inputs.rt3) {
                 outputs.leftStickX = 128 + (directions.x * 40);
                 outputs.leftStickY = 128 + (directions.y * 84);
             }
 
-            if (inputs.c_right) {
+            if (inputs.rt5) {
                 outputs.leftStickX = 128 + (directions.x * 62);
                 outputs.leftStickY = 128 + (directions.y * 72);
             }
@@ -186,12 +186,12 @@ void ProjectM::UpdateAnalogOutputs(const InputState &inputs, OutputState &output
         outputs.leftStickX = 128 + (directions.x * 100);
     }
 
-    if (inputs.lightshield) {
+    if (inputs.rf7) {
         outputs.triggerRAnalog = 49;
     }
 
     // Send lightshield input if we are using Z = lightshield + A macro.
-    if (inputs.z && !(inputs.mod_x || _options.true_z_press)) {
+    if (inputs.rf3 && !(inputs.lt1 || _options.true_z_press)) {
         outputs.triggerRAnalog = 49;
     }
 
@@ -204,7 +204,7 @@ void ProjectM::UpdateAnalogOutputs(const InputState &inputs, OutputState &output
     }
 
     // Shut off C-stick when using D-Pad layer.
-    if ((inputs.mod_x && inputs.mod_y) || inputs.nunchuk_c) {
+    if ((inputs.lt1 && inputs.lt2) || inputs.nunchuk_c) {
         outputs.rightStickX = 128;
         outputs.rightStickY = 128;
     }

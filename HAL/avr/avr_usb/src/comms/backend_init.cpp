@@ -44,7 +44,7 @@ size_t initialize_backends(
                 inputs,
                 input_sources,
                 input_source_count,
-                inputs.a ? 0 : 125,
+                inputs.rt1 ? 0 : 125,
                 pinout.joybus_data
             );
             backend_count = 1;

@@ -92,7 +92,6 @@ void select_mode(
     // rather than on every single poll.
 
     InputState &inputs = backend->GetInputs();
-    // uint64_t buttons = backend->GetInputs().buttons;
 
     for (size_t i = 0; i < mode_configs_count; i++) {
         const GameModeConfig &mode_config = mode_configs[i];

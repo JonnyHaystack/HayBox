@@ -4,27 +4,27 @@ FgcMode::FgcMode(const GameModeConfig &config) : ControllerMode(config) {}
 
 void FgcMode::UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs) {
     // Directions
-    outputs.dpadLeft = inputs.left;
-    outputs.dpadRight = inputs.right;
-    outputs.dpadDown = inputs.down;
-    outputs.dpadUp = inputs.mod_x || inputs.c_up;
+    outputs.dpadLeft = inputs.lf3;
+    outputs.dpadRight = inputs.lf1;
+    outputs.dpadDown = inputs.lf2;
+    outputs.dpadUp = inputs.lt1;
 
     // Menu keys
-    outputs.start = inputs.start;
-    outputs.select = inputs.c_left;
-    outputs.home = inputs.c_down;
+    outputs.start = inputs.mb1;
+    outputs.select = inputs.rt3;
+    outputs.home = inputs.rt2;
 
     // Right hand bottom row
-    outputs.a = inputs.b;
-    outputs.b = inputs.x;
-    outputs.triggerRDigital = inputs.z;
-    outputs.triggerLDigital = inputs.up;
+    outputs.a = inputs.rf1;
+    outputs.b = inputs.rf2;
+    outputs.triggerRDigital = inputs.rf3;
+    outputs.triggerLDigital = inputs.rf4;
 
     // Right hand top row
-    outputs.x = inputs.r;
-    outputs.y = inputs.y;
-    outputs.buttonR = inputs.lightshield;
-    outputs.buttonL = inputs.midshield;
+    outputs.x = inputs.rf5;
+    outputs.y = inputs.rf6;
+    outputs.buttonR = inputs.rf7;
+    outputs.buttonL = inputs.rf8;
 }
 
 void FgcMode::UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs) {

@@ -7,21 +7,21 @@
 MKWii::MKWii(const GameModeConfig &config) : ControllerMode(config) {}
 
 void MKWii::UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs) {
-    outputs.a = inputs.b;
-    outputs.b = inputs.x;
-    outputs.triggerLDigital = inputs.z;
-    outputs.buttonR = inputs.up;
-    outputs.dpadUp = inputs.a;
-    outputs.start = inputs.start;
+    outputs.a = inputs.rf1;
+    outputs.b = inputs.rf2;
+    outputs.triggerLDigital = inputs.rf3;
+    outputs.buttonR = inputs.rf4;
+    outputs.dpadUp = inputs.rt1;
+    outputs.start = inputs.mb1;
 }
 
 void MKWii::UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs) {
-    bool up = inputs.down || inputs.mod_x || inputs.mod_y;
+    bool up = inputs.lf2 || inputs.lt1 || inputs.lt2;
 
     UpdateDirections(
-        inputs.left,
-        inputs.right,
-        inputs.l,
+        inputs.lf3,
+        inputs.lf1,
+        inputs.lf4,
         up,
         false,
         false,
@@ -33,7 +33,7 @@ void MKWii::UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs) 
         outputs
     );
 
-    if (inputs.z) {
+    if (inputs.rf3) {
         outputs.triggerLAnalog = 140;
     }
 

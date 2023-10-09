@@ -8,83 +8,83 @@ MultiVersus::MultiVersus(const GameModeConfig &config) : ControllerMode(config) 
 
 void MultiVersus::UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs) {
     // Bind X and Y to "jump" in-game.
-    outputs.x = inputs.x;
-    outputs.y = inputs.y;
+    outputs.x = inputs.rf2;
+    outputs.y = inputs.rf6;
 
-    outputs.start = !inputs.mod_y && inputs.start;
+    outputs.start = !inputs.lt2 && inputs.mb1;
 
     // Select, MS, or MY + Start for "Reset" in the Lab. Not supported by GameCube adapter.
-    outputs.select = inputs.select || inputs.midshield || (inputs.mod_y && inputs.start);
+    outputs.select = inputs.mb3 || inputs.rf8 || (inputs.lt2 && inputs.mb1);
 
     // Home not supported by GameCube adapter.
-    outputs.home = inputs.home;
+    outputs.home = inputs.mb2;
 
     // L or Nunchuk Z = LT. Bind to "dodge" in-game.
     if (inputs.nunchuk_connected) {
         outputs.triggerLDigital = inputs.nunchuk_z;
     } else {
-        outputs.triggerLDigital = inputs.l;
+        outputs.triggerLDigital = inputs.lf4;
     }
 
     // R = RT. Can be bound to "pickup item" or left unbound.
-    outputs.triggerRDigital = inputs.r;
+    outputs.triggerRDigital = inputs.rf5;
 
-    if (!inputs.mod_x) {
+    if (!inputs.lt1) {
         // Bind A to "attack" in-game.
-        outputs.a = inputs.a;
+        outputs.a = inputs.rt1;
 
         // Bind B to "special" in-game.
-        outputs.b = inputs.b;
+        outputs.b = inputs.rf1;
 
         // Z = RB. Bind to "dodge" in-game.
-        outputs.buttonR = inputs.z;
+        outputs.buttonR = inputs.rf3;
 
         // LS = LB. Not supported by GameCube adapter.
-        outputs.buttonL = inputs.lightshield;
+        outputs.buttonL = inputs.rf7;
     }
 
     // MX activates a layer for "neutral" binds. Uses D-Pad buttons.
-    if (inputs.mod_x && !inputs.mod_y) {
+    if (inputs.lt1 && !inputs.lt2) {
         // MX + A = D-Pad Left. Bind to "neutral attack" in-game.
-        outputs.dpadLeft = inputs.a;
+        outputs.dpadLeft = inputs.rt1;
 
         // MX + B = D-Pad Right. Bind to "neutral special" in-game.
-        outputs.dpadRight = inputs.b;
+        outputs.dpadRight = inputs.rf1;
 
         // MX + Z = D-Pad Down. Bind to "neutral evade" in-game.
-        outputs.dpadDown = inputs.z;
+        outputs.dpadDown = inputs.rf3;
 
         // MX + LS = D-Pad Up. Bind to "taunt 1" in-game.
-        outputs.dpadUp = inputs.lightshield;
+        outputs.dpadUp = inputs.rf7;
     }
 
     // MY activates C-Stick to D-Pad conversion.
-    if (inputs.mod_y && !inputs.mod_x) {
-        outputs.dpadLeft = inputs.c_left;
-        outputs.dpadRight = inputs.c_right;
-        outputs.dpadDown = inputs.c_down;
-        outputs.dpadUp = inputs.c_up;
+    if (inputs.lt2 && !inputs.lt1) {
+        outputs.dpadLeft = inputs.rt3;
+        outputs.dpadRight = inputs.rt5;
+        outputs.dpadDown = inputs.rt2;
+        outputs.dpadUp = inputs.rt4;
     }
 }
 
 void MultiVersus::UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs) {
     // Coordinate calculations to make modifier handling simpler.
     UpdateDirections(
-        inputs.left,
-        inputs.right,
-        inputs.down,
-        inputs.up,
-        inputs.c_left,
-        inputs.c_right,
-        inputs.c_down,
-        inputs.c_up,
+        inputs.lf3, // Left
+        inputs.lf1, // Right
+        inputs.lf2, // Down
+        inputs.rf4, // Up
+        inputs.rt3, // C-Left
+        inputs.rt5, // C-Right
+        inputs.rt2, // C-Down
+        inputs.rt4, // C-Up
         ANALOG_STICK_MIN,
         ANALOG_STICK_NEUTRAL,
         ANALOG_STICK_MAX,
         outputs
     );
 
-    if (inputs.mod_y && !inputs.mod_x) {
+    if (inputs.lt2 && !inputs.lt1) {
         // MY slows down the cursor for easier menu navigation.
         // Menu cursor speed can also be turned down in-game under "Interface" settings.
         // 128 ± 76 results in the slowest cursor that still actuates directional inputs in-game.
