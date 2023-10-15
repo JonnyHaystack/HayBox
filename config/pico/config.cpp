@@ -67,7 +67,7 @@ Config config = {
                 ButtonRemap { .physical_button = BTN_RT4, .activates = BTN_LT1 },
             },
             .activation_binding_count = 3,
-            .activation_binding = { BTN_RT1, BTN_MB1, BTN_LF1 },
+            .activation_binding = { BTN_LT1, BTN_MB1, BTN_LF1 },
         },
     },
     .communication_backend_configs_count = 3,
