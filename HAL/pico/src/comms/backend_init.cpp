@@ -31,6 +31,7 @@ size_t initialize_backends(
         config.communication_backend_configs_count
     );
     if (backend_config.backend_id == COMMS_BACKEND_UNSPECIFIED) {
+        delay(250);
         CommunicationBackendId detected_backend_id = detect_console(pinout);
         backend_config = backend_config_from_id(
             detected_backend_id,
