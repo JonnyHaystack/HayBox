@@ -11,10 +11,7 @@
 
 #include <config.pb.h>
 
-// extern const Config config;
-
-// uint64_t gamemode_activation_masks[sizeof(config.game_mode_configs) / sizeof(GameModeConfig)];
-uint64_t mode_activation_masks[10];
+uint64_t mode_activation_masks[sizeof(Config::game_mode_configs) / sizeof(GameModeConfig)];
 
 void set_mode(CommunicationBackend *backend, ControllerMode *mode) {
     // Delete keyboard mode in case one is set, so we don't end up getting both controller and
@@ -95,7 +92,6 @@ void select_mode(
 
     for (size_t i = 0; i < mode_configs_count; i++) {
         const GameModeConfig &mode_config = mode_configs[i];
-        // if (all_buttons_held(buttons, mode_activation_masks[i])) {
         if (all_buttons_held(inputs.buttons, mode_activation_masks[i])) {
             set_mode(backend, mode_config);
             return;
