@@ -81,7 +81,7 @@ Config config = {
             .backend_id = COMMS_BACKEND_DINPUT,
             .default_mode = MODE_MELEE,
             .activation_binding_count = 1,
-            .activation_binding = { BTN_RT3 },
+            .activation_binding = { BTN_RF3 },
         },
         CommunicationBackendConfig {
             .backend_id = COMMS_BACKEND_CONFIGURATOR,
