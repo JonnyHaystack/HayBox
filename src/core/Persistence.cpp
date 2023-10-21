@@ -1,3 +1,20 @@
+/*
+ * This file is part of HayBox
+ * Copyright (C) 2023 Jonathan Haylett
+ *
+ * HayBox is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this software. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "core/Persistence.hpp"
 
 #include "stdlib.hpp"
@@ -7,8 +24,15 @@
 #include <pb_decode.h>
 #include <pb_encode.h>
 
+Config Persistence::_config;
+uint8_t Persistence::_buffer[eeprom_size - config_offset];
+
 Persistence::Persistence() {
+#ifdef ARDUINO_PICO_REVISION
     EEPROM.begin(eeprom_size);
+#else
+    EEPROM.begin();
+#endif
 }
 
 Persistence::~Persistence() {
@@ -51,15 +75,13 @@ bool Persistence::LoadConfig(Config &config) {
 
     pb_istream_t istream = pb_istream_from_buffer(_buffer, config_size);
 
-    Config original = config;
-
     // Return true if successfully decoded.
-    if (pb_decode(&istream, Config_fields, &config)) {
+    if (pb_decode(&istream, Config_fields, &_config)) {
+        config = _config;
         return true;
     }
 
     // Otherwise reset back to original config.
-    config = original;
     return false;
 }
 

@@ -1,3 +1,20 @@
+/*
+ * This file is part of HayBox
+ * Copyright (C) 2023 Jonathan Haylett
+ *
+ * HayBox is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this software. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef _CORE_PERSISTENCE_HPP
 #define _CORE_PERSISTENCE_HPP
 
@@ -21,7 +38,8 @@ class Persistence {
     static constexpr size_t config_offset = sizeof(ConfigHeader);
 
   private:
-    uint8_t _buffer[eeprom_size - config_offset];
+    static Config _config;
+    static uint8_t _buffer[eeprom_size - config_offset];
 };
 
 #endif
