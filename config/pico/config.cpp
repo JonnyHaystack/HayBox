@@ -90,6 +90,38 @@ Config config = {
             .activation_binding = { BTN_RT2 },
         }
     },
+    .keyboard_modes_count = 1,
+    .keyboard_modes = {
+        KeyboardModeConfig {
+            0,
+            "Default",
+            22,
+            {
+                { BTN_LF4, HID_KEY_A },
+                { BTN_LF3, HID_KEY_B },
+                { BTN_LF2, HID_KEY_C },
+                { BTN_LF1, HID_KEY_D },
+                { BTN_LT1, HID_KEY_E },
+                { BTN_LT2, HID_KEY_F },
+                { BTN_MB3, HID_KEY_G },
+                { BTN_MB1, HID_KEY_H },
+                { BTN_MB2, HID_KEY_I },
+                { BTN_RF5, HID_KEY_J },
+                { BTN_RF6, HID_KEY_K },
+                { BTN_RF7, HID_KEY_L },
+                { BTN_RF8, HID_KEY_M },
+                { BTN_RF1, HID_KEY_N },
+                { BTN_RF2, HID_KEY_O },
+                { BTN_RF3, HID_KEY_P },
+                { BTN_RF4, HID_KEY_Q },
+                { BTN_RT4, HID_KEY_R },
+                { BTN_RT3, HID_KEY_S },
+                { BTN_RT5, HID_KEY_T },
+                { BTN_RT1, HID_KEY_U },
+                { BTN_RT2, HID_KEY_V },
+            },
+        },
+    },
 };
 
 GpioButtonMapping button_mappings[] = {
