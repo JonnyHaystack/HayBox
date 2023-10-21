@@ -1,7 +1,6 @@
 #ifndef _UTIL_STATE_UTIL_HPP
 #define _UTIL_STATE_UTIL_HPP
 
-#include "core/state.hpp"
 #include "stdlib.hpp"
 
 #include <config.pb.h>

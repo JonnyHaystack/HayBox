@@ -1,0 +1,46 @@
+ButtonRemap.physical_button int_size:IS_8
+ButtonRemap.activates int_size:IS_8
+
+SocdPair.button_dir1 int_size:IS_8
+SocdPair.button_dir2 int_size:IS_8
+SocdPair.socd_type int_size:IS_8
+
+ButtonToKeycodeMapping.button int_size:IS_8
+ButtonToKeycodeMapping.keycode int_size:IS_8
+
+GameModeConfig.mode_id int_size:IS_8
+GameModeConfig.socd_pairs max_count:10
+GameModeConfig.socd_pairs type:FT_POINTER
+GameModeConfig.button_remapping max_count:60
+GameModeConfig.button_remapping type:FT_POINTER
+GameModeConfig.activation_binding max_count:4
+GameModeConfig.activation_binding type:FT_POINTER
+GameModeConfig.keyboard_mode_id int_size:IS_8
+
+KeyboardModeConfig.id int_size:IS_8
+KeyboardModeConfig.name max_length:20
+KeyboardModeConfig.buttons_to_keycodes max_count:60
+KeyboardModeConfig.buttons_to_keycodes type:FT_POINTER
+
+CommunicationBackendConfig.backend_id int_size:IS_8
+CommunicationBackendConfig.default_mode int_size:IS_8
+CommunicationBackendConfig.activation_binding max_count:2
+CommunicationBackendConfig.activation_binding type:FT_POINTER
+
+Config.default_backend int_size:IS_8
+Config.game_mode_configs max_count:10
+Config.game_mode_configs type:FT_POINTER
+Config.communication_backend_configs max_count:10
+Config.communication_backend_configs type:FT_POINTER
+Config.keyboard_modes max_count:5
+Config.keyboard_modes type:FT_POINTER
+
+DeviceInfo.firmware_name max_length:25
+DeviceInfo.firmware_version max_length:8
+DeviceInfo.device_name max_length:30
+
+Command long_names:false
+Button long_names:false
+SocdType long_names:false
+GameModeId long_names:false
+CommunicationBackendId long_names:false
