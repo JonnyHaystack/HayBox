@@ -13,6 +13,8 @@
 
 uint64_t mode_activation_masks[sizeof(Config::game_mode_configs) / sizeof(GameModeConfig)];
 
+size_t current_mode_index = 0;
+
 void set_mode(CommunicationBackend *backend, ControllerMode *mode) {
     // Delete keyboard mode in case one is set, so we don't end up getting both controller and
     // keyboard inputs.
@@ -107,7 +109,8 @@ void select_mode(
 
     for (size_t i = 0; i < mode_configs_count; i++) {
         const GameModeConfig &mode_config = mode_configs[i];
-        if (all_buttons_held(inputs.buttons, mode_activation_masks[i])) {
+        if (all_buttons_held(inputs.buttons, mode_activation_masks[i]) && i != current_mode_index) {
+            current_mode_index = i;
             set_mode(backend, mode_config, keyboard_modes, keyboard_modes_count);
             return;
         }
