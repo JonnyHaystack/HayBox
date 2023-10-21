@@ -14,7 +14,7 @@
 
 Config config = {
     .default_backend = COMMS_BACKEND_XINPUT,
-    .game_mode_configs_count = 4,
+    .game_mode_configs_count = 5,
     .game_mode_configs = {
         GameModeConfig {
             .mode_id = MODE_MELEE,
@@ -68,6 +68,17 @@ Config config = {
             },
             .activation_binding_count = 3,
             .activation_binding = { BTN_LT1, BTN_MB1, BTN_LF1 },
+        },
+        GameModeConfig {
+            .mode_id = MODE_KEYBOARD,
+            .socd_pairs_count = 2,
+            .socd_pairs = {
+                SocdPair { .button_dir1 = BTN_LF3, .button_dir2 = BTN_LF1, .socd_type = SOCD_2IP },
+                SocdPair { .button_dir1 = BTN_LT1, .button_dir2 = BTN_RT4, .socd_type = SOCD_2IP },
+            },
+            .button_remapping_count = 0,
+            .activation_binding_count = 3,
+            .activation_binding = { BTN_LT2, BTN_MB1, BTN_LF4 },
         },
     },
     .communication_backend_configs_count = 3,
