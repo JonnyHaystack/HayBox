@@ -29,6 +29,8 @@ size_t initialize_backends(
     size_t backend_configs_count,
     const GameModeConfig *game_mode_configs,
     size_t game_mode_configs_count,
+    const KeyboardModeConfig *keyboard_modes,
+    size_t keyboard_modes_count,
     const Pinout &pinout
 );
 

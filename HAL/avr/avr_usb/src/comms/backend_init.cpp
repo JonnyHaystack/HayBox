@@ -21,6 +21,8 @@ size_t initialize_backends(
     size_t backend_configs_count,
     const GameModeConfig *game_mode_configs,
     size_t game_mode_configs_count,
+    const KeyboardModeConfig *keyboard_modes,
+    size_t keyboard_modes_count,
     const Pinout &pinout
 ) {
     CommunicationBackend *primary_backend = nullptr;
@@ -70,7 +72,14 @@ size_t initialize_backends(
         mode_id = MODE_MELEE;
     }
 
-    set_mode(primary_backend, mode_id, game_mode_configs, game_mode_configs_count);
+    set_mode(
+        primary_backend,
+        mode_id,
+        game_mode_configs,
+        game_mode_configs_count,
+        keyboard_modes,
+        keyboard_modes_count
+    );
 
     return backend_count;
 }
