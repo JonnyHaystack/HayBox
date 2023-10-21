@@ -13,7 +13,7 @@
 
 uint64_t mode_activation_masks[sizeof(Config::game_mode_configs) / sizeof(GameModeConfig)];
 
-size_t current_mode_index = 0;
+size_t current_mode_index = SIZE_MAX;
 
 void set_mode(CommunicationBackend *backend, ControllerMode *mode) {
     // Delete keyboard mode in case one is set, so we don't end up getting both controller and
