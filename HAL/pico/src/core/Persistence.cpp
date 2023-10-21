@@ -28,11 +28,7 @@ Config Persistence::_config;
 uint8_t Persistence::_buffer[eeprom_size - config_offset];
 
 Persistence::Persistence() {
-#ifdef ARDUINO_PICO_REVISION
-    EEPROM.begin(eeprom_size);
-#else
     EEPROM.begin();
-#endif
 }
 
 Persistence::~Persistence() {
@@ -58,9 +54,7 @@ bool Persistence::SaveConfig(Config &config) {
     for (size_t i = 0; i < header.config_size; i++) {
         EEPROM.write(config_offset + i, _buffer[i]);
     }
-#ifdef ARDUINO_PICO_REVISION
     EEPROM.commit();
-#endif
 
     return true;
 }
