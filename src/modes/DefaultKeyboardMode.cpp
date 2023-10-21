@@ -5,7 +5,7 @@
 
 DefaultKeyboardMode::DefaultKeyboardMode(const GameModeConfig &config) : KeyboardMode(config) {}
 
-void DefaultKeyboardMode::UpdateKeys(InputState &inputs) {
+void DefaultKeyboardMode::UpdateKeys(const InputState &inputs) {
     Press(HID_KEY_A, inputs.lf4);
     Press(HID_KEY_B, inputs.lf3);
     Press(HID_KEY_C, inputs.lf2);

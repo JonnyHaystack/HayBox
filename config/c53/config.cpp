@@ -152,7 +152,13 @@ void setup() {
 }
 
 void loop() {
-    select_mode(backends[0], config.game_mode_configs, config.game_mode_configs_count);
+    select_mode(
+        backends[0],
+        config.game_mode_configs,
+        config.game_mode_configs_count,
+        config.keyboard_modes,
+        config.keyboard_modes_count
+    );
 
     for (size_t i = 0; i < backend_count; i++) {
         backends[i]->SendReport();

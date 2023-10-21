@@ -11,7 +11,7 @@ KeyboardMode::~KeyboardMode() {
     _keyboard.sendReport();
 }
 
-void KeyboardMode::SendReport(InputState &inputs) {
+void KeyboardMode::SendReport(const InputState &inputs) {
     InputState remapped_inputs = inputs;
     HandleRemap(inputs, remapped_inputs);
     HandleSocd(remapped_inputs);

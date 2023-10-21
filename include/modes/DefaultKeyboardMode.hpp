@@ -9,7 +9,7 @@ class DefaultKeyboardMode : public KeyboardMode {
     DefaultKeyboardMode(const GameModeConfig &config);
 
   private:
-    void UpdateKeys(InputState &inputs);
+    void UpdateKeys(const InputState &inputs);
 };
 
 #endif
