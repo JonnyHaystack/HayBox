@@ -8,6 +8,7 @@
 #include <hardware/structs/usb.h>
 
 CommunicationBackendId detect_console(const Pinout &pinout) {
+    delay(500);
     bool usb_connected = usb_hw->sie_status & USB_SIE_STATUS_CONNECTED_BITS;
 
     if (usb_connected) {

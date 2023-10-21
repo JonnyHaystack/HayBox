@@ -25,13 +25,15 @@ size_t initialize_backends(
     Config &config,
     const Pinout &pinout
 ) {
+    CommunicationBackend *primary_backend = nullptr;
+
     CommunicationBackendConfig backend_config = backend_config_from_buttons(
         inputs,
         config.communication_backend_configs,
         config.communication_backend_configs_count
     );
     if (backend_config.backend_id == COMMS_BACKEND_UNSPECIFIED) {
-        delay(250);
+        primary_backend = new XInputBackend(inputs, input_sources, input_source_count);
         CommunicationBackendId detected_backend_id = detect_console(pinout);
         backend_config = backend_config_from_id(
             detected_backend_id,
@@ -40,11 +42,11 @@ size_t initialize_backends(
         );
     }
 
-    CommunicationBackend *primary_backend;
     size_t backend_count;
 
     switch (backend_config.backend_id) {
         case COMMS_BACKEND_DINPUT:
+            delete primary_backend;
             TUGamepad::registerDescriptor();
             TUKeyboard::registerDescriptor();
             primary_backend = new DInputBackend(inputs, input_sources, input_source_count);
@@ -54,25 +56,29 @@ size_t initialize_backends(
             };
             break;
         case COMMS_BACKEND_XINPUT:
-            primary_backend = new XInputBackend(inputs, input_sources, input_source_count);
+            // delete primary_backend;
+            // primary_backend = new XInputBackend(inputs, input_sources, input_source_count);
             backend_count = 2;
             backends = new CommunicationBackend *[backend_count] {
                 primary_backend, new B0XXInputViewer(inputs, input_sources, input_source_count)
             };
             break;
         case COMMS_BACKEND_GAMECUBE:
+            delete primary_backend;
             primary_backend =
                 new GamecubeBackend(inputs, input_sources, input_source_count, pinout.joybus_data);
             backend_count = 1;
             backends = new CommunicationBackend *[backend_count] { primary_backend };
             break;
         case COMMS_BACKEND_N64:
+            delete primary_backend;
             primary_backend =
                 new N64Backend(inputs, input_sources, input_source_count, pinout.joybus_data);
             backend_count = 1;
             backends = new CommunicationBackend *[backend_count] { primary_backend };
             break;
         case COMMS_BACKEND_NINTENDO_SWITCH:
+            delete primary_backend;
             NintendoSwitchBackend::RegisterDescriptor();
             primary_backend = new NintendoSwitchBackend(inputs, input_sources, input_source_count);
             backend_count = 1;
@@ -81,6 +87,7 @@ size_t initialize_backends(
         case COMMS_BACKEND_UNSPECIFIED: // Fall back to configurator if invalid backend selected.
         case COMMS_BACKEND_CONFIGURATOR:
         default:
+            delete primary_backend;
             primary_backend =
                 new ConfiguratorBackend(inputs, input_sources, input_source_count, config);
             backend_count = 1;
@@ -92,7 +99,14 @@ size_t initialize_backends(
         mode_id = MODE_MELEE;
     }
 
-    set_mode(primary_backend, mode_id, config.game_mode_configs, config.game_mode_configs_count);
+    set_mode(
+        primary_backend,
+        mode_id,
+        config.game_mode_configs,
+        config.game_mode_configs_count,
+        config.keyboard_modes,
+        config.keyboard_modes_count
+    );
 
     return backend_count;
 }

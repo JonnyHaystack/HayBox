@@ -13,10 +13,6 @@ DInputBackend::DInputBackend(
     : CommunicationBackend(inputs, input_sources, input_source_count) {
     _gamepad = new TUGamepad();
     _gamepad->begin();
-
-    while (!USBDevice.mounted()) {
-        delay(1);
-    }
 }
 
 DInputBackend::~DInputBackend() {

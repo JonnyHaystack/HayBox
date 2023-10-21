@@ -17,10 +17,6 @@ XInputBackend::XInputBackend(
     Serial.begin(115200);
 
     TinyUSBDevice.setID(0x0738, 0x4726);
-
-    while (!_xinput->ready()) {
-        delay(1);
-    }
 }
 
 XInputBackend::~XInputBackend() {

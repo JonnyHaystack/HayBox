@@ -23,13 +23,12 @@ size_t initialize_backends(
     size_t game_mode_configs_count,
     const Pinout &pinout
 ) {
-    CommunicationBackend *primary_backend;
+    CommunicationBackend *primary_backend = nullptr;
 
     CommunicationBackendConfig backend_config =
         backend_config_from_buttons(inputs, backend_configs, backend_configs_count);
     if (backend_config.backend_id == COMMS_BACKEND_UNSPECIFIED) {
         primary_backend = new DInputBackend(inputs, input_sources, input_source_count);
-        delay(500);
         CommunicationBackendId detected_backend_id = detect_console(pinout);
         backend_config =
             backend_config_from_id(detected_backend_id, backend_configs, backend_configs_count);
