@@ -28,7 +28,7 @@ Config Persistence::_config;
 uint8_t Persistence::_buffer[eeprom_size - config_offset];
 
 Persistence::Persistence() {
-    EEPROM.begin();
+    EEPROM.begin(eeprom_size);
 }
 
 Persistence::~Persistence() {
