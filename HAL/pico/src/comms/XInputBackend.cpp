@@ -10,24 +10,20 @@ XInputBackend::XInputBackend(
     InputSource **input_sources,
     size_t input_source_count
 )
-    : CommunicationBackend(inputs, input_sources, input_source_count) {
+    : CommunicationBackend(inputs, input_sources, input_source_count),
+      _xinput() {
     Serial.end();
-    _xinput = new Adafruit_USBD_XInput();
-    _xinput->begin();
+    _xinput.begin();
     Serial.begin(115200);
 
     TinyUSBDevice.setID(0x0738, 0x4726);
-}
-
-XInputBackend::~XInputBackend() {
-    delete _xinput;
 }
 
 void XInputBackend::SendReport() {
     ScanInputs(InputScanSpeed::SLOW);
     ScanInputs(InputScanSpeed::MEDIUM);
 
-    while (!_xinput->ready()) {
+    while (!_xinput.ready()) {
         tight_loop_contents();
     }
 
@@ -59,5 +55,5 @@ void XInputBackend::SendReport() {
     _report.rx = (_outputs.rightStickX - 128) * 65535 / 255 + 128;
     _report.ry = (_outputs.rightStickY - 128) * 65535 / 255 + 128;
 
-    _xinput->sendReport(&_report);
+    _xinput.sendReport(&_report);
 }

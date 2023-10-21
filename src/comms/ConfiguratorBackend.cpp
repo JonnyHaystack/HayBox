@@ -1,3 +1,20 @@
+/*
+ * This file is part of HayBox
+ * Copyright (C) 2023 Jonathan Haylett
+ *
+ * HayBox is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this software. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "comms/ConfiguratorBackend.hpp"
 
 #include "core/InputSource.hpp"
@@ -14,9 +31,9 @@ ConfiguratorBackend::ConfiguratorBackend(
     Config &config
 )
     : CommunicationBackend(inputs, input_sources, input_source_count),
+      _in(Serial),
+      _out(Serial),
       _config(config) {
-    _in = new packetio::COBSStream(Serial);
-    _out = new packetio::COBSPrint(Serial);
     serial::init(115200);
     _persistence = new Persistence();
 }
@@ -24,8 +41,6 @@ ConfiguratorBackend::ConfiguratorBackend(
 ConfiguratorBackend::~ConfiguratorBackend() {
     serial::close();
     delete _persistence;
-    delete _in;
-    delete _out;
 }
 
 void ConfiguratorBackend::SendReport() {
@@ -60,30 +75,30 @@ size_t ConfiguratorBackend::ReadPacket(uint8_t *buffer, size_t max_len) {
         delay(1);
     }
     while (true) {
-        int result = _in->read();
-        if (result == _in->EOF) {
+        int result = _in.read();
+        if (result == _in.EOF) {
             continue;
         }
-        if (result == _in->EOP) {
+        if (result == _in.EOP) {
             break;
         }
         buffer[bytes_read++] = result;
         if (bytes_read >= max_len) {
-            _in->next();
+            _in.next();
             return bytes_read;
         }
     }
-    _in->next();
+    _in.next();
 
     return bytes_read;
 }
 
 bool ConfiguratorBackend::WritePacket(Command command_id, uint8_t *buffer, size_t len) {
-    _out->write((uint8_t)command_id);
+    _out.write((uint8_t)command_id);
     for (size_t i = 0; i < len; i++) {
-        _out->write(buffer[i]);
+        _out.write(buffer[i]);
     }
-    return _out->end();
+    return _out.end();
 }
 
 bool ConfiguratorBackend::HandleGetDeviceInfo() {

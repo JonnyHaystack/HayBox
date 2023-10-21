@@ -1,3 +1,20 @@
+/*
+ * This file is part of HayBox
+ * Copyright (C) 2023 Jonathan Haylett
+ *
+ * HayBox is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this software. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef _COMMS_CONFIGURATORBACKEND_HPP
 #define _COMMS_CONFIGURATORBACKEND_HPP
 
@@ -27,8 +44,8 @@ class ConfiguratorBackend : public CommunicationBackend {
     bool HandleGetConfig();
     bool HandleSetConfig(uint8_t *buffer, size_t len);
 
-    packetio::COBSStream *_in;
-    packetio::COBSPrint *_out;
+    packetio::COBSStream _in;
+    packetio::COBSPrint _out;
     Persistence *_persistence;
     uint8_t _cmd_buffer[Persistence::eeprom_size - Persistence::config_offset];
     Config &_config;
