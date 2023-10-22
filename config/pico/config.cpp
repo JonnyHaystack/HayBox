@@ -39,10 +39,10 @@ GpioButtonMapping button_mappings[] = {
     { BTN_RF3, 19},
     { BTN_RF4, 17},
 
-    { BTN_RT5, 27},
-    { BTN_RT6, 22},
-    { BTN_RT7, 20},
-    { BTN_RT8, 18},
+    { BTN_RF5, 27},
+    { BTN_RF6, 22},
+    { BTN_RF7, 20},
+    { BTN_RF8, 18},
 };
 size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
 
