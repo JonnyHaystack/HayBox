@@ -11,7 +11,7 @@
 
 #include <config.pb.h>
 
-uint64_t mode_activation_masks[sizeof(Config::game_mode_configs) / sizeof(GameModeConfig)];
+uint64_t mode_activation_masks[10];
 
 size_t current_mode_index = SIZE_MAX;
 
