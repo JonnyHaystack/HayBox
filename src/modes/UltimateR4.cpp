@@ -56,167 +56,157 @@ void UltimateR4::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
     bool shield_button_pressed = inputs.l || inputs.r;
 
     if (inputs.mod_x) {
-        if (directions.horizontal) {
-          if (shield_button_pressed) {
-            // MX + Horizontal = 51 for shield tilt
-            outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 51);
-          } else {
-            // Fastest walking speed before run
-            outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 53);
-          }
-        } else if (directions.vertical) {
-            // Vertical Shield Tilt and crouch with mod_x = 65
-            outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 65);
-        } else if (directions.diagonal) {
-            // MX + q1/2/3/4 = 53 35
-            outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 53);
-            outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 34);
-            if (shield_button_pressed) {
-                // TODO: If holding shield, then side, THEN down, it will spot dodge.
-                // MX + L, R, LS, and MS + q1/2/3/4 = 6375 3750 = 51 30
-                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 51);
-                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 30);
-            }
-        }
-
-        // Angled fsmash/ftilt with C-Stick + MX
-        if (directions.cx != 0) {
-            outputs.rightStickX = ANALOG_STICK_NEUTRAL + (directions.cx * 100);
-            outputs.rightStickY = ANALOG_STICK_NEUTRAL + (directions.y * 59);
-        }
-
-        /* Up B angles */
-        if (directions.diagonal && !shield_button_pressed) {
-            // (39.05) = 53 43
-            if (inputs.c_down) {
+        if (shield_button_pressed) {
+          // Double shielding for shield tilt
+          outputs.triggerLDigital = true;
+          outputs.triggerRDigital = true;
+        } else {
+            if (directions.horizontal) {
+                // Fastest walking speed before run
                 outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 53);
-                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 43);
-            }
-            // (36.35) = 53 39
-            if (inputs.c_left) {
+            } else if (directions.vertical) {
+                // Vertical Shield Tilt and crouch with mod_x = 65
+                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 65);
+            } else if (directions.diagonal) {
+                // MX + q1/2/3/4 = 53 35
                 outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 53);
-                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 39);
-            }
-            // (30.32) = 56 41
-            if (inputs.c_up) {
-                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 53);
-                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 31);
-            }
-            // (27.85) = 49 42
-            if (inputs.c_right) {
-                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 53);
-                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 28);
+                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 34);
             }
 
-            /* Extended Up B Angles */
-            if (inputs.b) {
-                // (33.29) = 67 44
-                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 67);
-                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 44);
-                // (39.38) = 67 55
+            // Angled fsmash/ftilt with C-Stick + MX
+            if (directions.cx != 0) {
+                outputs.rightStickX = ANALOG_STICK_NEUTRAL + (directions.cx * 100);
+                outputs.rightStickY = ANALOG_STICK_NEUTRAL + (directions.y * 59);
+            }
+
+            /* Up B angles */
+            if (directions.diagonal) {
+                // (39.05) = 53 43
                 if (inputs.c_down) {
-                    outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 67);
-                    outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 55);
+                    outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 53);
+                    outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 43);
                 }
-                // (36.18) = 67 49
+                // (36.35) = 53 39
                 if (inputs.c_left) {
-                    outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 67);
-                    outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 49);
-                }
-                // (30.2) = 67 39
-                if (inputs.c_up) {
-                    outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 67);
+                    outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 53);
                     outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 39);
                 }
-                // (27.58) = 67 35
-                if (inputs.c_right) {
-                    outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 67);
-                    outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 35);
+                // (30.32) = 56 41
+                if (inputs.c_up) {
+                    outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 53);
+                    outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 31);
                 }
-            }
+                // (27.85) = 49 42
+                if (inputs.c_right) {
+                    outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 53);
+                    outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 28);
+                }
 
-            // Angled Ftilts
-            if (inputs.a) {
-                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 36);
-                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 26);
+                /* Extended Up B Angles */
+                if (inputs.b) {
+                    // (33.29) = 67 44
+                    outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 67);
+                    outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 44);
+                    // (39.38) = 67 55
+                    if (inputs.c_down) {
+                        outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 67);
+                        outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 55);
+                    }
+                    // (36.18) = 67 49
+                    if (inputs.c_left) {
+                        outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 67);
+                        outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 49);
+                    }
+                    // (30.2) = 67 39
+                    if (inputs.c_up) {
+                        outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 67);
+                        outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 39);
+                    }
+                    // (27.58) = 67 35
+                    if (inputs.c_right) {
+                        outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 67);
+                        outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 35);
+                    }
+                }
+
+                // Angled Ftilts
+                if (inputs.a) {
+                    outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 36);
+                    outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 26);
+                }
             }
         }
     }
 
     if (inputs.mod_y) {
-        if (directions.horizontal) {
-          if (shield_button_pressed) {
-            outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 51);
-          } else {
-            // Allow tink/yink walk shield
-            outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 28);
-          }
-        } else if (directions.vertical) {
-            // Vertical Shield Tilt and crouch with mod_x = 50
-            outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 50);
-        } else if (directions.diagonal) {
-            outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 53);
-            outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 34);
-            if (shield_button_pressed) {
-                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 51);
-                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 30);
-            }
-        }
-
-        /* Up B angles */
-        if (directions.diagonal && !shield_button_pressed) {
-            // (50.95) = 43 53
-            if (inputs.c_down) {
-                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 43);
-                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 53);
-            }
-            // (53.65) = 39 53
-            if (inputs.c_left) {
-                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 49);
-                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 53);
-            }
-            // (59.68) = 31 53
-            if (inputs.c_up) {
-                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 31);
-                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 53);
-            }
-            // (62.15) = 28 53
-            if (inputs.c_right) {
+        if (shield_button_pressed) {
+          // Double shielding for shield tilt
+          outputs.triggerLDigital = true;
+          outputs.triggerRDigital = true;
+        } else {
+            if (directions.horizontal) {
+                // Allow tink/yink walk shield
                 outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 28);
-                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 53);
+            } else if (directions.diagonal) {
+                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 53);
+                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 34);
             }
 
-            /* Extended Up B Angles */
-            if (inputs.b) {
-                // (56.71) = 44 67
-                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 44);
-                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 67);
-                // (50.62) = 55 67
+            /* Up B angles */
+            if (directions.diagonal) {
+                // (50.95) = 43 53
                 if (inputs.c_down) {
-                    outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 55);
-                    outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 67);
+                    outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 43);
+                    outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 53);
                 }
-                // (53.82) = 49 67
+                // (53.65) = 39 53
                 if (inputs.c_left) {
                     outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 49);
-                    outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 67);
+                    outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 53);
                 }
-                // (59.8) = 39 67
+                // (59.68) = 31 53
                 if (inputs.c_up) {
-                    outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 39);
-                    outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 67);
+                    outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 31);
+                    outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 53);
                 }
-                // (62.42) = 35 67
+                // (62.15) = 28 53
                 if (inputs.c_right) {
-                    outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 35);
-                    outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 67);
+                    outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 28);
+                    outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 53);
                 }
-            }
 
-            // MY Pivot Uptilt/Dtilt
-            if (inputs.a) {
-                outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 50);
-                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 65);
+                /* Extended Up B Angles */
+                if (inputs.b) {
+                    // (56.71) = 44 67
+                    outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 44);
+                    outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 67);
+                    // (50.62) = 55 67
+                    if (inputs.c_down) {
+                        outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 55);
+                        outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 67);
+                    }
+                    // (53.82) = 49 67
+                    if (inputs.c_left) {
+                        outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 49);
+                        outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 67);
+                    }
+                    // (59.8) = 39 67
+                    if (inputs.c_up) {
+                        outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 39);
+                        outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 67);
+                    }
+                    // (62.42) = 35 67
+                    if (inputs.c_right) {
+                        outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 35);
+                        outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 67);
+                    }
+                }
+
+                // MY Pivot Uptilt/Dtilt
+                if (inputs.a) {
+                    outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 50);
+                    outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 65);
+                }
             }
         }
     }
