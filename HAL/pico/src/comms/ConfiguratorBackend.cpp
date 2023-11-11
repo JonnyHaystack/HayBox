@@ -134,6 +134,53 @@ bool ConfiguratorBackend::HandleSetConfig(uint8_t *buffer, size_t len) {
         return false;
     }
 
+    if (_config.default_backend_config > _config.communication_backend_configs_count) {
+        char errmsg[75];
+        size_t errmsg_len = snprintf(
+            errmsg,
+            sizeof(errmsg),
+            "Default backend ID is %d but only %d backend configs are defined",
+            (uint8_t)_config.default_backend_config,
+            (uint8_t)_config.communication_backend_configs_count
+        );
+        WritePacket(CMD_ERROR, (uint8_t *)errmsg, errmsg_len);
+        return false;
+    }
+
+    for (size_t i = 0; i < _config.communication_backend_configs_count; i++) {
+        uint8_t default_mode_id = _config.communication_backend_configs[i].default_mode_config;
+        if (default_mode_id > _config.game_mode_configs_count) {
+            char errmsg[75];
+            size_t errmsg_len = snprintf(
+                errmsg,
+                sizeof(errmsg),
+                "Default mode ID is %d for backend %d but only %d modes are defined",
+                (uint8_t)default_mode_id,
+                (uint8_t)i + 1,
+                (uint8_t)_config.game_mode_configs_count
+            );
+            WritePacket(CMD_ERROR, (uint8_t *)errmsg, errmsg_len);
+            return false;
+        }
+    }
+
+    for (size_t i = 0; i < _config.game_mode_configs_count; i++) {
+        uint8_t keyboard_mode_id = _config.game_mode_configs[i].keyboard_mode_config;
+        if (keyboard_mode_id > _config.keyboard_modes_count) {
+            char errmsg[85];
+            size_t errmsg_len = snprintf(
+                errmsg,
+                sizeof(errmsg),
+                "Keyboard mode ID %d is for game mode %d but only %d keyboard modes are defined",
+                (uint8_t)keyboard_mode_id,
+                (uint8_t)i + 1,
+                (uint8_t)_config.keyboard_modes_count
+            );
+            WritePacket(CMD_ERROR, (uint8_t *)errmsg, errmsg_len);
+            return false;
+        }
+    }
+
     if (!_persistence->SaveConfig(_config)) {
         char errmsg[] = "Failed to save config to memory";
         WritePacket(CMD_ERROR, (uint8_t *)errmsg, sizeof(errmsg));
