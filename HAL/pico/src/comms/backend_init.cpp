@@ -7,7 +7,6 @@
 #include "comms/N64Backend.hpp"
 #include "comms/NintendoSwitchBackend.hpp"
 #include "comms/XInputBackend.hpp"
-#include "comms/console_detection.hpp"
 #include "core/CommunicationBackend.hpp"
 #include "core/config_utils.hpp"
 #include "core/mode_selection.hpp"
@@ -23,8 +22,19 @@ size_t initialize_backends(
     InputSource **input_sources,
     size_t input_source_count,
     Config &config,
-    const Pinout &pinout
+    const Pinout &pinout,
+    usb_backend_getter_t get_usb_backend_config,
+    detect_console_t detect_console,
+    secondary_backend_initializer_t init_secondary_backends,
+    primary_backend_initializer_t init_primary_backend,
+    backend_config_selector_t get_backend_config_custom
 ) {
+    // Make sure required function pointers are not null.
+    if (init_primary_backend == nullptr || get_usb_backend_config == nullptr ||
+        detect_console == nullptr) {
+        return 0;
+    }
+
     CommunicationBackend *primary_backend = nullptr;
 
     /* First check button holds for a matching comms backend config. */
@@ -34,15 +44,17 @@ size_t initialize_backends(
         config.communication_backend_configs_count
     );
 
-    // TODO: weakly defined backend_config_custom()
+    if (backend_config.backend_id == COMMS_BACKEND_UNSPECIFIED &&
+        get_backend_config_custom != nullptr) {
+        get_backend_config_custom(backend_config, inputs, config);
+    }
 
     /* If no match found for button hold, use console/USB detection to select backend instead. */
     if (backend_config.backend_id == COMMS_BACKEND_UNSPECIFIED) {
         /* Must check default USB backend here and initialize it before console detection, so that
          * we can respond correctly to device descriptor requests from host. */
-        const CommunicationBackendConfig &usb_backend_config =
-            config.communication_backend_configs[config.default_usb_backend_config - 1];
-        // TODO: weakly defined usb_backend_config_custom()
+        CommunicationBackendConfig usb_backend_config;
+        get_usb_backend_config(usb_backend_config, config);
         init_primary_backend(
             primary_backend,
             usb_backend_config.backend_id,
@@ -52,8 +64,8 @@ size_t initialize_backends(
             config,
             pinout
         );
-        // TODO: weakly defined detect_console_custom()
-        CommunicationBackendId detected_backend_id = detect_console(pinout);
+        CommunicationBackendId detected_backend_id = COMMS_BACKEND_UNSPECIFIED;
+        detected_backend_id = detect_console(pinout);
         if (detected_backend_id == COMMS_BACKEND_XINPUT) {
             backend_config = usb_backend_config;
         } else {
@@ -69,9 +81,6 @@ size_t initialize_backends(
         backend_config = config.communication_backend_configs[config.default_backend_config - 1];
     }
 
-    size_t backend_count;
-
-    // TODO: weakly defined init_primary_backend_custom()
     init_primary_backend(
         primary_backend,
         backend_config.backend_id,
@@ -81,17 +90,20 @@ size_t initialize_backends(
         config,
         pinout
     );
-    // TODO: weakly defined init_secondary_backends_custom()
-    backend_count = init_secondary_backends(
-        backends,
-        primary_backend,
-        backend_config.backend_id,
-        inputs,
-        input_sources,
-        input_source_count,
-        config,
-        pinout
-    );
+
+    size_t backend_count = 1;
+    if (init_secondary_backends != nullptr) {
+        backend_count = init_secondary_backends(
+            backends,
+            primary_backend,
+            backend_config.backend_id,
+            inputs,
+            input_sources,
+            input_source_count,
+            config,
+            pinout
+        );
+    }
 
     if (backend_config.default_mode_config > 0) {
         const GameModeConfig &mode_config =
@@ -176,3 +188,21 @@ size_t init_secondary_backends(
 
     return backend_count;
 }
+
+// clang-format off
+
+usb_backend_getter_t get_usb_backend_config_default = [](
+    CommunicationBackendConfig &backend_config,
+    const Config &config
+) {
+    if (config.default_usb_backend_config > 0 &&
+        config.default_usb_backend_config <= config.communication_backend_configs_count) {
+        backend_config =
+            config.communication_backend_configs[config.default_usb_backend_config - 1];
+    }
+};
+
+// clang-format on
+
+primary_backend_initializer_t init_primary_backend_default = &init_primary_backend;
+secondary_backend_initializer_t init_secondary_backends_default = &init_secondary_backends;
