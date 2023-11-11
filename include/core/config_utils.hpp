@@ -17,4 +17,10 @@ CommunicationBackendConfig backend_config_from_id(
     size_t backend_configs_count
 );
 
+uint8_t mode_config_id_from_mode_id(
+    GameModeId mode_id,
+    const GameModeConfig *mode_configs,
+    size_t mode_configs_count
+);
+
 #endif

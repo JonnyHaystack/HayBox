@@ -17,23 +17,28 @@ size_t initialize_backends(
     InputState &inputs,
     InputSource **input_sources,
     size_t input_source_count,
-    const CommunicationBackendConfig *backend_configs,
-    size_t backend_configs_count,
-    const GameModeConfig *game_mode_configs,
-    size_t game_mode_configs_count,
-    const KeyboardModeConfig *keyboard_modes,
-    size_t keyboard_modes_count,
+    const Config &config,
     const Pinout &pinout
 ) {
     CommunicationBackend *primary_backend = nullptr;
 
-    CommunicationBackendConfig backend_config =
-        backend_config_from_buttons(inputs, backend_configs, backend_configs_count);
+    CommunicationBackendConfig backend_config = backend_config_from_buttons(
+        inputs,
+        config.communication_backend_configs,
+        config.communication_backend_configs_count
+    );
     if (backend_config.backend_id == COMMS_BACKEND_UNSPECIFIED) {
         primary_backend = new DInputBackend(inputs, input_sources, input_source_count);
         CommunicationBackendId detected_backend_id = detect_console(pinout);
-        backend_config =
-            backend_config_from_id(detected_backend_id, backend_configs, backend_configs_count);
+        backend_config = backend_config_from_id(
+            detected_backend_id,
+            config.communication_backend_configs,
+            config.communication_backend_configs_count
+        );
+    }
+    if (backend_config.backend_id == COMMS_BACKEND_UNSPECIFIED &&
+        config.default_backend_config > 0) {
+        backend_config = config.communication_backend_configs[config.default_backend_config - 1];
     }
 
     size_t backend_count;
@@ -67,19 +72,11 @@ size_t initialize_backends(
             break;
     }
 
-    GameModeId mode_id = backend_config.default_mode;
-    if (backend_config.default_mode == MODE_UNSPECIFIED) {
-        mode_id = MODE_MELEE;
+    if (backend_config.default_mode_config > 0) {
+        const GameModeConfig &mode_config =
+            config.game_mode_configs[backend_config.default_mode_config - 1];
+        set_mode(primary_backend, mode_config, config.keyboard_modes, config.keyboard_modes_count);
     }
-
-    set_mode(
-        primary_backend,
-        mode_id,
-        game_mode_configs,
-        game_mode_configs_count,
-        keyboard_modes,
-        keyboard_modes_count
-    );
 
     return backend_count;
 }

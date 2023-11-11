@@ -63,9 +63,16 @@ void set_mode(
             set_mode(backend, new RivalsOfAether(mode_config));
             break;
         case MODE_KEYBOARD:
+            if (mode_config.keyboard_mode_config < 1 ||
+                mode_config.keyboard_mode_config > keyboard_modes_count) {
+                break;
+            }
             set_mode(
                 backend,
-                new CustomKeyboardMode(mode_config, keyboard_modes[mode_config.keyboard_mode_id])
+                new CustomKeyboardMode(
+                    mode_config,
+                    keyboard_modes[mode_config.keyboard_mode_config - 1]
+                )
             );
             break;
         case MODE_UNSPECIFIED:

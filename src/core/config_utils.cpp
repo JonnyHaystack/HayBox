@@ -26,7 +26,7 @@ CommunicationBackendConfig backend_config_from_buttons(
 
     return CommunicationBackendConfig{
         .backend_id = COMMS_BACKEND_UNSPECIFIED,
-        .default_mode = MODE_UNSPECIFIED,
+        .default_mode_config = 0,
     };
 }
 
@@ -46,6 +46,21 @@ CommunicationBackendConfig backend_config_from_id(
 
     return CommunicationBackendConfig{
         .backend_id = backend_id,
-        .default_mode = MODE_UNSPECIFIED,
+        .default_mode_config = 0,
     };
+}
+
+uint8_t mode_config_id_from_mode_id(
+    GameModeId mode_id,
+    const GameModeConfig *mode_configs,
+    size_t mode_configs_count
+) {
+    for (size_t i = 0; i < mode_configs_count; i++) {
+        const GameModeConfig &mode = mode_configs[i];
+        if (mode.mode_id == mode_id) {
+            return i + 1;
+        }
+    }
+
+    return 0;
 }

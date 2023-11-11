@@ -194,19 +194,8 @@ void setup() {
     static InputSource *input_sources[] = { &gpio_input };
     size_t input_source_count = sizeof(input_sources) / sizeof(InputSource *);
 
-    backend_count = initialize_backends(
-        backends,
-        inputs,
-        input_sources,
-        input_source_count,
-        config.communication_backend_configs,
-        config.communication_backend_configs_count,
-        config.game_mode_configs,
-        config.game_mode_configs_count,
-        config.keyboard_modes,
-        config.keyboard_modes_count,
-        pinout
-    );
+    backend_count =
+        initialize_backends(backends, inputs, input_sources, input_source_count, config, pinout);
 
     setup_mode_activation_bindings(config.game_mode_configs, config.game_mode_configs_count);
 }

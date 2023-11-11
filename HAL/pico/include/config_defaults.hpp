@@ -7,7 +7,6 @@
 // clang-format off
 
 const Config default_config = {
-    .default_backend = COMMS_BACKEND_XINPUT,
     .game_mode_configs_count = 5,
     .game_mode_configs = {
         GameModeConfig {
@@ -73,24 +72,37 @@ const Config default_config = {
             .button_remapping_count = 0,
             .activation_binding_count = 3,
             .activation_binding = { BTN_LT2, BTN_MB1, BTN_LF4 },
+            .keyboard_mode_config = 1,
         },
     },
     .communication_backend_configs_count = 3,
     .communication_backend_configs = {
         CommunicationBackendConfig {
             .backend_id = COMMS_BACKEND_XINPUT,
-            .default_mode = MODE_MELEE,
-            .activation_binding_count = 0,
+            .default_mode_config = 1,
         },
         CommunicationBackendConfig {
             .backend_id = COMMS_BACKEND_DINPUT,
-            .default_mode = MODE_MELEE,
+            .default_mode_config = 5,
             .activation_binding_count = 1,
             .activation_binding = { BTN_RF3 },
         },
         CommunicationBackendConfig {
+            .backend_id = COMMS_BACKEND_NINTENDO_SWITCH,
+            .default_mode_config = 3,
+            .activation_binding_count = 1,
+            .activation_binding = { BTN_RF2 },
+        },
+        CommunicationBackendConfig {
+            .backend_id = COMMS_BACKEND_GAMECUBE,
+            .default_mode_config = 1,
+        },
+        CommunicationBackendConfig {
+            .backend_id = COMMS_BACKEND_N64,
+            .default_mode_config = 1,
+        },
+        CommunicationBackendConfig {
             .backend_id = COMMS_BACKEND_CONFIGURATOR,
-            .default_mode = MODE_UNSPECIFIED,
             .activation_binding_count = 1,
             .activation_binding = { BTN_RT2 },
         }
@@ -127,6 +139,8 @@ const Config default_config = {
             },
         },
     },
+    .default_backend_config = 1,
+    .default_usb_backend_config = 1,
 };
 
 // clang-format on

@@ -1,4 +1,5 @@
 #include "comms/backend_init.hpp"
+#include "config_defaults.hpp"
 #include "core/CommunicationBackend.hpp"
 #include "core/KeyboardMode.hpp"
 #include "core/Persistence.hpp"
@@ -11,7 +12,6 @@
 #include "stdlib.hpp"
 
 #include <config.pb.h>
-#include <config_defaults.hpp>
 
 Config config = default_config;
 

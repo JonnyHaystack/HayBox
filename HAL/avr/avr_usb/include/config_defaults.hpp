@@ -7,7 +7,7 @@
 // clang-format off
 
 const Config default_config = {
-    .default_backend = COMMS_BACKEND_DINPUT,
+    .default_backend_config = 1,
     .game_mode_configs_count = 5,
     .game_mode_configs = new GameModeConfig[5] {
         GameModeConfig {
@@ -77,13 +77,14 @@ const Config default_config = {
             .button_remapping = {},
             .activation_binding_count = 3,
             .activation_binding = new Button[3] { BTN_LT2, BTN_MB1, BTN_LF4 },
+            .keyboard_mode_config = 1,
         },
     },
     .communication_backend_configs_count = 1,
     .communication_backend_configs = new CommunicationBackendConfig[1] {
         CommunicationBackendConfig {
             .backend_id = COMMS_BACKEND_DINPUT,
-            .default_mode = MODE_MELEE,
+            .default_mode_config = 1,
             .activation_binding_count = 1,
             .activation_binding = new Button[1] { BTN_RF3 },
         },
