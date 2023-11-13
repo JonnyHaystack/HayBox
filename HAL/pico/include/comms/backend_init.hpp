@@ -95,6 +95,7 @@ typedef CommunicationBackendId (*detect_console_t)(const Pinout &pinout);
 
 // clang-format on
 
+extern backend_config_selector_t get_backend_config_default;
 extern usb_backend_getter_t get_usb_backend_config_default;
 extern primary_backend_initializer_t init_primary_backend_default;
 extern secondary_backend_initializer_t init_secondary_backends_default;
@@ -117,11 +118,11 @@ size_t initialize_backends(
     size_t input_source_count,
     Config &config,
     const Pinout &pinout,
+    backend_config_selector_t get_backend_config_custom = get_backend_config_default,
     usb_backend_getter_t get_usb_backend_config = get_usb_backend_config_default,
     detect_console_t detect_console = &detect_console,
     secondary_backend_initializer_t init_secondary_backends = init_secondary_backends_default,
-    primary_backend_initializer_t init_primary_backend = init_primary_backend_default,
-    backend_config_selector_t get_backend_config_custom = nullptr
+    primary_backend_initializer_t init_primary_backend = init_primary_backend_default
 );
 
 #endif

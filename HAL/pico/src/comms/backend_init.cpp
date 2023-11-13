@@ -23,31 +23,22 @@ size_t initialize_backends(
     size_t input_source_count,
     Config &config,
     const Pinout &pinout,
+    backend_config_selector_t get_backend_config,
     usb_backend_getter_t get_usb_backend_config,
     detect_console_t detect_console,
     secondary_backend_initializer_t init_secondary_backends,
-    primary_backend_initializer_t init_primary_backend,
-    backend_config_selector_t get_backend_config_custom
+    primary_backend_initializer_t init_primary_backend
 ) {
     // Make sure required function pointers are not null.
-    if (init_primary_backend == nullptr || get_usb_backend_config == nullptr ||
-        detect_console == nullptr) {
+    if (get_backend_config == nullptr || get_usb_backend_config == nullptr ||
+        init_primary_backend == nullptr || detect_console == nullptr) {
         return 0;
     }
 
+    CommunicationBackendConfig backend_config = CommunicationBackendConfig_init_zero;
+    get_backend_config(backend_config, inputs, config);
+
     CommunicationBackend *primary_backend = nullptr;
-
-    /* First check button holds for a matching comms backend config. */
-    CommunicationBackendConfig backend_config = backend_config_from_buttons(
-        inputs,
-        config.communication_backend_configs,
-        config.communication_backend_configs_count
-    );
-
-    if (backend_config.backend_id == COMMS_BACKEND_UNSPECIFIED &&
-        get_backend_config_custom != nullptr) {
-        get_backend_config_custom(backend_config, inputs, config);
-    }
 
     /* If no match found for button hold, use console/USB detection to select backend instead. */
     if (backend_config.backend_id == COMMS_BACKEND_UNSPECIFIED) {
@@ -191,6 +182,20 @@ size_t init_secondary_backends(
 
 // clang-format off
 
+/* Default is to first check button holds for a matching comms backend config. */
+backend_config_selector_t get_backend_config_default = [](
+    CommunicationBackendConfig &backend_config,
+    const InputState &inputs,
+    const Config &config
+) {
+    backend_config = backend_config_from_buttons(
+        inputs,
+        config.communication_backend_configs,
+        config.communication_backend_configs_count
+    );
+};
+
+/* Default is to get default USB backend from config. */
 usb_backend_getter_t get_usb_backend_config_default = [](
     CommunicationBackendConfig &backend_config,
     const Config &config
