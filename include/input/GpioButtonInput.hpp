@@ -21,6 +21,9 @@ class GpioButtonInput : public InputSource {
   protected:
     const GpioButtonMapping *_button_mappings;
     size_t _button_count;
+
+  private:
+    virtual void UpdateButtonState(InputState &inputs, size_t button_mapping_index, bool pressed);
 };
 
 #endif

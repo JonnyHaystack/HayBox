@@ -66,9 +66,12 @@ template <size_t num_rows, size_t num_cols> class SwitchMatrixInput : public Inp
 
             // Read each cell in the column/row.
             for (size_t j = 0; j < _num_inputs; j++) {
-                Button button =
-                    _direction == DiodeDirection::ROW2COL ? _matrix[j][i] : _matrix[i][j];
-                set_button(inputs.buttons, button, !gpio::read_digital(_input_pins[j]));
+                UpdateButtonState(
+                    inputs,
+                    DiodeDirection::ROW2COL ? j : i,
+                    DiodeDirection::ROW2COL ? i : j,
+                    !gpio::read_digital(_input_pins[j])
+                );
             }
 
             // Deactivate the column/row.
@@ -83,6 +86,17 @@ template <size_t num_rows, size_t num_cols> class SwitchMatrixInput : public Inp
     const uint *_input_pins;
     const Button (&_matrix)[num_rows][num_cols];
     DiodeDirection _direction;
+
+  private:
+    virtual void UpdateButtonState(
+        InputState &inputs,
+        size_t col_index,
+        size_t row_index,
+        bool pressed
+    ) {
+        Button button = _matrix[col_index][row_index];
+        set_button(inputs.buttons, button, pressed);
+    };
 };
 
 #endif
