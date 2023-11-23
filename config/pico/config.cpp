@@ -6,7 +6,7 @@
 #include "core/mode_selection.hpp"
 #include "core/pinout.hpp"
 #include "core/state.hpp"
-#include "input/GpioButtonInput.hpp"
+#include "input/DebouncedGpioButtonInput.hpp"
 #include "input/NunchukInput.hpp"
 #include "reboot.hpp"
 #include "stdlib.hpp"
@@ -44,7 +44,9 @@ GpioButtonMapping button_mappings[] = {
     { BTN_RF7, 20},
     { BTN_RF8, 18},
 };
-size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
+const size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
+
+DebouncedGpioButtonInput<button_count> gpio_input(button_mappings, 5);
 
 const Pinout pinout = {
     .joybus_data = 28,
@@ -62,7 +64,6 @@ void setup() {
     static InputState inputs;
 
     // Create GPIO input source and use it to read button states for checking button holds.
-    static GpioButtonInput gpio_input(button_mappings, button_count);
     gpio_input.UpdateInputs(inputs);
 
     // Check bootsel button hold as early as possible for safety.
@@ -83,7 +84,7 @@ void setup() {
     delete persistence;
 
     // Create array of input sources to be used.
-    static InputSource *input_sources[] = { &gpio_input };
+    static InputSource *input_sources[] = {};
     size_t input_source_count = sizeof(input_sources) / sizeof(InputSource *);
 
     backend_count =
@@ -110,21 +111,16 @@ void loop() {
     }
 }
 
-/* Nunchuk code runs on the second core */
-NunchukInput *nunchuk = nullptr;
+/* Button inputs are read from the second core */
 
 void setup1() {
     while (backends == nullptr) {
         tight_loop_contents();
     }
-
-    // Create Nunchuk input source.
-    nunchuk = new NunchukInput(Wire, pinout.nunchuk_detect, pinout.nunchuk_sda, pinout.nunchuk_scl);
 }
 
 void loop1() {
     if (backends != nullptr) {
-        nunchuk->UpdateInputs(backends[0]->GetInputs());
-        busy_wait_us(50);
+        gpio_input.UpdateInputs(backends[0]->GetInputs());
     }
 }
