@@ -29,7 +29,7 @@ class DebouncedSwitchMatrixInput : public SwitchMatrixInput<num_rows, num_cols> 
             _debounce_period_ms
         );
         if (state_changed) {
-            Button button = _matrix[col_index][row_index];
+            Button button = this->_matrix[col_index][row_index];
             set_button(inputs.buttons, button, pressed);
         }
     };

@@ -68,8 +68,8 @@ template <size_t num_rows, size_t num_cols> class SwitchMatrixInput : public Inp
             for (size_t j = 0; j < _num_inputs; j++) {
                 UpdateButtonState(
                     inputs,
-                    DiodeDirection::ROW2COL ? j : i,
-                    DiodeDirection::ROW2COL ? i : j,
+                    _direction == DiodeDirection::ROW2COL ? j : i,
+                    _direction == DiodeDirection::ROW2COL ? i : j,
                     !gpio::read_digital(_input_pins[j])
                 );
             }
