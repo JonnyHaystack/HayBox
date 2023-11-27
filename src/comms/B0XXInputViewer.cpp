@@ -31,8 +31,6 @@ void B0XXInputViewer::SendReport() {
     }
     _clock = 0;
 
-    // Only scan fast input sources because we don't want to waste any more time than necessary
-    // on the input viewer and we can't afford to read from something like a Nunchuk twice.
     _report[0] = ASCII_BIT(_inputs.mb1);
     _report[1] = ASCII_BIT(_inputs.rf6);
     _report[2] = ASCII_BIT(_inputs.rf2);
@@ -40,7 +38,7 @@ void B0XXInputViewer::SendReport() {
     _report[4] = ASCII_BIT(_inputs.rt1);
     _report[5] = ASCII_BIT(_inputs.lf4);
     _report[6] = ASCII_BIT(_inputs.rf5);
-    _report[7] = ASCII_BIT(_inputs.rf2);
+    _report[7] = ASCII_BIT(_inputs.rf3);
     _report[8] = ASCII_BIT(_inputs.rf4);
     _report[9] = ASCII_BIT(_inputs.lf2);
     _report[10] = ASCII_BIT(_inputs.lf1);
