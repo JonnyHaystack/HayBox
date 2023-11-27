@@ -7,7 +7,6 @@
 // clang-format off
 
 const Config default_config = {
-    .default_backend_config = 1,
     .game_mode_configs_count = 5,
     .game_mode_configs = new GameModeConfig[5] {
         GameModeConfig {
@@ -121,6 +120,8 @@ const Config default_config = {
             },
         },
     },
+    .default_backend_config = 1,
+    .default_usb_backend_config = 1,
 };
 
 // clang-format on
