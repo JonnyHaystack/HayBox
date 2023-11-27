@@ -59,9 +59,9 @@ void setup() {
     }
 
     // Turn on LED to indicate firmware booted.
-    gpio_init(PICO_DEFAULT_LED_PIN);
-    gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
-    gpio_put(PICO_DEFAULT_LED_PIN, 1);
+    // gpio_init(PICO_DEFAULT_LED_PIN);
+    // gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
+    // gpio_put(PICO_DEFAULT_LED_PIN, 1);
 
     // Attempt to load config, or write default config to flash if failed to load config.
     Persistence *persistence = new Persistence();
@@ -82,7 +82,9 @@ void setup() {
         config,
         pinout,
         get_backend_config_default,
-        &usb_backend_from_4pos_switch
+        &usb_backend_from_4pos_switch,
+        &detect_console,
+        &init_secondary_backends_glyph
     );
 
     setup_mode_activation_bindings(config.game_mode_configs, config.game_mode_configs_count);
