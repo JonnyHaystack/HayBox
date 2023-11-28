@@ -19,13 +19,11 @@ class NeoPixelBackend : public CommunicationBackend {
 
   protected:
     static constexpr uint8_t _max_pixels_per_cycle = 5;
-    const uint8_t _cycles_per_show = _pixel_count / _max_pixels_per_cycle;
+    const uint16_t _pixel_count;
+    const uint8_t _cycles_per_show;
 
     Adafruit_NeoPixel _strip;
     uint8_t _current_cycle = 0;
-
-  private:
-    const uint16_t _pixel_count;
 };
 
 #endif

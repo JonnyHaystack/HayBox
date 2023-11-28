@@ -9,7 +9,8 @@ NeoPixelBackend::NeoPixelBackend(
 )
     : CommunicationBackend(inputs, input_sources, input_source_count),
       _strip(pixel_count, control_pin),
-      _pixel_count(pixel_count) {
+      _pixel_count(pixel_count),
+      _cycles_per_show(pixel_count / _max_pixels_per_cycle) {
     _strip.begin();
     _strip.setBrightness(100);
     if (_strip.canShow()) {
