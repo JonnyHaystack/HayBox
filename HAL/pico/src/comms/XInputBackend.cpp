@@ -43,8 +43,8 @@ void XInputBackend::SendReport() {
 
     _report.lb = _outputs.triggerLDigital;
     _report.rb = _outputs.triggerRDigital;
-    _report.lt = _outputs.buttonL ? 255 : 0;
-    _report.rt = _outputs.buttonR ? 255 : 0;
+    _report.lt = _outputs.buttonL ? 255 : _outputs.triggerLAnalog;
+    _report.rt = _outputs.buttonR ? 255 : _outputs.triggerRAnalog;
 
     _report.start = _outputs.start;
     _report.back = _outputs.select;

@@ -94,6 +94,13 @@ void setup() {
           primary_backend, new B0XXInputViewer(input_sources, input_source_count)
       };
       primary_backend->SetGameMode(new UltimateR4(socd::SOCD_2IP));
+    } else if (button_holds.b) {
+      // Hold B for Melee (slippi)
+      backend_count = 1;
+      primary_backend = new XInputBackend(input_sources, input_source_count);
+      backends = new CommunicationBackend *[backend_count] { primary_backend };
+      socd::SocdType socdType = (button_holds.r && button_holds.y) ? socd::SOCD_2IP_NO_REAC : socd::SOCD_2IP;
+      primary_backend->SetGameMode(new Melee20Button(socdType, { .crouch_walk_os = false }));
     } else if (button_holds.y) {
       // Hold Y for FGC Mode
       backend_count = 2;
@@ -112,6 +119,7 @@ void setup() {
     }
   } else {
     if (console == ConnectedConsole::GAMECUBE) {
+      // NOTE: This is called when using a gcc adapter with the switch!
       primary_backend = new GamecubeBackend(input_sources, input_source_count, pinout.joybus_data);
       socd::SocdType socdType = (button_holds.r && button_holds.y) ? socd::SOCD_2IP_NO_REAC : socd::SOCD_2IP;
       primary_backend->SetGameMode(new Melee20Button(socdType, { .crouch_walk_os = false }));
