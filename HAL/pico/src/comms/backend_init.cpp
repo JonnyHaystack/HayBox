@@ -172,6 +172,7 @@ size_t init_secondary_backends(
             backends = new CommunicationBackend *[backend_count] {
                 primary_backend, new B0XXInputViewer(inputs, input_sources, input_source_count)
             };
+            break;
         default:
             backend_count = 1;
             backends = new CommunicationBackend *[backend_count] { primary_backend };
