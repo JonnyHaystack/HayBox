@@ -8,6 +8,8 @@ SocdPair.socd_type int_size:IS_8
 ButtonToKeycodeMapping.button int_size:IS_8
 ButtonToKeycodeMapping.keycode int_size:IS_8
 
+ButtonToColorMapping.button int_size:IS_8
+
 GameModeConfig.mode_id int_size:IS_8
 GameModeConfig.socd_pairs max_count:10
 GameModeConfig.socd_pairs type:FT_POINTER
@@ -27,12 +29,19 @@ CommunicationBackendConfig.default_mode_config int_size:IS_8
 CommunicationBackendConfig.activation_binding max_count:2
 CommunicationBackendConfig.activation_binding type:FT_POINTER
 
+RgbConfig.button_colors max_count:60
+RgbConfig.button_colors type:FT_POINTER
+RgbConfig.animation int_size:IS_8
+RgbConfig.speed int_size:IS_8
+
 Config.game_mode_configs max_count:10
 Config.game_mode_configs type:FT_POINTER
 Config.communication_backend_configs max_count:10
 Config.communication_backend_configs type:FT_POINTER
 Config.keyboard_modes max_count:5
 Config.keyboard_modes type:FT_POINTER
+Config.rgb_configs max_count:10
+Config.rgb_configs type:FT_POINTER
 Config.default_backend_config int_size:IS_8
 Config.default_usb_backend_config int_size:IS_8
 
@@ -45,3 +54,4 @@ Button long_names:false
 SocdType long_names:false
 GameModeId long_names:false
 CommunicationBackendId long_names:false
+RgbAnimationId long_names:false

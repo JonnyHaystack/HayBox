@@ -120,6 +120,8 @@ const Config default_config = {
             },
         },
     },
+    .rgb_configs_count = 0,
+    .rgb_configs = {},
     .default_backend_config = 1,
     .default_usb_backend_config = 1,
 };
