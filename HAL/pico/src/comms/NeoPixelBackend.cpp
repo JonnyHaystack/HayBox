@@ -34,6 +34,9 @@ void NeoPixelBackend::SetGameMode(ControllerMode *gamemode) {
         _button_colors[i] = 0;
     }
 
+    // Reset current pixel bookmark.
+    _current_pixel = 0;
+
     uint8_t rgb_config_id = gamemode->GetConfig().rgb_config;
     if (rgb_config_id == 0 || rgb_config_id > rgb_configs_count) {
         config = nullptr;
@@ -49,7 +52,7 @@ void NeoPixelBackend::SetGameMode(ControllerMode *gamemode) {
 }
 
 void NeoPixelBackend::SendReport() {
-    if (!_strip.canShow()) {
+    if (config == nullptr || !_strip.canShow()) {
         return;
     }
 
