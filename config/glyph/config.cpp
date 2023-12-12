@@ -58,11 +58,6 @@ void setup() {
         reboot_bootloader();
     }
 
-    // Turn on LED to indicate firmware booted.
-    // gpio_init(PICO_DEFAULT_LED_PIN);
-    // gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
-    // gpio_put(PICO_DEFAULT_LED_PIN, 1);
-
     // Attempt to load config, or write default config to flash if failed to load config.
     Persistence *persistence = new Persistence();
     if (!persistence->LoadConfig(config)) {
@@ -91,13 +86,7 @@ void setup() {
 }
 
 void loop() {
-    select_mode(
-        backends[0],
-        config.game_mode_configs,
-        config.game_mode_configs_count,
-        config.keyboard_modes,
-        config.keyboard_modes_count
-    );
+    select_mode(backends, backend_count, config);
 
     for (size_t i = 0; i < backend_count; i++) {
         backends[i]->SendReport();

@@ -12,6 +12,10 @@ InputMode::~InputMode() {
     delete[] _socd_states;
 }
 
+const GameModeConfig &InputMode::GetConfig() {
+    return _config;
+}
+
 void InputMode::HandleSocd(InputState &inputs) {
     // Handle SOCD resolution for each SOCD button pair.
     for (size_t i = 0; i < _config.socd_pairs_count; i++) {

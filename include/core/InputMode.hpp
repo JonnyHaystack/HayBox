@@ -10,6 +10,7 @@ class InputMode {
   public:
     InputMode(const GameModeConfig &config);
     virtual ~InputMode();
+    const GameModeConfig &GetConfig();
 
   protected:
     const GameModeConfig &_config;

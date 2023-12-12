@@ -102,23 +102,24 @@ void set_mode(
     }
 }
 
-void select_mode(
-    CommunicationBackend *backend,
-    const GameModeConfig *mode_configs,
-    size_t mode_configs_count,
-    const KeyboardModeConfig *keyboard_modes,
-    size_t keyboard_modes_count
-) {
+void select_mode(CommunicationBackend **backends, size_t backends_count, const Config &config) {
     // TODO: Use a counter variable to only run the contents of this function every x iterations
     // rather than on every single poll.
 
-    InputState &inputs = backend->GetInputs();
+    InputState &inputs = backends[0]->GetInputs();
 
-    for (size_t i = 0; i < mode_configs_count; i++) {
-        const GameModeConfig &mode_config = mode_configs[i];
+    for (size_t i = 0; i < config.game_mode_configs_count; i++) {
+        const GameModeConfig &mode_config = config.game_mode_configs[i];
         if (all_buttons_held(inputs.buttons, mode_activation_masks[i]) && i != current_mode_index) {
             current_mode_index = i;
-            set_mode(backend, mode_config, keyboard_modes, keyboard_modes_count);
+            for (size_t i = 0; i < backends_count; i++) {
+                set_mode(
+                    backends[i],
+                    mode_config,
+                    config.keyboard_modes,
+                    config.keyboard_modes_count
+                );
+            }
             return;
         }
     }

@@ -25,13 +25,7 @@ void set_mode(
     const KeyboardModeConfig *keyboard_modes,
     size_t keyboard_modes_count
 );
-void select_mode(
-    CommunicationBackend *backend,
-    const GameModeConfig *mode_configs,
-    size_t mode_configs_count,
-    const KeyboardModeConfig *keyboard_modes,
-    size_t keyboard_modes_count
-);
+void select_mode(CommunicationBackend **backends, size_t backends_count, const Config &config);
 void setup_mode_activation_bindings(const GameModeConfig *mode_configs, size_t mode_configs_count);
 
 #endif
