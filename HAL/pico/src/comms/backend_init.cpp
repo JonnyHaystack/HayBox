@@ -99,7 +99,9 @@ size_t initialize_backends(
     if (backend_config.default_mode_config > 0) {
         const GameModeConfig &mode_config =
             config.game_mode_configs[backend_config.default_mode_config - 1];
-        set_mode(primary_backend, mode_config, config.keyboard_modes, config.keyboard_modes_count);
+        for (size_t i = 0; i < backend_count; i++) {
+            set_mode(backends[i], mode_config, config.keyboard_modes, config.keyboard_modes_count);
+        }
     }
 
     return backend_count;
