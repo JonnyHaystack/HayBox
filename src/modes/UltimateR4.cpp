@@ -56,6 +56,12 @@ void UltimateR4::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
     bool shield_button_pressed = inputs.l || inputs.r;
 
     if (inputs.mod_x) {
+        // Angled fsmash/ftilt with C-Stick + MX
+        if (directions.cx != 0) {
+            outputs.rightStickX = ANALOG_STICK_NEUTRAL + (directions.cx * 100);
+            outputs.rightStickY = ANALOG_STICK_NEUTRAL + 59;
+        }
+
         if (shield_button_pressed) {
           // Double shielding for shield tilt
           outputs.triggerLDigital = true;
@@ -71,12 +77,6 @@ void UltimateR4::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
                 // MX + q1/2/3/4 = 53 35
                 outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 53);
                 outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 34);
-            }
-
-            // Angled fsmash/ftilt with C-Stick + MX
-            if (directions.cx != 0) {
-                outputs.rightStickX = ANALOG_STICK_NEUTRAL + (directions.cx * 100);
-                outputs.rightStickY = ANALOG_STICK_NEUTRAL + (directions.y * 59);
             }
 
             /* Up B angles */
@@ -139,6 +139,12 @@ void UltimateR4::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
     }
 
     if (inputs.mod_y) {
+         // Angled fsmash/ftilt with C-Stick + MX
+        if (directions.cx != 0) {
+            outputs.rightStickX = ANALOG_STICK_NEUTRAL + (directions.cx * 100);
+            outputs.rightStickY = ANALOG_STICK_NEUTRAL - 59;
+        }
+
         if (shield_button_pressed) {
           // Double shielding for shield tilt
           outputs.triggerLDigital = true;
