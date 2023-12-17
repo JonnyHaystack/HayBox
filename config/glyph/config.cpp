@@ -37,6 +37,9 @@ DebouncedSwitchMatrixInput<num_rows, num_cols> matrix_input(
 
 const Pinout pinout = {
     .joybus_data = 4,
+    .nes_data = 4,
+    .nes_clock = 5,
+    .nes_latch = 6,
     .mux = -1,
     .nunchuk_detect = -1,
     .nunchuk_sda = -1,
