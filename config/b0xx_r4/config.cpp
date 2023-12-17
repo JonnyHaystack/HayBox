@@ -121,8 +121,12 @@ void setup() {
     if (console == ConnectedConsole::GAMECUBE) {
       // NOTE: This is called when using a gcc adapter with the switch!
       primary_backend = new GamecubeBackend(input_sources, input_source_count, pinout.joybus_data);
-      socd::SocdType socdType = (button_holds.r && button_holds.y) ? socd::SOCD_2IP_NO_REAC : socd::SOCD_2IP;
-      primary_backend->SetGameMode(new Melee20Button(socdType, { .crouch_walk_os = false }));
+      if (button_holds.b) {
+        primary_backend->SetGameMode(new UltimateR4(socd::SOCD_2IP));
+      } else {
+        socd::SocdType socdType = (button_holds.r && button_holds.y) ? socd::SOCD_2IP_NO_REAC : socd::SOCD_2IP;
+        primary_backend->SetGameMode(new Melee20Button(socdType, { .crouch_walk_os = false }));
+      }
     } else if (console == ConnectedConsole::N64) {
       primary_backend = new N64Backend(input_sources, input_source_count, pinout.joybus_data);
       primary_backend->SetGameMode(new UltimateR4(socd::SOCD_2IP));

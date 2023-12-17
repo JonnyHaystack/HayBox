@@ -48,6 +48,7 @@ void select_mode(CommunicationBackend *backend) {
                 )
             );
         } else if (inputs.down) {
+            // TODO: Should I make this switch to UltimateR4?
             set_mode(backend, new Ultimate(socd::SOCD_2IP));
         } else if (inputs.right) {
             set_mode(backend, new FgcMode(socd::SOCD_NEUTRAL, socd::SOCD_NEUTRAL));

@@ -68,13 +68,16 @@ void UltimateR4::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
             outputs.rightStickY = ANALOG_STICK_NEUTRAL + 59;
         }
 
+        // These all can be true at the same time
         if (directions.horizontal) {
             // Fastest walking speed before run
             outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 53);
-        } else if (directions.vertical) {
+        }
+        if (directions.vertical) {
             // Vertical Shield Tilt and crouch with mod_x = 65
             outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 65);
-        } else if (directions.diagonal) {
+        }
+        if (directions.diagonal) {
             // MX + q1/2/3/4 = 53 35
             outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 53);
             outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 34);
@@ -150,10 +153,17 @@ void UltimateR4::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
           outputs.triggerLDigital = true;
           outputs.triggerRDigital = true;
         }
+
+        // These all can be true at the same time
         if (directions.horizontal) {
             // Allow tink/yink walk shield
             outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 28);
-        } else if (directions.diagonal) {
+        }
+        if (directions.vertical) {
+            // Vertical Shield Tilt and crouch with mod_x = 65
+            outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 65);
+        }
+        if (directions.diagonal) {
             outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 53);
             outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 34);
         }
