@@ -5,7 +5,9 @@
 #include "comms/DInputBackend.hpp"
 #include "comms/GamecubeBackend.hpp"
 #include "comms/N64Backend.hpp"
+#include "comms/NesBackend.hpp"
 #include "comms/NintendoSwitchBackend.hpp"
+#include "comms/SnesBackend.hpp"
 #include "comms/XInputBackend.hpp"
 #include "core/CommunicationBackend.hpp"
 #include "core/config_utils.hpp"
@@ -145,6 +147,28 @@ void init_primary_backend(
             delete primary_backend;
             primary_backend =
                 new N64Backend(inputs, input_sources, input_source_count, pinout.joybus_data);
+            break;
+        case COMMS_BACKEND_NES:
+            delete primary_backend;
+            primary_backend = new NesBackend(
+                inputs,
+                input_sources,
+                input_source_count,
+                pinout.nes_data,
+                pinout.nes_clock,
+                pinout.nes_latch
+            );
+            break;
+        case COMMS_BACKEND_SNES:
+            delete primary_backend;
+            primary_backend = new SnesBackend(
+                inputs,
+                input_sources,
+                input_source_count,
+                pinout.nes_data,
+                pinout.nes_clock,
+                pinout.nes_latch
+            );
             break;
         case COMMS_BACKEND_UNSPECIFIED: // Fall back to configurator if invalid backend selected.
         case COMMS_BACKEND_CONFIGURATOR:
