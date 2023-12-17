@@ -226,6 +226,12 @@ void UltimateR4::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         }
     }
 
+    // Angled special while running to do down special
+    if (inputs.b && directions.diagonal) {
+        outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 65);
+        outputs.leftStickY = ANALOG_STICK_MIN;
+    }
+
     // C-stick ASDI Slideoff angle overrides any other C-stick modifiers (such as angled fsmash).
     if (directions.cx != 0 && directions.cy != 0) {
         // 5250 8500 = 42 68
