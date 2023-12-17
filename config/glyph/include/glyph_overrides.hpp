@@ -131,15 +131,13 @@ size_t init_secondary_backends_glyph(
     }
 
     // Add new backend to array and increase backend count to reflect this.
-    new_backends[backend_count++] = new NeoPixelBackend(
+    new_backends[backend_count++] = new NeoPixelBackend<LED_PIN, LED_COUNT>(
         inputs,
         input_sources,
         input_source_count,
         pixel_to_button_mappings,
         config.rgb_configs,
-        config.rgb_configs_count,
-        LED_PIN,
-        LED_COUNT
+        config.rgb_configs_count
     );
 
     // Delete the old backends array and reassign it.
