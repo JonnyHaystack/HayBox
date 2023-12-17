@@ -15,11 +15,10 @@ class N64Backend : public CommunicationBackend {
         int polling_rate,
         int data_pin
     );
-    ~N64Backend();
     void SendReport();
 
   private:
-    CN64Console *_n64;
+    CN64Console _n64;
     N64_Data_t _data;
     int _delay;
 };

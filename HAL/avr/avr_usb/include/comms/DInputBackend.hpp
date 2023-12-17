@@ -16,7 +16,7 @@ class DInputBackend : public CommunicationBackend {
     void SendReport();
 
   private:
-    Joystick_ *_joystick;
+    Joystick_ _joystick;
 };
 
 #endif

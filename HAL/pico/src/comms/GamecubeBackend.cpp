@@ -15,13 +15,9 @@ GamecubeBackend::GamecubeBackend(
     int sm,
     int offset
 )
-    : CommunicationBackend(inputs, input_sources, input_source_count) {
-    _gamecube = new GamecubeConsole(data_pin, pio, sm, offset);
+    : CommunicationBackend(inputs, input_sources, input_source_count),
+      _gamecube(data_pin, pio, sm, offset) {
     _report = default_gc_report;
-}
-
-GamecubeBackend::~GamecubeBackend() {
-    delete _gamecube;
 }
 
 void GamecubeBackend::SendReport() {
@@ -30,7 +26,7 @@ void GamecubeBackend::SendReport() {
     ScanInputs(InputScanSpeed::MEDIUM);
 
     // Read inputs
-    _gamecube->WaitForPollStart();
+    _gamecube.WaitForPollStart();
 
     // Update fast inputs in response to poll.
     // But wait 40us first so that we read inputs at the start of the 3rd byte of the poll command
@@ -64,11 +60,11 @@ void GamecubeBackend::SendReport() {
     _report.r_analog = _outputs.triggerRAnalog;
 
     // Send outputs to console unless poll command is invalid.
-    if (_gamecube->WaitForPollEnd() != PollStatus::ERROR) {
-        _gamecube->SendReport(&_report);
+    if (_gamecube.WaitForPollEnd() != PollStatus::ERROR) {
+        _gamecube.SendReport(&_report);
     }
 }
 
 int GamecubeBackend::GetOffset() {
-    return _gamecube->GetOffset();
+    return _gamecube.GetOffset();
 }

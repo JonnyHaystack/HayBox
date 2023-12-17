@@ -14,7 +14,7 @@ class DInputBackend : public CommunicationBackend {
     void SendReport();
 
   private:
-    TUGamepad *_gamepad;
+    TUGamepad _gamepad;
 };
 
 #endif

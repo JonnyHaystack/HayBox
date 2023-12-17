@@ -14,13 +14,9 @@ N64Backend::N64Backend(
     int sm,
     int offset
 )
-    : CommunicationBackend(inputs, input_sources, input_source_count) {
-    _n64 = new N64Console(data_pin, pio, sm, offset);
+    : CommunicationBackend(inputs, input_sources, input_source_count),
+      _n64(data_pin, pio, sm, offset) {
     _report = default_n64_report;
-}
-
-N64Backend::~N64Backend() {
-    delete _n64;
 }
 
 void N64Backend::SendReport() {
@@ -29,7 +25,7 @@ void N64Backend::SendReport() {
     ScanInputs(InputScanSpeed::MEDIUM);
 
     // Read inputs
-    _n64->WaitForPoll();
+    _n64.WaitForPoll();
 
     // Update fast inputs in response to poll.
     ScanInputs(InputScanSpeed::FAST);
@@ -59,9 +55,9 @@ void N64Backend::SendReport() {
     _report.stick_y = _outputs.leftStickY - 128;
 
     // Send outputs to console.
-    _n64->SendReport(&_report);
+    _n64.SendReport(&_report);
 }
 
 int N64Backend::GetOffset() {
-    return _n64->GetOffset();
+    return _n64.GetOffset();
 }

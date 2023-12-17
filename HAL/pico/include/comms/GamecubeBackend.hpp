@@ -17,12 +17,11 @@ class GamecubeBackend : public CommunicationBackend {
         int sm = -1,
         int offset = -1
     );
-    ~GamecubeBackend();
     void SendReport();
     int GetOffset();
 
   private:
-    GamecubeConsole *_gamecube;
+    GamecubeConsole _gamecube;
     gc_report_t _report;
 };
 

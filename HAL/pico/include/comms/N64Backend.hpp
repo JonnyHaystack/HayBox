@@ -17,12 +17,11 @@ class N64Backend : public CommunicationBackend {
         int sm = -1,
         int offset = -1
     );
-    ~N64Backend();
     void SendReport();
     int GetOffset();
 
   private:
-    N64Console *_n64;
+    N64Console _n64;
     n64_report_t _report;
 };
 

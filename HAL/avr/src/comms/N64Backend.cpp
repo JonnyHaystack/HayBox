@@ -9,8 +9,8 @@ N64Backend::N64Backend(
     int polling_rate,
     int data_pin
 )
-    : CommunicationBackend(inputs, input_sources, input_source_count) {
-    _n64 = new CN64Console(data_pin);
+    : CommunicationBackend(inputs, input_sources, input_source_count),
+      _n64(data_pin) {
     _data = defaultN64Data;
 
     if (polling_rate > 0) {
@@ -21,10 +21,6 @@ N64Backend::N64Backend(
         // If polling rate is set to 0, disable the delay.
         _delay = 0;
     }
-}
-
-N64Backend::~N64Backend() {
-    delete _n64;
 }
 
 void N64Backend::SendReport() {
