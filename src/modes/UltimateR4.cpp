@@ -227,7 +227,7 @@ void UltimateR4::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
     }
 
     // Angled special while running to do down special
-    if (inputs.b && directions.diagonal) {
+    if (inputs.b && directions.horizontal && inputs.down) {
         outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 65);
         outputs.leftStickY = ANALOG_STICK_MIN;
     }
