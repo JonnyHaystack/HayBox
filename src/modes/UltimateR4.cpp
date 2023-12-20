@@ -68,19 +68,16 @@ void UltimateR4::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
             outputs.rightStickY = ANALOG_STICK_NEUTRAL + 59;
         }
 
-        // These all can be true at the same time
-        if (directions.horizontal) {
-            // Fastest walking speed before run
-            outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 53);
-        }
-        if (directions.vertical) {
-            // Vertical Shield Tilt and crouch with mod_x = 65
-            outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 65);
-        }
         if (directions.diagonal) {
-            // MX + q1/2/3/4 = 53 35
+            // MX + q1/2/3/4 = 53 34
             outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 53);
             outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 34);
+        } else if (directions.horizontal) {
+            // Fastest walking speed before run
+            outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 53);
+        } else if (directions.vertical) {
+            // Crouch with mod_x = 65
+            outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 65);
         }
 
         /* Up B angles */
@@ -142,30 +139,27 @@ void UltimateR4::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
     }
 
     if (inputs.mod_y) {
-         // Angled fsmash/ftilt with C-Stick + MX
-        if (directions.cx != 0) {
-            outputs.rightStickX = ANALOG_STICK_NEUTRAL + (directions.cx * 100);
-            outputs.rightStickY = ANALOG_STICK_NEUTRAL - 59;
-        }
-
         if (shield_button_pressed) {
           // Double shielding for shield tilt
           outputs.triggerLDigital = true;
           outputs.triggerRDigital = true;
         }
 
-        // These all can be true at the same time
-        if (directions.horizontal) {
-            // Allow tink/yink walk shield
-            outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 28);
+         // Angled fsmash/ftilt with C-Stick + MX
+        if (directions.cx != 0) {
+            outputs.rightStickX = ANALOG_STICK_NEUTRAL + (directions.cx * 100);
+            outputs.rightStickY = ANALOG_STICK_NEUTRAL - 59;
         }
-        if (directions.vertical) {
-            // Vertical Shield Tilt and crouch with mod_x = 65
-            outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 65);
-        }
+
         if (directions.diagonal) {
             outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 53);
             outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 34);
+        } else if (directions.horizontal) {
+            // Allow tink/yink walk shield
+            outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 28);
+        } else if (directions.vertical) {
+            // Crouch with mod_y = 65
+            outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 65);
         }
 
         /* Up B angles */
