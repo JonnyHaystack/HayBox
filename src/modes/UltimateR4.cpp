@@ -60,24 +60,24 @@ void UltimateR4::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
           // Double shielding for shield tilt
           outputs.triggerLDigital = true;
           outputs.triggerRDigital = true;
-        }
-
-        // Angled fsmash/ftilt with C-Stick + MX
-        if (directions.cx != 0) {
+        } else {
+          // Angled fsmash/ftilt with C-Stick + MX
+          if (directions.cx != 0) {
             outputs.rightStickX = ANALOG_STICK_NEUTRAL + (directions.cx * 100);
             outputs.rightStickY = ANALOG_STICK_NEUTRAL + 59;
-        }
+          }
 
-        if (directions.diagonal) {
+          if (directions.diagonal) {
             // MX + q1/2/3/4 = 53 34
             outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 53);
             outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 34);
-        } else if (directions.horizontal) {
+          } else if (directions.horizontal) {
             // Fastest walking speed before run
             outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 53);
-        } else if (directions.vertical) {
+          } else if (directions.vertical) {
             // Crouch with mod_x = 65
             outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 65);
+          }
         }
 
         /* Up B angles */
@@ -143,23 +143,23 @@ void UltimateR4::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
           // Double shielding for shield tilt
           outputs.triggerLDigital = true;
           outputs.triggerRDigital = true;
-        }
-
-         // Angled fsmash/ftilt with C-Stick + MX
-        if (directions.cx != 0) {
+        } else {
+          // Angled fsmash/ftilt with C-Stick + MX
+          if (directions.cx != 0) {
             outputs.rightStickX = ANALOG_STICK_NEUTRAL + (directions.cx * 100);
             outputs.rightStickY = ANALOG_STICK_NEUTRAL - 59;
-        }
+          }
 
-        if (directions.diagonal) {
+          if (directions.diagonal) {
             outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 53);
             outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 34);
-        } else if (directions.horizontal) {
+          } else if (directions.horizontal) {
             // Allow tink/yink walk shield
             outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 28);
-        } else if (directions.vertical) {
+          } else if (directions.vertical) {
             // Crouch with mod_y = 65
             outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 65);
+          }
         }
 
         /* Up B angles */
