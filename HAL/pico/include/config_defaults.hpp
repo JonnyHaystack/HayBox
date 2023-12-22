@@ -79,7 +79,7 @@ const Config default_config = {
             .keyboard_mode_config = 1,
         },
     },
-    .communication_backend_configs_count = 6,
+    .communication_backend_configs_count = 8,
     .communication_backend_configs = {
         CommunicationBackendConfig {
             .backend_id = COMMS_BACKEND_XINPUT,
@@ -108,11 +108,13 @@ const Config default_config = {
         CommunicationBackendConfig {
             .backend_id = COMMS_BACKEND_NES,
             .default_mode_config = 1,
+            .activation_binding_count = 1,
             .activation_binding = { BTN_LT1 },
         },
         CommunicationBackendConfig {
             .backend_id = COMMS_BACKEND_SNES,
             .default_mode_config = 1,
+            .activation_binding_count = 1,
             .activation_binding = { BTN_LT2 },
         },
         CommunicationBackendConfig {
