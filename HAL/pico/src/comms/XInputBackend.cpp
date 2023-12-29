@@ -56,11 +56,11 @@ void XInputBackend::SendReport() {
     _report.ls = _outputs.leftStickClick;
     _report.rs = _outputs.rightStickClick;
 
-    _report.lx = (_outputs.leftStickX - 128) * 65535 / 255 + 128;
-    _report.ly = (_outputs.leftStickY - 128) * 65535 / 255 + 128;
+    _report.lx = ((_outputs.leftStickX - 128) * 65535 / 255) * 1.266 + 128 + 0.49;
+    _report.ly = ((_outputs.leftStickY - 128) * 65535 / 255) * 1.256 + 128 + 1.48;
 
-    _report.rx = (_outputs.rightStickX - 128) * 65535 / 255 + 128;
-    _report.ry = (_outputs.rightStickY - 128) * 65535 / 255 + 128;
+    _report.rx = ((_outputs.rightStickX - 128) * 65535 / 255) * 1.266 + 128 + 0.49;
+    _report.ry = ((_outputs.rightStickY - 128) * 65535 / 255) * 1.256 + 128 + 1.48;
 
     _xinput->sendReport(&_report);
 }
