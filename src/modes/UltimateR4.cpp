@@ -107,7 +107,7 @@ void UltimateR4::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
             if (inputs.b) {
                 // (33.29) = 67 44
                 outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 67);
-                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 44);
+                outputs.leftStickY = ANALOG_STICK_NEUTRAL + (directions.y * 60);
                 // (39.38) = 67 55
                 if (inputs.c_down) {
                     outputs.leftStickX = ANALOG_STICK_NEUTRAL + (directions.x * 67);
