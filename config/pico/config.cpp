@@ -46,7 +46,7 @@ GpioButtonMapping button_mappings[] = {
 };
 const size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
 
-DebouncedGpioButtonInput<button_count> gpio_input(button_mappings, 5);
+DebouncedGpioButtonInput<button_count> gpio_input(button_mappings);
 
 const Pinout pinout = {
     .joybus_data = 28,
@@ -94,13 +94,7 @@ void setup() {
 }
 
 void loop() {
-    select_mode(
-        backends[0],
-        config.game_mode_configs,
-        config.game_mode_configs_count,
-        config.keyboard_modes,
-        config.keyboard_modes_count
-    );
+    select_mode(backends, backend_count, config);
 
     for (size_t i = 0; i < backend_count; i++) {
         backends[i]->SendReport();
