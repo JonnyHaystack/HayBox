@@ -466,6 +466,10 @@ If you are using an official adapter with an Arduino-based controller you will l
 
 If you are using an Arduino-based controller without a boost circuit, you will need 5V power so for Mayflash adapter you need both USB cables plugged in, and on console the rumble line needs to be intact. Pico works natively with 3.3V power so this isn't an issue.
 
+### Controller not working when using a clone Pico
+
+If you are using a clone of the Pico and the controller is not recognized in Windows, clone and build the 'configurator' branch. This is because cloned Picos are missing the VBUS line used for the N64 mode, and will error when selecting a console.
+
 ## Contributing
 
 I welcome contributions and if you make an input mode that you want to share,
