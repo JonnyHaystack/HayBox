@@ -20,20 +20,27 @@ void Ultimate::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
     outputs.b = inputs.b;
     outputs.x = inputs.x;
     outputs.y = inputs.y;
-    outputs.buttonL = inputs.lightshield;
-    outputs.buttonR = inputs.z || inputs.midshield;
     outputs.triggerLDigital = inputs.l;
     outputs.triggerRDigital = inputs.r;
-    outputs.start = inputs.start;
-    outputs.select = inputs.select;
-    outputs.home = inputs.home;
 
-    // Turn on D-Pad layer by holding Mod X + Mod Y or Nunchuk C button.
-    if ((inputs.mod_x && inputs.mod_y) || inputs.nunchuk_c) {
+    // Turn on D-Pad layer by holding Nunchuk C button.
+    if (inputs.nunchuk_c) {
         outputs.dpadUp = inputs.c_up;
         outputs.dpadDown = inputs.c_down;
         outputs.dpadLeft = inputs.c_left;
         outputs.dpadRight = inputs.c_right;
+        outputs.leftStickClick = inputs.lightshield;
+        outputs.rightStickClick = inputs.z;
+        outputs.select = inputs.start;
+        outputs.home = inputs.mod_y;
+    }
+    else
+    {
+        outputs.buttonL = inputs.lightshield;
+        outputs.buttonR = inputs.z;
+        outputs.start = inputs.start;
+        outputs.select = inputs.select;
+        outputs.home = inputs.home;
     }
 }
 
