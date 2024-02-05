@@ -32,7 +32,7 @@ void set_mode(CommunicationBackend *backend, KeyboardMode *mode) {
 
 void select_mode(CommunicationBackend *backend) {
     InputState &inputs = backend->GetInputs();
-    if (inputs.mod_x && !inputs.mod_y && inputs.start) {
+    /*if (inputs.mod_x && !inputs.mod_y && inputs.start) {
         if (inputs.l) {
             set_mode(
                 backend,
@@ -56,6 +56,14 @@ void select_mode(CommunicationBackend *backend) {
     } else if (inputs.mod_y && !inputs.mod_x && inputs.start) {
         if (inputs.l) {
             set_mode(backend, new DefaultKeyboardMode(socd::SOCD_2IP));
+        }
+    }*/
+    if (inputs.mod_x && !inputs.mod_y && inputs.start) {
+        if(inputs.c_left){
+            set_mode(backend, new Ultimate_Terry(socd::SOCD_NEUTRAL));
+            }
+       if(inputs.c_right){
+           set_mode(backend, new Ultimate(socd::SOCD_NEUTRAL));
         }
     }
 }
