@@ -18,7 +18,7 @@ Ultimate::Ultimate(socd::SocdType socd_type) {
 void Ultimate::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
     outputs.a = inputs.a;
     outputs.b = inputs.b;
-    outputs.x = inputs.x;
+    outputs.x = inputs.x||inputs.y;
     outputs.y = inputs.y;
     outputs.triggerLDigital = inputs.l;
     outputs.triggerRDigital = inputs.r;
