@@ -8,6 +8,8 @@
 #include "modes/ProjectM.hpp"
 #include "modes/RivalsOfAether.hpp"
 #include "modes/Ultimate.hpp"
+#include "modes/Ultimate_Terry.hpp"
+
 
 extern KeyboardMode *current_kb_mode;
 
