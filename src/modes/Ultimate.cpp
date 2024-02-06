@@ -29,8 +29,8 @@ void Ultimate::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
         outputs.dpadDown = inputs.c_down;
         outputs.dpadLeft = inputs.c_left;
         outputs.dpadRight = inputs.c_right;
-        outputs.leftStickClick = inputs.lightshield;
-        outputs.rightStickClick = inputs.z;
+        outputs.leftStickClick = inputs.l;
+        outputs.rightStickClick = inputs.r;
         outputs.select = inputs.start;
         outputs.home = inputs.mod_y;
     }

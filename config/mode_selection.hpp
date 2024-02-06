@@ -9,6 +9,8 @@
 #include "modes/RivalsOfAether.hpp"
 #include "modes/Ultimate.hpp"
 #include "modes/Ultimate_Terry.hpp"
+#include "modes/Ultimate_Kazuya.hpp"
+#include "modes/Ultimate_Main.hpp"
 
 
 extern KeyboardMode *current_kb_mode;
@@ -61,13 +63,19 @@ void select_mode(CommunicationBackend *backend) {
         }
     }*/
     if (inputs.mod_x && !inputs.mod_y && inputs.start) {
-        if(inputs.c_left){
+        if(inputs.c_up){
             set_mode(backend, new Ultimate_Terry(socd::SOCD_NEUTRAL));
+            }
+       if(inputs.c_left){
+           set_mode(backend, new Ultimate_Kazuya(socd::SOCD_NEUTRAL));
+            }
+       if(inputs.c_down){
+           set_mode(backend, new Ultimate_Main(socd::SOCD_NEUTRAL));
             }
        if(inputs.c_right){
            set_mode(backend, new Ultimate(socd::SOCD_NEUTRAL));
         }
-    }
+    }        
 }
 
 #endif

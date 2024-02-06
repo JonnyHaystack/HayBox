@@ -1,11 +1,11 @@
 /* Ultimate profile by Taker */
-#include "modes/Ultimate.hpp"
+#include "modes/Ultimate_Kazuya.hpp"
 
 #define ANALOG_STICK_MIN 28
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 228
 
-Ultimate::Ultimate(socd::SocdType socd_type) {
+Ultimate_Kazuya::Ultimate_Kazuya(socd::SocdType socd_type) {
     _socd_pair_count = 4;
     _socd_pairs = new socd::SocdPair[_socd_pair_count]{
         socd::SocdPair{&InputState::left,    &InputState::right,   socd_type},
@@ -15,7 +15,7 @@ Ultimate::Ultimate(socd::SocdType socd_type) {
     };
 }
 
-void Ultimate::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
+void Ultimate_Kazuya::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
     outputs.a = inputs.a;
     outputs.b = inputs.b;
     outputs.x = inputs.x||inputs.y;
@@ -44,7 +44,7 @@ void Ultimate::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
     }
 }
 
-void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
+void Ultimate_Kazuya::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
     // Coordinate calculations to make modifier handling simpler.
     UpdateDirections(
         inputs.left,
