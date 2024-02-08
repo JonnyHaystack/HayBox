@@ -1,5 +1,4 @@
 #include "comms/backend_init.hpp"
-#include "config_defaults.hpp"
 #include "core/CommunicationBackend.hpp"
 #include "core/KeyboardMode.hpp"
 #include "core/Persistence.hpp"
@@ -13,7 +12,7 @@
 
 #include <config.pb.h>
 
-Config config = default_config;
+Config config = glyph_default_config();
 
 const size_t num_rows = 4;
 const size_t num_cols = 11;

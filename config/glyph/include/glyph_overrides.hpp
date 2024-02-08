@@ -1,6 +1,7 @@
 #include "comms/B0XXInputViewer.hpp"
 #include "comms/IntegratedDisplay.hpp"
 #include "comms/NeoPixelBackend.hpp"
+#include "config_defaults.hpp"
 #include "core/config_utils.hpp"
 #include "stdlib.hpp"
 
@@ -52,6 +53,53 @@ const Button pixel_to_button_mappings[LED_COUNT] = {
 };
 
 // clang-format on
+
+Config glyph_default_config() {
+    Config config = default_config;
+    config.rgb_configs_count = 2;
+    config.rgb_configs[0] = {
+        .button_colors_count = 19,
+        .button_colors = {
+            { BTN_LF1, 0x0000ff },
+            { BTN_LF2, 0x0000ff },
+            { BTN_LF3, 0x0000ff },
+            { BTN_LF4, 0x0000ff },
+            { BTN_LT1, 0x0000ff },
+            { BTN_LT2, 0x0000ff },
+            { BTN_RF1, 0x0000ff },
+            { BTN_RF2, 0x0000ff },
+            { BTN_RF3, 0x0000ff },
+            { BTN_RF4, 0x0000ff },
+            { BTN_RF5, 0x0000ff },
+            { BTN_RF6, 0x0000ff },
+            { BTN_RF7, 0x0000ff },
+            { BTN_RF8, 0x0000ff },
+            { BTN_RT1, 0x0000ff },
+            { BTN_RT2, 0x0000ff },
+            { BTN_RT3, 0x0000ff },
+            { BTN_RT4, 0x0000ff },
+            { BTN_RT5, 0x0000ff },
+        },
+    };
+    config.rgb_configs[1] = {
+        .button_colors_count = 12,
+        .button_colors = {
+            { BTN_LF6,  0xff0000 },
+            { BTN_LF7,  0xff0000 },
+            { BTN_LF8,  0xff0000 },
+            { BTN_LT6,  0xff0000 },
+            { BTN_RF9,  0xff0000 },
+            { BTN_RF10, 0xff0000 },
+            { BTN_RF11, 0xff0000 },
+            { BTN_RF1,  0xff0000 },
+            { BTN_RF12, 0xff0000 },
+            { BTN_RF13, 0xff0000 },
+            { BTN_RF14, 0xff0000 },
+            { BTN_RF5,  0xff0000 },
+        },
+    };
+    return config;
+}
 
 Adafruit_SSD1306 display(128, 64, &Wire1);
 
