@@ -37,7 +37,7 @@ PackConstructorInitializers: CurrentLine
 PenaltyReturnTypeOnItsOwnLine: 2000
 PointerAlignment: Right
 QualifierAlignment: Custom
-QualifierOrder: ['inline', 'static', 'const', 'constexpr', 'restrict', 'volatile', 'type']
+QualifierOrder: ['inline', 'static', 'constexpr', 'const', 'restrict', 'volatile', 'type']
 ReferenceAlignment: Right
 ReflowComments: true
 SeparateDefinitionBlocks: Always
