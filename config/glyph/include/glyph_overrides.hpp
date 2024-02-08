@@ -126,7 +126,6 @@ size_t init_secondary_backends_glyph(
 
     // Create new array containing all old backends but with length increased by 1 to make space for
     // NeoPixel backend.
-    // CommunicationBackend **new_backends = new CommunicationBackend *[backend_count + 1];
     CommunicationBackend **new_backends = new CommunicationBackend *[backend_count + 2];
     for (size_t i = 0; i < backend_count; i++) {
         new_backends[i] = backends[i];
