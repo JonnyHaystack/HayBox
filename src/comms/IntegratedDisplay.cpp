@@ -8,6 +8,8 @@ IntegratedDisplay::IntegratedDisplay(
     InputSource **input_sources,
     size_t input_source_count,
     Adafruit_GFX &display,
+    void (*clear_display)(),
+    void (*update_display)(),
     Config &config,
     CommunicationBackendId backend_id,
     CommunicationBackend **backends,
@@ -15,6 +17,8 @@ IntegratedDisplay::IntegratedDisplay(
 )
     : CommunicationBackend(inputs, input_sources, input_source_count),
       _display(display),
+      _clear_display(clear_display),
+      _update_display(update_display),
       _config(config),
       _backend_id(backend_id),
       _backends(backends),
@@ -138,8 +142,8 @@ IntegratedDisplay::~IntegratedDisplay() {
     delete[] _usb_backends_page.items;
     delete[] _gamemode_options_page.items;
 
-    _display.clearDisplay();
-    _display.display();
+    _clear_display();
+    _update_display();
 }
 
 void IntegratedDisplay::SetGameMode(ControllerMode *gamemode) {
@@ -235,7 +239,7 @@ void IntegratedDisplay::UpdateOutputs() {
 void IntegratedDisplay::SendReport() {
     UpdateOutputs();
 
-    _display.clearDisplay();
+    _clear_display();
 
     if (_display_mode == DISPLAY_MODE_VIEWER) {
         /* Gamemode text */
@@ -265,7 +269,7 @@ void IntegratedDisplay::SendReport() {
         }
     }
 
-    _display.display();
+    _update_display();
 }
 
 void IntegratedDisplay::SetDefaultMode(

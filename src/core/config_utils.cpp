@@ -35,8 +35,6 @@ CommunicationBackendConfig backend_config_from_id(
     const CommunicationBackendConfig *backend_configs,
     size_t backend_configs_count
 ) {
-    // Find the first backend config that matches the detected console so we can check what the
-    // configured default gamemode is.
     for (size_t i = 0; i < backend_configs_count; i++) {
         const CommunicationBackendConfig &backend_config = backend_configs[i];
         if (backend_config.backend_id == backend_id) {
@@ -48,6 +46,21 @@ CommunicationBackendConfig backend_config_from_id(
         .backend_id = backend_id,
         .default_mode_config = 0,
     };
+}
+
+uint8_t backend_config_id_from_backend_id(
+    CommunicationBackendId backend_id,
+    const CommunicationBackendConfig *backend_configs,
+    size_t backend_configs_count
+) {
+    for (size_t i = 0; i < backend_configs_count; i++) {
+        const CommunicationBackendConfig &backend_config = backend_configs[i];
+        if (backend_config.backend_id == backend_id) {
+            return i + 1;
+        }
+    }
+
+    return 0;
 }
 
 uint8_t mode_config_id_from_mode_id(

@@ -127,7 +127,6 @@ const Config default_config = {
     .keyboard_modes = {
         KeyboardModeConfig {
             0,
-            "Default",
             22,
             {
                 { BTN_LF4, HID_KEY_A },

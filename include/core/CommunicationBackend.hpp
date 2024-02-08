@@ -18,7 +18,7 @@ class CommunicationBackend {
     void ScanInputs();
     void ScanInputs(InputScanSpeed input_source_filter);
 
-    void UpdateOutputs();
+    virtual void UpdateOutputs();
     virtual void SetGameMode(ControllerMode *gamemode);
 
     virtual void SendReport() = 0;

@@ -104,3 +104,5 @@ size_t Persistence::LoadConfigRaw(uint8_t *buffer, size_t buffer_len) {
     // Return the number of bytes of config data read.
     return bytes_read;
 }
+
+Persistence persistence;

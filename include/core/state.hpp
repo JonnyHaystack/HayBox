@@ -101,7 +101,7 @@ typedef struct {
 } StickDirections;
 
 // Output state.
-typedef struct outputstate {
+typedef struct _OutputState {
     // Digital outputs.
     bool a = false;
     bool b = false;

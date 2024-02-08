@@ -100,18 +100,20 @@ size_t init_secondary_backends_glyph(
     Wire1.setClock(1'000'000UL);
     if (display.begin(SSD1306_SWITCHCAPVCC, 0x3C, false, false)) {
         backend_count++;
+        // clang-format off
         new_backends[backend_count - 1] = new IntegratedDisplay(
             inputs,
             input_sources,
             input_source_count,
-            128,
-            64,
-            Wire1,
+            display,
+            []() { display.clearDisplay(); },
+            []() { display.display(); },
             config,
             backend_id,
             new_backends,
             backend_count
         );
+        // clang-format on
     }
 
     // Delete the old backends array and reassign it.

@@ -42,4 +42,6 @@ class Persistence {
     static uint8_t _buffer[eeprom_size - config_offset];
 };
 
+extern Persistence persistence;
+
 #endif

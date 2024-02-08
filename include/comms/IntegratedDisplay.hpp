@@ -39,6 +39,8 @@ class IntegratedDisplay : public CommunicationBackend {
         InputSource **input_sources,
         size_t input_source_count,
         Adafruit_GFX &display,
+        void (*clear_display)(),
+        void (*update_display)(),
         Config &config,
         CommunicationBackendId backend_id,
         CommunicationBackend **backends,
@@ -57,7 +59,9 @@ class IntegratedDisplay : public CommunicationBackend {
     static constexpr uint8_t max_visible_lines = 6;
     static constexpr char highlight_string[] = ">";
 
-    Adafruit_GFX _display;
+    Adafruit_GFX &_display;
+    void (*_clear_display)();
+    void (*_update_display)();
     Config &_config;
     const CommunicationBackendId _backend_id;
     DisplayMode _display_mode = DISPLAY_MODE_VIEWER;

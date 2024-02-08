@@ -11,6 +11,7 @@ ButtonToKeycodeMapping.keycode int_size:IS_8
 ButtonToColorMapping.button int_size:IS_8
 
 GameModeConfig.mode_id int_size:IS_8
+GameModeConfig.name max_length:17
 GameModeConfig.socd_pairs max_count:10
 GameModeConfig.socd_pairs type:FT_POINTER
 GameModeConfig.button_remapping max_count:60
@@ -20,7 +21,6 @@ GameModeConfig.activation_binding type:FT_POINTER
 GameModeConfig.keyboard_mode_config int_size:IS_8
 
 KeyboardModeConfig.id int_size:IS_8
-KeyboardModeConfig.name max_length:20
 KeyboardModeConfig.buttons_to_keycodes max_count:60
 KeyboardModeConfig.buttons_to_keycodes type:FT_POINTER
 
