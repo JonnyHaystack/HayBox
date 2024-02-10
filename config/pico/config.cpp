@@ -30,7 +30,7 @@ GpioButtonMapping button_mappings[] = {
     { &InputState::right,       2 },
 
     { &InputState::mod_x,       6 }, 
-    { &InputState::nunchuk_c,       7 }, 
+    { &InputState::nunchuk_c,   7 },  //Dpad Toggle 
 
     { &InputState::select,      10},
     { &InputState::start,       0 },
@@ -44,13 +44,13 @@ GpioButtonMapping button_mappings[] = {
 
     { &InputState::b,           26},
     { &InputState::x,           21},
-    { &InputState::zl,           19},
-    { &InputState::zr,           17},
+    { &InputState::lightshield, 19},  //Left Bumper
+    { &InputState::r,           17},  //Right Bumper
 
     { &InputState::mod_x,       27},
     { &InputState::mod_y,       22},
-    { &InputState::r,          20},
-    { &InputState::l,          18},
+    { &InputState::l,           20},  //Left Trigger
+    { &InputState::z,           18},  //Right Trigger
 };
 size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
 

@@ -29,15 +29,15 @@ void Ultimate_Main::UpdateDigitalOutputs(InputState &inputs, OutputState &output
         outputs.dpadDown = inputs.c_down;
         outputs.dpadLeft = inputs.c_left;
         outputs.dpadRight = inputs.c_right;
-        outputs.leftStickClick = inputs.zl;
-        outputs.rightStickClick = inputs.zr;
+        outputs.leftStickClick = inputs.lightshield;
+        outputs.rightStickClick = inputs.z;
         outputs.select = inputs.start;
         outputs.home = inputs.mod_y;
     }
     else
     {
-        outputs.buttonL = inputs.zl;
-        outputs.buttonR = inputs.zr;
+        outputs.buttonL = inputs.lightshield;
+        outputs.buttonR = inputs.z;
         outputs.start = inputs.start;
         outputs.select = inputs.select;
         outputs.home = inputs.home;

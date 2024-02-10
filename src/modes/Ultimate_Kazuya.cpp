@@ -36,8 +36,8 @@ void Ultimate_Kazuya::UpdateDigitalOutputs(InputState &inputs, OutputState &outp
     }
     else
     {
-        outputs.buttonL = inputs.zl;
-        outputs.buttonR = inputs.zr;
+        outputs.buttonL = inputs.lightshield;
+        outputs.buttonR = inputs.z;
         outputs.start = inputs.start;
         outputs.select = inputs.select;
         outputs.home = inputs.home;

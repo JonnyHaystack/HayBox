@@ -16,31 +16,31 @@ Ultimate::Ultimate(socd::SocdType socd_type) {
 }
 
 void Ultimate::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
-    outputs.a = inputs.a;
-    outputs.b = inputs.b;
-    outputs.x = inputs.x||inputs.y;
-    outputs.y = inputs.y;
-    outputs.triggerLDigital = inputs.l;
-    outputs.triggerRDigital = inputs.r;
+    outputs.a = inputs.c_down;                                  //14
+    outputs.b = inputs.b;                                       //26
+    outputs.x = inputs.x||inputs.y;                             //21
+    outputs.y = inputs.y;                                       //
+    outputs.triggerLDigital = inputs.l;                         //20
+    outputs.triggerRDigital = inputs.r;                         //17
 
     // Turn on D-Pad layer by holding Nunchuk C button.
     if (inputs.nunchuk_c) {
-        outputs.dpadUp = inputs.c_up;
-        outputs.dpadDown = inputs.c_down;
-        outputs.dpadLeft = inputs.c_left;
-        outputs.dpadRight = inputs.c_right;
-        outputs.leftStickClick = inputs.l;
+        outputs.dpadUp = inputs.c_up;                           //12
+        outputs.dpadDown = inputs.a;                            //15
+        outputs.dpadLeft = inputs.c_left;                       //13
+        outputs.dpadRight = inputs.c_right;                     //16
+        outputs.leftStickClick = inputs.l;                      
         outputs.rightStickClick = inputs.r;
-        outputs.select = inputs.start;
-        outputs.home = inputs.mod_y;
+        outputs.select = inputs.start;                          //10
+        outputs.home = inputs.mod_y;                            //11    
     }
     else
     {
-        outputs.buttonL = inputs.zl;
-        outputs.buttonR = inputs.zr;
-        outputs.start = inputs.start;
-        outputs.select = inputs.select;
-        outputs.home = inputs.home;
+        outputs.buttonL = inputs.lightshield;                   //19   
+        outputs.buttonR = inputs.z;                             //18
+        outputs.start = inputs.start;                           //0
+        outputs.select = inputs.select;                         //10
+        outputs.home = inputs.home;                             //11
     }
 }
 
