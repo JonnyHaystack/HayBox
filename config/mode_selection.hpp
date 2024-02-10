@@ -63,16 +63,16 @@ void select_mode(CommunicationBackend *backend) {
         }
     }*/
     if (inputs.mod_x && !inputs.mod_y && inputs.start) {
-        if(inputs.c_up){
+        if(inputs.c_right){
             set_mode(backend, new Ultimate_Terry(socd::SOCD_NEUTRAL));
             }
        if(inputs.c_left){
            set_mode(backend, new Ultimate_Kazuya(socd::SOCD_NEUTRAL));
             }
-       if(inputs.c_down){
+       if(inputs.c_up){
            set_mode(backend, new Ultimate_Main(socd::SOCD_NEUTRAL));
             }
-       if(inputs.c_right){
+       if(inputs.c_down){
            set_mode(backend, new Ultimate(socd::SOCD_NEUTRAL));
         }
     }        

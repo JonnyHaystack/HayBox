@@ -16,7 +16,7 @@ Ultimate_Terry::Ultimate_Terry(socd::SocdType socd_type) {
 }
 
 void Ultimate_Terry::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
-    outputs.a = inputs.a;
+    outputs.a = inputs.c_down;
     outputs.b = inputs.b;
     outputs.x = inputs.x||inputs.y;
     outputs.y = inputs.y;
@@ -53,7 +53,7 @@ void Ultimate_Terry::UpdateAnalogOutputs(InputState &inputs, OutputState &output
         inputs.up,
         inputs.c_left,
         inputs.c_right,
-        inputs.c_down,
+        inputs.a,
         inputs.c_up,
         ANALOG_STICK_MIN,
         ANALOG_STICK_NEUTRAL,
