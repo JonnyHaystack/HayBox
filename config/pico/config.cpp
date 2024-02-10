@@ -24,13 +24,13 @@ size_t backend_count;
 KeyboardMode *current_kb_mode = nullptr;
 
 GpioButtonMapping button_mappings[] = {
-    {&InputState::up,           5 },
+    { &InputState::up,          5 },
     { &InputState::left,        4 },
     { &InputState::down,        3 },
     { &InputState::right,       2 },
 
     { &InputState::mod_x,       6 }, 
-    { &InputState::nunchuk_c,   7 },  //Dpad Toggle 
+    { &InputState::mod_y,       7 },  //Dpad Toggle 
 
     { &InputState::select,      10},
     { &InputState::start,       0 },
@@ -47,8 +47,8 @@ GpioButtonMapping button_mappings[] = {
     { &InputState::lightshield, 19},  //Left Bumper
     { &InputState::r,           17},  //Right Bumper
 
-    { &InputState::mod_x,       27},
-    { &InputState::mod_y,       22},
+    { &InputState::y,           27},
+    { &InputState::nunchuk_c,   22},
     { &InputState::l,           20},  //Left Trigger
     { &InputState::z,           18},  //Right Trigger
 };

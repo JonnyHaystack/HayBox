@@ -63,7 +63,7 @@ void Ultimate_Main::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
 
     bool shield_button_pressed = inputs.l || inputs.r;
 
-    if (inputs.mod_x) {
+    if (inputs.up) {
         // MX + Horizontal = 6625 = 53
         if (directions.horizontal) {
             outputs.leftStickX = 128 + (directions.x * 53);
