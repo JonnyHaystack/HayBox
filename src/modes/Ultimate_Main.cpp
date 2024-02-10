@@ -50,7 +50,7 @@ void Ultimate_Main::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
         inputs.left,
         inputs.right,
         inputs.down,
-        inputs.up,
+        inputs.mod_x,
         inputs.c_left,
         inputs.c_right,
         inputs.c_down,
