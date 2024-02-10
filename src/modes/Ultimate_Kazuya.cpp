@@ -32,7 +32,7 @@ void Ultimate_Kazuya::UpdateDigitalOutputs(InputState &inputs, OutputState &outp
         outputs.leftStickClick = inputs.lightshield;
         outputs.rightStickClick = inputs.z;
         outputs.select = inputs.start;
-        outputs.home = inputs.mod_y;
+        outputs.home = inputs.home;
     }
     else
     {
