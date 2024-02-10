@@ -26,7 +26,7 @@ void Ultimate::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
     // Turn on D-Pad layer by holding Nunchuk C button.
     if (inputs.nunchuk_c) {
         outputs.dpadUp = inputs.c_up;                           //12
-        outputs.dpadDown = inputs.a;                            //15
+        outputs.dpadDown = inputs.c_down;                            //15
         outputs.dpadLeft = inputs.c_left;                       //13
         outputs.dpadRight = inputs.c_right;                     //16
         outputs.leftStickClick = inputs.l;                      
@@ -53,7 +53,7 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         inputs.up,
         inputs.c_left,
         inputs.c_right,
-        inputs.c_down,
+        inputs.a,
         inputs.c_up,
         ANALOG_STICK_MIN,
         ANALOG_STICK_NEUTRAL,
