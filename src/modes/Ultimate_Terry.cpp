@@ -1,11 +1,11 @@
 /* Ultimate profile by Taker */
-#include "modes/Ultimate_Terry.hpp"
+#include "modes/Ultimate_Main.hpp"
 
 #define ANALOG_STICK_MIN 28
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 228
 
-Ultimate_Terry::Ultimate_Terry(socd::SocdType socd_type) {
+Ultimate_Main::Ultimate_Main(socd::SocdType socd_type) {
     _socd_pair_count = 4;
     _socd_pairs = new socd::SocdPair[_socd_pair_count]{
         socd::SocdPair{&InputState::left,    &InputState::right,   socd_type},
@@ -14,11 +14,14 @@ Ultimate_Terry::Ultimate_Terry(socd::SocdType socd_type) {
         socd::SocdPair{ &InputState::c_down, &InputState::c_up,    socd_type},
     };
 }
+///////////////////////////////////////////////////////////////////////////////
+//if(inputs.c_right){set_mode(backend, new Ultimate_Terry(socd::SOCD_NEUTRAL));         inputs.mod_x && inputs.start && c_right    
+///////////////////////////////////////////////////////////////////////////////
 
-void Ultimate_Terry::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
-    outputs.a = inputs.c_down;
+void Ultimate_Main::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
+    outputs.a = inputs.c_down;           //Code was inputs.a
     outputs.b = inputs.b;
-    outputs.x = inputs.x||inputs.y;
+    outputs.x = inputs.x             //inputs.x||inputs.y this code will make a short hop macro if both buttons are set to jump
     outputs.y = inputs.y;
     outputs.triggerLDigital = inputs.l;
     outputs.triggerRDigital = inputs.r;
@@ -32,7 +35,7 @@ void Ultimate_Terry::UpdateDigitalOutputs(InputState &inputs, OutputState &outpu
         outputs.leftStickClick = inputs.lightshield;
         outputs.rightStickClick = inputs.z;
         outputs.select = inputs.start;
-        outputs.home = inputs.home;
+        outputs.home = inputs.home;            //changed from inputs.mod_y to inputs.home       
     }
     else
     {
@@ -42,15 +45,25 @@ void Ultimate_Terry::UpdateDigitalOutputs(InputState &inputs, OutputState &outpu
         outputs.select = inputs.select;
         outputs.home = inputs.home;
     }
+    if (inputs.mod_x) {                                 /////////////      Testing to see if it works 
+        outputs.x = inputs.x||inputs.y                  /////////////               
+    }                                                   /////////////       
+    else                                                /////////////      Should make it so that mod_x in the config.cpp file modifys x to
+    {                                                   /////////////      input both x and y at the same time crating a short hop
+        outputs.x = inputs.x                            /////////////
+    }                                                   /////////////
+    if (inputs.mod_x && inputs.mod_y) {
+        outputs.home = inputs.home;
+    }
 }
 
-void Ultimate_Terry::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
+void Ultimate_Main::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
     // Coordinate calculations to make modifier handling simpler.
     UpdateDirections(
         inputs.left,
         inputs.right,
         inputs.down,
-        inputs.up,
+        inputs.mod_x,           //Code was inputs.up
         inputs.c_left,
         inputs.c_right,
         inputs.a,
@@ -63,7 +76,7 @@ void Ultimate_Terry::UpdateAnalogOutputs(InputState &inputs, OutputState &output
 
     bool shield_button_pressed = inputs.l || inputs.r;
 
-    if (inputs.mod_x) {
+    if (inputs.up) {                     //I think this is where I have to change inputs.mod_x to inputs.up to make mod_x input up
         // MX + Horizontal = 6625 = 53
         if (directions.horizontal) {
             outputs.leftStickX = 128 + (directions.x * 53);

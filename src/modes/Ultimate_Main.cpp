@@ -14,11 +14,14 @@ Ultimate_Main::Ultimate_Main(socd::SocdType socd_type) {
         socd::SocdPair{ &InputState::c_down, &InputState::c_up,    socd_type},
     };
 }
+//////////////////////////////////////////////////////////////////////////
+//if(inputs.c_up){set_mode(backend, new Ultimate_Main(socd::SOCD_NEUTRAL))      inputs.mod_x && inputs.start && c_up
+//////////////////////////////////////////////////////////////////////////
 
 void Ultimate_Main::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
-    outputs.a = inputs.a;
+    outputs.a = inputs.a;           //Code was inputs.a
     outputs.b = inputs.b;
-    outputs.x = inputs.x||inputs.y;
+    outputs.x = inputs.x             //inputs.x||inputs.y this code will make a short hop macro if both buttons are set to jump
     outputs.y = inputs.y;
     outputs.triggerLDigital = inputs.l;
     outputs.triggerRDigital = inputs.r;
@@ -31,8 +34,8 @@ void Ultimate_Main::UpdateDigitalOutputs(InputState &inputs, OutputState &output
         outputs.dpadRight = inputs.c_right;
         outputs.leftStickClick = inputs.lightshield;
         outputs.rightStickClick = inputs.z;
-        outputs.select = inputs.start;
-        outputs.home = inputs.home;
+        //changed from outputs.select = inputs.start; to nothing. Supposed to be on line 37
+        //changed from outputs.home = inputs.home; to nothing. Supposed to be line 38
     }
     else
     {
@@ -40,6 +43,17 @@ void Ultimate_Main::UpdateDigitalOutputs(InputState &inputs, OutputState &output
         outputs.buttonR = inputs.z;
         outputs.start = inputs.start;
         outputs.select = inputs.select;
+        outputs.home = inputs.home;
+    }
+    if (inputs.mod_x) {                                 /////////////      Testing to see if it works 
+        outputs.x = inputs.x||inputs.y                  /////////////               
+    }                                                   /////////////   
+        
+    else                                                /////////////      Should make it so that mod_x in the config.cpp file modifys x to
+    {                                                   /////////////      input both x and y at the same time crating a short hop
+        outputs.x = inputs.x                            /////////////
+    }                                                   /////////////
+    if (inputs.mod_x && inputs.mod_y) {
         outputs.home = inputs.home;
     }
 }
@@ -50,7 +64,7 @@ void Ultimate_Main::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
         inputs.left,
         inputs.right,
         inputs.down,
-        inputs.mod_x,
+        inputs.mod_x,           //Code was inputs.up
         inputs.c_left,
         inputs.c_right,
         inputs.c_down,
@@ -63,7 +77,7 @@ void Ultimate_Main::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
 
     bool shield_button_pressed = inputs.l || inputs.r;
 
-    if (inputs.up) {
+    if (inputs.up) {                     //I think this is where I have to change inputs.mod_x to inputs.up to make mod_x input up
         // MX + Horizontal = 6625 = 53
         if (directions.horizontal) {
             outputs.leftStickX = 128 + (directions.x * 53);

@@ -14,33 +14,46 @@ Ultimate::Ultimate(socd::SocdType socd_type) {
         socd::SocdPair{ &InputState::c_down, &InputState::c_up,    socd_type},
     };
 }
+////////////////////////////////////////////////////////////////////////
+//if(inputs.c_down){set_mode(backend, new Ultimate(socd::SOCD_NEUTRAL));           inputs.mod_x && inputs.start && c_down
+////////////////////////////////////////////////////////////////////////
 
 void Ultimate::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
-    outputs.a = inputs.c_down;                                  //14
-    outputs.b = inputs.b;                                       //26
-    outputs.x = inputs.x||inputs.y;                             //21
-    outputs.y = inputs.y;                                       //
-    outputs.triggerLDigital = inputs.l;                         //20
-    outputs.triggerRDigital = inputs.r;                         //17
+    outputs.a = inputs.c_down;                                  
+    outputs.b = inputs.b;                                       
+    outputs.x = inputs.x||inputs.y;                             
+    outputs.y = inputs.y;                                       
+    outputs.triggerLDigital = inputs.l;                         
+    outputs.triggerRDigital = inputs.r;                         
 
     // Turn on D-Pad layer by holding Nunchuk C button.
     if (inputs.nunchuk_c) {
-        outputs.dpadUp = inputs.c_up;                           //12
-        outputs.dpadDown = inputs.c_down;                            //15
-        outputs.dpadLeft = inputs.c_left;                       //13
-        outputs.dpadRight = inputs.c_right;                     //16
+        outputs.dpadUp = inputs.c_up;                           
+        outputs.dpadDown = inputs.c_down;                       
+        outputs.dpadLeft = inputs.c_left;                       
+        outputs.dpadRight = inputs.c_right;                     
         outputs.leftStickClick = inputs.lightshield;                      
         outputs.rightStickClick = inputs.z;
-        outputs.select = inputs.start;                          //10
-        outputs.home = inputs.home;                            //11    
+        outputs.select = inputs.start;                         
+        outputs.home = inputs.home;                                
     }
     else
     {
-        outputs.buttonL = inputs.lightshield;                   //19   
-        outputs.buttonR = inputs.z;                             //18
-        outputs.start = inputs.start;                           //0
-        outputs.select = inputs.select;                         //10
-        outputs.home = inputs.home;                             //11
+        outputs.buttonL = inputs.lightshield;                      
+        outputs.buttonR = inputs.z;                             
+        outputs.start = inputs.start;                           
+        outputs.select = inputs.select;                         
+        outputs.home = inputs.home;                            
+    }
+    if (inputs.mod_x) {                                 /////////////      Testing to see if it works 
+        outputs.x = inputs.x||inputs.y                  /////////////               
+    }                                                   /////////////       
+    else                                                /////////////      Should make it so that mod_x in the config.cpp file modifys x to
+    {                                                   /////////////      input both x and y at the same time crating a short hop
+        outputs.x = inputs.x                            /////////////
+    }                                                   /////////////
+    if (inputs.mod_x && inputs.mod_y) {
+        outputs.home = inputs.home;
     }
 }
 

@@ -14,6 +14,9 @@ Ultimate_Kazuya::Ultimate_Kazuya(socd::SocdType socd_type) {
         socd::SocdPair{ &InputState::c_down, &InputState::c_up,    socd_type},
     };
 }
+///////////////////////////////////////////////////////////////////////////////
+//if(inputs.c_left){set_mode(backend, new Ultimate_Kazuya(socd::SOCD_NEUTRAL));         inputs.mod_x && inputs.start && c_left
+///////////////////////////////////////////////////////////////////////////////
 
 void Ultimate_Kazuya::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
     outputs.a = inputs.a;
@@ -40,6 +43,16 @@ void Ultimate_Kazuya::UpdateDigitalOutputs(InputState &inputs, OutputState &outp
         outputs.buttonR = inputs.z;
         outputs.start = inputs.start;
         outputs.select = inputs.select;
+        outputs.home = inputs.home;
+    }
+    if (inputs.mod_x) {                                 /////////////      Testing to see if it works 
+        outputs.x = inputs.x||inputs.y                  /////////////               
+    }                                                   /////////////       
+    else                                                /////////////      Should make it so that mod_x in the config.cpp file modifys x to
+    {                                                   /////////////      input both x and y at the same time crating a short hop
+        outputs.x = inputs.x                            /////////////
+    }                                                   /////////////
+    if (inputs.mod_x && inputs.mod_y) {
         outputs.home = inputs.home;
     }
 }
