@@ -34,8 +34,8 @@ void Ultimate_Main::UpdateDigitalOutputs(InputState &inputs, OutputState &output
         outputs.dpadRight = inputs.c_right;
         outputs.leftStickClick = inputs.lightshield;
         outputs.rightStickClick = inputs.z;
-        //changed from outputs.select = inputs.start; to nothing. Supposed to be on line 37
-        //changed from outputs.home = inputs.home; to nothing. Supposed to be line 38
+        outputs.home = inputs.home;//changed from outputs.select = inputs.start; to nothing. Supposed to be on line 37
+        outputs.home = inputs.home;//changed from outputs.home = inputs.home; to nothing. Supposed to be line 38
     }
     else
     {
@@ -43,19 +43,23 @@ void Ultimate_Main::UpdateDigitalOutputs(InputState &inputs, OutputState &output
         outputs.buttonR = inputs.z;
         outputs.start = inputs.start;
         outputs.select = inputs.select;
-        //outputs.home = inputs.home;
+        outputs.home = inputs.home;                                                //outputs.home = inputs.home;
     }
-    if (inputs.mod_x) {                                 /////////////      Testing to see if it works 
+/*  if (inputs.mod_x) {                                 /////////////      Testing to see if it works 
         outputs.x = inputs.x||inputs.y;                  /////////////               
     }                                                   /////////////   
     else                                                /////////////      Should make it so that mod_x in the config.cpp file modifys x to
     {                                                   /////////////      input both x and y at the same time crating a short hop
         outputs.x = inputs.x;                            /////////////
     }                                                   /////////////
-    /*Should make it so that mod_x & mod_y have to be pressed together along with the home button to go to home page on switch*/
+        Should make it so that mod_x & mod_y have to be pressed together along with the home button to go to home page on switch
     if (inputs.y && inputs.nunchuk_c) {
         outputs.home = inputs.home;
     }
+    else
+    {
+        outputs.home = inputs.home;
+    }*/
 }
 
 void Ultimate_Main::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
