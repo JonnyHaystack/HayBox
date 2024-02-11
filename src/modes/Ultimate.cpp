@@ -8,7 +8,7 @@
 Ultimate::Ultimate(socd::SocdType socd_type) {
     _socd_pair_count = 4;
     _socd_pairs = new socd::SocdPair[_socd_pair_count]{
-        socd::SocdPair{&InputState::left,    &InputState::right,   socd_type},
+        socd::SocdPair{ &InputState::left,   &InputState::right,   socd_type},
         socd::SocdPair{ &InputState::down,   &InputState::up,      socd_type},
         socd::SocdPair{ &InputState::c_left, &InputState::c_right, socd_type},
         socd::SocdPair{ &InputState::c_down, &InputState::c_up,    socd_type},
@@ -21,7 +21,7 @@ Ultimate::Ultimate(socd::SocdType socd_type) {
 void Ultimate::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
     outputs.a = inputs.c_down;                                  
     outputs.b = inputs.b;                                       
-    outputs.x = inputs.x||inputs.y;                             
+    outputs.x = inputs.x;                             
     outputs.y = inputs.y;                                       
     outputs.triggerLDigital = inputs.l;                         
     outputs.triggerRDigital = inputs.r;                         
@@ -34,8 +34,8 @@ void Ultimate::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
         outputs.dpadRight = inputs.c_right;                     
         outputs.leftStickClick = inputs.lightshield;                      
         outputs.rightStickClick = inputs.z;
-        outputs.select = inputs.start;                         
-        outputs.home = inputs.home;                                
+        //changed from outputs.select = inputs.start; to nothing. Supposed to be on line 37
+        //changed from outputs.home = inputs.home; to nothing. Supposed to be line 38                           
     }
     else
     {
@@ -43,16 +43,16 @@ void Ultimate::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
         outputs.buttonR = inputs.z;                             
         outputs.start = inputs.start;                           
         outputs.select = inputs.select;                         
-        outputs.home = inputs.home;                            
+        //outputs.home = inputs.home;                            
     }
     if (inputs.mod_x) {                                 /////////////      Testing to see if it works 
-        outputs.x = inputs.x||inputs.y                  /////////////               
+        outputs.x = inputs.x||inputs.y;                  /////////////               
     }                                                   /////////////       
     else                                                /////////////      Should make it so that mod_x in the config.cpp file modifys x to
     {                                                   /////////////      input both x and y at the same time crating a short hop
-        outputs.x = inputs.x                            /////////////
+        outputs.x = inputs.x;                            /////////////
     }                                                   /////////////
-    if (inputs.mod_x && inputs.mod_y) {
+    if (inputs.y && inputs.nunchuk_c) {
         outputs.home = inputs.home;
     }
 }

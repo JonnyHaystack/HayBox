@@ -19,9 +19,9 @@ Ultimate_Kazuya::Ultimate_Kazuya(socd::SocdType socd_type) {
 ///////////////////////////////////////////////////////////////////////////////
 
 void Ultimate_Kazuya::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
-    outputs.a = inputs.a;
-    outputs.b = inputs.b;
-    outputs.x = inputs.x||inputs.y;
+    outputs.a = inputs.c_down;                                          /*inputs.c_down switched with inputs.a which switched with outputs.b to inputs.a*/
+    outputs.b = inputs.a;
+    outputs.x = inputs.x;
     outputs.y = inputs.y;
     outputs.triggerLDigital = inputs.l;
     outputs.triggerRDigital = inputs.r;
@@ -34,8 +34,8 @@ void Ultimate_Kazuya::UpdateDigitalOutputs(InputState &inputs, OutputState &outp
         outputs.dpadRight = inputs.c_right;
         outputs.leftStickClick = inputs.lightshield;
         outputs.rightStickClick = inputs.z;
-        outputs.select = inputs.start;
-        outputs.home = inputs.home;
+        //changed from outputs.select = inputs.start; to nothing. Supposed to be on line 37
+        //changed from outputs.home = inputs.home; to nothing. Supposed to be line 38
     }
     else
     {
@@ -43,18 +43,29 @@ void Ultimate_Kazuya::UpdateDigitalOutputs(InputState &inputs, OutputState &outp
         outputs.buttonR = inputs.z;
         outputs.start = inputs.start;
         outputs.select = inputs.select;
-        outputs.home = inputs.home;
+        //outputs.home = inputs.home;
     }
     if (inputs.mod_x) {                                 /////////////      Testing to see if it works 
-        outputs.x = inputs.x||inputs.y                  /////////////               
+        outputs.x = inputs.x||inputs.y;                  /////////////               
     }                                                   /////////////       
     else                                                /////////////      Should make it so that mod_x in the config.cpp file modifys x to
     {                                                   /////////////      input both x and y at the same time crating a short hop
-        outputs.x = inputs.x                            /////////////
+        outputs.x = inputs.x;                            /////////////
     }                                                   /////////////
-    if (inputs.mod_x && inputs.mod_y) {
+    if (inputs.y && inputs.nunchuk_c) {
         outputs.home = inputs.home;
     }
+    /*
+                                                        Electric wind god fist right
+    if (inputs.z && inputs.mod_y) {
+        outputs.right||outputs.down||outputs.a
+    }
+                                                        Electric wind god fist left
+    if (inputs.z && inputs.mod_z) {
+        outputs.right outputs.down
+    }
+                                                        Work in progress. Need to figure out how to write button presses one after another. I know inputs.down||inputs.right||inputs.a would make the last part of the ewgf but I need the initial inputs.right then inputs.down.
+    */
 }
 
 void Ultimate_Kazuya::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
@@ -66,7 +77,7 @@ void Ultimate_Kazuya::UpdateAnalogOutputs(InputState &inputs, OutputState &outpu
         inputs.up,
         inputs.c_left,
         inputs.c_right,
-        inputs.c_down,
+        inputs.mod_x,                                /*mod_x and c_down switched*/
         inputs.c_up,
         ANALOG_STICK_MIN,
         ANALOG_STICK_NEUTRAL,
