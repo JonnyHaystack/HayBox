@@ -17,6 +17,7 @@ HayBox is a modular, cross-platform firmware for digital or mixed analog/digital
 * [Customisation](#customisation)
   * [Console/gamemode selection bindings](#consolegamemode-selection-bindings)
   * [Creating custom input modes](#creating-custom-input-modes)
+  * [SOCD](#socd)
   * [Mod X lightshield and R shield tilt](#mod-x-lightshield-and-r-shield-tilt)
   * [Mode-specific optional features](#mode-specific-optional-features)
     * [Melee modes](#melee-modes)
