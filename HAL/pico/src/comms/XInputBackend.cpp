@@ -19,6 +19,10 @@ XInputBackend::XInputBackend(
     TinyUSBDevice.setID(0x0738, 0x4726);
 }
 
+CommunicationBackendId XInputBackend::BackendId() {
+    return COMMS_BACKEND_XINPUT;
+}
+
 void XInputBackend::SendReport() {
     ScanInputs(InputScanSpeed::SLOW);
     ScanInputs(InputScanSpeed::MEDIUM);

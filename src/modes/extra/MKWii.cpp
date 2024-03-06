@@ -4,7 +4,7 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 255
 
-MKWii::MKWii(const GameModeConfig &config) : ControllerMode(config) {}
+MKWii::MKWii(GameModeConfig &config) : ControllerMode(config) {}
 
 void MKWii::UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs) {
     outputs.a = inputs.rf1;

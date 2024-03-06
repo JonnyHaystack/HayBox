@@ -18,6 +18,10 @@ DInputBackend::~DInputBackend() {
     _joystick.end();
 }
 
+CommunicationBackendId DInputBackend::BackendId() {
+    return COMMS_BACKEND_DINPUT;
+}
+
 void DInputBackend::SendReport() {
     // Update inputs from all sources at once.
     ScanInputs();

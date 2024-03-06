@@ -8,7 +8,7 @@
 
 class CustomKeyboardMode : public KeyboardMode {
   public:
-    CustomKeyboardMode(const GameModeConfig &config, const KeyboardModeConfig &keyboard_config);
+    CustomKeyboardMode(GameModeConfig &config, const KeyboardModeConfig &keyboard_config);
 
   private:
     const KeyboardModeConfig &_keyboard_config;

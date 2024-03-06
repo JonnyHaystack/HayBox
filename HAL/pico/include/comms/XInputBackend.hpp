@@ -10,6 +10,7 @@
 class XInputBackend : public CommunicationBackend {
   public:
     XInputBackend(InputState &inputs, InputSource **input_sources, size_t input_source_count);
+    CommunicationBackendId BackendId();
     void SendReport();
 
   private:

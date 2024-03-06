@@ -50,6 +50,7 @@ class NintendoSwitchBackend : public CommunicationBackend {
 
     static void RegisterDescriptor();
 
+    CommunicationBackendId BackendId();
     void SendReport();
 
   protected:

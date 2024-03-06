@@ -8,7 +8,7 @@
 
 class KeyboardMode : public InputMode {
   public:
-    KeyboardMode(const GameModeConfig &config);
+    KeyboardMode(GameModeConfig &config);
     ~KeyboardMode();
     void SendReport(const InputState &inputs);
 

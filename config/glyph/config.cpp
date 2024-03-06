@@ -49,9 +49,12 @@ CommunicationBackend **backends = nullptr;
 size_t backend_count;
 KeyboardMode *current_kb_mode = nullptr;
 
-void setup() {
-    static InputState inputs;
+InputState inputs;
 
+InputSource *input_sources[] = { &matrix_input };
+size_t input_source_count = sizeof(input_sources) / sizeof(InputSource *);
+
+void setup() {
     // Create GPIO input source and use it to read button states for checking button holds.
     matrix_input.UpdateInputs(inputs);
 
@@ -66,9 +69,6 @@ void setup() {
     }
 
     // Create array of input sources to be used.
-    static InputSource *input_sources[] = {};
-    size_t input_source_count = sizeof(input_sources) / sizeof(InputSource *);
-
     backend_count = initialize_backends(
         backends,
         inputs,
@@ -97,16 +97,41 @@ void loop() {
     }
 }
 
-/* Button inputs are read from the second core */
+/* Second core handles OLED display */
+Adafruit_SSD1306 display(128, 64, &Wire1);
+IntegratedDisplay *display_backend = nullptr;
 
 void setup1() {
-    while (backends == nullptr) {
-        tight_loop_contents();
+    while (!backend_count || backends == nullptr) {
+        delay(1);
+    }
+    Wire1.setSDA(2);
+    Wire1.setSCL(3);
+    Wire1.setClock(1'000'000UL);
+    Wire1.begin();
+    if (display.begin(SSD1306_SWITCHCAPVCC, 0x3C, false, false)) {
+        // clang-format off
+        display_backend = new IntegratedDisplay(
+            inputs,
+            input_sources,
+            input_source_count,
+            display,
+            []() { display.clearDisplay(); },
+            []() { display.display(); },
+            config,
+            backends[0]->BackendId(),
+            backends,
+            backend_count
+        );
+        // clang-format on
     }
 }
 
 void loop1() {
-    if (backends != nullptr) {
-        matrix_input.UpdateInputs(backends[0]->GetInputs());
+    if (display_backend != nullptr) {
+        if (display_backend->CurrentGameMode() != backends[0]->CurrentGameMode()) {
+            display_backend->SetGameMode(backends[0]->CurrentGameMode());
+        }
+        display_backend->SendReport();
     }
 }

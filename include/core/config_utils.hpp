@@ -71,4 +71,21 @@ constexpr const char *backend_name(CommunicationBackendId backend_id) {
     }
 }
 
+constexpr const char *socd_name(SocdType socd_type) {
+    switch (socd_type) {
+        case SOCD_NEUTRAL:
+            return "Neutral";
+        case SOCD_2IP:
+            return "2IP";
+        case SOCD_2IP_NO_REAC:
+            return "2IP No Reactivation";
+        case SOCD_DIR1_PRIORITY:
+            return "Dir 1 priority";
+        case SOCD_DIR2_PRIORITY:
+            return "Dir 2 priority";
+        default:
+            return "Unknown";
+    }
+}
+
 #endif

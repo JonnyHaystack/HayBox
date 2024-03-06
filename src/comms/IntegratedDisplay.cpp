@@ -33,7 +33,7 @@ IntegratedDisplay::IntegratedDisplay(
     size_t usb_backend_options_count = 0;
     for (size_t i = 0; i < config.communication_backend_configs_count; i++) {
         CommunicationBackendConfig &backend_config = config.communication_backend_configs[i];
-        MenuPage::MenuItem &current_backend_option = usb_backend_options[usb_backend_options_count];
+        MenuPage::MenuItem &current_option = usb_backend_options[usb_backend_options_count];
 
         if (backend_config.backend_id != COMMS_BACKEND_XINPUT &&
             backend_config.backend_id != COMMS_BACKEND_DINPUT &&
@@ -42,12 +42,12 @@ IntegratedDisplay::IntegratedDisplay(
         }
 
         strlcpy(
-            current_backend_option.text,
+            current_option.text,
             backend_name(backend_config.backend_id),
-            sizeof(current_backend_option.text)
+            sizeof(current_option.text)
         );
-        current_backend_option.key = i;
-        current_backend_option.action = &SetDefaultUsbBackend;
+        current_option.key = i;
+        current_option.action = &SetDefaultUsbBackend;
         usb_backend_options_count++;
     }
 
@@ -62,7 +62,7 @@ IntegratedDisplay::IntegratedDisplay(
     size_t gamemode_options_count = 0;
     for (size_t i = 0; i < config.game_mode_configs_count; i++) {
         GameModeConfig &mode_config = config.game_mode_configs[i];
-        MenuPage::MenuItem &current_gamemode_option = gamemode_options[gamemode_options_count];
+        MenuPage::MenuItem &current_option = gamemode_options[gamemode_options_count];
 
         // Don't show keyboard modes as a gamemode option unless using DInputBackend.
         if (_backend_id != COMMS_BACKEND_DINPUT && mode_config.mode_id == MODE_KEYBOARD) {
@@ -70,20 +70,16 @@ IntegratedDisplay::IntegratedDisplay(
         }
 
         if (strnlen(mode_config.name, sizeof(mode_config.name)) > 0) {
-            strlcpy(
-                current_gamemode_option.text,
-                mode_config.name,
-                sizeof(current_gamemode_option.text)
-            );
+            strlcpy(current_option.text, mode_config.name, sizeof(current_option.text));
         } else {
             strlcpy(
-                current_gamemode_option.text,
+                current_option.text,
                 gamemode_name(mode_config.mode_id),
-                sizeof(current_gamemode_option.text)
+                sizeof(current_option.text)
             );
         }
-        current_gamemode_option.key = i;
-        current_gamemode_option.action = &SetDefaultMode;
+        current_option.key = i;
+        current_option.action = &SetDefaultMode;
         gamemode_options_count++;
     }
 
@@ -92,11 +88,21 @@ IntegratedDisplay::IntegratedDisplay(
         .items_count = gamemode_options_count,
     };
 
-    /* Build top-level page */
-    char top_level_item1_text[] = "Default Gamemode";
-    char top_level_item2_text[] = "Default USB Mode";
-    char top_level_item3_text[] = "Exit";
+    /* Build SOCD types page */
+    static MenuPage::MenuItem socd_options[_SocdType_MAX] = {};
+    for (uint8_t socd_type = SOCD_NEUTRAL; socd_type < _SocdType_ARRAYSIZE; socd_type++) {
+        MenuPage::MenuItem &current_option = socd_options[socd_type - 1];
+        strlcpy(current_option.text, socd_name((SocdType)socd_type), sizeof(current_option.text));
+        current_option.key = socd_type;
+        current_option.action = &SetSocdType;
+    }
 
+    static MenuPage socd_page = {
+        .items = socd_options,
+        .items_count = sizeof(socd_options) / sizeof(MenuPage::MenuItem),
+    };
+
+    /* Build top-level page */
     // clang-format off
     static const MenuPage::MenuItem top_level_items[] = {
         {
@@ -106,6 +112,10 @@ IntegratedDisplay::IntegratedDisplay(
         {
             .text = "Default USB Mode",
             .page = &_usb_backends_page,
+        },
+        {
+            .text = "SOCD Mode",
+            .page = &socd_page,
         },
         {
             .text = "Return",
@@ -136,6 +146,7 @@ IntegratedDisplay::IntegratedDisplay(
 
     _usb_backends_page.parent = &_top_level_page;
     _gamemode_options_page.parent = &_top_level_page;
+    socd_page.parent = &_top_level_page;
 }
 
 IntegratedDisplay::~IntegratedDisplay() {
@@ -147,8 +158,9 @@ IntegratedDisplay::~IntegratedDisplay() {
 }
 
 void IntegratedDisplay::SetGameMode(ControllerMode *gamemode) {
-    _gamemode = gamemode->GetConfig().mode_id;
-    strlcpy(_gamemode_text, gamemode_name(_gamemode), sizeof(_gamemode_text));
+    GameModeId mode_id = gamemode->GetConfig().mode_id;
+    strlcpy(_gamemode_text, gamemode_name(mode_id), sizeof(_gamemode_text));
+    CommunicationBackend::SetGameMode(gamemode);
 }
 
 void IntegratedDisplay::UpdateOutputs() {
@@ -306,4 +318,20 @@ void IntegratedDisplay::SetDefaultUsbBackend(
         return;
     }
     config.default_usb_backend_config = backend_config_index + 1;
+}
+
+void IntegratedDisplay::SetSocdType(
+    IntegratedDisplay *instance,
+    Config &config,
+    uint8_t socd_type
+) {
+    if (socd_type <= SOCD_UNSPECIFIED || socd_type > _SocdType_MAX) {
+        return;
+    }
+
+    // Overwrite SOCD type for all SOCD pairs of current gamemode's config.
+    GameModeConfig &mode_config = instance->_gamemode->GetConfig();
+    for (size_t i = 0; i < mode_config.socd_pairs_count; i++) {
+        mode_config.socd_pairs[i].socd_type = (SocdType)socd_type;
+    }
 }

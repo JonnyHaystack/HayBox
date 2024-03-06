@@ -15,6 +15,7 @@ class GamecubeBackend : public CommunicationBackend {
         int polling_rate,
         int data_pin
     );
+    CommunicationBackendId BackendId();
     void SendReport();
 
   private:

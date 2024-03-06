@@ -6,7 +6,7 @@
 
 class FgcMode : public ControllerMode {
   public:
-    FgcMode(const GameModeConfig &config);
+    FgcMode(GameModeConfig &config);
 
   private:
     void UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs);

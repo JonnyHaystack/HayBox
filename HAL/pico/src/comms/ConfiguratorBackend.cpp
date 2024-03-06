@@ -43,6 +43,10 @@ ConfiguratorBackend::~ConfiguratorBackend() {
     delete _persistence;
 }
 
+CommunicationBackendId ConfiguratorBackend::BackendId() {
+    return COMMS_BACKEND_CONFIGURATOR;
+}
+
 void ConfiguratorBackend::SendReport() {
     size_t packet_len = ReadPacket(_cmd_buffer, sizeof(_cmd_buffer));
     Command command = (Command)_cmd_buffer[0];

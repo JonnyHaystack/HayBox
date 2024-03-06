@@ -1,6 +1,6 @@
 #include "core/ControllerMode.hpp"
 
-ControllerMode::ControllerMode(const GameModeConfig &config) : InputMode(config) {
+ControllerMode::ControllerMode(GameModeConfig &config) : InputMode(config) {
     // Set up initial state.
     ResetDirections();
 }

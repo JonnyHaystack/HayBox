@@ -101,8 +101,6 @@ Config glyph_default_config() {
     return config;
 }
 
-Adafruit_SSD1306 display(128, 64, &Wire1);
-
 size_t init_secondary_backends_glyph(
     CommunicationBackend **&backends,
     CommunicationBackend *&primary_backend,
@@ -140,28 +138,6 @@ size_t init_secondary_backends_glyph(
         config.rgb_configs,
         config.rgb_configs_count
     );
-
-    Wire1.setSDA(2);
-    Wire1.setSCL(3);
-    Wire1.begin();
-    Wire1.setClock(1'000'000UL);
-    if (display.begin(SSD1306_SWITCHCAPVCC, 0x3C, false, false)) {
-        backend_count++;
-        // clang-format off
-        new_backends[backend_count - 1] = new IntegratedDisplay(
-            inputs,
-            input_sources,
-            input_source_count,
-            display,
-            []() { display.clearDisplay(); },
-            []() { display.display(); },
-            config,
-            backend_id,
-            new_backends,
-            backend_count
-        );
-        // clang-format on
-    }
 
     // Delete the old backends array and reassign it.
     delete[] backends;

@@ -14,6 +14,10 @@ NesBackend::NesBackend(
     : CommunicationBackend(inputs, input_sources, input_source_count),
       _nes(data_pin, clock_pin, latch_pin, pio, sm, offset) {}
 
+CommunicationBackendId NesBackend::BackendId() {
+    return COMMS_BACKEND_NES;
+}
+
 void NesBackend::SendReport() {
     ScanInputs();
 

@@ -19,6 +19,10 @@ N64Backend::N64Backend(
     _report = default_n64_report;
 }
 
+CommunicationBackendId N64Backend::BackendId() {
+    return COMMS_BACKEND_N64;
+}
+
 void N64Backend::SendReport() {
     // Update slower inputs before we start waiting for poll.
     ScanInputs(InputScanSpeed::SLOW);

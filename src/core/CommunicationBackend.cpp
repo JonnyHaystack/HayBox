@@ -4,6 +4,8 @@
 #include "core/InputSource.hpp"
 #include "core/state.hpp"
 
+#include <config.pb.h>
+
 CommunicationBackend::CommunicationBackend(
     InputState &inputs,
     InputSource **input_sources,
@@ -45,7 +47,15 @@ void CommunicationBackend::UpdateOutputs() {
     }
 }
 
+CommunicationBackendId CommunicationBackend::BackendId() {
+    return COMMS_BACKEND_UNSPECIFIED;
+}
+
 void CommunicationBackend::SetGameMode(ControllerMode *gamemode) {
     delete _gamemode;
     _gamemode = gamemode;
+}
+
+ControllerMode *CommunicationBackend::CurrentGameMode() {
+    return _gamemode;
 }

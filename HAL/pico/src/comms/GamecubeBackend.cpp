@@ -20,6 +20,10 @@ GamecubeBackend::GamecubeBackend(
     _report = default_gc_report;
 }
 
+CommunicationBackendId GamecubeBackend::BackendId() {
+    return COMMS_BACKEND_GAMECUBE;
+}
+
 void GamecubeBackend::SendReport() {
     // Update slower inputs before we start waiting for poll.
     ScanInputs(InputScanSpeed::SLOW);

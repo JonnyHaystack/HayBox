@@ -4,7 +4,7 @@
 #include "core/state.hpp"
 #include "util/state_util.hpp"
 
-InputMode::InputMode(const GameModeConfig &config) : _config(config) {
+InputMode::InputMode(GameModeConfig &config) : _config(config) {
     _socd_states = new socd::SocdState[_config.socd_pairs_count];
 }
 
@@ -12,7 +12,7 @@ InputMode::~InputMode() {
     delete[] _socd_states;
 }
 
-const GameModeConfig &InputMode::GetConfig() {
+GameModeConfig &InputMode::GetConfig() {
     return _config;
 }
 

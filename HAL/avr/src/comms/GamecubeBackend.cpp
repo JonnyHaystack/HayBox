@@ -26,6 +26,10 @@ GamecubeBackend::GamecubeBackend(
     }
 }
 
+CommunicationBackendId GamecubeBackend::BackendId() {
+    return COMMS_BACKEND_GAMECUBE;
+}
+
 void GamecubeBackend::SendReport() {
     // Update inputs from all sources at once.
     ScanInputs();

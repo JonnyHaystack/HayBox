@@ -4,7 +4,7 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 208
 
-Melee18Button::Melee18Button(const GameModeConfig &config, Melee18ButtonOptions options)
+Melee18Button::Melee18Button(GameModeConfig &config, Melee18ButtonOptions options)
     : ControllerMode(config) {
     _options = options;
     horizontal_socd = false;

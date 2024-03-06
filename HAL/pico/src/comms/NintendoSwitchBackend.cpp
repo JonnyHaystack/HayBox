@@ -107,6 +107,10 @@ void NintendoSwitchBackend::RegisterDescriptor() {
     TUCompositeHID::addDescriptor(_descriptor, sizeof(_descriptor));
 }
 
+CommunicationBackendId NintendoSwitchBackend::BackendId() {
+    return COMMS_BACKEND_NINTENDO_SWITCH;
+}
+
 void NintendoSwitchBackend::SendReport() {
     ScanInputs(InputScanSpeed::SLOW);
     ScanInputs(InputScanSpeed::MEDIUM);

@@ -1,6 +1,6 @@
 #include "modes/extra/ToughLoveArena.hpp"
 
-ToughLoveArena::ToughLoveArena(const GameModeConfig &config) : KeyboardMode(config) {}
+ToughLoveArena::ToughLoveArena(GameModeConfig &config) : KeyboardMode(config) {}
 
 void ToughLoveArena::UpdateKeys(const InputState &inputs) {
     Press(HID_KEY_S, inputs.lf3);

@@ -3,7 +3,7 @@
 #include "core/socd.hpp"
 #include "core/state.hpp"
 
-DefaultKeyboardMode::DefaultKeyboardMode(const GameModeConfig &config) : KeyboardMode(config) {}
+DefaultKeyboardMode::DefaultKeyboardMode(GameModeConfig &config) : KeyboardMode(config) {}
 
 void DefaultKeyboardMode::UpdateKeys(const InputState &inputs) {
     Press(HID_KEY_A, inputs.lf4);

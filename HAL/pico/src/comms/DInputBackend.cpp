@@ -18,6 +18,10 @@ DInputBackend::~DInputBackend() {
     _gamepad.resetInputs();
 }
 
+CommunicationBackendId DInputBackend::BackendId() {
+    return COMMS_BACKEND_DINPUT;
+}
+
 void DInputBackend::SendReport() {
     ScanInputs(InputScanSpeed::SLOW);
     ScanInputs(InputScanSpeed::MEDIUM);

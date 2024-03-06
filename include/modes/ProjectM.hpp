@@ -11,7 +11,7 @@ typedef struct {
 
 class ProjectM : public ControllerMode {
   public:
-    ProjectM(const GameModeConfig &config, ProjectMOptions options = {});
+    ProjectM(GameModeConfig &config, ProjectMOptions options = {});
 
   private:
     ProjectMOptions _options;

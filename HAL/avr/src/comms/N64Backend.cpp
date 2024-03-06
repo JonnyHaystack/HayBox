@@ -23,6 +23,10 @@ N64Backend::N64Backend(
     }
 }
 
+CommunicationBackendId N64Backend::BackendId() {
+    return COMMS_BACKEND_N64;
+}
+
 void N64Backend::SendReport() {
     // Update inputs from all sources at once.
     ScanInputs();

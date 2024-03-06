@@ -7,7 +7,7 @@
 
 class DarkSouls : public ControllerMode {
   public:
-    DarkSouls(const GameModeConfig &config);
+    DarkSouls(GameModeConfig &config);
 
   private:
     void UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs);

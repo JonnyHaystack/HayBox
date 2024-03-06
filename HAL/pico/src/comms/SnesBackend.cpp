@@ -14,6 +14,10 @@ SnesBackend::SnesBackend(
     : CommunicationBackend(inputs, input_sources, input_source_count),
       _snes(data_pin, clock_pin, latch_pin, pio, sm, offset) {}
 
+CommunicationBackendId SnesBackend::BackendId() {
+    return COMMS_BACKEND_SNES;
+}
+
 void SnesBackend::SendReport() {
     ScanInputs();
 

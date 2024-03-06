@@ -7,7 +7,7 @@
 
 class ToughLoveArena : public KeyboardMode {
   public:
-    ToughLoveArena(const GameModeConfig &config);
+    ToughLoveArena(GameModeConfig &config);
 
   private:
     void UpdateKeys(const InputState &inputs);

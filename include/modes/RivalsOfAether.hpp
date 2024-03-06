@@ -6,7 +6,7 @@
 
 class RivalsOfAether : public ControllerMode {
   public:
-    RivalsOfAether(const GameModeConfig &config);
+    RivalsOfAether(GameModeConfig &config);
 
   private:
     void UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs);

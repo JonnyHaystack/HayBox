@@ -34,6 +34,7 @@ class ConfiguratorBackend : public CommunicationBackend {
         Config &config
     );
     ~ConfiguratorBackend();
+    CommunicationBackendId BackendId();
     void SendReport();
 
   private:

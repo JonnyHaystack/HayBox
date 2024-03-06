@@ -4,7 +4,7 @@
 
 #include <ArduinoKeyboard.hpp>
 
-KeyboardMode::KeyboardMode(const GameModeConfig &config) : InputMode(config) {}
+KeyboardMode::KeyboardMode(GameModeConfig &config) : InputMode(config) {}
 
 KeyboardMode::~KeyboardMode() {
     _keyboard.releaseAll();

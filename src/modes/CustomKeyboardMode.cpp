@@ -6,7 +6,7 @@
 #include <config.pb.h>
 
 CustomKeyboardMode::CustomKeyboardMode(
-    const GameModeConfig &config,
+    GameModeConfig &config,
     const KeyboardModeConfig &keyboard_config
 )
     : KeyboardMode(config),

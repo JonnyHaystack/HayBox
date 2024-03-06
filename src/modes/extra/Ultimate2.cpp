@@ -5,7 +5,7 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 228
 
-Ultimate2::Ultimate2(const GameModeConfig &config) : ControllerMode(config) {}
+Ultimate2::Ultimate2(GameModeConfig &config) : ControllerMode(config) {}
 
 void Ultimate2::UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs) {
     outputs.a = inputs.rt1;

@@ -8,7 +8,7 @@
 
 class HollowKnight : public ControllerMode {
   public:
-    HollowKnight(const GameModeConfig &config);
+    HollowKnight(GameModeConfig &config);
 
   private:
     void UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs);

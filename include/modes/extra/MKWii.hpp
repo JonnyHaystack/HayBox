@@ -7,7 +7,7 @@
 
 class MKWii : public ControllerMode {
   public:
-    MKWii(const GameModeConfig &config);
+    MKWii(GameModeConfig &config);
 
   private:
     void UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs);

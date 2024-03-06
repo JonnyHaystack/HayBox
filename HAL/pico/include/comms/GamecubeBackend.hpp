@@ -17,6 +17,7 @@ class GamecubeBackend : public CommunicationBackend {
         int sm = -1,
         int offset = -1
     );
+    CommunicationBackendId BackendId();
     void SendReport();
     int GetOffset();
 

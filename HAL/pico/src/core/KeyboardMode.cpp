@@ -4,7 +4,7 @@
 
 #include <TUKeyboard.hpp>
 
-KeyboardMode::KeyboardMode(const GameModeConfig &config) : InputMode(config) {
+KeyboardMode::KeyboardMode(GameModeConfig &config) : InputMode(config) {
     _keyboard = new TUKeyboard();
     _keyboard->begin();
 }

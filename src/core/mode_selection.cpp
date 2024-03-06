@@ -36,7 +36,7 @@ void set_mode(CommunicationBackend *backend, KeyboardMode *mode) {
 
 void set_mode(
     CommunicationBackend *backend,
-    const GameModeConfig &mode_config,
+    GameModeConfig &mode_config,
     const KeyboardModeConfig *keyboard_modes,
     size_t keyboard_modes_count
 ) {
@@ -86,7 +86,7 @@ void set_mode(
 void set_mode(
     CommunicationBackend *backend,
     GameModeId mode_id,
-    const GameModeConfig *mode_configs,
+    GameModeConfig *mode_configs,
     size_t mode_configs_count,
     const KeyboardModeConfig *keyboard_modes,
     size_t keyboard_modes_count
@@ -94,7 +94,7 @@ void set_mode(
     // In this overload we only know the mode id so we need to find a mode config that matches this
     // ID.
     for (size_t i = 0; i < mode_configs_count; i++) {
-        const GameModeConfig &mode = mode_configs[i];
+        GameModeConfig &mode = mode_configs[i];
         if (mode.mode_id == mode_id) {
             set_mode(backend, mode, keyboard_modes, keyboard_modes_count);
             return;
@@ -102,14 +102,14 @@ void set_mode(
     }
 }
 
-void select_mode(CommunicationBackend **backends, size_t backends_count, const Config &config) {
+void select_mode(CommunicationBackend **backends, size_t backends_count, Config &config) {
     // TODO: Use a counter variable to only run the contents of this function every x iterations
     // rather than on every single poll.
 
     InputState &inputs = backends[0]->GetInputs();
 
     for (size_t i = 0; i < config.game_mode_configs_count; i++) {
-        const GameModeConfig &mode_config = config.game_mode_configs[i];
+        GameModeConfig &mode_config = config.game_mode_configs[i];
         if (all_buttons_held(inputs.buttons, mode_activation_masks[i]) && i != current_mode_index) {
             current_mode_index = i;
             for (size_t i = 0; i < backends_count; i++) {

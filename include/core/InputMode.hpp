@@ -8,12 +8,12 @@
 
 class InputMode {
   public:
-    InputMode(const GameModeConfig &config);
+    InputMode(GameModeConfig &config);
     virtual ~InputMode();
-    const GameModeConfig &GetConfig();
+    GameModeConfig &GetConfig();
 
   protected:
-    const GameModeConfig &_config;
+    GameModeConfig &_config;
 
     virtual void HandleSocd(InputState &inputs);
     virtual void HandleRemap(const InputState &original_inputs, InputState &remapped_inputs);

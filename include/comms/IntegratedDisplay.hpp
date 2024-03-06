@@ -65,7 +65,6 @@ class IntegratedDisplay : public CommunicationBackend {
     Config &_config;
     const CommunicationBackendId _backend_id;
     DisplayMode _display_mode = DISPLAY_MODE_VIEWER;
-    GameModeId _gamemode = MODE_UNSPECIFIED;
     char _gamemode_text[16] = "";
 
     absolute_time_t _button_cooldown_end = 0;
@@ -90,6 +89,7 @@ class IntegratedDisplay : public CommunicationBackend {
         Config &config,
         uint8_t backend_config_index
     );
+    static void SetSocdType(IntegratedDisplay *instance, Config &config, uint8_t socd_type);
 };
 
 #endif

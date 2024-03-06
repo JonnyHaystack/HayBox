@@ -12,7 +12,7 @@ typedef struct {
 
 class Melee20Button : public ControllerMode {
   public:
-    Melee20Button(const GameModeConfig &config, Melee20ButtonOptions options = {});
+    Melee20Button(GameModeConfig &config, Melee20ButtonOptions options = {});
 
   protected:
     void UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs);
