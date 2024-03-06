@@ -325,6 +325,7 @@ void IntegratedDisplay::SetDefaultMode(
         config.communication_backend_configs[i].default_mode_config = mode_config_index + 1;
     }
 
+    // Update mode for all backends.
     for (size_t i = 0; i < instance->_backends_count; i++) {
         set_mode(
             instance->_backends[i],

@@ -98,6 +98,7 @@ Config glyph_default_config() {
             { BTN_RF5,  0xff0000 },
         },
     };
+    config.rgb_brightness = 255;
     return config;
 }
 
