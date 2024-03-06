@@ -10,6 +10,7 @@
 #include "reboot.hpp"
 #include "stdlib.hpp"
 
+#include <Adafruit_SSD1306.h>
 #include <config.pb.h>
 
 Config config = glyph_default_config();
@@ -97,6 +98,45 @@ void loop() {
     }
 }
 
+#define MENU_BUTTON_RADIUS 2
+#define NORMAL_BUTTON_RADIUS 4
+#define LARGE_BUTTON_RADIUS 5
+
+InputViewerButton input_viewer_buttons[] = {
+  // {BTN_MB1,  2,   3,  MENU_BUTTON_RADIUS  },
+  // { BTN_MB2, 8,   3,  MENU_BUTTON_RADIUS  },
+  // { BTN_MB3, 14,  3,  MENU_BUTTON_RADIUS  },
+  // { BTN_MB4, 20,  3,  MENU_BUTTON_RADIUS  },
+  // { BTN_MB5, 26,  3,  MENU_BUTTON_RADIUS  },
+  // { BTN_MB6, 32,  3,  MENU_BUTTON_RADIUS  },
+  // { BTN_MB7, 38,  3,  MENU_BUTTON_RADIUS  },
+
+    {BTN_LF4,  6,   29, NORMAL_BUTTON_RADIUS},
+    { BTN_LF3, 15,  23, NORMAL_BUTTON_RADIUS},
+    { BTN_LF2, 25,  22, NORMAL_BUTTON_RADIUS},
+    { BTN_LF1, 35,  27, NORMAL_BUTTON_RADIUS},
+
+    { BTN_RF1, 93,  27, NORMAL_BUTTON_RADIUS},
+    { BTN_RF2, 102, 23, NORMAL_BUTTON_RADIUS},
+    { BTN_RF3, 112, 24, NORMAL_BUTTON_RADIUS},
+    { BTN_RF4, 122, 29, NORMAL_BUTTON_RADIUS},
+
+    { BTN_RF5, 93,  17, NORMAL_BUTTON_RADIUS},
+    { BTN_RF6, 102, 13, NORMAL_BUTTON_RADIUS},
+    { BTN_RF7, 112, 14, NORMAL_BUTTON_RADIUS},
+    { BTN_RF8, 122, 19, NORMAL_BUTTON_RADIUS},
+
+    { BTN_LT1, 38,  52, NORMAL_BUTTON_RADIUS},
+    { BTN_LT2, 46,  58, NORMAL_BUTTON_RADIUS},
+
+    { BTN_RT1, 90,  52, NORMAL_BUTTON_RADIUS},
+    { BTN_RT2, 82,  58, NORMAL_BUTTON_RADIUS},
+    { BTN_RT3, 82,  46, NORMAL_BUTTON_RADIUS},
+    { BTN_RT4, 90,  40, NORMAL_BUTTON_RADIUS},
+    { BTN_RT5, 98,  46, NORMAL_BUTTON_RADIUS},
+};
+size_t input_viewer_buttons_count = count_of(input_viewer_buttons);
+
 /* Second core handles OLED display */
 Adafruit_SSD1306 display(128, 64, &Wire1);
 IntegratedDisplay *display_backend = nullptr;
@@ -110,17 +150,18 @@ void setup1() {
     Wire1.setClock(1'000'000UL);
     Wire1.begin();
     if (display.begin(SSD1306_SWITCHCAPVCC, 0x3C, false, false)) {
+        CommunicationBackendId primary_backend_id = backends[0]->BackendId();
         // clang-format off
         display_backend = new IntegratedDisplay(
             inputs,
-            input_sources,
-            input_source_count,
             display,
             []() { display.clearDisplay(); },
             []() { display.display(); },
             DisplayControls{ .back = BTN_MB4, .down = BTN_MB5, .up = BTN_MB6, .enter = BTN_MB7 },
+            input_viewer_buttons,
+            input_viewer_buttons_count,
             config,
-            backends[0]->BackendId(),
+            primary_backend_id,
             backends,
             backend_count
         );

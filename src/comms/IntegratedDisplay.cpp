@@ -4,31 +4,35 @@
 #include "core/config_utils.hpp"
 #include "util/state_util.hpp"
 
+#define DEFAULT_COLOR 1
+
 IntegratedDisplay::IntegratedDisplay(
     InputState &inputs,
-    InputSource **input_sources,
-    size_t input_source_count,
     Adafruit_GFX &display,
     void (*clear_display)(),
     void (*update_display)(),
     const DisplayControls controls,
+    const InputViewerButton *input_viewer_buttons,
+    const size_t input_viewer_buttons_count,
     Config &config,
     CommunicationBackendId backend_id,
     CommunicationBackend **backends,
     size_t backends_count
 )
-    : CommunicationBackend(inputs, input_sources, input_source_count),
+    : CommunicationBackend(inputs, nullptr, 0),
       _display(display),
       _clear_display(clear_display),
       _update_display(update_display),
       _controls(controls),
       _controls_array{ controls.back, controls.down, controls.up, controls.enter },
+      _input_viewer_buttons(input_viewer_buttons),
+      _input_viewer_buttons_count(input_viewer_buttons_count),
       _config(config),
       _backend_id(backend_id),
       _backends(backends),
       _backends_count(backends_count) {
     _display.setTextSize(1);
-    _display.setTextColor(WHITE);
+    _display.setTextColor(DEFAULT_COLOR);
 
     /* Build default USB backends page */
     MenuPage::MenuItem *usb_backend_options =
@@ -178,7 +182,7 @@ void IntegratedDisplay::UpdateOutputs() {
         return;
     }
 
-    for (uint8_t i = 0; i < sizeof(_controls_array); i++) {
+    for (uint8_t i = 0; i < controls_count; i++) {
         Button button = _controls_array[i];
         if (get_button(_inputs.buttons, button)) {
             _button_cooldown_end = make_timeout_time_ms(button_cooldown_ms);
@@ -277,6 +281,18 @@ void IntegratedDisplay::SendReport() {
         const char *backend_text = backend_name(_backend_id);
         _display.setCursor(_display.width() - (strlen(backend_text) * font_width), 0);
         _display.print(backend_name(_backend_id));
+
+        /* Input display */
+        for (size_t i = 0; i < _input_viewer_buttons_count; i++) {
+            InputViewerButton mapping = _input_viewer_buttons[i];
+            if (get_button(_inputs.buttons, mapping.button)) {
+                _display
+                    .fillCircle(mapping.center_x, mapping.center_y, mapping.radius, DEFAULT_COLOR);
+            } else {
+                _display
+                    .drawCircle(mapping.center_x, mapping.center_y, mapping.radius, DEFAULT_COLOR);
+            }
+        }
     } else if (_display_mode == DISPLAY_MODE_CONFIG) {
         /* Menu */
         if (_highlighted_menu_item - _current_menu_offset > max_visible_lines - 1) {

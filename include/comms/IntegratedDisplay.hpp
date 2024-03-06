@@ -8,7 +8,6 @@
 #include "reboot.hpp"
 
 #include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
 #include <Wire.h>
 #include <config.pb.h>
 
@@ -24,6 +23,13 @@ typedef struct _DisplayControls {
     Button up;
     Button enter;
 } DisplayControls;
+
+typedef struct _InputViewerButton {
+    Button button;
+    uint8_t center_x;
+    uint8_t center_y;
+    uint8_t radius;
+} InputViewerButton;
 
 class IntegratedDisplay;
 
@@ -44,12 +50,12 @@ class IntegratedDisplay : public CommunicationBackend {
   public:
     IntegratedDisplay(
         InputState &inputs,
-        InputSource **input_sources,
-        size_t input_source_count,
         Adafruit_GFX &display,
         void (*clear_display)(),
         void (*update_display)(),
         DisplayControls controls,
+        const InputViewerButton *input_viewer_buttons,
+        const size_t input_viewer_buttons_count,
         Config &config,
         CommunicationBackendId backend_id,
         CommunicationBackend **backends,
@@ -61,6 +67,7 @@ class IntegratedDisplay : public CommunicationBackend {
     virtual void SendReport();
 
   protected:
+    static constexpr uint8_t controls_count = 4;
     static constexpr uint8_t padding = 2;
     static constexpr uint32_t button_cooldown_ms = 150;
     static constexpr uint8_t font_width = 6;
@@ -72,7 +79,9 @@ class IntegratedDisplay : public CommunicationBackend {
     void (*_clear_display)();
     void (*_update_display)();
     const DisplayControls _controls;
-    const Button _controls_array[4];
+    const Button _controls_array[controls_count];
+    const InputViewerButton *_input_viewer_buttons;
+    const size_t _input_viewer_buttons_count;
     Config &_config;
     const CommunicationBackendId _backend_id;
     DisplayMode _display_mode = DISPLAY_MODE_VIEWER;
