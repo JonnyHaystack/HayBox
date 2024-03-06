@@ -118,6 +118,7 @@ void setup1() {
             display,
             []() { display.clearDisplay(); },
             []() { display.display(); },
+            DisplayControls{ .back = BTN_MB4, .down = BTN_MB5, .up = BTN_MB6, .enter = BTN_MB7 },
             config,
             backends[0]->BackendId(),
             backends,

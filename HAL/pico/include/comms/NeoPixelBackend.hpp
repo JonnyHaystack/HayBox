@@ -14,12 +14,14 @@ template <uint8_t data_pin, int led_count> class NeoPixelBackend : public Commun
         size_t input_source_count,
         const Button *button_mappings,
         const RgbConfig *rgb_configs,
-        size_t rgb_configs_count
+        const size_t rgb_configs_count,
+        const uint8_t &brightness
     )
         : CommunicationBackend(inputs, input_sources, input_source_count),
           _button_mappings(button_mappings),
           _rgb_configs(rgb_configs),
-          _rgb_configs_count(rgb_configs_count) {
+          _rgb_configs_count(rgb_configs_count),
+          _brightness(brightness) {
         FastLED.addLeds<NEOPIXEL, data_pin>(_leds, led_count);
         FastLED.setMaxPowerInVoltsAndMilliamps(5, 200);
     }
@@ -54,6 +56,7 @@ template <uint8_t data_pin, int led_count> class NeoPixelBackend : public Commun
             Button button = this->_button_mappings[i];
             _leds[i] = _button_colors[max(0, button - 1)];
         }
+        FastLED.setBrightness(_brightness);
         FastLED.show();
     }
 
@@ -65,6 +68,7 @@ template <uint8_t data_pin, int led_count> class NeoPixelBackend : public Commun
     const RgbConfig *_rgb_configs;
     const size_t _rgb_configs_count;
     const RgbConfig *_config = nullptr;
+    const uint8_t &_brightness;
 
     CRGB _leds[led_count];
     uint32_t _button_colors[button_colors_count];

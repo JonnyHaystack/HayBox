@@ -136,7 +136,8 @@ size_t init_secondary_backends_glyph(
         input_source_count,
         pixel_to_button_mappings,
         config.rgb_configs,
-        config.rgb_configs_count
+        config.rgb_configs_count,
+        config.rgb_brightness
     );
 
     // Delete the old backends array and reassign it.

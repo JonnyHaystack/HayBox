@@ -2,6 +2,7 @@
 
 #include "core/Persistence.hpp"
 #include "core/config_utils.hpp"
+#include "util/state_util.hpp"
 
 IntegratedDisplay::IntegratedDisplay(
     InputState &inputs,
@@ -10,6 +11,7 @@ IntegratedDisplay::IntegratedDisplay(
     Adafruit_GFX &display,
     void (*clear_display)(),
     void (*update_display)(),
+    const DisplayControls controls,
     Config &config,
     CommunicationBackendId backend_id,
     CommunicationBackend **backends,
@@ -19,6 +21,8 @@ IntegratedDisplay::IntegratedDisplay(
       _display(display),
       _clear_display(clear_display),
       _update_display(update_display),
+      _controls(controls),
+      _controls_array{ controls.back, controls.down, controls.up, controls.enter },
       _config(config),
       _backend_id(backend_id),
       _backends(backends),
@@ -118,6 +122,12 @@ IntegratedDisplay::IntegratedDisplay(
             .page = &socd_page,
         },
         {
+            .text = "RGB Brightness",
+            .action = [](IntegratedDisplay *instance, Config &config, uint8_t key) {
+                instance->_display_mode = DISPLAY_MODE_RGB_BRIGHTNESS;
+            },
+        },
+        {
             .text = "Return",
             .action = [](IntegratedDisplay *instance, Config &config, uint8_t key) {
                 instance->_display_mode = DISPLAY_MODE_VIEWER;
@@ -164,45 +174,45 @@ void IntegratedDisplay::SetGameMode(ControllerMode *gamemode) {
 }
 
 void IntegratedDisplay::UpdateOutputs() {
-    // Process inputs.
     if (!time_reached(_button_cooldown_end)) {
         return;
     }
+
+    for (uint8_t i = 0; i < sizeof(_controls_array); i++) {
+        Button button = _controls_array[i];
+        if (get_button(_inputs.buttons, button)) {
+            _button_cooldown_end = make_timeout_time_ms(button_cooldown_ms);
+            switch (_display_mode) {
+                case DISPLAY_MODE_VIEWER:
+                    return HandleControlsViewerMode(button);
+                case DISPLAY_MODE_CONFIG:
+                    return HandleControlsConfigMode(button);
+                case DISPLAY_MODE_RGB_BRIGHTNESS:
+                    return HandleControlsRgbBrightnessMode(button);
+            }
+        }
+    }
+}
+
+void IntegratedDisplay::HandleControlsViewerMode(Button button) {
+    if (button == _controls.enter) {
+        _display_mode = DISPLAY_MODE_CONFIG;
+    }
+}
+
+void IntegratedDisplay::HandleControlsConfigMode(Button button) {
     if (_current_menu_page == nullptr) {
         _current_menu_page = &_top_level_page;
         _current_menu_offset = 0;
         return;
     }
 
-    if (_display_mode != DISPLAY_MODE_CONFIG) {
-        if (_inputs.mb7) {
-            _button_cooldown_end = make_timeout_time_ms(button_cooldown_ms);
-            _display_mode = DISPLAY_MODE_CONFIG;
-        }
-        return;
-    }
-
-    // Handle Up button press.
-    if (_inputs.mb6) {
-        _button_cooldown_end = make_timeout_time_ms(button_cooldown_ms);
-
+    if (button == _controls.up) {
         _highlighted_menu_item = max(0, _highlighted_menu_item - 1);
-        return;
-    }
-
-    // Handle Down button press.
-    if (_inputs.mb5) {
-        _button_cooldown_end = make_timeout_time_ms(button_cooldown_ms);
-
+    } else if (button == _controls.down) {
         _highlighted_menu_item =
             min(_current_menu_page->items_count - 1, _highlighted_menu_item + 1);
-        return;
-    }
-
-    // Handle Select button press.
-    if (_inputs.mb7) {
-        _button_cooldown_end = make_timeout_time_ms(button_cooldown_ms);
-
+    } else if (button == _controls.enter) {
         // Bounds check.
         if (_highlighted_menu_item > _current_menu_page->items_count) {
             _highlighted_menu_item = 0;
@@ -231,12 +241,8 @@ void IntegratedDisplay::UpdateOutputs() {
             _highlighted_menu_item = 0;
             return;
         }
-    }
-
-    // Handle Back button press.
-    if (_inputs.mb4) {
-        _button_cooldown_end = make_timeout_time_ms(button_cooldown_ms);
-
+    } else if (button == _controls.back) {
+        // If at top-level page, go back to input viewer.
         if (_current_menu_page->parent == nullptr) {
             _display_mode = DISPLAY_MODE_VIEWER;
             return;
@@ -244,7 +250,16 @@ void IntegratedDisplay::UpdateOutputs() {
 
         _current_menu_page = _current_menu_page->parent;
         _highlighted_menu_item = 0;
-        return;
+    }
+}
+
+void IntegratedDisplay::HandleControlsRgbBrightnessMode(Button button) {
+    if (button == _controls.up) {
+        _config.rgb_brightness++;
+    } else if (button == _controls.down) {
+        _config.rgb_brightness--;
+    } else if (button == _controls.back) {
+        _display_mode = DISPLAY_MODE_CONFIG;
     }
 }
 
@@ -260,7 +275,7 @@ void IntegratedDisplay::SendReport() {
 
         /* Backend text */
         const char *backend_text = backend_name(_backend_id);
-        _display.setCursor(_display.width() - (strlen(backend_text) * 6), 0);
+        _display.setCursor(_display.width() - (strlen(backend_text) * font_width), 0);
         _display.print(backend_name(_backend_id));
     } else if (_display_mode == DISPLAY_MODE_CONFIG) {
         /* Menu */
@@ -279,6 +294,18 @@ void IntegratedDisplay::SendReport() {
             _display.setCursor(font_width + padding, i * (font_height + padding));
             _display.print(_current_menu_page->items[i + _current_menu_offset].text);
         }
+    } else if (_display_mode == DISPLAY_MODE_RGB_BRIGHTNESS) {
+        // Current brightness value.
+        _display.setCursor(_display.width() / 2 - (font_width * 3) / 2, _display.height() / 2);
+        _display.printf("%3d", _config.rgb_brightness);
+
+        // Display control hints.
+        _display.setCursor(5, _display.height() - font_height);
+        _display.print("Back");
+        _display.setCursor(45, _display.getCursorY());
+        _display.print("-");
+        _display.setCursor(_display.width() - 45 - font_width, _display.getCursorY());
+        _display.print("+");
     }
 
     _update_display();

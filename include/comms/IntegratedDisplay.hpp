@@ -15,7 +15,15 @@
 typedef enum _DisplayMode {
     DISPLAY_MODE_VIEWER,
     DISPLAY_MODE_CONFIG,
+    DISPLAY_MODE_RGB_BRIGHTNESS,
 } DisplayMode;
+
+typedef struct _DisplayControls {
+    Button back;
+    Button down;
+    Button up;
+    Button enter;
+} DisplayControls;
 
 class IntegratedDisplay;
 
@@ -41,6 +49,7 @@ class IntegratedDisplay : public CommunicationBackend {
         Adafruit_GFX &display,
         void (*clear_display)(),
         void (*update_display)(),
+        DisplayControls controls,
         Config &config,
         CommunicationBackendId backend_id,
         CommunicationBackend **backends,
@@ -62,6 +71,8 @@ class IntegratedDisplay : public CommunicationBackend {
     Adafruit_GFX &_display;
     void (*_clear_display)();
     void (*_update_display)();
+    const DisplayControls _controls;
+    const Button _controls_array[4];
     Config &_config;
     const CommunicationBackendId _backend_id;
     DisplayMode _display_mode = DISPLAY_MODE_VIEWER;
@@ -90,6 +101,10 @@ class IntegratedDisplay : public CommunicationBackend {
         uint8_t backend_config_index
     );
     static void SetSocdType(IntegratedDisplay *instance, Config &config, uint8_t socd_type);
+
+    void HandleControlsViewerMode(Button button);
+    void HandleControlsConfigMode(Button button);
+    void HandleControlsRgbBrightnessMode(Button button);
 };
 
 #endif
