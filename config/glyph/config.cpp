@@ -5,6 +5,10 @@
 #include "core/mode_selection.hpp"
 #include "core/pinout.hpp"
 #include "core/state.hpp"
+#include "display/ConfigMenu.hpp"
+#include "display/DisplayMode.hpp"
+#include "display/InputDisplay.hpp"
+#include "display/RgbBrightnessMenu.hpp"
 #include "glyph_overrides.hpp"
 #include "input/DebouncedSwitchMatrixInput.hpp"
 #include "reboot.hpp"
@@ -141,16 +145,30 @@ size_t input_viewer_buttons_count = count_of(input_viewer_buttons);
 Adafruit_SSD1306 display(128, 64, &Wire1);
 IntegratedDisplay *display_backend = nullptr;
 
+RgbBrightnessMenu rgb_brightness_menu(config);
+
 void setup1() {
     while (!backend_count || backends == nullptr) {
         delay(1);
     }
+
+    // These have to be initialized after backends.
+    CommunicationBackendId primary_backend_id = backends[0]->BackendId();
+    static InputDisplay input_display(
+        input_viewer_buttons,
+        input_viewer_buttons_count,
+        primary_backend_id
+    );
+    static ConfigMenu config_menu(config, backends, backend_count);
+
+    static DisplayMode *display_modes[] = { &input_display, &config_menu, &rgb_brightness_menu };
+    size_t display_modes_count = count_of(display_modes);
+
     Wire1.setSDA(2);
     Wire1.setSCL(3);
     Wire1.setClock(1'000'000UL);
     Wire1.begin();
     if (display.begin(SSD1306_SWITCHCAPVCC, 0x3C, false, false)) {
-        CommunicationBackendId primary_backend_id = backends[0]->BackendId();
         // clang-format off
         display_backend = new IntegratedDisplay(
             inputs,
@@ -158,12 +176,8 @@ void setup1() {
             []() { display.clearDisplay(); },
             []() { display.display(); },
             DisplayControls{ .back = BTN_MB4, .down = BTN_MB5, .up = BTN_MB6, .enter = BTN_MB7 },
-            input_viewer_buttons,
-            input_viewer_buttons_count,
-            config,
-            primary_backend_id,
-            backends,
-            backend_count
+            display_modes,
+            display_modes_count
         );
         // clang-format on
     }
