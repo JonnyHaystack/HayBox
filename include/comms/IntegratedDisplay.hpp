@@ -48,6 +48,7 @@ class IntegratedDisplay : public CommunicationBackend {
     DisplayMode **_display_modes;
     size_t _display_modes_count;
 
+    void HandleControls(DisplayMode *active_mode);
     DisplayMode *GetActiveDisplayMode();
 };
 

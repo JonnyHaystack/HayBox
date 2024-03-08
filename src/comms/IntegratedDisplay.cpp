@@ -31,12 +31,22 @@ IntegratedDisplay::~IntegratedDisplay() {
 }
 
 void IntegratedDisplay::SendReport() {
-    if (!time_reached(_button_cooldown_end)) {
+    DisplayMode *active_mode = GetActiveDisplayMode();
+    if (active_mode == nullptr) {
         return;
     }
 
-    DisplayMode *active_mode = GetActiveDisplayMode();
-    if (active_mode == nullptr) {
+    _clear_display();
+    active_mode->UpdateDisplay(this, _display);
+    _update_display();
+
+    // This is done *after* display update so any side effects of HandleControls are not shown
+    // without active_mode also being up-to-date.
+    HandleControls(active_mode);
+}
+
+void IntegratedDisplay::HandleControls(DisplayMode *active_mode) {
+    if (!time_reached(_button_cooldown_end)) {
         return;
     }
 
@@ -45,13 +55,9 @@ void IntegratedDisplay::SendReport() {
         if (get_button(_inputs.buttons, button)) {
             _button_cooldown_end = make_timeout_time_ms(button_cooldown_ms);
             active_mode->HandleControls(this, _controls, button);
-            break;
+            return;
         }
     }
-
-    _clear_display();
-    active_mode->UpdateDisplay(this, _display);
-    _update_display();
 }
 
 void IntegratedDisplay::SetDisplayMode(DisplayModeId display_mode) {
