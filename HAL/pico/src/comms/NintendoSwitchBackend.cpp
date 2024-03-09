@@ -125,6 +125,7 @@ void NintendoSwitchBackend::SendReport() {
     _report.l3 = _outputs.leftStickClick;
     _report.r3 = _outputs.rightStickClick;
     _report.home = _outputs.home;
+    _report.capture = _outputs.capture;
 
     // Analog outputs
     _report.lx = (_outputs.leftStickX - 128) * 1.25 + 128;
