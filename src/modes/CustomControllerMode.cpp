@@ -56,6 +56,29 @@ void CustomControllerMode::UpdateAnalogOutputs(const InputState &inputs, OutputS
         }
     }
 
+    const AnalogTriggerMapping *analog_trigger_mappings =
+        _custom_mode_config.analog_trigger_mappings;
+    for (size_t i = 0; i < _custom_mode_config.analog_trigger_mappings_count; i++) {
+        const AnalogTriggerMapping &mapping = analog_trigger_mappings[i];
+        if (get_button(inputs.buttons, mapping.button)) {
+            switch (mapping.trigger) {
+                case TRIGGER_LT:
+                    outputs.triggerLAnalog = mapping.value;
+                    break;
+                case TRIGGER_RT:
+                    outputs.triggerRAnalog = mapping.value;
+                    break;
+            }
+        }
+    }
+
+    if (outputs.triggerLDigital) {
+        outputs.triggerLAnalog = 255;
+    }
+    if (outputs.triggerRDigital) {
+        outputs.triggerRAnalog = 255;
+    }
+
     // Nunchuk overrides left stick.
     if (inputs.nunchuk_connected) {
         outputs.leftStickX = inputs.nunchuk_x;
