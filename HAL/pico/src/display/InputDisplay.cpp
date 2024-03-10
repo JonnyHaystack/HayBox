@@ -33,9 +33,15 @@ void InputDisplay::UpdateDisplay(IntegratedDisplay *instance, Adafruit_GFX &disp
     uint8_t color = instance->default_color;
 
     /* Gamemode text */
-    const char *gamemode_text = gamemode_name(instance->CurrentGameMode()->GetConfig().mode_id);
     display.setCursor(0, 0);
-    display.print(gamemode_text);
+    if (instance->CurrentGameMode() != nullptr) {
+        const GameModeConfig &mode_config = instance->CurrentGameMode()->GetConfig();
+        if (strnlen(mode_config.name, sizeof(mode_config.name)) > 0) {
+            display.print(mode_config.name);
+        } else {
+            display.print(gamemode_name(instance->CurrentGameMode()->GetConfig().mode_id));
+        }
+    }
 
     /* Backend text */
     const char *backend_text = backend_name(_backend_id);

@@ -102,7 +102,7 @@ size_t initialize_backends(
         GameModeConfig &mode_config =
             config.game_mode_configs[backend_config.default_mode_config - 1];
         for (size_t i = 0; i < backend_count; i++) {
-            set_mode(backends[i], mode_config, config.keyboard_modes, config.keyboard_modes_count);
+            set_mode(backends[i], mode_config, config);
         }
     }
 

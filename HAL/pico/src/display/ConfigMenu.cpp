@@ -266,12 +266,7 @@ void ConfigMenu::SetDefaultMode(
 
     // Update mode for all backends.
     for (size_t i = 0; i < menu->_backends_count; i++) {
-        set_mode(
-            menu->_backends[i],
-            config.game_mode_configs[mode_config_index],
-            config.keyboard_modes,
-            config.keyboard_modes_count
-        );
+        set_mode(menu->_backends[i], config.game_mode_configs[mode_config_index], config);
     }
 }
 

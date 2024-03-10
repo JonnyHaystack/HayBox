@@ -103,23 +103,30 @@ typedef struct {
 // Output state.
 typedef struct _OutputState {
     // Digital outputs.
-    bool a = false;
-    bool b = false;
-    bool x = false;
-    bool y = false;
-    bool buttonL = false;
-    bool buttonR = false;
-    bool triggerLDigital = false;
-    bool triggerRDigital = false;
-    bool start = false;
-    bool select = false;
-    bool home = false;
-    bool dpadUp = false;
-    bool dpadDown = false;
-    bool dpadLeft = false;
-    bool dpadRight = false;
-    bool leftStickClick = false;
-    bool rightStickClick = false;
+    union {
+        uint32_t buttons = 0;
+
+        struct {
+            bool a : 1;
+            bool b : 1;
+            bool x : 1;
+            bool y : 1;
+            bool buttonL : 1;
+            bool buttonR : 1;
+            bool triggerLDigital : 1;
+            bool triggerRDigital : 1;
+            bool start : 1;
+            bool select : 1;
+            bool home : 1;
+            bool capture : 1;
+            bool dpadUp : 1;
+            bool dpadDown : 1;
+            bool dpadLeft : 1;
+            bool dpadRight : 1;
+            bool leftStickClick : 1;
+            bool rightStickClick : 1;
+        };
+    };
 
     // Analog outputs.
     uint8_t leftStickX = 128;

@@ -183,6 +183,21 @@ bool ConfiguratorBackend::HandleSetConfig(uint8_t *buffer, size_t len) {
             WritePacket(CMD_ERROR, (uint8_t *)errmsg, errmsg_len);
             return false;
         }
+
+        uint8_t custom_mode_id = _config.game_mode_configs[i].custom_mode_config;
+        if (custom_mode_id > _config.custom_modes_count) {
+            char errmsg[85];
+            size_t errmsg_len = snprintf(
+                errmsg,
+                sizeof(errmsg),
+                "Custom mode ID %d is for game mode config %d but only %d custom modes are defined",
+                (uint8_t)custom_mode_id,
+                (uint8_t)i + 1,
+                (uint8_t)_config.custom_modes_count
+            );
+            WritePacket(CMD_ERROR, (uint8_t *)errmsg, errmsg_len);
+            return false;
+        }
     }
 
     if (!_persistence->SaveConfig(_config)) {

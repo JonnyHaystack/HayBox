@@ -1,6 +1,7 @@
 #include "core/mode_selection.hpp"
 
 #include "core/state.hpp"
+#include "modes/CustomControllerMode.hpp"
 #include "modes/CustomKeyboardMode.hpp"
 #include "modes/FgcMode.hpp"
 #include "modes/Melee20Button.hpp"
@@ -34,12 +35,7 @@ void set_mode(CommunicationBackend *backend, KeyboardMode *mode) {
     backend->SetGameMode(nullptr);
 }
 
-void set_mode(
-    CommunicationBackend *backend,
-    GameModeConfig &mode_config,
-    const KeyboardModeConfig *keyboard_modes,
-    size_t keyboard_modes_count
-) {
+void set_mode(CommunicationBackend *backend, GameModeConfig &mode_config, Config &config) {
     switch (mode_config.mode_id) {
         case MODE_MELEE:
             set_mode(backend, new Melee20Button(mode_config, { .crouch_walk_os = false }));
@@ -64,17 +60,29 @@ void set_mode(
             break;
         case MODE_KEYBOARD:
             if (mode_config.keyboard_mode_config < 1 ||
-                mode_config.keyboard_mode_config > keyboard_modes_count) {
+                mode_config.keyboard_mode_config > config.keyboard_modes_count) {
                 break;
             }
             set_mode(
                 backend,
                 new CustomKeyboardMode(
                     mode_config,
-                    keyboard_modes[mode_config.keyboard_mode_config - 1]
+                    config.keyboard_modes[mode_config.keyboard_mode_config - 1]
                 )
             );
             break;
+        case MODE_CUSTOM:
+            if (mode_config.custom_mode_config < 1 ||
+                mode_config.custom_mode_config > config.custom_modes_count) {
+                break;
+            }
+            set_mode(
+                backend,
+                new CustomControllerMode(
+                    mode_config,
+                    config.custom_modes[mode_config.custom_mode_config - 1]
+                )
+            );
         case MODE_UNSPECIFIED:
         default:
             break;
@@ -83,20 +91,13 @@ void set_mode(
 
 // TODO: Maybe remove this overload in favour of looking up the gamemode outside of here using a
 // config_utils function.
-void set_mode(
-    CommunicationBackend *backend,
-    GameModeId mode_id,
-    GameModeConfig *mode_configs,
-    size_t mode_configs_count,
-    const KeyboardModeConfig *keyboard_modes,
-    size_t keyboard_modes_count
-) {
+void set_mode(CommunicationBackend *backend, GameModeId mode_id, Config &config) {
     // In this overload we only know the mode id so we need to find a mode config that matches this
     // ID.
-    for (size_t i = 0; i < mode_configs_count; i++) {
-        GameModeConfig &mode = mode_configs[i];
+    for (size_t i = 0; i < config.game_mode_configs_count; i++) {
+        GameModeConfig &mode = config.game_mode_configs[i];
         if (mode.mode_id == mode_id) {
-            set_mode(backend, mode, keyboard_modes, keyboard_modes_count);
+            set_mode(backend, mode, config);
             return;
         }
     }
@@ -113,12 +114,7 @@ void select_mode(CommunicationBackend **backends, size_t backends_count, Config 
         if (all_buttons_held(inputs.buttons, mode_activation_masks[i]) && i != current_mode_index) {
             current_mode_index = i;
             for (size_t i = 0; i < backends_count; i++) {
-                set_mode(
-                    backends[i],
-                    mode_config,
-                    config.keyboard_modes,
-                    config.keyboard_modes_count
-                );
+                set_mode(backends[i], mode_config, config);
             }
             return;
         }
