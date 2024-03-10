@@ -7,7 +7,7 @@
 
 class ShovelKnight : public ControllerMode {
   public:
-    ShovelKnight(GameModeConfig &config);
+    ShovelKnight();
 
   private:
     virtual void UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs);

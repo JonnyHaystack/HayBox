@@ -4,16 +4,23 @@
 
 #define ANALOG_STICK_NEUTRAL 128
 
-CustomControllerMode::CustomControllerMode(
+CustomControllerMode::CustomControllerMode() : ControllerMode() {}
+
+void CustomControllerMode::SetConfig(
     GameModeConfig &config,
     const CustomModeConfig &custom_mode_config
-)
-    : ControllerMode(config),
-      _custom_mode_config(custom_mode_config) {}
+) {
+    InputMode::SetConfig(config);
+    _custom_mode_config = &custom_mode_config;
+}
 
 void CustomControllerMode::UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs) {
-    for (size_t output = 0; output < _custom_mode_config.digital_button_mappings_count; output++) {
-        Button input = _custom_mode_config.digital_button_mappings[output];
+    if (_custom_mode_config == nullptr) {
+        return;
+    }
+
+    for (size_t output = 0; output < _custom_mode_config->digital_button_mappings_count; output++) {
+        Button input = _custom_mode_config->digital_button_mappings[output];
         set_output(outputs.buttons, (DigitalOutput)(output + 1), get_button(inputs.buttons, input));
     }
 
@@ -23,7 +30,12 @@ void CustomControllerMode::UpdateDigitalOutputs(const InputState &inputs, Output
 }
 
 void CustomControllerMode::UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs) {
-    const Button *direction_buttons = _custom_mode_config.stick_direction_mappings;
+    if (_custom_mode_config == nullptr) {
+        return;
+    }
+
+    const Button *direction_buttons = _custom_mode_config->stick_direction_mappings;
+    uint8_t stick_range = _custom_mode_config->stick_range;
     UpdateDirections(
         get_button(inputs.buttons, GetDirectionButton(direction_buttons, SD_LSTICK_LEFT)),
         get_button(inputs.buttons, GetDirectionButton(direction_buttons, SD_LSTICK_RIGHT)),
@@ -33,14 +45,14 @@ void CustomControllerMode::UpdateAnalogOutputs(const InputState &inputs, OutputS
         get_button(inputs.buttons, GetDirectionButton(direction_buttons, SD_RSTICK_RIGHT)),
         get_button(inputs.buttons, GetDirectionButton(direction_buttons, SD_RSTICK_DOWN)),
         get_button(inputs.buttons, GetDirectionButton(direction_buttons, SD_RSTICK_UP)),
-        ANALOG_STICK_NEUTRAL - _custom_mode_config.stick_range,
+        ANALOG_STICK_NEUTRAL - stick_range,
         ANALOG_STICK_NEUTRAL,
-        ANALOG_STICK_NEUTRAL + _custom_mode_config.stick_range,
+        ANALOG_STICK_NEUTRAL + stick_range,
         outputs
     );
 
-    const AnalogModifier *modifiers = _custom_mode_config.modifiers;
-    for (size_t i = 0; i < _custom_mode_config.modifiers_count; i++) {
+    const AnalogModifier *modifiers = _custom_mode_config->modifiers;
+    for (size_t i = 0; i < _custom_mode_config->modifiers_count; i++) {
         const AnalogModifier &modifier = modifiers[i];
         if (modifier.axis == AXIS_UNSPECIFIED || modifier.axis > _AnalogAxis_MAX) {
             continue;
@@ -57,8 +69,8 @@ void CustomControllerMode::UpdateAnalogOutputs(const InputState &inputs, OutputS
     }
 
     const AnalogTriggerMapping *analog_trigger_mappings =
-        _custom_mode_config.analog_trigger_mappings;
-    for (size_t i = 0; i < _custom_mode_config.analog_trigger_mappings_count; i++) {
+        _custom_mode_config->analog_trigger_mappings;
+    for (size_t i = 0; i < _custom_mode_config->analog_trigger_mappings_count; i++) {
         const AnalogTriggerMapping &mapping = analog_trigger_mappings[i];
         if (get_button(inputs.buttons, mapping.button)) {
             switch (mapping.trigger) {
@@ -67,6 +79,8 @@ void CustomControllerMode::UpdateAnalogOutputs(const InputState &inputs, OutputS
                     break;
                 case TRIGGER_RT:
                     outputs.triggerRAnalog = mapping.value;
+                    break;
+                default:
                     break;
             }
         }

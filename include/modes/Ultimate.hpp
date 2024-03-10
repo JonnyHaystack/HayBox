@@ -6,7 +6,7 @@
 
 class Ultimate : public ControllerMode {
   public:
-    Ultimate(GameModeConfig &config);
+    Ultimate();
 
   private:
     void UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs);

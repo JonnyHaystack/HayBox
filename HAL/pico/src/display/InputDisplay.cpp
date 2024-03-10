@@ -35,11 +35,11 @@ void InputDisplay::UpdateDisplay(IntegratedDisplay *instance, Adafruit_GFX &disp
     /* Gamemode text */
     display.setCursor(0, 0);
     if (instance->CurrentGameMode() != nullptr) {
-        const GameModeConfig &mode_config = instance->CurrentGameMode()->GetConfig();
+        const GameModeConfig &mode_config = *instance->CurrentGameMode()->GetConfig();
         if (strnlen(mode_config.name, sizeof(mode_config.name)) > 0) {
             display.print(mode_config.name);
         } else {
-            display.print(gamemode_name(instance->CurrentGameMode()->GetConfig().mode_id));
+            display.print(gamemode_name(mode_config.mode_id));
         }
     }
 

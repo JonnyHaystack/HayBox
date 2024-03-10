@@ -34,7 +34,12 @@ template <uint8_t data_pin, int led_count> class NeoPixelBackend : public Commun
             _button_colors[i] = 0;
         }
 
-        uint8_t rgb_config_id = gamemode->GetConfig().rgb_config;
+        if (gamemode == nullptr || gamemode->GetConfig() == nullptr) {
+            _config = nullptr;
+            return;
+        }
+
+        uint8_t rgb_config_id = gamemode->GetConfig()->rgb_config;
         if (rgb_config_id == 0 || rgb_config_id > _rgb_configs_count) {
             _config = nullptr;
             return;

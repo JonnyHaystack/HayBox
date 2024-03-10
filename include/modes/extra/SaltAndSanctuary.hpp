@@ -7,7 +7,7 @@
 
 class SaltAndSanctuary : public ControllerMode {
   public:
-    SaltAndSanctuary(GameModeConfig &config);
+    SaltAndSanctuary();
 
   private:
     void UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs);

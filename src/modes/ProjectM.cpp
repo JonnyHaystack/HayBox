@@ -4,7 +4,7 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 228
 
-ProjectM::ProjectM(GameModeConfig &config, ProjectMOptions options) : ControllerMode(config) {
+ProjectM::ProjectM(ProjectMOptions options) : ControllerMode() {
     _options = options;
     _horizontal_socd = false;
 }

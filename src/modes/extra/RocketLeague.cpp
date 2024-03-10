@@ -4,7 +4,7 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 255
 
-RocketLeague::RocketLeague(GameModeConfig &config) : ControllerMode(config) {}
+RocketLeague::RocketLeague() : ControllerMode() {}
 
 void RocketLeague::UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs) {
     outputs.a = inputs.rt1;

@@ -8,10 +8,11 @@
 
 class CustomKeyboardMode : public KeyboardMode {
   public:
-    CustomKeyboardMode(GameModeConfig &config, const KeyboardModeConfig &keyboard_config);
+    CustomKeyboardMode();
+    void SetConfig(GameModeConfig &config, const KeyboardModeConfig &keyboard_config);
 
   private:
-    const KeyboardModeConfig &_keyboard_config;
+    const KeyboardModeConfig *_keyboard_config;
 
     void UpdateKeys(const InputState &inputs);
 };

@@ -1,6 +1,6 @@
 #include "modes/FgcMode.hpp"
 
-FgcMode::FgcMode(GameModeConfig &config) : ControllerMode(config) {}
+FgcMode::FgcMode() : ControllerMode() {}
 
 void FgcMode::UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs) {
     // Directions

@@ -4,7 +4,7 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 255
 
-SaltAndSanctuary::SaltAndSanctuary(GameModeConfig &config) : ControllerMode(config) {}
+SaltAndSanctuary::SaltAndSanctuary() : ControllerMode() {}
 
 void SaltAndSanctuary::UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs) {
     outputs.dpadRight = inputs.lf4; // Block

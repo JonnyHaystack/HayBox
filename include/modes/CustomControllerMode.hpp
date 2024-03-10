@@ -8,14 +8,15 @@
 
 class CustomControllerMode : public ControllerMode {
   public:
-    CustomControllerMode(GameModeConfig &config, const CustomModeConfig &custom_mode_config);
+    CustomControllerMode();
+    void SetConfig(GameModeConfig &config, const CustomModeConfig &custom_mode_config);
 
   protected:
     void UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs);
     void UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs);
 
   private:
-    const CustomModeConfig &_custom_mode_config;
+    const CustomModeConfig *_custom_mode_config;
 
     Button GetDirectionButton(const Button *direction_buttons, StickDirectionButton direction);
 };

@@ -31,7 +31,7 @@ class CommunicationBackend {
     size_t _input_source_count;
 
     OutputState _outputs;
-    ControllerMode *_gamemode;
+    ControllerMode *_gamemode = nullptr;
 
   private:
     void ResetOutputs();

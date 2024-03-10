@@ -4,7 +4,7 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 255
 
-MultiVersus::MultiVersus(GameModeConfig &config) : ControllerMode(config) {}
+MultiVersus::MultiVersus() : ControllerMode() {}
 
 void MultiVersus::UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs) {
     // Bind X and Y to "jump" in-game.

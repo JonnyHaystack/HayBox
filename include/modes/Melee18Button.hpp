@@ -10,7 +10,7 @@ typedef struct {
 
 class Melee18Button : public ControllerMode {
   public:
-    Melee18Button(GameModeConfig &config, Melee18ButtonOptions options = {});
+    Melee18Button(Melee18ButtonOptions options = {});
 
   private:
     Melee18ButtonOptions _options;

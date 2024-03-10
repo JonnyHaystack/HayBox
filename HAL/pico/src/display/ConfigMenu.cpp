@@ -294,8 +294,10 @@ void ConfigMenu::SetSocdType(
     }
 
     // Overwrite SOCD type for all SOCD pairs of current gamemode's config.
-    GameModeConfig &mode_config = display_backend->CurrentGameMode()->GetConfig();
-    for (size_t i = 0; i < mode_config.socd_pairs_count; i++) {
-        mode_config.socd_pairs[i].socd_type = (SocdType)socd_type;
+    GameModeConfig *mode_config = display_backend->CurrentGameMode()->GetConfig();
+    if (mode_config != nullptr) {
+        for (size_t i = 0; i < mode_config->socd_pairs_count; i++) {
+            mode_config->socd_pairs[i].socd_type = (SocdType)socd_type;
+        }
     }
 }

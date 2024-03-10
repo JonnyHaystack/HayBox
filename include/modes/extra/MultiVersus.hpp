@@ -7,7 +7,7 @@
 
 class MultiVersus : public ControllerMode {
   public:
-    MultiVersus(GameModeConfig &config);
+    MultiVersus();
 
   protected:
     virtual void UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs);

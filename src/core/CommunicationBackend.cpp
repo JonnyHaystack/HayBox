@@ -52,7 +52,6 @@ CommunicationBackendId CommunicationBackend::BackendId() {
 }
 
 void CommunicationBackend::SetGameMode(ControllerMode *gamemode) {
-    delete _gamemode;
     _gamemode = gamemode;
 }
 

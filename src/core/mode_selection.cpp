@@ -12,6 +12,14 @@
 
 #include <config.pb.h>
 
+Melee20Button melee_mode({ .crouch_walk_os = false });
+ProjectM projectm_mode({ .true_z_press = false, .ledgedash_max_jump_traj = true });
+Ultimate ultimate_mode;
+FgcMode fgc_mode;
+RivalsOfAether rivals_mode;
+CustomKeyboardMode keyboard_mode;
+CustomControllerMode custom_mode;
+
 uint64_t mode_activation_masks[10];
 
 size_t current_mode_index = SIZE_MAX;
@@ -19,7 +27,6 @@ size_t current_mode_index = SIZE_MAX;
 void set_mode(CommunicationBackend *backend, ControllerMode *mode) {
     // Delete keyboard mode in case one is set, so we don't end up getting both controller and
     // keyboard inputs.
-    delete current_kb_mode;
     current_kb_mode = nullptr;
 
     // Set new controller mode.
@@ -28,7 +35,6 @@ void set_mode(CommunicationBackend *backend, ControllerMode *mode) {
 
 void set_mode(CommunicationBackend *backend, KeyboardMode *mode) {
     // Delete and reassign current keyboard mode.
-    delete current_kb_mode;
     current_kb_mode = mode;
 
     // Unset the current controller mode so backend only gives neutral inputs.
@@ -38,51 +44,47 @@ void set_mode(CommunicationBackend *backend, KeyboardMode *mode) {
 void set_mode(CommunicationBackend *backend, GameModeConfig &mode_config, Config &config) {
     switch (mode_config.mode_id) {
         case MODE_MELEE:
-            set_mode(backend, new Melee20Button(mode_config, { .crouch_walk_os = false }));
+            melee_mode.SetConfig(mode_config);
+            set_mode(backend, &melee_mode);
             break;
         case MODE_PROJECT_M:
-            set_mode(
-                backend,
-                new ProjectM(
-                    mode_config,
-                    { .true_z_press = false, .ledgedash_max_jump_traj = true }
-                )
-            );
+            projectm_mode.SetConfig(mode_config);
+            set_mode(backend, &projectm_mode);
             break;
         case MODE_ULTIMATE:
-            set_mode(backend, new Ultimate(mode_config));
+            ultimate_mode.SetConfig(mode_config);
+            set_mode(backend, &ultimate_mode);
             break;
         case MODE_FGC:
-            set_mode(backend, new FgcMode(mode_config));
+            fgc_mode.SetConfig(mode_config);
+            set_mode(backend, &fgc_mode);
             break;
         case MODE_RIVALS_OF_AETHER:
-            set_mode(backend, new RivalsOfAether(mode_config));
+            rivals_mode.SetConfig(mode_config);
+            set_mode(backend, &rivals_mode);
             break;
         case MODE_KEYBOARD:
             if (mode_config.keyboard_mode_config < 1 ||
                 mode_config.keyboard_mode_config > config.keyboard_modes_count) {
                 break;
             }
-            set_mode(
-                backend,
-                new CustomKeyboardMode(
-                    mode_config,
-                    config.keyboard_modes[mode_config.keyboard_mode_config - 1]
-                )
+            keyboard_mode.SetConfig(
+                mode_config,
+                config.keyboard_modes[mode_config.keyboard_mode_config - 1]
             );
+            set_mode(backend, &keyboard_mode);
             break;
         case MODE_CUSTOM:
             if (mode_config.custom_mode_config < 1 ||
                 mode_config.custom_mode_config > config.custom_modes_count) {
                 break;
             }
-            set_mode(
-                backend,
-                new CustomControllerMode(
-                    mode_config,
-                    config.custom_modes[mode_config.custom_mode_config - 1]
-                )
+            custom_mode.SetConfig(
+                mode_config,
+                config.custom_modes[mode_config.custom_mode_config - 1]
             );
+            set_mode(backend, &custom_mode);
+            break;
         case MODE_UNSPECIFIED:
         default:
             break;

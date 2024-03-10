@@ -4,8 +4,7 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 208
 
-Melee20Button::Melee20Button(GameModeConfig &config, Melee20ButtonOptions options)
-    : ControllerMode(config) {
+Melee20Button::Melee20Button(Melee20ButtonOptions options) : ControllerMode() {
     _options = options;
     _horizontal_socd = false;
 }

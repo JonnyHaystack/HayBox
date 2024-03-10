@@ -9,7 +9,7 @@
 
 class ControllerMode : public InputMode {
   public:
-    ControllerMode(GameModeConfig &config);
+    ControllerMode();
     void UpdateOutputs(const InputState &inputs, OutputState &outputs);
     void ResetDirections();
     virtual void UpdateDirections(

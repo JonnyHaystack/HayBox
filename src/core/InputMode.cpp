@@ -4,22 +4,23 @@
 #include "core/state.hpp"
 #include "util/state_util.hpp"
 
-InputMode::InputMode(GameModeConfig &config) : _config(config) {
-    _socd_states = new socd::SocdState[_config.socd_pairs_count];
-}
+InputMode::InputMode() {}
 
-InputMode::~InputMode() {
-    delete[] _socd_states;
-}
-
-GameModeConfig &InputMode::GetConfig() {
+GameModeConfig *InputMode::GetConfig() {
     return _config;
 }
 
+void InputMode::SetConfig(GameModeConfig &config) {
+    _config = &config;
+}
+
 void InputMode::HandleSocd(InputState &inputs) {
+    if (_config == nullptr) {
+        return;
+    }
     // Handle SOCD resolution for each SOCD button pair.
-    for (size_t i = 0; i < _config.socd_pairs_count; i++) {
-        const SocdPair &pair = _config.socd_pairs[i];
+    for (size_t i = 0; i < _config->socd_pairs_count; i++) {
+        const SocdPair &pair = _config->socd_pairs[i];
         switch (pair.socd_type) {
             case SOCD_NEUTRAL:
                 socd::neutral(inputs, pair.button_dir1, pair.button_dir2);
@@ -54,12 +55,16 @@ void InputMode::HandleSocd(InputState &inputs) {
 }
 
 void InputMode::HandleRemap(const InputState &original_inputs, InputState &remapped_inputs) {
+    if (_config == nullptr) {
+        return;
+    }
+
     // Keep track of which buttons have been remapped so that we can avoid conflicts for buttons
     // that are remapped to multiple buttons and prevent macro remapping.
     uint64_t physical_buttons_already_remapped = 0;
     uint64_t buttons_already_mapped_to = 0;
-    for (size_t i = 0; i < _config.button_remapping_count; i++) {
-        const ButtonRemap &remapping = _config.button_remapping[i];
+    for (size_t i = 0; i < _config->button_remapping_count; i++) {
+        const ButtonRemap &remapping = _config->button_remapping[i];
         // If this physical button was already mapped to something else, ignore this remapping. This
         // is to prevent creating macro behaviour through remapping.
         if (get_button(physical_buttons_already_remapped, remapping.physical_button)) {
