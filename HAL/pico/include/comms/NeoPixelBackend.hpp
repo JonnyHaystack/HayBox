@@ -54,12 +54,9 @@ template <uint8_t data_pin, int led_count> class NeoPixelBackend : public Commun
     }
 
     virtual void SendReport() {
-        if (_config == nullptr) {
-            return;
-        }
         for (int i = 0; i < led_count; i++) {
             Button button = this->_button_mappings[i];
-            _leds[i] = _button_colors[max(0, button - 1)];
+            _leds[i] = _config != nullptr ? _button_colors[max(0, button - 1)] : 0;
         }
         FastLED.setBrightness(_brightness);
         FastLED.show();
