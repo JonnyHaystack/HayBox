@@ -8,6 +8,7 @@
 #include "display/ConfigMenu.hpp"
 #include "display/DisplayMode.hpp"
 #include "display/InputDisplay.hpp"
+#include "display/MenuButtonHints.hpp"
 #include "display/RgbBrightnessMenu.hpp"
 #include "glyph_overrides.hpp"
 #include "input/DebouncedSwitchMatrixInput.hpp"
@@ -154,6 +155,7 @@ void setup1() {
 
     // These have to be initialized after backends.
     CommunicationBackendId primary_backend_id = backends[0]->BackendId();
+    static MenuButtonHints menu_button_hints(primary_backend_id);
     static InputDisplay input_display(
         input_viewer_buttons,
         input_viewer_buttons_count,
@@ -161,7 +163,12 @@ void setup1() {
     );
     static ConfigMenu config_menu(config, backends, backend_count);
 
-    static DisplayMode *display_modes[] = { &input_display, &config_menu, &rgb_brightness_menu };
+    static DisplayMode *display_modes[] = {
+        &menu_button_hints,
+        &input_display,
+        &config_menu,
+        &rgb_brightness_menu,
+    };
     size_t display_modes_count = count_of(display_modes);
 
     Wire1.setSDA(2);
@@ -180,14 +187,17 @@ void setup1() {
             display_modes_count
         );
         // clang-format on
+        display_backend->SetDisplayMode(DISPLAY_MODE_BUTTON_HINTS);
     }
 }
 
 void loop1() {
-    if (display_backend != nullptr) {
-        if (display_backend->CurrentGameMode() != backends[0]->CurrentGameMode()) {
-            display_backend->SetGameMode(backends[0]->CurrentGameMode());
-        }
-        display_backend->SendReport();
+    if (display_backend == nullptr) {
+        return;
     }
+    if (backends[0] != nullptr && backends[0]->CurrentGameMode() != nullptr &&
+        display_backend->CurrentGameMode() != backends[0]->CurrentGameMode()) {
+        display_backend->SetGameMode(backends[0]->CurrentGameMode());
+    }
+    display_backend->SendReport();
 }

@@ -12,6 +12,7 @@ typedef enum _DisplayModeId {
     DISPLAY_MODE_VIEWER,
     DISPLAY_MODE_CONFIG,
     DISPLAY_MODE_RGB_BRIGHTNESS,
+    DISPLAY_MODE_BUTTON_HINTS
 } DisplayModeId;
 
 class DisplayMode {

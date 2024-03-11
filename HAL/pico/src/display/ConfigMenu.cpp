@@ -123,6 +123,10 @@ ConfigMenu::ConfigMenu(Config &config, CommunicationBackend **backends, size_t b
                 Config &config,
                 uint8_t key
             ) {
+                // Restore gamemode.
+                if (menu->_backends[0] != nullptr) {
+                    menu->_backends[0]->SetGameMode(display_backend->CurrentGameMode());
+                }
                 display_backend->SetDisplayMode(DISPLAY_MODE_VIEWER);
             },
         },
@@ -219,6 +223,10 @@ void ConfigMenu::HandleControls(
     } else if (button == controls.back) {
         // If at top-level page, go back to input viewer.
         if (_current_menu_page->parent == nullptr) {
+            // Restore gamemode.
+            if (_backends[0] != nullptr) {
+                _backends[0]->SetGameMode(instance->CurrentGameMode());
+            }
             instance->SetDisplayMode(DISPLAY_MODE_VIEWER);
             return;
         }
@@ -229,6 +237,12 @@ void ConfigMenu::HandleControls(
 }
 
 void ConfigMenu::UpdateDisplay(IntegratedDisplay *instance, Adafruit_GFX &display) {
+    // Unset gamemode to prevent menu button presses being sent to console.
+    if (_backends[0] != nullptr && _backends[0]->CurrentGameMode() != nullptr) {
+        instance->SetGameMode(_backends[0]->CurrentGameMode());
+        _backends[0]->SetGameMode(nullptr);
+    }
+
     uint8_t font_width = instance->font_width;
     uint8_t font_height = instance->font_height;
 
@@ -268,6 +282,7 @@ void ConfigMenu::SetDefaultMode(
     for (size_t i = 0; i < menu->_backends_count; i++) {
         set_mode(menu->_backends[i], config.game_mode_configs[mode_config_index], config);
     }
+    set_mode(display_backend, config.game_mode_configs[mode_config_index], config);
 }
 
 void ConfigMenu::SetDefaultUsbBackend(
