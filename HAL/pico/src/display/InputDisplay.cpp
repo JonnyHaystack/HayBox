@@ -22,7 +22,7 @@ void InputDisplay::HandleControls(
     const DisplayControls &controls,
     Button button
 ) {
-    if (button == controls.enter) {
+    if (button == controls.back) {
         instance->SetDisplayMode(DISPLAY_MODE_CONFIG);
     }
 }

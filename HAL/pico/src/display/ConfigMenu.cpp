@@ -116,7 +116,7 @@ ConfigMenu::ConfigMenu(Config &config, CommunicationBackend **backends, size_t b
             },
         },
         {
-            .text = "Return",
+            .text = "Input Viewer",
             .action = [](
                 IntegratedDisplay *display_backend,
                 ConfigMenu *menu,
@@ -227,7 +227,7 @@ void ConfigMenu::HandleControls(
             if (_backends[0] != nullptr) {
                 _backends[0]->SetGameMode(instance->CurrentGameMode());
             }
-            instance->SetDisplayMode(DISPLAY_MODE_VIEWER);
+            instance->SetDisplayMode(DISPLAY_MODE_BUTTON_HINTS);
             return;
         }
 
