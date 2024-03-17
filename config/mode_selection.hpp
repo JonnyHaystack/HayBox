@@ -8,6 +8,8 @@
 #include "modes/ProjectM.hpp"
 #include "modes/RivalsOfAether.hpp"
 #include "modes/Ultimate.hpp"
+#include "modes/MeleeRSwap.hpp"
+#include "modes/SparkMarthMode.hpp"
 
 extern KeyboardMode *current_kb_mode;
 
@@ -32,26 +34,16 @@ void set_mode(CommunicationBackend *backend, KeyboardMode *mode) {
 
 void select_mode(CommunicationBackend *backend) {
     InputState &inputs = backend->GetInputs();
-    if (inputs.mod_x && !inputs.mod_y && inputs.start) {
-        if (inputs.l) {
+    if (inputs.nunchuk_start && !inputs.mod_y && inputs.c_left) {
+        if (inputs.b) {
             set_mode(
                 backend,
                 new Melee20Button(socd::SOCD_2IP_NO_REAC, { .crouch_walk_os = false })
             );
-        } else if (inputs.left) {
-            set_mode(
-                backend,
-                new ProjectM(
-                    socd::SOCD_2IP_NO_REAC,
-                    { .true_z_press = false, .ledgedash_max_jump_traj = true }
-                )
-            );
-        } else if (inputs.down) {
-            set_mode(backend, new Ultimate(socd::SOCD_2IP));
-        } else if (inputs.right) {
-            set_mode(backend, new FgcMode(socd::SOCD_NEUTRAL));
-        } else if (inputs.b) {
-            set_mode(backend, new RivalsOfAether(socd::SOCD_2IP));
+        }else if (inputs.r) {
+            set_mode(backend, new MeleeRSwap(socd::SOCD_2IP_NO_REAC));
+        }else if (inputs.x) {
+            set_mode(backend, new SparkMarthMode(socd::SOCD_2IP_NO_REAC));
         }
     } else if (inputs.mod_y && !inputs.mod_x && inputs.start) {
         if (inputs.l) {

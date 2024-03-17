@@ -17,6 +17,7 @@
 #include "modes/Melee20Button.hpp"
 #include "stdlib.hpp"
 #include "HAL/pico/include/input/GamecubeControllerInput.hpp"
+#include "modes/MeleeRSwap.hpp"
 
 
 #include <pico/bootrom.h>
@@ -164,7 +165,7 @@ void setup() {
     gpio_input->UpdateInputs(button_holds);
 
     // Bootsel button hold as early as possible for safety.
-    if (button_holds.start) {
+    if (button_holds.c_down && button_holds.c_left) {
         reset_usb_boot(0, 0);
     }
 
@@ -222,10 +223,16 @@ void setup() {
         backends = new CommunicationBackend *[backend_count] { primary_backend };
     }
 
-    // Default to Melee mode.
-    primary_backend->SetGameMode(
-        new Melee20Button(socd::SOCD_2IP_NO_REAC, { .crouch_walk_os = false })
-    );
+    if(button_holds.a){
+        primary_backend->SetGameMode(
+            new MeleeRSwap(socd::SOCD_2IP_NO_REAC, { .crouch_walk_os = false })
+        );
+    }else{
+        // Default to Melee mode.
+        primary_backend->SetGameMode(
+            new Melee20Button(socd::SOCD_2IP_NO_REAC, { .crouch_walk_os = false })
+        );
+    }
 }
 
 void loop() {
@@ -247,7 +254,7 @@ void setup1() {
     while (backends == nullptr) {
         tight_loop_contents();
     }
-
+    sleep_ms(10);
     gcc = new GamecubeControllerInput(9, 1000, pio1);
 }
 

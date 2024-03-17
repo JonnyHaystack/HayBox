@@ -1,10 +1,10 @@
-#include "modes/Melee20Button.hpp"
+#include "modes/SparkMarthMode.hpp"
 
 #define ANALOG_STICK_MIN 48
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 208
 
-Melee20Button::Melee20Button(socd::SocdType socd_type, Melee20ButtonOptions options)
+SparkMarthMode::SparkMarthMode(socd::SocdType socd_type, SparkMarthModeOptions options)
     : ControllerMode(socd_type) {
     _socd_pair_count = 4;
     _socd_pairs = new socd::SocdPair[_socd_pair_count]{
@@ -18,14 +18,14 @@ Melee20Button::Melee20Button(socd::SocdType socd_type, Melee20ButtonOptions opti
     _horizontal_socd = false;
 }
 
-void Melee20Button::HandleSocd(InputState &inputs) {
+void SparkMarthMode::HandleSocd(InputState &inputs) {
     _horizontal_socd = inputs.left && inputs.right;
     InputMode::HandleSocd(inputs);
 }
 
-void Melee20Button::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
+void SparkMarthMode::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
     outputs.a = inputs.a;
-    outputs.b = inputs.b;
+    outputs.b = inputs.r;
     outputs.x = inputs.x;
     outputs.y = inputs.y;
     outputs.buttonR = inputs.z;
@@ -34,7 +34,7 @@ void Melee20Button::UpdateDigitalOutputs(InputState &inputs, OutputState &output
     } else {
         outputs.triggerLDigital = inputs.l;
     }
-    outputs.triggerRDigital = inputs.r;
+    outputs.triggerRDigital = inputs.b;
     outputs.start = inputs.start;
 
     // Activate D-Pad layer by holding Mod X + Mod Y or Nunchuk C button.
@@ -58,7 +58,7 @@ void Melee20Button::UpdateDigitalOutputs(InputState &inputs, OutputState &output
         outputs.dpadRight = true;
 }
 
-void Melee20Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
+void SparkMarthMode::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
     // Coordinate calculations to make modifier handling simpler.
     UpdateDirections(
         inputs.left,
