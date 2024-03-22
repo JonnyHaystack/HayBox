@@ -24,7 +24,7 @@ typedef struct _MenuPage {
     } MenuItem;
 
     struct _MenuPage *parent = nullptr;
-    const MenuItem *items = nullptr;
+    MenuItem *items = nullptr;
     size_t items_count = 0;
 } MenuPage;
 
@@ -42,23 +42,7 @@ class ConfigMenu : public DisplayMode {
     );
     virtual void UpdateDisplay(IntegratedDisplay *instance, Adafruit_GFX &display);
 
-  private:
-    static constexpr uint8_t padding = 2;
-    static constexpr uint8_t max_visible_lines = 6;
-    static constexpr char highlight_string[] = ">";
-
-    Config &_config;
-    CommunicationBackend **_backends;
-    size_t _backends_count;
-
-    MenuPage _usb_backends_page;
-    MenuPage _gamemode_options_page;
-    MenuPage _top_level_page;
-
-    MenuPage *_current_menu_page = &_top_level_page;
-    uint8_t _highlighted_menu_item = 0;
-    int _current_menu_offset = 0;
-
+  protected:
     static void SetDefaultMode(
         IntegratedDisplay *instance,
         ConfigMenu *menu,
@@ -77,6 +61,23 @@ class ConfigMenu : public DisplayMode {
         Config &config,
         uint8_t socd_type
     );
+
+    Config &_config;
+    CommunicationBackend **_backends;
+    size_t _backends_count;
+
+    MenuPage _usb_backends_page;
+    MenuPage _gamemode_options_page;
+    MenuPage _top_level_page;
+
+    MenuPage *_current_menu_page = &_top_level_page;
+    uint8_t _highlighted_menu_item = 0;
+    int _current_menu_offset = 0;
+
+  private:
+    static constexpr uint8_t padding = 2;
+    static constexpr uint8_t max_visible_lines = 6;
+    static constexpr char highlight_string[] = ">";
 };
 
 #endif

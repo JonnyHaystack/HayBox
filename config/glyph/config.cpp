@@ -1,3 +1,4 @@
+#include "button_positions.hpp"
 #include "comms/backend_init.hpp"
 #include "core/CommunicationBackend.hpp"
 #include "core/KeyboardMode.hpp"
@@ -5,8 +6,8 @@
 #include "core/mode_selection.hpp"
 #include "core/pinout.hpp"
 #include "core/state.hpp"
-#include "display/ConfigMenu.hpp"
 #include "display/DisplayMode.hpp"
+#include "display/GlyphConfigMenu.hpp"
 #include "display/InputDisplay.hpp"
 #include "display/MenuButtonHints.hpp"
 #include "display/RgbBrightnessMenu.hpp"
@@ -103,50 +104,13 @@ void loop() {
     }
 }
 
-#define MENU_BUTTON_RADIUS 2
-#define NORMAL_BUTTON_RADIUS 4
-#define LARGE_BUTTON_RADIUS 5
-
-InputViewerButton input_viewer_buttons[] = {
-  // {BTN_MB1,  2,   3,  MENU_BUTTON_RADIUS  },
-  // { BTN_MB2, 8,   3,  MENU_BUTTON_RADIUS  },
-  // { BTN_MB3, 14,  3,  MENU_BUTTON_RADIUS  },
-  // { BTN_MB4, 20,  3,  MENU_BUTTON_RADIUS  },
-  // { BTN_MB5, 26,  3,  MENU_BUTTON_RADIUS  },
-  // { BTN_MB6, 32,  3,  MENU_BUTTON_RADIUS  },
-  // { BTN_MB7, 38,  3,  MENU_BUTTON_RADIUS  },
-
-    {BTN_LF4,  6,   29, NORMAL_BUTTON_RADIUS},
-    { BTN_LF3, 15,  23, NORMAL_BUTTON_RADIUS},
-    { BTN_LF2, 25,  22, NORMAL_BUTTON_RADIUS},
-    { BTN_LF1, 35,  27, NORMAL_BUTTON_RADIUS},
-
-    { BTN_RF1, 93,  27, NORMAL_BUTTON_RADIUS},
-    { BTN_RF2, 102, 23, NORMAL_BUTTON_RADIUS},
-    { BTN_RF3, 112, 24, NORMAL_BUTTON_RADIUS},
-    { BTN_RF4, 122, 29, NORMAL_BUTTON_RADIUS},
-
-    { BTN_RF5, 93,  17, NORMAL_BUTTON_RADIUS},
-    { BTN_RF6, 102, 13, NORMAL_BUTTON_RADIUS},
-    { BTN_RF7, 112, 14, NORMAL_BUTTON_RADIUS},
-    { BTN_RF8, 122, 19, NORMAL_BUTTON_RADIUS},
-
-    { BTN_LT1, 38,  52, NORMAL_BUTTON_RADIUS},
-    { BTN_LT2, 46,  58, NORMAL_BUTTON_RADIUS},
-
-    { BTN_RT1, 90,  52, NORMAL_BUTTON_RADIUS},
-    { BTN_RT2, 82,  58, NORMAL_BUTTON_RADIUS},
-    { BTN_RT3, 82,  46, NORMAL_BUTTON_RADIUS},
-    { BTN_RT4, 90,  40, NORMAL_BUTTON_RADIUS},
-    { BTN_RT5, 98,  46, NORMAL_BUTTON_RADIUS},
-};
-size_t input_viewer_buttons_count = count_of(input_viewer_buttons);
-
 /* Second core handles OLED display */
 Adafruit_SSD1306 display(128, 64, &Wire1);
 IntegratedDisplay *display_backend = nullptr;
 
 RgbBrightnessMenu rgb_brightness_menu(config);
+
+InputDisplay *input_viewer = nullptr;
 
 void setup1() {
     while (!backend_count || backends == nullptr) {
@@ -157,11 +121,11 @@ void setup1() {
     CommunicationBackendId primary_backend_id = backends[0]->BackendId();
     static MenuButtonHints menu_button_hints(primary_backend_id);
     static InputDisplay input_display(
-        input_viewer_buttons,
-        input_viewer_buttons_count,
+        platform_fighter_buttons,
+        platform_fighter_buttons_count,
         primary_backend_id
     );
-    static ConfigMenu config_menu(config, backends, backend_count);
+    static GlyphConfigMenu config_menu(config, backends, backend_count);
 
     static DisplayMode *display_modes[] = {
         &menu_button_hints,
@@ -170,6 +134,8 @@ void setup1() {
         &rgb_brightness_menu,
     };
     size_t display_modes_count = count_of(display_modes);
+
+    input_viewer = &input_display;
 
     Wire1.setSDA(2);
     Wire1.setSCL(3);
@@ -198,6 +164,28 @@ void loop1() {
     if (backends[0] != nullptr && backends[0]->CurrentGameMode() != nullptr &&
         display_backend->CurrentGameMode() != backends[0]->CurrentGameMode()) {
         display_backend->SetGameMode(backends[0]->CurrentGameMode());
+    }
+    // Update input display layout.
+    if (display_backend->CurrentGameMode() != nullptr) {
+        GameModeConfig *mode_config = display_backend->CurrentGameMode()->GetConfig();
+        switch (mode_config->layout_plate) {
+            case LAYOUT_PLATE_UNSPECIFIED:
+            case LAYOUT_PLATE_EVERYTHING:
+                input_viewer->UpdateButtonLayout(full_layout_buttons, full_layout_buttons_count);
+                break;
+            case LAYOUT_PLATE_FGC:
+                input_viewer->UpdateButtonLayout(fgc_buttons, fgc_buttons_count);
+                break;
+            case LAYOUT_PLATE_SPLIT_FGC:
+                input_viewer->UpdateButtonLayout(split_fgc_buttons, split_fgc_buttons_count);
+                break;
+            case LAYOUT_PLATE_PLATFORM_FIGHTER:
+                input_viewer->UpdateButtonLayout(
+                    platform_fighter_buttons,
+                    platform_fighter_buttons_count
+                );
+                break;
+        }
     }
     display_backend->SendReport();
 }

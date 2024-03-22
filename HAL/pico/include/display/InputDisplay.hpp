@@ -24,6 +24,10 @@ class InputDisplay : public DisplayMode {
         Button button
     );
     void UpdateDisplay(IntegratedDisplay *instance, Adafruit_GFX &display);
+    void UpdateButtonLayout(
+        InputViewerButton *input_viewer_buttons,
+        size_t input_viewer_buttons_count
+    );
 
   protected:
     InputViewerButton *_input_viewer_buttons;

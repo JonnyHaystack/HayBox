@@ -91,7 +91,7 @@ ConfigMenu::ConfigMenu(Config &config, CommunicationBackend **backends, size_t b
 
     /* Build top-level page */
     // clang-format off
-    static const MenuPage::MenuItem top_level_items[] = {
+    static MenuPage::MenuItem top_level_items[] = {
         {
             .text = "Gamemode",
             .page = &_gamemode_options_page,

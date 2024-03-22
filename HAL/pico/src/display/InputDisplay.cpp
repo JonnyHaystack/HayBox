@@ -49,6 +49,9 @@ void InputDisplay::UpdateDisplay(IntegratedDisplay *instance, Adafruit_GFX &disp
     display.print(backend_name(_backend_id));
 
     /* Input display */
+    if (_input_viewer_buttons == nullptr) {
+        return;
+    }
     for (size_t i = 0; i < _input_viewer_buttons_count; i++) {
         InputViewerButton mapping = _input_viewer_buttons[i];
         if (get_button(inputs.buttons, mapping.button)) {
@@ -57,4 +60,12 @@ void InputDisplay::UpdateDisplay(IntegratedDisplay *instance, Adafruit_GFX &disp
             display.drawCircle(mapping.center_x, mapping.center_y, mapping.radius, color);
         }
     }
+}
+
+void InputDisplay::UpdateButtonLayout(
+    InputViewerButton *input_viewer_buttons,
+    size_t input_viewer_buttons_count
+) {
+    _input_viewer_buttons = input_viewer_buttons;
+    _input_viewer_buttons_count = input_viewer_buttons_count;
 }

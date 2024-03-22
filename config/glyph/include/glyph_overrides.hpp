@@ -1,3 +1,6 @@
+#ifndef _GLYPH_OVERRIDES_HPP
+#define _GLYPH_OVERRIDES_HPP
+
 #include "comms/B0XXInputViewer.hpp"
 #include "comms/IntegratedDisplay.hpp"
 #include "comms/NeoPixelBackend.hpp"
@@ -99,6 +102,38 @@ Config glyph_default_config() {
         },
     };
     config.rgb_brightness = 255;
+
+    // Assign layout plates and applicable backends for default gamemode configs.
+    for (size_t i = 0; i < config.game_mode_configs_count; i++) {
+        GameModeConfig &mode_config = config.game_mode_configs[i];
+        switch (mode_config.mode_id) {
+            case MODE_FGC:
+                if (mode_config.button_remapping_count > 0) {
+                    mode_config.layout_plate = LAYOUT_PLATE_FGC;
+                } else {
+                    mode_config.layout_plate = LAYOUT_PLATE_SPLIT_FGC;
+                }
+                mode_config.applicable_backends[0] = COMMS_BACKEND_XINPUT;
+                mode_config.applicable_backends[1] = COMMS_BACKEND_DINPUT;
+                mode_config.applicable_backends[2] = COMMS_BACKEND_NINTENDO_SWITCH;
+                mode_config.applicable_backends_count = 3;
+                break;
+            case MODE_MELEE:
+            case MODE_PROJECT_M:
+            case MODE_ULTIMATE:
+            case MODE_RIVALS_OF_AETHER:
+                mode_config.layout_plate = LAYOUT_PLATE_PLATFORM_FIGHTER;
+                mode_config.applicable_backends[0] = COMMS_BACKEND_XINPUT;
+                mode_config.applicable_backends[1] = COMMS_BACKEND_DINPUT;
+                mode_config.applicable_backends[2] = COMMS_BACKEND_NINTENDO_SWITCH;
+                mode_config.applicable_backends[3] = COMMS_BACKEND_GAMECUBE;
+                mode_config.applicable_backends_count = 4;
+                break;
+            default:
+                mode_config.layout_plate = LAYOUT_PLATE_EVERYTHING;
+        }
+    }
+
     return config;
 }
 
@@ -147,3 +182,5 @@ size_t init_secondary_backends_glyph(
 
     return backend_count;
 }
+
+#endif
