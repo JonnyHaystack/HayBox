@@ -21,7 +21,6 @@
 #include "cobs/Print.h"
 #include "cobs/Stream.h"
 #include "core/CommunicationBackend.hpp"
-#include "core/Persistence.hpp"
 
 #include <config.pb.h>
 
@@ -31,24 +30,25 @@ class ConfiguratorBackend : public CommunicationBackend {
         InputState &inputs,
         InputSource **input_sources,
         size_t input_source_count,
-        Config &config
+        Config &config,
+        Stream &stream
     );
-    ~ConfiguratorBackend();
     CommunicationBackendId BackendId();
     void SendReport();
 
   private:
     size_t ReadPacket(uint8_t *buffer, size_t max_len);
+    int ReadByte();
+    void SkipToNextPacket();
     bool WritePacket(Command command_id, uint8_t *buffer, size_t len);
     bool HandleUnknownCommand(Command command);
     bool HandleGetDeviceInfo();
     bool HandleGetConfig();
-    bool HandleSetConfig(uint8_t *buffer, size_t len);
+    bool HandleSetConfig();
 
     packetio::COBSStream _in;
     packetio::COBSPrint _out;
-    Persistence *_persistence;
-    uint8_t _cmd_buffer[Persistence::eeprom_size - Persistence::config_offset];
+    Stream &_base_stream;
     Config &_config;
 };
 

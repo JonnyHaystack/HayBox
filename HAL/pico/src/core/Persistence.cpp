@@ -20,89 +20,164 @@
 #include "stdlib.hpp"
 
 #include <CRC32.h>
-#include <EEPROM.h>
+#include <LittleFS.h>
+#include <pb_arduino.h>
 #include <pb_decode.h>
 #include <pb_encode.h>
 
-Config Persistence::_config;
-uint8_t Persistence::_buffer[eeprom_size - config_offset];
-
 Persistence::Persistence() {
-    EEPROM.begin(eeprom_size);
+    LittleFS.begin();
 }
 
 Persistence::~Persistence() {
-    EEPROM.end();
+    LittleFS.end();
 }
 
 bool Persistence::SaveConfig(Config &config) {
-    pb_ostream_t ostream = pb_ostream_from_buffer(_buffer, sizeof(_buffer));
-
-    if (!pb_encode(&ostream, Config_fields, &config)) {
+    // Make sure config encodes correctly.
+    size_t encoded_size;
+    if (!pb_get_encoded_size(&encoded_size, Config_fields, &config)) {
         return false;
     }
 
-    ConfigHeader header = {
-        .config_size = ostream.bytes_written,
-        .config_crc = CRC32::calculate(_buffer, ostream.bytes_written),
-    };
-
-    // Store number of bytes of configuration data at offset 0.
-    EEPROM.put(0, header);
-
-    // Store the rest of the data directly after that.
-    for (size_t i = 0; i < header.config_size; i++) {
-        EEPROM.write(config_offset + i, _buffer[i]);
+    // Open file to store config data in.
+    File config_file = LittleFS.open(config_filename, "w+");
+    if (!config_file) {
+        return false;
     }
-    EEPROM.commit();
+
+    // Write empty header to start with.
+    ConfigHeader header = { .config_size = 0, .config_crc = 0 };
+    config_file.write((uint8_t *)&header, sizeof(ConfigHeader));
+
+    // Encode Protobuf data directly into file body.
+    pb_ostream_t ostream = as_pb_ostream(config_file);
+    if (!pb_encode(&ostream, Config_fields, &config)) {
+        config_file.close();
+        return false;
+    }
+
+    // Calculate checksum.
+    config_file.seek(config_offset);
+    CRC32 crc;
+    int value;
+    while ((value = config_file.read()) != -1) {
+        crc.update((uint8_t)value);
+    }
+
+    // Update header.
+    header.config_size = ostream.bytes_written;
+    header.config_crc = crc.finalize();
+    config_file.seek(0);
+    config_file.write((uint8_t *)&header, sizeof(ConfigHeader));
+
+    // Persist changes.
+    config_file.close();
 
     return true;
 }
 
 bool Persistence::LoadConfig(Config &config) {
-    size_t config_size = LoadConfigRaw(_buffer, sizeof(_buffer));
-
-    // No valid config found.
-    if (config_size == 0) {
+    // Open file to load config data from.
+    File config_file = LittleFS.open(config_filename, "r");
+    if (!config_file) {
         return false;
     }
 
-    pb_istream_t istream = pb_istream_from_buffer(_buffer, config_size);
-
-    // Return true if successfully decoded.
-    if (pb_decode(&istream, Config_fields, &_config)) {
-        config = _config;
-        return true;
+    if (!CheckSavedConfig(config_file)) {
+        config_file.close();
+        return false;
     }
 
-    // Otherwise reset back to original config.
-    return false;
+    // Seek to start of Protobuf data.
+    if (!config_file.seek(config_offset)) {
+        config_file.close();
+        return false;
+    }
+
+    // Reset config defaults first, so config is completely replaced rather than merged with
+    // defaults.
+    config = Config_init_default;
+
+    // Decode streamed Protobuf data into config struct.
+    pb_istream_t istream = as_pb_istream(config_file, (size_t)config_file.available());
+    if (!pb_decode(&istream, Config_fields, &config)) {
+        config_file.close();
+        return false;
+    }
+
+    config_file.close();
+    return true;
 }
 
-size_t Persistence::LoadConfigRaw(uint8_t *buffer, size_t buffer_len) {
-    // Get config header containing CRC32 checksum and number of stored bytes of config data from
-    // offset 0 of EEPROM.
+bool Persistence::CheckSavedConfig() {
+    // Open file to load config data from.
+    File config_file = LittleFS.open(config_filename, "r");
+    if (!config_file) {
+        return false;
+    }
+
+    bool is_valid = CheckSavedConfig(config_file);
+    config_file.close();
+    return is_valid;
+}
+
+size_t Persistence::LoadConfigRaw(Print &out, bool validate) {
+    // Open file to load config data from.
+    File config_file = LittleFS.open(config_filename, "r");
+    if (!config_file) {
+        return false;
+    }
+
+    // Optionally perform validation.
+    if (validate && !CheckSavedConfig(config_file)) {
+        config_file.close();
+        return false;
+    }
+
+    // Seek to start of Protobuf data.
+    if (!config_file.seek(config_offset)) {
+        config_file.close();
+        return false;
+    }
+
+    // Write raw Protobuf encoded data to output stream.
+    int value;
+    while ((value = config_file.read()) != -1) {
+        out.write((uint8_t)value);
+    }
+
+    config_file.close();
+    return true;
+}
+
+bool Persistence::CheckSavedConfig(File &config_file) {
+    size_t file_size = config_file.size();
+
+    // Read file header.
     ConfigHeader header;
-    EEPROM.get(0, header);
-
-    // Buffer can't be less than the size we expect to read.
-    if (buffer_len < header.config_size) {
-        return 0;
+    size_t bytes_read = config_file.read((uint8_t *)&header, sizeof(ConfigHeader));
+    if (bytes_read < sizeof(ConfigHeader)) {
+        return false;
     }
 
-    // Read config data from EEPROM into the buffer.
-    size_t bytes_read;
-    for (bytes_read = 0; bytes_read < header.config_size; bytes_read++) {
-        buffer[bytes_read] = EEPROM.read(config_offset + bytes_read);
+    // Validate config length.
+    size_t config_size = file_size - config_offset;
+    if (config_size != header.config_size) {
+        return false;
     }
 
-    // If CRC32 checksum does not match, consider it as having failed to read.
-    if (CRC32::calculate(buffer, bytes_read) != header.config_crc) {
-        return 0;
+    // Calculate CRC for file contents and compare with CRC in header.
+    CRC32 crc;
+    int value;
+    while ((value = config_file.read()) != -1) {
+        crc.update((uint8_t)value);
+    }
+    if (crc.finalize() != header.config_crc) {
+        return false;
     }
 
-    // Return the number of bytes of config data read.
-    return bytes_read;
+    return true;
 }
 
 Persistence persistence;

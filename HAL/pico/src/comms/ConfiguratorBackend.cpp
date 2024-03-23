@@ -18,9 +18,10 @@
 #include "comms/ConfiguratorBackend.hpp"
 
 #include "core/InputSource.hpp"
+#include "core/Persistence.hpp"
 #include "reboot.hpp"
-#include "serial.hpp"
 
+#include <pb_arduino.h>
 #include <pb_decode.h>
 #include <pb_encode.h>
 
@@ -28,28 +29,29 @@ ConfiguratorBackend::ConfiguratorBackend(
     InputState &inputs,
     InputSource **input_sources,
     size_t input_source_count,
-    Config &config
+    Config &config,
+    Stream &stream
 )
     : CommunicationBackend(inputs, input_sources, input_source_count),
-      _in(Serial),
-      _out(Serial),
-      _config(config) {
-    serial::init(115200);
-    _persistence = new Persistence();
-}
-
-ConfiguratorBackend::~ConfiguratorBackend() {
-    serial::close();
-    delete _persistence;
-}
+      _in(stream),
+      _out(stream),
+      _base_stream(stream),
+      _config(config) {}
 
 CommunicationBackendId ConfiguratorBackend::BackendId() {
     return COMMS_BACKEND_CONFIGURATOR;
 }
 
 void ConfiguratorBackend::SendReport() {
-    size_t packet_len = ReadPacket(_cmd_buffer, sizeof(_cmd_buffer));
-    Command command = (Command)_cmd_buffer[0];
+    int data = ReadByte();
+    if (data < 0) {
+        if (data == _in.EOP) {
+            SkipToNextPacket();
+        }
+        return;
+    }
+
+    Command command = (Command)data;
     switch (command) {
         case CMD_GET_DEVICE_INFO:
             HandleGetDeviceInfo();
@@ -58,7 +60,7 @@ void ConfiguratorBackend::SendReport() {
             HandleGetConfig();
             break;
         case CMD_SET_CONFIG:
-            HandleSetConfig(_cmd_buffer, packet_len);
+            HandleSetConfig();
             break;
         case CMD_REBOOT_FIRMWARE:
             reboot_firmware();
@@ -71,11 +73,13 @@ void ConfiguratorBackend::SendReport() {
             HandleUnknownCommand(command);
             break;
     }
+
+    SkipToNextPacket();
 }
 
 size_t ConfiguratorBackend::ReadPacket(uint8_t *buffer, size_t max_len) {
     size_t bytes_read = 0;
-    while (!Serial.available()) {
+    while (!_in.available()) {
         delay(1);
     }
     while (true) {
@@ -97,6 +101,17 @@ size_t ConfiguratorBackend::ReadPacket(uint8_t *buffer, size_t max_len) {
     return bytes_read;
 }
 
+int ConfiguratorBackend::ReadByte() {
+    if (!_base_stream.available()) {
+        return -1;
+    }
+    return _in.read();
+}
+
+void ConfiguratorBackend::SkipToNextPacket() {
+    _in.next();
+}
+
 bool ConfiguratorBackend::WritePacket(Command command_id, uint8_t *buffer, size_t len) {
     _out.write((uint8_t)command_id);
     for (size_t i = 0; i < len; i++) {
@@ -112,29 +127,46 @@ bool ConfiguratorBackend::HandleGetDeviceInfo() {
         DEVICE_NAME,
     };
 
-    uint8_t buffer[sizeof(DeviceInfo)];
-    pb_ostream_t ostream = pb_ostream_from_buffer(buffer, sizeof(buffer));
-
-    if (!pb_encode(&ostream, DeviceInfo_fields, &device_info)) {
+    // Ensure device info encodes correctly.
+    size_t size;
+    if (!pb_get_encoded_size(&size, DeviceInfo_fields, &device_info)) {
         char errmsg[] = "Failed to encode device info";
         WritePacket(CMD_ERROR, (uint8_t *)errmsg, sizeof(errmsg));
         return false;
     }
 
-    return WritePacket(CMD_SET_DEVICE_INFO, buffer, ostream.bytes_written);
+    _out.write(CMD_SET_DEVICE_INFO);
+    pb_ostream_t ostream = as_pb_ostream(_out);
+    pb_encode(&ostream, DeviceInfo_fields, &device_info);
+    return _out.end();
 }
 
 bool ConfiguratorBackend::HandleGetConfig() {
-    size_t config_size = _persistence->LoadConfigRaw(_cmd_buffer, sizeof(_cmd_buffer));
-    return WritePacket(CMD_SET_CONFIG, _cmd_buffer, config_size);
+    if (!persistence.CheckSavedConfig()) {
+        char errmsg[] = "Config file is invalid";
+        WritePacket(CMD_ERROR, (uint8_t *)errmsg, sizeof(errmsg));
+        return false;
+    }
+
+    // Write raw config data to output stream.
+    _out.write(CMD_SET_CONFIG);
+    persistence.LoadConfigRaw(_out, false);
+    return _out.end();
 }
 
-bool ConfiguratorBackend::HandleSetConfig(uint8_t *buffer, size_t len) {
-    pb_istream_t istream = pb_istream_from_buffer(&buffer[1], len - 1);
+bool ConfiguratorBackend::HandleSetConfig() {
+    // Reset config defaults first, so config is completely replaced rather than merged.
+    _config = Config_init_default;
 
+    pb_istream_t istream = as_pb_istream(_in);
     if (!pb_decode(&istream, Config_fields, &_config)) {
-        char errmsg[] = "Failed to decode config";
-        WritePacket(CMD_ERROR, (uint8_t *)errmsg, sizeof(errmsg));
+        char errmsg[100];
+        size_t errmsg_len =
+            snprintf(errmsg, sizeof(errmsg), "Failed to decode config: %s", istream.errmsg);
+        WritePacket(CMD_ERROR, (uint8_t *)errmsg, errmsg_len);
+
+        // Restore old config.
+        persistence.LoadConfig(_config);
         return false;
     }
 
@@ -200,7 +232,7 @@ bool ConfiguratorBackend::HandleSetConfig(uint8_t *buffer, size_t len) {
         }
     }
 
-    if (!_persistence->SaveConfig(_config)) {
+    if (!persistence.SaveConfig(_config)) {
         char errmsg[] = "Failed to save config to memory";
         WritePacket(CMD_ERROR, (uint8_t *)errmsg, sizeof(errmsg));
         return false;

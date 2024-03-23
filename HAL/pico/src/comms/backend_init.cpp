@@ -174,8 +174,9 @@ void init_primary_backend(
         case COMMS_BACKEND_CONFIGURATOR:
         default:
             delete primary_backend;
+            Serial.begin(115200);
             primary_backend =
-                new ConfiguratorBackend(inputs, input_sources, input_source_count, config);
+                new ConfiguratorBackend(inputs, input_sources, input_source_count, config, Serial);
     }
 }
 

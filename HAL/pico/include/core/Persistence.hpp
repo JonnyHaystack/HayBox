@@ -18,6 +18,7 @@
 #ifndef _CORE_PERSISTENCE_HPP
 #define _CORE_PERSISTENCE_HPP
 
+#include <LittleFS.h>
 #include <config.pb.h>
 
 class Persistence {
@@ -32,14 +33,15 @@ class Persistence {
 
     bool SaveConfig(Config &config);
     bool LoadConfig(Config &config);
-    size_t LoadConfigRaw(uint8_t *buffer, size_t buffer_len);
+    bool CheckSavedConfig();
+    size_t LoadConfigRaw(Print &out, bool validate = true);
 
-    static constexpr size_t eeprom_size = 4096;
     static constexpr size_t config_offset = sizeof(ConfigHeader);
 
   private:
-    static Config _config;
-    static uint8_t _buffer[eeprom_size - config_offset];
+    static constexpr char config_filename[] = "config.bin";
+
+    bool CheckSavedConfig(File &config_file);
 };
 
 extern Persistence persistence;
