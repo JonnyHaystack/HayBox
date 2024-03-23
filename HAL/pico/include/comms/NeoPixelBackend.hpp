@@ -5,6 +5,7 @@
 
 #include <FastLED.h>
 #include <config.pb.h>
+#include <time.h>
 
 template <uint8_t data_pin, int led_count> class NeoPixelBackend : public CommunicationBackend {
   public:
@@ -24,6 +25,7 @@ template <uint8_t data_pin, int led_count> class NeoPixelBackend : public Commun
           _brightness(brightness) {
         FastLED.addLeds<NEOPIXEL, data_pin>(_leds, led_count);
         FastLED.setMaxPowerInVoltsAndMilliamps(5, 200);
+        FastLED.setMaxRefreshRate(0);
     }
 
     ~NeoPixelBackend() { FastLED.clear(true); }
@@ -54,6 +56,12 @@ template <uint8_t data_pin, int led_count> class NeoPixelBackend : public Commun
     }
 
     virtual void SendReport() {
+        // Use timeout to avoid refreshing too fast which results in FastLED library blocking.
+        if (!time_reached(_refresh_timeout)) {
+            return;
+        }
+        _refresh_timeout = make_timeout_time_ms(refresh_interval_ms);
+
         for (int i = 0; i < led_count; i++) {
             Button button = this->_button_mappings[i];
             _leds[i] = _config != nullptr ? _button_colors[max(0, button - 1)] : 0;
@@ -65,6 +73,7 @@ template <uint8_t data_pin, int led_count> class NeoPixelBackend : public Commun
   protected:
     static constexpr size_t button_colors_count =
         sizeof(RgbConfig::button_colors) / sizeof(ButtonToColorMapping);
+    static constexpr uint64_t refresh_interval_ms = 4; // 250Hz refresh rate
 
     const Button *_button_mappings;
     const RgbConfig *_rgb_configs;
@@ -74,6 +83,7 @@ template <uint8_t data_pin, int led_count> class NeoPixelBackend : public Commun
 
     CRGB _leds[led_count];
     uint32_t _button_colors[button_colors_count];
+    absolute_time_t _refresh_timeout;
 };
 
 #endif
