@@ -95,7 +95,7 @@ After that:
 
 #### Pico bootsel mode
 
-To reboot Pico-based controllers into bootsel mode, hold Start on plugin.
+To reboot Pico-based controllers into bootsel mode, hold C-Left and C-Down on plugin.
 
 #### Communication backends (console selection)
 
