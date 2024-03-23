@@ -97,11 +97,6 @@ After that:
 
 To reboot Pico-based controllers into bootsel mode, hold Start on plugin.
 
-#### Brook board passthrough mode
-
-To switch to Brook board mode on GCCPCB2, GCCMX, B0XX R2, or LBX, hold B on
-plugin.
-
 #### Communication backends (console selection)
 
 Communication backends are selected slightly differently depending on the type
@@ -129,14 +124,8 @@ switch game anyway. It also serves the purpose of reducing the number of buttons
 you have to hold with one hand while plugging in.
 
 The default controller mode button combinations are:
-- Mod X + Start + L - Melee mode (default)
-- Mod X + Start + Left - Project M/Project+ mode
-- Mod X + Start + Down - Ultimate mode
-- Mod X + Start + Right - FGC mode (Hitbox style fighting game layout)
-- Mod X + Start + B - Rivals of Aether mode
-
-Default keyboard mode button combinations (only available when using DInput backend, **not** with XInput):
-- Mod Y + Start + L - Default keyboard mode
+- GCC Start + C-Left + B - Default Layout
+- GCC Start + C-Left + R - R and B Swap
 
 ### Dolphin setup
 
