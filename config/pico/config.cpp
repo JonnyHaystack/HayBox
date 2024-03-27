@@ -254,7 +254,6 @@ void setup1() {
     while (backends == nullptr) {
         tight_loop_contents();
     }
-    sleep_ms(10);
     gcc = new GamecubeControllerInput(9, 1000, pio1);
 }
 

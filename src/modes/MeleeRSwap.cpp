@@ -64,7 +64,7 @@ void MeleeRSwap::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         inputs.left,
         inputs.right,
         inputs.down,
-        inputs.midshield,
+        inputs.up,
         inputs.c_left,
         inputs.c_right,
         inputs.c_down,
@@ -272,10 +272,10 @@ void MeleeRSwap::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         outputs.leftStickX = 128 + (directions.x * 80);
     }
 
-    if (inputs.up) {
+    if (inputs.lightshield) {
         outputs.triggerRAnalog = 49;
     }
-    if (inputs.lightshield) {
+    if (inputs.midshield) {
         outputs.triggerRAnalog = 94;
     }
 
