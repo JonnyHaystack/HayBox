@@ -15,6 +15,38 @@ FgcMode::FgcMode(socd::SocdType horizontal_socd, socd::SocdType vertical_socd) {
 }
 
 void FgcMode::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
+    /*
+    Controls from old repo, used for GGS
+    // Directions
+    outputs.dpadLeft = inputs.left;
+    outputs.dpadRight = inputs.right;
+    outputs.dpadDown = inputs.down;
+    outputs.dpadUp = inputs.mod_x;
+    outputs.triggerLDigital = inputs.l;
+
+    // Menu keys
+    outputs.start = inputs.start;
+    outputs.select = inputs.mod_y;
+    outputs.home = inputs.midshield;
+
+    // Right hand top row
+    outputs.leftStickClick = inputs.r;
+    outputs.rightStickClick = inputs.lightshield;
+    // inputs.y
+
+    // Right hand bottom row
+    outputs.a = inputs.b;
+    outputs.b = inputs.x;
+    outputs.x = inputs.z;
+    outputs.y = inputs.up;
+
+    // Right hand thumb
+    outputs.triggerRDigital = inputs.a;
+    outputs.buttonL = inputs.c_right;
+    outputs.buttonR = inputs.c_down;
+    
+    */
+    
     // Directions
     outputs.dpadLeft = inputs.left;
     outputs.dpadRight = inputs.right;

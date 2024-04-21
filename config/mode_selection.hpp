@@ -8,6 +8,7 @@
 #include "modes/ProjectM.hpp"
 #include "modes/RivalsOfAether.hpp"
 #include "modes/Ultimate.hpp"
+#include "modes/extra/Celeste.hpp"
 
 extern KeyboardMode *current_kb_mode;
 
@@ -52,6 +53,10 @@ void select_mode(CommunicationBackend *backend) {
             set_mode(backend, new FgcMode(socd::SOCD_NEUTRAL, socd::SOCD_NEUTRAL));
         } else if (inputs.b) {
             set_mode(backend, new RivalsOfAether(socd::SOCD_2IP));
+        } else if (inputs.a) {
+            set_mode(backend, new Celeste(socd::SOCD_2IP));
+        } else if (inputs.x) {
+            set_mode(backend, new Melee20Button(socd::SOCD_NEUTRAL, { .crouch_walk_os = false }));
         }
     } else if (inputs.mod_y && !inputs.mod_x && inputs.start) {
         if (inputs.l) {

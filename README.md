@@ -167,6 +167,10 @@ The default controller mode button combinations are:
 - Mod X + Start + Right - FGC mode (Hitbox style fighting game layout)
 - Mod X + Start + B - Rivals of Aether mode
 
+I've added the following as well:
+- Mod X + Start + A - Celeste mode
+- Mod X + Start + X - Melee Neutral SOCD
+
 Default keyboard mode button combinations (only available when using DInput backend, **not** with XInput):
 - Mod Y + Start + L - Default keyboard mode
 

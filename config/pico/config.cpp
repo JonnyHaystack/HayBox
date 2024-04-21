@@ -130,6 +130,7 @@ void setup() {
 
     // Default to Melee mode.
     primary_backend->SetGameMode(
+        // new FgcMode(socd::SOCD_NEUTRAL)
         new Melee20Button(socd::SOCD_2IP_NO_REAC, { .crouch_walk_os = false })
     );
 }
