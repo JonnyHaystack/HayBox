@@ -108,6 +108,7 @@ Config glyph_default_config() {
         GameModeConfig &mode_config = config.game_mode_configs[i];
         switch (mode_config.mode_id) {
             case MODE_FGC:
+                mode_config.rgb_config = 2;
                 if (mode_config.button_remapping_count > 0) {
                     mode_config.layout_plate = LAYOUT_PLATE_FGC;
                 } else {
@@ -122,6 +123,7 @@ Config glyph_default_config() {
             case MODE_PROJECT_M:
             case MODE_ULTIMATE:
             case MODE_RIVALS_OF_AETHER:
+                mode_config.rgb_config = 1;
                 mode_config.layout_plate = LAYOUT_PLATE_PLATFORM_FIGHTER;
                 mode_config.applicable_backends[0] = COMMS_BACKEND_XINPUT;
                 mode_config.applicable_backends[1] = COMMS_BACKEND_DINPUT;
