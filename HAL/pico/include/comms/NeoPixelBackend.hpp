@@ -83,7 +83,7 @@ template <uint8_t data_pin, int led_count> class NeoPixelBackend : public Commun
 
     CRGB _leds[led_count];
     uint32_t _button_colors[button_colors_count];
-    absolute_time_t _refresh_timeout;
+    absolute_time_t _refresh_timeout = 0;
 };
 
 #endif
