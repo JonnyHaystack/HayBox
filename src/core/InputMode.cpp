@@ -64,8 +64,8 @@ void InputMode::HandleRemap(const InputState &original_inputs, InputState &remap
     uint64_t physical_buttons_already_remapped = 0;
     for (size_t i = 0; i < _config->button_remapping_count; i++) {
         const ButtonRemap &remapping = _config->button_remapping[i];
-        // If this physical button was already mapped to something else, ignore this remapping. This
-        // is to prevent creating macro behaviour through remapping.
+        // If this physical button was already remapped to something else, ignore this remapping.
+        // This is to prevent creating macro behaviour through remapping.
         if (get_button(physical_buttons_already_remapped, remapping.physical_button)) {
             continue;
         }
@@ -77,21 +77,10 @@ void InputMode::HandleRemap(const InputState &original_inputs, InputState &remap
                                  get_button(remapped_inputs.buttons, remapping.activates);
         set_button(remapped_inputs.buttons, remapping.activates, should_be_pressed);
 
-        // Track which buttons have been mapped from/to.
+        // Track which buttons have been remapped.
         set_button(physical_buttons_already_remapped, remapping.physical_button, true);
     }
 
     // Copy over original button states for buttons that were not remapped.
-    for (uint8_t i = BTN_LF1; i < _Button_MAX; i++) {
-        Button button = (Button)i;
-        if (!get_button(physical_buttons_already_remapped, button)) {
-            bool original_button_pressed = get_button(original_inputs.buttons, button);
-            bool remapped_button_pressed = get_button(remapped_inputs.buttons, button);
-            set_button(
-                remapped_inputs.buttons,
-                button,
-                original_button_pressed || remapped_button_pressed
-            );
-        }
-    }
+    remapped_inputs.buttons |= original_inputs.buttons & ~physical_buttons_already_remapped;
 }
