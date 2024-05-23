@@ -17,6 +17,7 @@ class CustomControllerMode : public ControllerMode {
 
   private:
     const CustomModeConfig *_custom_mode_config;
+    uint64_t _modifier_button_masks[10];
 
     Button GetDirectionButton(const Button *direction_buttons, StickDirectionButton direction);
 };

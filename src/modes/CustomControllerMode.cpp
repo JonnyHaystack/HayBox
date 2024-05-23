@@ -2,6 +2,7 @@
 
 #include "util/state_util.hpp"
 
+#define SIGNUM(x) ((x > 0) - (x < 0))
 #define ANALOG_STICK_NEUTRAL 128
 
 CustomControllerMode::CustomControllerMode() : ControllerMode() {}
@@ -12,6 +13,12 @@ void CustomControllerMode::SetConfig(
 ) {
     InputMode::SetConfig(config);
     _custom_mode_config = &custom_mode_config;
+    for (size_t i = 0; i < custom_mode_config.modifiers_count; i++) {
+        _modifier_button_masks[i] = make_button_mask(
+            custom_mode_config.modifiers[i].buttons,
+            custom_mode_config.modifiers[i].buttons_count
+        );
+    }
 }
 
 void CustomControllerMode::UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs) {
@@ -57,14 +64,26 @@ void CustomControllerMode::UpdateAnalogOutputs(const InputState &inputs, OutputS
         if (modifier.axis == AXIS_UNSPECIFIED || modifier.axis > _AnalogAxis_MAX) {
             continue;
         }
-        if (!get_button(inputs.buttons, modifier.button)) {
+        if (!all_buttons_held(inputs.buttons, _modifier_button_masks[i])) {
             continue;
         }
 
         uint8_t OutputState::*axis = axis_pointer(modifier.axis);
         if (axis != nullptr) {
-            outputs.*axis =
-                ANALOG_STICK_NEUTRAL + (outputs.*axis - ANALOG_STICK_NEUTRAL) * modifier.multiplier;
+            int8_t sign = 0;
+            switch (modifier.combination_mode) {
+                case COMBINATION_MODE_OVERRIDE:
+                    sign = SIGNUM(outputs.*axis);
+                    outputs.*axis = ANALOG_STICK_NEUTRAL +
+                                    _custom_mode_config->stick_range * modifier.multiplier * sign;
+                    break;
+                case COMBINATION_MODE_COMPOUND:
+                case COMBINATION_MODE_UNSPECIFIED:
+                default:
+                    outputs.*axis = ANALOG_STICK_NEUTRAL +
+                                    (outputs.*axis - ANALOG_STICK_NEUTRAL) * modifier.multiplier;
+                    break;
+            }
         }
     }
 
