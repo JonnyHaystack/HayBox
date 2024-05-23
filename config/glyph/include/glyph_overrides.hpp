@@ -16,6 +16,244 @@
 
 // clang-format off
 
+const Config default_config = {
+    .game_mode_configs_count = 5,
+    .game_mode_configs = {
+        GameModeConfig {
+            .mode_id = MODE_MELEE,
+            .socd_pairs_count = 4,
+            .socd_pairs = {
+                SocdPair { .button_dir1 = BTN_LF3, .button_dir2 = BTN_LF1, .socd_type = SOCD_2IP_NO_REAC },
+                SocdPair { .button_dir1 = BTN_LF2, .button_dir2 = BTN_RF4, .socd_type = SOCD_2IP_NO_REAC },
+                SocdPair { .button_dir1 = BTN_RT3, .button_dir2 = BTN_RT5, .socd_type = SOCD_2IP_NO_REAC },
+                SocdPair { .button_dir1 = BTN_RT2, .button_dir2 = BTN_RT4, .socd_type = SOCD_2IP_NO_REAC },
+            },
+            .button_remapping_count = 0,
+            .activation_binding_count = 3,
+            .rgb_config = 1,
+        },
+        GameModeConfig {
+            .mode_id = MODE_PROJECT_M,
+            .socd_pairs_count = 4,
+            .socd_pairs = {
+                SocdPair { .button_dir1 = BTN_LF3, .button_dir2 = BTN_LF1, .socd_type = SOCD_2IP_NO_REAC },
+                SocdPair { .button_dir1 = BTN_LF2, .button_dir2 = BTN_RF4, .socd_type = SOCD_2IP_NO_REAC },
+                SocdPair { .button_dir1 = BTN_RT3, .button_dir2 = BTN_RT5, .socd_type = SOCD_2IP_NO_REAC },
+                SocdPair { .button_dir1 = BTN_RT2, .button_dir2 = BTN_RT4, .socd_type = SOCD_2IP_NO_REAC },
+            },
+            .button_remapping_count = 0,
+            .activation_binding_count = 3,
+            .rgb_config = 1,
+        },
+        GameModeConfig {
+            .mode_id = MODE_ULTIMATE,
+            .socd_pairs_count = 4,
+            .socd_pairs = {
+                SocdPair { .button_dir1 = BTN_LF3, .button_dir2 = BTN_LF1, .socd_type = SOCD_2IP },
+                SocdPair { .button_dir1 = BTN_LF2, .button_dir2 = BTN_RF4, .socd_type = SOCD_2IP },
+                SocdPair { .button_dir1 = BTN_RT3, .button_dir2 = BTN_RT5, .socd_type = SOCD_2IP },
+                SocdPair { .button_dir1 = BTN_RT2, .button_dir2 = BTN_RT4, .socd_type = SOCD_2IP },
+            },
+            .button_remapping_count = 0,
+            .activation_binding_count = 3,
+            .rgb_config = 1,
+        },
+        GameModeConfig {
+            .mode_id = MODE_FGC,
+            .name = "Split FGC",
+            .socd_pairs_count = 2,
+            .socd_pairs = {
+                SocdPair { .button_dir1 = BTN_LF3, .button_dir2 = BTN_LF1, .socd_type = SOCD_NEUTRAL },
+                SocdPair { .button_dir1 = BTN_LT1, .button_dir2 = BTN_RT4, .socd_type = SOCD_NEUTRAL },
+            },
+            .rgb_config = 1,
+            .layout_plate = LAYOUT_PLATE_SPLIT_FGC,
+        },
+        GameModeConfig {
+            .mode_id = MODE_FGC,
+            .socd_pairs_count = 2,
+            .socd_pairs = {
+                SocdPair { .button_dir1 = BTN_LF3, .button_dir2 = BTN_LF1, .socd_type = SOCD_NEUTRAL },
+                SocdPair { .button_dir1 = BTN_LT1, .button_dir2 = BTN_RT4, .socd_type = SOCD_NEUTRAL },
+            },
+            .button_remapping_count = 28,
+            .button_remapping = {
+                // Right hand bottom row
+                ButtonRemap { .physical_button = BTN_RF9,  .activates = BTN_RF1 },
+                ButtonRemap { .physical_button = BTN_RF10, .activates = BTN_RF2 },
+                ButtonRemap { .physical_button = BTN_RF11, .activates = BTN_RF3 },
+                ButtonRemap { .physical_button = BTN_RF1,  .activates = BTN_RF4 },
+                // Right hand top row
+                ButtonRemap { .physical_button = BTN_RF12, .activates = BTN_RF5 },
+                ButtonRemap { .physical_button = BTN_RF13, .activates = BTN_RF6 },
+                ButtonRemap { .physical_button = BTN_RF14, .activates = BTN_RF7 },
+                ButtonRemap { .physical_button = BTN_RF5,  .activates = BTN_RF8 },
+                // Left hand row
+                ButtonRemap { .physical_button = BTN_LF8,  .activates = BTN_LF1 },
+                ButtonRemap { .physical_button = BTN_LF7,  .activates = BTN_LF2 },
+                ButtonRemap { .physical_button = BTN_LF6,  .activates = BTN_LF3 },
+                // Up button
+                ButtonRemap { .physical_button = BTN_LT6,  .activates = BTN_LT1 },
+                // Menu buttons
+                ButtonRemap { .physical_button = BTN_MB3,  .activates = BTN_RT3 },
+                ButtonRemap { .physical_button = BTN_MB4,  .activates = BTN_RT2 },
+                ButtonRemap { .physical_button = BTN_MB2,  .activates = BTN_MB1 },
+                
+                // Unmap the old buttons
+                ButtonRemap { .physical_button = BTN_RF2,  .activates = BTN_UNSPECIFIED },
+                ButtonRemap { .physical_button = BTN_RF3,  .activates = BTN_UNSPECIFIED },
+                ButtonRemap { .physical_button = BTN_RF4,  .activates = BTN_UNSPECIFIED },
+                ButtonRemap { .physical_button = BTN_RF6,  .activates = BTN_UNSPECIFIED },
+                ButtonRemap { .physical_button = BTN_RF7,  .activates = BTN_UNSPECIFIED },
+                ButtonRemap { .physical_button = BTN_RF8,  .activates = BTN_UNSPECIFIED },
+                ButtonRemap { .physical_button = BTN_LF1,  .activates = BTN_UNSPECIFIED },
+                ButtonRemap { .physical_button = BTN_LF2,  .activates = BTN_UNSPECIFIED },
+                ButtonRemap { .physical_button = BTN_LF3,  .activates = BTN_UNSPECIFIED },
+                ButtonRemap { .physical_button = BTN_LT1,  .activates = BTN_UNSPECIFIED },
+                ButtonRemap { .physical_button = BTN_RT2,  .activates = BTN_UNSPECIFIED },
+                ButtonRemap { .physical_button = BTN_RT3,  .activates = BTN_UNSPECIFIED },
+                ButtonRemap { .physical_button = BTN_MB1,  .activates = BTN_UNSPECIFIED },
+            },
+            .activation_binding_count = 3,
+            .rgb_config = 2,
+            .layout_plate = LAYOUT_PLATE_FGC,
+        },
+        GameModeConfig {
+            .mode_id = MODE_KEYBOARD,
+            .socd_pairs_count = 2,
+            .socd_pairs = {
+                SocdPair { .button_dir1 = BTN_LF3, .button_dir2 = BTN_LF1, .socd_type = SOCD_2IP },
+                SocdPair { .button_dir1 = BTN_LT1, .button_dir2 = BTN_RT4, .socd_type = SOCD_2IP },
+            },
+            .button_remapping_count = 0,
+            .activation_binding_count = 3,
+            .keyboard_mode_config = 1,
+        },
+    },
+    .communication_backend_configs_count = 8,
+    .communication_backend_configs = {
+        CommunicationBackendConfig {
+            .backend_id = COMMS_BACKEND_XINPUT,
+            .default_mode_config = 4,
+        },
+        CommunicationBackendConfig {
+            .backend_id = COMMS_BACKEND_DINPUT,
+            .default_mode_config = 5,
+            .activation_binding_count = 1,
+            .activation_binding = { BTN_RF3 },
+        },
+        CommunicationBackendConfig {
+            .backend_id = COMMS_BACKEND_NINTENDO_SWITCH,
+            .default_mode_config = 3,
+            .activation_binding_count = 1,
+            .activation_binding = { BTN_RF2 },
+        },
+        CommunicationBackendConfig {
+            .backend_id = COMMS_BACKEND_GAMECUBE,
+            .default_mode_config = 1,
+        },
+        CommunicationBackendConfig {
+            .backend_id = COMMS_BACKEND_N64,
+            .default_mode_config = 1,
+        },
+        CommunicationBackendConfig {
+            .backend_id = COMMS_BACKEND_NES,
+            .default_mode_config = 1,
+            .activation_binding_count = 1,
+            .activation_binding = { BTN_LT1 },
+        },
+        CommunicationBackendConfig {
+            .backend_id = COMMS_BACKEND_SNES,
+            .default_mode_config = 1,
+            .activation_binding_count = 1,
+            .activation_binding = { BTN_LT2 },
+        },
+        CommunicationBackendConfig {
+            .backend_id = COMMS_BACKEND_CONFIGURATOR,
+            .activation_binding_count = 1,
+            .activation_binding = { BTN_RT2 },
+        }
+    },
+    .keyboard_modes_count = 1,
+    .keyboard_modes = {
+        KeyboardModeConfig {
+            0,
+            22,
+            {
+                { BTN_LF4, HID_KEY_A },
+                { BTN_LF3, HID_KEY_B },
+                { BTN_LF2, HID_KEY_C },
+                { BTN_LF1, HID_KEY_D },
+                { BTN_LT1, HID_KEY_E },
+                { BTN_LT2, HID_KEY_F },
+                { BTN_MB3, HID_KEY_G },
+                { BTN_MB1, HID_KEY_H },
+                { BTN_MB2, HID_KEY_I },
+                { BTN_RF5, HID_KEY_J },
+                { BTN_RF6, HID_KEY_K },
+                { BTN_RF7, HID_KEY_L },
+                { BTN_RF8, HID_KEY_M },
+                { BTN_RF1, HID_KEY_N },
+                { BTN_RF2, HID_KEY_O },
+                { BTN_RF3, HID_KEY_P },
+                { BTN_RF4, HID_KEY_Q },
+                { BTN_RT4, HID_KEY_R },
+                { BTN_RT3, HID_KEY_S },
+                { BTN_RT5, HID_KEY_T },
+                { BTN_RT1, HID_KEY_U },
+                { BTN_RT2, HID_KEY_V },
+            },
+        },
+    },
+    .rgb_configs_count = 2,
+    .rgb_configs = {
+        RgbConfig {
+            .button_colors_count = 19,
+            .button_colors = {
+                { BTN_LF1, 0x0000ff },
+                { BTN_LF2, 0x0000ff },
+                { BTN_LF3, 0x0000ff },
+                { BTN_LF4, 0x0000ff },
+                { BTN_LT1, 0x0000ff },
+                { BTN_LT2, 0x0000ff },
+                { BTN_RF1, 0x0000ff },
+                { BTN_RF2, 0x0000ff },
+                { BTN_RF3, 0x0000ff },
+                { BTN_RF4, 0x0000ff },
+                { BTN_RF5, 0x0000ff },
+                { BTN_RF6, 0x0000ff },
+                { BTN_RF7, 0x0000ff },
+                { BTN_RF8, 0x0000ff },
+                { BTN_RT1, 0x0000ff },
+                { BTN_RT2, 0x0000ff },
+                { BTN_RT3, 0x0000ff },
+                { BTN_RT4, 0x0000ff },
+                { BTN_RT5, 0x0000ff },
+            },
+        },
+        RgbConfig {
+            .button_colors_count = 12,
+            .button_colors = {
+                { BTN_LF6,  0xff0000 },
+                { BTN_LF7,  0xff0000 },
+                { BTN_LF8,  0xff0000 },
+                { BTN_LT6,  0xff0000 },
+                { BTN_RF9,  0xff0000 },
+                { BTN_RF10, 0xff0000 },
+                { BTN_RF11, 0xff0000 },
+                { BTN_RF1,  0xff0000 },
+                { BTN_RF12, 0xff0000 },
+                { BTN_RF13, 0xff0000 },
+                { BTN_RF14, 0xff0000 },
+                { BTN_RF5,  0xff0000 },
+            },
+        },
+    },
+    .default_backend_config = 1,
+    .default_usb_backend_config = 1,
+    .rgb_brightness = 255,
+};
+
 const Button pixel_to_button_mappings[LED_COUNT] = {
     BTN_MB1, BTN_MB1,
     BTN_LF4, BTN_LF4,
@@ -59,103 +297,16 @@ const Button pixel_to_button_mappings[LED_COUNT] = {
 
 Config glyph_default_config() {
     Config config = default_config;
-    config.rgb_configs_count = 2;
-    config.rgb_configs[0] = {
-        .button_colors_count = 19,
-        .button_colors = {
-            { BTN_LF1, 0x0000ff },
-            { BTN_LF2, 0x0000ff },
-            { BTN_LF3, 0x0000ff },
-            { BTN_LF4, 0x0000ff },
-            { BTN_LT1, 0x0000ff },
-            { BTN_LT2, 0x0000ff },
-            { BTN_RF1, 0x0000ff },
-            { BTN_RF2, 0x0000ff },
-            { BTN_RF3, 0x0000ff },
-            { BTN_RF4, 0x0000ff },
-            { BTN_RF5, 0x0000ff },
-            { BTN_RF6, 0x0000ff },
-            { BTN_RF7, 0x0000ff },
-            { BTN_RF8, 0x0000ff },
-            { BTN_RT1, 0x0000ff },
-            { BTN_RT2, 0x0000ff },
-            { BTN_RT3, 0x0000ff },
-            { BTN_RT4, 0x0000ff },
-            { BTN_RT5, 0x0000ff },
-        },
-    };
-    config.rgb_configs[1] = {
-        .button_colors_count = 12,
-        .button_colors = {
-            { BTN_LF6,  0xff0000 },
-            { BTN_LF7,  0xff0000 },
-            { BTN_LF8,  0xff0000 },
-            { BTN_LT6,  0xff0000 },
-            { BTN_RF9,  0xff0000 },
-            { BTN_RF10, 0xff0000 },
-            { BTN_RF11, 0xff0000 },
-            { BTN_RF1,  0xff0000 },
-            { BTN_RF12, 0xff0000 },
-            { BTN_RF13, 0xff0000 },
-            { BTN_RF14, 0xff0000 },
-            { BTN_RF5,  0xff0000 },
-        },
-    };
-    config.rgb_brightness = 255;
 
     // Assign layout plates and applicable backends for default gamemode configs.
     for (size_t i = 0; i < config.game_mode_configs_count; i++) {
         GameModeConfig &mode_config = config.game_mode_configs[i];
         switch (mode_config.mode_id) {
             case MODE_FGC:
-                mode_config.rgb_config = 2;
-                if (mode_config.button_remapping_count > 0) {
-                    mode_config.layout_plate = LAYOUT_PLATE_FGC;
-                } else {
-                    mode_config.layout_plate = LAYOUT_PLATE_SPLIT_FGC;
-                }
                 mode_config.applicable_backends[0] = COMMS_BACKEND_XINPUT;
                 mode_config.applicable_backends[1] = COMMS_BACKEND_DINPUT;
                 mode_config.applicable_backends[2] = COMMS_BACKEND_NINTENDO_SWITCH;
                 mode_config.applicable_backends_count = 3;
-
-                // Right hand bottom row
-                mode_config.button_remapping[0] = { BTN_RF9, BTN_RF1 };
-                mode_config.button_remapping[1] = { BTN_RF10, BTN_RF2 };
-                mode_config.button_remapping[2] = { BTN_RF11, BTN_RF3 };
-                mode_config.button_remapping[3] = { BTN_RF1, BTN_RF4 };
-                // Right hand top row
-                mode_config.button_remapping[4] = { BTN_RF12, BTN_RF5 };
-                mode_config.button_remapping[5] = { BTN_RF13, BTN_RF6 };
-                mode_config.button_remapping[6] = { BTN_RF14, BTN_RF7 };
-                mode_config.button_remapping[7] = { BTN_RF5, BTN_RF8 };
-                // Left hand row
-                mode_config.button_remapping[8] = { BTN_LF8, BTN_LF1 };
-                mode_config.button_remapping[9] = { BTN_LF7, BTN_LF2 };
-                mode_config.button_remapping[10] = { BTN_LF6, BTN_LF3 };
-                // Up button
-                mode_config.button_remapping[11] = { BTN_LT6, BTN_LT1 };
-                // Menu buttons
-                mode_config.button_remapping[12] = { BTN_MB3, BTN_RT3 };
-                mode_config.button_remapping[13] = { BTN_MB4, BTN_RT2 };
-                mode_config.button_remapping[14] = { BTN_MB2, BTN_MB1 };
-
-                // Unmap the old buttons
-                mode_config.button_remapping[15] = { BTN_RF2, BTN_UNSPECIFIED };
-                mode_config.button_remapping[16] = { BTN_RF3, BTN_UNSPECIFIED };
-                mode_config.button_remapping[17] = { BTN_RF4, BTN_UNSPECIFIED };
-                mode_config.button_remapping[18] = { BTN_RF6, BTN_UNSPECIFIED };
-                mode_config.button_remapping[19] = { BTN_RF7, BTN_UNSPECIFIED };
-                mode_config.button_remapping[20] = { BTN_RF8, BTN_UNSPECIFIED };
-                mode_config.button_remapping[21] = { BTN_LF1, BTN_UNSPECIFIED };
-                mode_config.button_remapping[22] = { BTN_LF2, BTN_UNSPECIFIED };
-                mode_config.button_remapping[23] = { BTN_LF3, BTN_UNSPECIFIED };
-                mode_config.button_remapping[24] = { BTN_LT1, BTN_UNSPECIFIED };
-                mode_config.button_remapping[25] = { BTN_RT2, BTN_UNSPECIFIED };
-                mode_config.button_remapping[26] = { BTN_RT3, BTN_UNSPECIFIED };
-                mode_config.button_remapping[27] = { BTN_MB1, BTN_UNSPECIFIED };
-
-                mode_config.button_remapping_count = 28;
                 break;
             case MODE_MELEE:
             case MODE_PROJECT_M:
