@@ -93,7 +93,7 @@ ConfigMenu::ConfigMenu(Config &config, CommunicationBackend **backends, size_t b
     // clang-format off
     static MenuPage::MenuItem top_level_items[] = {
         {
-            .text = "Gamemode",
+            .text = "Profile",
             .page = &_gamemode_options_page,
         },
         {
@@ -101,7 +101,7 @@ ConfigMenu::ConfigMenu(Config &config, CommunicationBackend **backends, size_t b
             .page = &_usb_backends_page,
         },
         {
-            .text = "SOCD Mode",
+            .text = "SOCD Option",
             .page = &socd_page,
         },
         {

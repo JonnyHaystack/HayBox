@@ -49,6 +49,13 @@ class IntegratedDisplay : public CommunicationBackend {
     size_t _display_modes_count;
 
     void HandleControls(DisplayMode *active_mode);
+
+    /**
+     * @brief Get the current active DisplayMode instance.
+     *
+     * @return A pointer to the first DisplayMode instance in the _display_modes array whose
+     * DisplayModeId is the same as the current value of _display_mode in this class.
+     */
     DisplayMode *GetActiveDisplayMode();
 };
 
