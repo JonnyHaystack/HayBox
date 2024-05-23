@@ -169,6 +169,9 @@ Config glyph_default_config() {
                 mode_config.applicable_backends[3] = COMMS_BACKEND_GAMECUBE;
                 mode_config.applicable_backends_count = 4;
                 break;
+            case MODE_KEYBOARD:
+                mode_config.applicable_backends[0] = COMMS_BACKEND_DINPUT;
+                mode_config.applicable_backends_count = 1;
             default:
                 mode_config.layout_plate = LAYOUT_PLATE_EVERYTHING;
         }
