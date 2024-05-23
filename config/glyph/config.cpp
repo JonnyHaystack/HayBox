@@ -148,7 +148,7 @@ void setup1() {
             display,
             []() { display.clearDisplay(); },
             []() { display.display(); },
-            DisplayControls{ .back = BTN_MB4, .down = BTN_MB5, .up = BTN_MB6, .enter = BTN_MB7 },
+            DisplayControls{ .back = BTN_MB1, .down = BTN_MB6, .up = BTN_MB5, .enter = BTN_MB7 },
             display_modes,
             display_modes_count
         );
