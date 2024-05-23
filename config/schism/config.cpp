@@ -7,7 +7,6 @@
 #include "core/pinout.hpp"
 #include "core/state.hpp"
 #include "input/DebouncedGpioButtonInput.hpp"
-#include "input/Mcp23Input.hpp"
 #include "input/Pca9671Input.hpp"
 #include "reboot.hpp"
 #include "stdlib.hpp"
@@ -51,7 +50,6 @@ const size_t expander_button_count =
     sizeof(expander_button_mappings) / sizeof(Pca9671ButtonMapping);
 
 DebouncedGpioButtonInput<button_count> gpio_input(button_mappings);
-// Mcp23Input *expander_input = nullptr;
 Pca9671Input expander_input(expander_button_mappings, expander_button_count, Wire, 20, 21);
 
 const Pinout pinout = {
