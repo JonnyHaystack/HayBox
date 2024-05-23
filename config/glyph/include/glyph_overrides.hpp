@@ -118,6 +118,44 @@ Config glyph_default_config() {
                 mode_config.applicable_backends[1] = COMMS_BACKEND_DINPUT;
                 mode_config.applicable_backends[2] = COMMS_BACKEND_NINTENDO_SWITCH;
                 mode_config.applicable_backends_count = 3;
+
+                // Right hand bottom row
+                mode_config.button_remapping[0] = { BTN_RF9, BTN_RF1 };
+                mode_config.button_remapping[1] = { BTN_RF10, BTN_RF2 };
+                mode_config.button_remapping[2] = { BTN_RF11, BTN_RF3 };
+                mode_config.button_remapping[3] = { BTN_RF1, BTN_RF4 };
+                // Right hand top row
+                mode_config.button_remapping[4] = { BTN_RF12, BTN_RF5 };
+                mode_config.button_remapping[5] = { BTN_RF13, BTN_RF6 };
+                mode_config.button_remapping[6] = { BTN_RF14, BTN_RF7 };
+                mode_config.button_remapping[7] = { BTN_RF5, BTN_RF8 };
+                // Left hand row
+                mode_config.button_remapping[8] = { BTN_LF8, BTN_LF1 };
+                mode_config.button_remapping[9] = { BTN_LF7, BTN_LF2 };
+                mode_config.button_remapping[10] = { BTN_LF6, BTN_LF3 };
+                // Up button
+                mode_config.button_remapping[11] = { BTN_LT6, BTN_LT1 };
+                // Menu buttons
+                mode_config.button_remapping[12] = { BTN_MB3, BTN_RT3 };
+                mode_config.button_remapping[13] = { BTN_MB4, BTN_RT2 };
+                mode_config.button_remapping[14] = { BTN_MB2, BTN_MB1 };
+
+                // Unmap the old buttons
+                mode_config.button_remapping[15] = { BTN_RF2, BTN_UNSPECIFIED };
+                mode_config.button_remapping[16] = { BTN_RF3, BTN_UNSPECIFIED };
+                mode_config.button_remapping[17] = { BTN_RF4, BTN_UNSPECIFIED };
+                mode_config.button_remapping[18] = { BTN_RF6, BTN_UNSPECIFIED };
+                mode_config.button_remapping[19] = { BTN_RF7, BTN_UNSPECIFIED };
+                mode_config.button_remapping[20] = { BTN_RF8, BTN_UNSPECIFIED };
+                mode_config.button_remapping[21] = { BTN_LF1, BTN_UNSPECIFIED };
+                mode_config.button_remapping[22] = { BTN_LF2, BTN_UNSPECIFIED };
+                mode_config.button_remapping[23] = { BTN_LF3, BTN_UNSPECIFIED };
+                mode_config.button_remapping[24] = { BTN_LT1, BTN_UNSPECIFIED };
+                mode_config.button_remapping[25] = { BTN_RT2, BTN_UNSPECIFIED };
+                mode_config.button_remapping[26] = { BTN_RT3, BTN_UNSPECIFIED };
+                mode_config.button_remapping[27] = { BTN_MB1, BTN_UNSPECIFIED };
+
+                mode_config.button_remapping_count = 28;
                 break;
             case MODE_MELEE:
             case MODE_PROJECT_M:
