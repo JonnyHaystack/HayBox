@@ -4,7 +4,6 @@
 #include <Adafruit_GFX.h>
 #include <config.pb.h>
 
-// struct _DisplayControls;
 typedef struct _DisplayControls DisplayControls;
 class IntegratedDisplay;
 
