@@ -4,7 +4,6 @@
 #include "comms/B0XXInputViewer.hpp"
 #include "comms/IntegratedDisplay.hpp"
 #include "comms/NeoPixelBackend.hpp"
-#include "config_defaults.hpp"
 #include "core/config_utils.hpp"
 #include "stdlib.hpp"
 
@@ -17,7 +16,7 @@
 // clang-format off
 
 const Config default_config = {
-    .game_mode_configs_count = 5,
+    .game_mode_configs_count = 6,
     .game_mode_configs = {
         GameModeConfig {
             .mode_id = MODE_MELEE,
@@ -323,6 +322,7 @@ Config glyph_default_config() {
             case MODE_KEYBOARD:
                 mode_config.applicable_backends[0] = COMMS_BACKEND_DINPUT;
                 mode_config.applicable_backends_count = 1;
+                break;
             default:
                 mode_config.layout_plate = LAYOUT_PLATE_EVERYTHING;
         }
