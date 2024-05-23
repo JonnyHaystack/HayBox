@@ -133,11 +133,11 @@ const Config default_config = {
     .communication_backend_configs = {
         CommunicationBackendConfig {
             .backend_id = COMMS_BACKEND_XINPUT,
-            .default_mode_config = 4,
+            .default_mode_config = 1,
         },
         CommunicationBackendConfig {
             .backend_id = COMMS_BACKEND_DINPUT,
-            .default_mode_config = 5,
+            .default_mode_config = 1,
             .activation_binding_count = 1,
             .activation_binding = { BTN_RF3 },
         },
