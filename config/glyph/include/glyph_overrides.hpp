@@ -322,6 +322,7 @@ Config glyph_default_config() {
             case MODE_KEYBOARD:
                 mode_config.applicable_backends[0] = COMMS_BACKEND_DINPUT;
                 mode_config.applicable_backends_count = 1;
+                mode_config.rgb_config = 1;
                 break;
             default:
                 mode_config.layout_plate = LAYOUT_PLATE_EVERYTHING;
@@ -354,7 +355,7 @@ size_t init_secondary_backends_glyph(
 
     // Create new array containing all old backends but with length increased by 1 to make space for
     // NeoPixel backend.
-    CommunicationBackend **new_backends = new CommunicationBackend *[backend_count + 2];
+    CommunicationBackend **new_backends = new CommunicationBackend *[backend_count + 1];
     for (size_t i = 0; i < backend_count; i++) {
         new_backends[i] = backends[i];
     }
