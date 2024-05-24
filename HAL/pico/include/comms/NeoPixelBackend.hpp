@@ -30,7 +30,7 @@ template <uint8_t data_pin, int led_count> class NeoPixelBackend : public Commun
 
     ~NeoPixelBackend() { FastLED.clear(true); }
 
-    virtual void SetGameMode(ControllerMode *gamemode) {
+    virtual void SetGameMode(InputMode *gamemode) {
         // Clear current button colors.
         for (size_t i = 0; i < button_colors_count; i++) {
             _button_colors[i] = 0;

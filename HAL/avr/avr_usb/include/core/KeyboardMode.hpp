@@ -13,6 +13,8 @@ class KeyboardMode : public InputMode {
     ~KeyboardMode();
     void SendReport(const InputState &inputs);
 
+    void UpdateOutputs(const InputState &inputs, OutputState &outputs) {}
+
   protected:
     void Press(uint8_t keycode, bool press);
 

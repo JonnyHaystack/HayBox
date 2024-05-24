@@ -51,10 +51,10 @@ CommunicationBackendId CommunicationBackend::BackendId() {
     return COMMS_BACKEND_UNSPECIFIED;
 }
 
-void CommunicationBackend::SetGameMode(ControllerMode *gamemode) {
+void CommunicationBackend::SetGameMode(InputMode *gamemode) {
     _gamemode = gamemode;
 }
 
-ControllerMode *CommunicationBackend::CurrentGameMode() {
+InputMode *CommunicationBackend::CurrentGameMode() {
     return _gamemode;
 }

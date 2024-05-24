@@ -11,6 +11,7 @@ class InputMode {
     InputMode();
     GameModeConfig *GetConfig();
     void SetConfig(GameModeConfig &config);
+    virtual void UpdateOutputs(const InputState &inputs, OutputState &outputs) = 0;
 
   protected:
     GameModeConfig *_config = nullptr;

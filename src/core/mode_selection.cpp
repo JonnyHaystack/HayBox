@@ -38,7 +38,7 @@ void set_mode(CommunicationBackend *backend, KeyboardMode *mode) {
     current_kb_mode = mode;
 
     // Unset the current controller mode so backend only gives neutral inputs.
-    backend->SetGameMode(nullptr);
+    backend->SetGameMode(mode);
 }
 
 void set_mode(CommunicationBackend *backend, GameModeConfig &mode_config, Config &config) {

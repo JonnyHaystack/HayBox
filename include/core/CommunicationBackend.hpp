@@ -20,8 +20,8 @@ class CommunicationBackend {
 
     virtual void UpdateOutputs();
     virtual CommunicationBackendId BackendId();
-    virtual void SetGameMode(ControllerMode *gamemode);
-    virtual ControllerMode *CurrentGameMode();
+    virtual void SetGameMode(InputMode *gamemode);
+    virtual InputMode *CurrentGameMode();
 
     virtual void SendReport() = 0;
 
@@ -31,7 +31,7 @@ class CommunicationBackend {
     size_t _input_source_count;
 
     OutputState _outputs;
-    ControllerMode *_gamemode = nullptr;
+    InputMode *_gamemode = nullptr;
 
   private:
     void ResetOutputs();
