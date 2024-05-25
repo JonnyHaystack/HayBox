@@ -38,14 +38,9 @@ jobs:
           include: ${{ fromJson(needs.metadata.outputs.meta_json).build }}
 
     steps:
-    - name: Check out HayBox repo
-      uses: actions/checkout@v4
-      with:
-        repository: ${{ env.HAYBOX_REPO }}
-        path: .
-
     - name: Check out specific HayBox revision
       run: |
+        git clone "$HAYBOX_REPO" .
         git checkout "$HAYBOX_REVISION"
 
     - name: Check out config repo
