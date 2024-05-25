@@ -10,6 +10,7 @@ jobs:
     env:
       VERSION_REF: ${{ github.ref_type == 'tag' && github.ref_name || github.sha }}
     strategy:
+        fail-fast: false
         matrix:
           include:
             - env: c53
