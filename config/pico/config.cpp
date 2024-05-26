@@ -77,11 +77,9 @@ void setup() {
     gpio_put(PICO_DEFAULT_LED_PIN, 1);
 
     // Attempt to load config, or write default config to flash if failed to load config.
-    Persistence *persistence = new Persistence();
-    if (!persistence->LoadConfig(config)) {
-        persistence->SaveConfig(config);
+    if (!persistence.LoadConfig(config)) {
+        persistence.SaveConfig(config);
     }
-    delete persistence;
 
     // Create array of input sources to be used.
     static InputSource *input_sources[] = {};
