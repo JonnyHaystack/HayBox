@@ -34,6 +34,11 @@ void set_mode(CommunicationBackend *backend, ControllerMode *mode) {
 }
 
 void set_mode(CommunicationBackend *backend, KeyboardMode *mode) {
+    // Only DInputBackend supports keyboard modes.
+    if (backend->BackendId() != COMMS_BACKEND_DINPUT) {
+        return;
+    }
+
     // Delete and reassign current keyboard mode.
     current_kb_mode = mode;
 
