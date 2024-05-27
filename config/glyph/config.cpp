@@ -153,7 +153,10 @@ void setup1() {
             display_modes_count
         );
         // clang-format on
-        display_backend->SetDisplayMode(DISPLAY_MODE_BUTTON_HINTS);
+        display_backend->SetDisplayMode(
+            config.default_dashboard_option == DASHBOARD_INPUT_VIEWER ? DISPLAY_MODE_VIEWER
+                                                                      : DISPLAY_MODE_BUTTON_HINTS
+        );
     }
 }
 

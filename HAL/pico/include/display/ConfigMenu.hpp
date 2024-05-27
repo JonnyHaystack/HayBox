@@ -33,7 +33,6 @@ typedef struct _MenuPage {
 class ConfigMenu : public DisplayMode {
   public:
     ConfigMenu(Config &config, CommunicationBackend **backends, size_t backends_count);
-    ~ConfigMenu();
     DisplayModeId GetId();
     virtual void HandleControls(
         IntegratedDisplay *instance,
@@ -41,36 +40,15 @@ class ConfigMenu : public DisplayMode {
         Button button
     );
     virtual void UpdateDisplay(IntegratedDisplay *instance, Adafruit_GFX &display);
+    virtual void ReturnToDashboard(IntegratedDisplay *instance);
 
   protected:
-    static void SetDefaultMode(
-        IntegratedDisplay *instance,
-        ConfigMenu *menu,
-        Config &config,
-        uint8_t mode_config_index
-    );
-    static void SetDefaultUsbBackend(
-        IntegratedDisplay *instance,
-        ConfigMenu *menu,
-        Config &config,
-        uint8_t backend_config_index
-    );
-    static void SetSocdType(
-        IntegratedDisplay *instance,
-        ConfigMenu *menu,
-        Config &config,
-        uint8_t socd_type
-    );
-
     Config &_config;
     CommunicationBackend **_backends;
     size_t _backends_count;
 
-    MenuPage _usb_backends_page;
-    MenuPage _gamemode_options_page;
-    MenuPage _top_level_page;
-
-    MenuPage *_current_menu_page = &_top_level_page;
+    MenuPage *_top_level_page = nullptr;
+    MenuPage *_current_menu_page = nullptr;
     uint8_t _highlighted_menu_item = 0;
     int _current_menu_offset = 0;
 
