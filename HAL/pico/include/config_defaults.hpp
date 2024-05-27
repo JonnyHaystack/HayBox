@@ -21,7 +21,6 @@ const Config default_config = {
             .button_remapping_count = 0,
             .activation_binding_count = 3,
             .activation_binding = { BTN_LT1, BTN_MB1, BTN_LF4 },
-            .rgb_config = 1,
         },
         GameModeConfig {
             .mode_id = MODE_PROJECT_M,
@@ -35,7 +34,6 @@ const Config default_config = {
             .button_remapping_count = 0,
             .activation_binding_count = 3,
             .activation_binding = { BTN_LT1, BTN_MB1, BTN_LF3 },
-            .rgb_config = 1,
         },
         GameModeConfig {
             .mode_id = MODE_ULTIMATE,
@@ -49,7 +47,6 @@ const Config default_config = {
             .button_remapping_count = 0,
             .activation_binding_count = 3,
             .activation_binding = { BTN_LT1, BTN_MB1, BTN_LF2 },
-            .rgb_config = 1,
         },
         GameModeConfig {
             .mode_id = MODE_FGC,
@@ -64,7 +61,6 @@ const Config default_config = {
             },
             .activation_binding_count = 3,
             .activation_binding = { BTN_LT1, BTN_MB1, BTN_LF1 },
-            .rgb_config = 2,
         },
         GameModeConfig {
             .mode_id = MODE_KEYBOARD,
@@ -87,7 +83,7 @@ const Config default_config = {
         },
         CommunicationBackendConfig {
             .backend_id = COMMS_BACKEND_DINPUT,
-            .default_mode_config = 5,
+            .default_mode_config = 1,
             .activation_binding_count = 1,
             .activation_binding = { BTN_RF3 },
         },
