@@ -82,7 +82,7 @@ const Config default_config = {
             },
             .button_remapping_count = 7,
             .button_remapping = {
-                ButtonRemap { .physical_button = BTN_RT4,  .activates = BTN_LT1 },
+                ButtonRemap { .physical_button = BTN_RT1,  .activates = BTN_LT1 },
                 ButtonRemap { .physical_button = BTN_MB3,  .activates = BTN_RT3 },
                 ButtonRemap { .physical_button = BTN_MB4,  .activates = BTN_RT2 },
                 ButtonRemap { .physical_button = BTN_MB2,  .activates = BTN_MB1 },
