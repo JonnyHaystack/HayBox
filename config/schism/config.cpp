@@ -75,6 +75,9 @@ void setup() {
         reboot_bootloader();
     }
 
+    // Also scan I/O expander for inputs, but after the bootloader check in case it causes a crash.
+    expander_input.UpdateInputs(inputs);
+
     // Turn on LED to indicate firmware booted.
     gpio_init(PICO_DEFAULT_LED_PIN);
     gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
@@ -115,10 +118,6 @@ void setup1() {
     while (backends == nullptr) {
         tight_loop_contents();
     }
-    // Wire.setSDA(20);
-    // Wire.setSCL(21);
-    // Wire.begin();
-    // expander_input = new Pca9671Input(expander_button_mappings, expander_button_count, Wire);
 }
 
 void loop1() {
