@@ -50,7 +50,7 @@ jobs:
 
     steps:
     - name: Check out source code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Set up Python
       uses: actions/setup-python@v5
@@ -69,7 +69,7 @@ jobs:
         cp ".pio/build/${{ matrix.env }}/firmware.${{ matrix.bin_ext }}" "${{ matrix.env }}/HayBox-${VERSION_REF}-${{ matrix.env }}.${{ matrix.bin_ext }}"
 
     - name: Publish ${{ matrix.env }} artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: HayBox-${{ env.VERSION_REF }}-${{ matrix.env }}.${{ matrix.bin_ext }}
         path: ${{ matrix.env }}/HayBox-${{ env.VERSION_REF }}-${{ matrix.env }}.${{ matrix.bin_ext }}
