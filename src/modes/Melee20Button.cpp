@@ -70,8 +70,8 @@ void Melee20Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
     bool shield_button_pressed = inputs.l || inputs.r || inputs.lightshield || inputs.midshield;
     if (directions.diagonal) {
         // q1/2 = 7000 7000
-        outputs.leftStickX = 128 + (directions.x * 56);
-        outputs.leftStickY = 128 + (directions.y * 56);
+        outputs.leftStickX = 128 + (directions.x * 51);
+        outputs.leftStickY = 128 + (directions.y * 27);
         // L, R, LS, and MS + q3/4 = 7000 6875 (For vanilla shield drop. Gives 44.5
         // degree wavedash). Also used as default q3/4 diagonal if crouch walk option select is
         // enabled.
