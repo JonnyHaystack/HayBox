@@ -6,20 +6,17 @@
 
 #include <config.pb.h>
 
-typedef struct {
-    bool crouch_walk_os = false;
-} Melee20ButtonOptions;
-
 class Melee20Button : public ControllerMode {
   public:
-    Melee20Button(Melee20ButtonOptions options = {});
+    Melee20Button();
+    void SetConfig(GameModeConfig &config, const MeleeOptions options);
 
   protected:
     void UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs);
     void UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs);
 
   private:
-    Melee20ButtonOptions _options;
+    MeleeOptions _options;
     bool _horizontal_socd;
 
     void HandleSocd(InputState &inputs);

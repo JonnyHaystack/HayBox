@@ -4,9 +4,13 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 228
 
-ProjectM::ProjectM(ProjectMOptions options) : ControllerMode() {
-    _options = options;
+ProjectM::ProjectM() : ControllerMode() {
     _horizontal_socd = false;
+}
+
+void ProjectM::SetConfig(GameModeConfig &config, const ProjectMOptions options) {
+    InputMode::SetConfig(config);
+    _options = options;
 }
 
 void ProjectM::HandleSocd(InputState &inputs) {
@@ -76,6 +80,7 @@ void ProjectM::UpdateAnalogOutputs(const InputState &inputs, OutputState &output
         }
     }
 
+    /* Mod X */
     if (inputs.lt1) {
         if (directions.horizontal) {
             outputs.leftStickX = 128 + (directions.x * 70);
@@ -90,6 +95,7 @@ void ProjectM::UpdateAnalogOutputs(const InputState &inputs, OutputState &output
         }
 
         if (directions.diagonal) {
+            // Default MX Diagonal
             outputs.leftStickX = 128 + (directions.x * 70);
             outputs.leftStickY = 128 + (directions.y * 34);
 
@@ -98,9 +104,15 @@ void ProjectM::UpdateAnalogOutputs(const InputState &inputs, OutputState &output
                 outputs.leftStickY = 128 + (directions.y * 31);
             }
 
+            // Airdodge angle
             if (inputs.rf5) {
-                outputs.leftStickX = 128 + (directions.x * 82);
-                outputs.leftStickY = 128 + (directions.y * 35);
+                if (_options.has_custom_airdodge) {
+                    outputs.leftStickX = 128 + (directions.x * _options.custom_airdodge.x);
+                    outputs.leftStickY = 128 + (directions.y * _options.custom_airdodge.y);
+                } else {
+                    outputs.leftStickX = 128 + (directions.x * 82);
+                    outputs.leftStickY = 128 + (directions.y * 35);
+                }
             }
 
             if (inputs.rt4) {
@@ -125,6 +137,7 @@ void ProjectM::UpdateAnalogOutputs(const InputState &inputs, OutputState &output
         }
     }
 
+    /* Mod Y */
     if (inputs.lt2) {
         if (directions.horizontal) {
             outputs.leftStickX = 128 + (directions.x * 35);
@@ -181,7 +194,7 @@ void ProjectM::UpdateAnalogOutputs(const InputState &inputs, OutputState &output
 
     // Horizontal SOCD overrides X-axis modifiers (for ledgedash maximum jump
     // trajectory).
-    if (_options.ledgedash_max_jump_traj && _horizontal_socd && !directions.vertical &&
+    if (!_options.disable_ledgedash_socd_override && _horizontal_socd && !directions.vertical &&
         !shield_button_pressed) {
         outputs.leftStickX = 128 + (directions.x * 100);
     }

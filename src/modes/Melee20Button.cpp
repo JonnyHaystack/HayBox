@@ -4,9 +4,13 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 208
 
-Melee20Button::Melee20Button(Melee20ButtonOptions options) : ControllerMode() {
-    _options = options;
+Melee20Button::Melee20Button() : ControllerMode() {
     _horizontal_socd = false;
+}
+
+void Melee20Button::SetConfig(GameModeConfig &config, const MeleeOptions options) {
+    InputMode::SetConfig(config);
+    _options = options;
 }
 
 void Melee20Button::HandleSocd(InputState &inputs) {
@@ -73,6 +77,7 @@ void Melee20Button::UpdateAnalogOutputs(const InputState &inputs, OutputState &o
         }
     }
 
+    /* Mod X */
     if (inputs.lt1) {
         // MX + Horizontal (even if shield is held) = 6625 = 53
         if (directions.horizontal) {
@@ -83,9 +88,15 @@ void Melee20Button::UpdateAnalogOutputs(const InputState &inputs, OutputState &o
             outputs.leftStickY = 128 + (directions.y * 43);
         }
         if (directions.diagonal && shield_button_pressed) {
-            // MX + L, R, LS, and MS + q1/2/3/4 = 6375 3750 = 51 30
-            outputs.leftStickX = 128 + (directions.x * 51);
-            outputs.leftStickY = 128 + (directions.y * 30);
+            // Use custom airdodge angle if set, otherwise B0XX standard default.
+            if (_options.has_custom_airdodge) {
+                outputs.leftStickX = 128 + (directions.x * _options.custom_airdodge.x);
+                outputs.leftStickY = 128 + (directions.y * _options.custom_airdodge.y);
+            } else {
+                // MX + L, R, LS, and MS + q1/2/3/4 = 6375 3750 = 51 30
+                outputs.leftStickX = 128 + (directions.x * 51);
+                outputs.leftStickY = 128 + (directions.y * 30);
+            }
         }
 
         /* Up B angles */
@@ -150,6 +161,7 @@ void Melee20Button::UpdateAnalogOutputs(const InputState &inputs, OutputState &o
         }
     }
 
+    /* Mod Y */
     if (inputs.lt2) {
         // MY + Horizontal (even if shield is held) = 3375 = 27
         if (directions.horizontal) {
@@ -240,7 +252,7 @@ void Melee20Button::UpdateAnalogOutputs(const InputState &inputs, OutputState &o
 
     // Horizontal SOCD overrides X-axis modifiers (for ledgedash maximum jump
     // trajectory).
-    if (_horizontal_socd && !directions.vertical) {
+    if (!_options.disable_ledgedash_socd_override && _horizontal_socd && !directions.vertical) {
         outputs.leftStickX = 128 + (directions.x * 80);
     }
 

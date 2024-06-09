@@ -12,8 +12,8 @@
 
 #include <config.pb.h>
 
-Melee20Button melee_mode({ .crouch_walk_os = false });
-ProjectM projectm_mode({ .true_z_press = false, .ledgedash_max_jump_traj = true });
+Melee20Button melee_mode;
+ProjectM projectm_mode;
 Ultimate ultimate_mode;
 FgcMode fgc_mode;
 RivalsOfAether rivals_mode;
@@ -49,11 +49,11 @@ void set_mode(CommunicationBackend *backend, KeyboardMode *mode) {
 void set_mode(CommunicationBackend *backend, GameModeConfig &mode_config, Config &config) {
     switch (mode_config.mode_id) {
         case MODE_MELEE:
-            melee_mode.SetConfig(mode_config);
+            melee_mode.SetConfig(mode_config, config.melee_options);
             set_mode(backend, &melee_mode);
             break;
         case MODE_PROJECT_M:
-            projectm_mode.SetConfig(mode_config);
+            projectm_mode.SetConfig(mode_config, config.project_m_options);
             set_mode(backend, &projectm_mode);
             break;
         case MODE_ULTIMATE:
