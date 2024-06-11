@@ -19,6 +19,12 @@ void CustomControllerMode::SetConfig(
             custom_mode_config.modifiers[i].buttons_count
         );
     }
+    for (size_t i = 0; i < custom_mode_config.button_combo_mappings_count; i++) {
+        _button_combo_mappings_masks[i] = make_button_mask(
+            custom_mode_config.button_combo_mappings[i].buttons,
+            custom_mode_config.button_combo_mappings[i].buttons_count
+        );
+    }
 }
 
 void CustomControllerMode::UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs) {
@@ -26,9 +32,28 @@ void CustomControllerMode::UpdateDigitalOutputs(const InputState &inputs, Output
         return;
     }
 
+    // First check for button combo -> single output mappings, and lock out the normal function of
+    // the buttons in any buttons combos that are activated.
+    _buttons_to_ignore = 0;
+    const ButtonComboMapping *button_combo_mappings = _custom_mode_config->button_combo_mappings;
+    for (size_t i = 0; i < _custom_mode_config->button_combo_mappings_count; i++) {
+        const ButtonComboMapping &button_combo_mapping = button_combo_mappings[i];
+        if (!all_buttons_held(inputs.buttons, _button_combo_mappings_masks[i])) {
+            continue;
+        }
+
+        set_output(outputs.buttons, button_combo_mapping.digital_output, true);
+        _buttons_to_ignore |= _button_combo_mappings_masks[i];
+    }
+    _filtered_buttons = inputs.buttons & ~_buttons_to_ignore;
+
     for (size_t output = 0; output < _custom_mode_config->digital_button_mappings_count; output++) {
         Button input = _custom_mode_config->digital_button_mappings[output];
-        set_output(outputs.buttons, (DigitalOutput)(output + 1), get_button(inputs.buttons, input));
+        set_output(
+            outputs.buttons,
+            (DigitalOutput)(output + 1),
+            get_button(_filtered_buttons, input)
+        );
     }
 
     if (inputs.nunchuk_connected) {
@@ -44,14 +69,14 @@ void CustomControllerMode::UpdateAnalogOutputs(const InputState &inputs, OutputS
     const Button *direction_buttons = _custom_mode_config->stick_direction_mappings;
     uint8_t stick_range = _custom_mode_config->stick_range;
     UpdateDirections(
-        get_button(inputs.buttons, GetDirectionButton(direction_buttons, SD_LSTICK_LEFT)),
-        get_button(inputs.buttons, GetDirectionButton(direction_buttons, SD_LSTICK_RIGHT)),
-        get_button(inputs.buttons, GetDirectionButton(direction_buttons, SD_LSTICK_DOWN)),
-        get_button(inputs.buttons, GetDirectionButton(direction_buttons, SD_LSTICK_UP)),
-        get_button(inputs.buttons, GetDirectionButton(direction_buttons, SD_RSTICK_LEFT)),
-        get_button(inputs.buttons, GetDirectionButton(direction_buttons, SD_RSTICK_RIGHT)),
-        get_button(inputs.buttons, GetDirectionButton(direction_buttons, SD_RSTICK_DOWN)),
-        get_button(inputs.buttons, GetDirectionButton(direction_buttons, SD_RSTICK_UP)),
+        get_button(_filtered_buttons, SD_LSTICK_LEFT)),
+        get_button(_filtered_buttons, SD_LSTICK_RIGHT)),
+        get_button(_filtered_buttons, GetDirectionButton(direction_buttons, SD_LSTICK_DOWN)),
+        get_button(_filtered_buttons, GetDirectionButton(direction_buttons, SD_LSTICK_UP)),
+        get_button(_filtered_buttons, GetDirectionButton(direction_buttons, SD_RSTICK_LEFT)),
+        get_button(_filtered_buttons, GetDirectionButton(direction_buttons, SD_RSTICK_RIGHT)),
+        get_button(_filtered_buttons, GetDirectionButton(direction_buttons, SD_RSTICK_DOWN)),
+        get_button(_filtered_buttons, GetDirectionButton(direction_buttons, SD_RSTICK_UP)),
         ANALOG_STICK_NEUTRAL - stick_range,
         ANALOG_STICK_NEUTRAL,
         ANALOG_STICK_NEUTRAL + stick_range,
@@ -64,7 +89,7 @@ void CustomControllerMode::UpdateAnalogOutputs(const InputState &inputs, OutputS
         if (modifier.axis == AXIS_UNSPECIFIED || modifier.axis > _AnalogAxis_MAX) {
             continue;
         }
-        if (!all_buttons_held(inputs.buttons, _modifier_button_masks[i])) {
+        if (!all_buttons_held(_filtered_buttons, _modifier_button_masks[i])) {
             continue;
         }
 
@@ -91,7 +116,7 @@ void CustomControllerMode::UpdateAnalogOutputs(const InputState &inputs, OutputS
         _custom_mode_config->analog_trigger_mappings;
     for (size_t i = 0; i < _custom_mode_config->analog_trigger_mappings_count; i++) {
         const AnalogTriggerMapping &mapping = analog_trigger_mappings[i];
-        if (get_button(inputs.buttons, mapping.button)) {
+        if (get_button(_filtered_buttons, mapping.button)) {
             switch (mapping.trigger) {
                 case TRIGGER_LT:
                     outputs.triggerLAnalog = mapping.value;
