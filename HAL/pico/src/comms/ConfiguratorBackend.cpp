@@ -201,7 +201,34 @@ bool ConfiguratorBackend::HandleSetConfig() {
     }
 
     for (size_t i = 0; i < _config.game_mode_configs_count; i++) {
-        uint8_t keyboard_mode_id = _config.game_mode_configs[i].keyboard_mode_config;
+        const GameModeConfig &gamemode_config = _config.game_mode_configs[i];
+        uint8_t keyboard_mode_id = gamemode_config.keyboard_mode_config;
+        uint8_t custom_mode_id = gamemode_config.custom_mode_config;
+
+        if (keyboard_mode_id > 0 && gamemode_config.mode_id != MODE_KEYBOARD) {
+            char errmsg[80];
+            size_t errmsg_len = snprintf(
+                errmsg,
+                sizeof(errmsg),
+                "keyboard_mode_id is set for game mode %d but mode_id is not MODE_KEYBOARD",
+                (uint8_t)i + 1
+            );
+            WritePacket(CMD_ERROR, (uint8_t *)errmsg, errmsg_len);
+            return false;
+        }
+
+        if (custom_mode_id > 0 && gamemode_config.mode_id != MODE_CUSTOM) {
+            char errmsg[75];
+            size_t errmsg_len = snprintf(
+                errmsg,
+                sizeof(errmsg),
+                "custom_mode_id is set for game mode %d but mode_id is not MODE_CUSTOM",
+                (uint8_t)i + 1
+            );
+            WritePacket(CMD_ERROR, (uint8_t *)errmsg, errmsg_len);
+            return false;
+        }
+
         if (keyboard_mode_id > _config.keyboard_modes_count) {
             char errmsg[85];
             size_t errmsg_len = snprintf(
@@ -216,7 +243,6 @@ bool ConfiguratorBackend::HandleSetConfig() {
             return false;
         }
 
-        uint8_t custom_mode_id = _config.game_mode_configs[i].custom_mode_config;
         if (custom_mode_id > _config.custom_modes_count) {
             char errmsg[85];
             size_t errmsg_len = snprintf(
