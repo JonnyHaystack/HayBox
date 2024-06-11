@@ -13,8 +13,8 @@ void FgcMode::UpdateDigitalOutputs(const InputState &inputs, OutputState &output
     outputs.start = inputs.mb1;
     outputs.select = inputs.rt3;
     outputs.home = inputs.rt2;
-    outputs.leftStickClick = inputs.rt1;
-    outputs.rightStickClick = inputs.rt5;
+    outputs.leftStickClick = inputs.lt2;
+    outputs.rightStickClick = inputs.rt1;
 
     // Right hand bottom row
     outputs.a = inputs.rf1;
