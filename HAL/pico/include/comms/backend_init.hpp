@@ -24,7 +24,7 @@
 typedef void (*backend_config_selector_t)(
     CommunicationBackendConfig &backend_config,
     const InputState &inputs,
-    const Config &config
+    Config &config
 );
 
 /**

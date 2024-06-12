@@ -22,7 +22,8 @@ DefaultConfigMenu::DefaultConfigMenu(
 
         if (backend_config.backend_id != COMMS_BACKEND_XINPUT &&
             backend_config.backend_id != COMMS_BACKEND_DINPUT &&
-            backend_config.backend_id != COMMS_BACKEND_NINTENDO_SWITCH) {
+            backend_config.backend_id != COMMS_BACKEND_NINTENDO_SWITCH &&
+            backend_config.backend_id != COMMS_BACKEND_CONFIGURATOR) {
             continue;
         }
 
@@ -32,7 +33,7 @@ DefaultConfigMenu::DefaultConfigMenu(
             sizeof(current_option.text)
         );
         current_option.key = i;
-        current_option.action = &SetDefaultUsbBackend;
+        current_option.action = &SetUsbBackend;
         usb_backend_options_count++;
     }
 
@@ -99,7 +100,7 @@ DefaultConfigMenu::DefaultConfigMenu(
             .page = &_gamemode_options_page,
         },
         {
-            .text = "Default USB Mode",
+            .text = "USB Mode",
             .page = &_usb_backends_page,
         },
         {
@@ -155,6 +156,17 @@ DefaultConfigMenu::DefaultConfigMenu(
             ) {
                 reboot_firmware();
             },
+        },
+        {
+            .text = "Firmware update",
+            .action = [](
+                IntegratedDisplay *display_backend,
+                ConfigMenu *menu,
+                Config &config,
+                uint8_t key
+            ) {
+                reboot_bootloader();
+            }
         }
     };
     // clang-format on
@@ -201,7 +213,7 @@ void DefaultConfigMenu::SetDefaultMode(
     set_mode(display_backend, config.game_mode_configs[mode_config_index], config);
 }
 
-void DefaultConfigMenu::SetDefaultUsbBackend(
+void DefaultConfigMenu::SetUsbBackend(
     IntegratedDisplay *display_backend,
     ConfigMenu *menu,
     Config &config,
@@ -211,7 +223,9 @@ void DefaultConfigMenu::SetDefaultUsbBackend(
         backend_config_index >= config.communication_backend_configs_count) {
         return;
     }
-    config.default_usb_backend_config = backend_config_index + 1;
+    // Set backend in watchdog SCRATCH0 register and reboot.
+    watchdog_hw->scratch[0] = backend_config_index + 1;
+    reboot_firmware();
 }
 
 void DefaultConfigMenu::SetSocdType(

@@ -15,7 +15,7 @@ class DefaultConfigMenu : public ConfigMenu {
         Config &config,
         uint8_t mode_config_index
     );
-    static void SetDefaultUsbBackend(
+    static void SetUsbBackend(
         IntegratedDisplay *instance,
         ConfigMenu *menu,
         Config &config,

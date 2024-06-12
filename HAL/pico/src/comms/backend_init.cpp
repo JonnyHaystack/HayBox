@@ -214,13 +214,20 @@ size_t init_secondary_backends(
 backend_config_selector_t get_backend_config_default = [](
     CommunicationBackendConfig &backend_config,
     const InputState &inputs,
-    const Config &config
+    Config &config
 ) {
-    backend_config = backend_config_from_buttons(
-        inputs,
-        config.communication_backend_configs,
-        config.communication_backend_configs_count
-    );
+    // Check watchdog SCRATCH0 register for temporarily set backend config index.
+    uint8_t temp_backend_index = watchdog_hw->scratch[0];
+    if (temp_backend_index > 0 && temp_backend_index <= config.communication_backend_configs_count) {
+        backend_config = config.communication_backend_configs[temp_backend_index - 1];
+        config.default_usb_backend_config = config.default_usb_backend_config = temp_backend_index;
+    } else {
+        backend_config = backend_config_from_buttons(
+            inputs,
+            config.communication_backend_configs,
+            config.communication_backend_configs_count
+        );
+    }
 };
 
 /* Default is to get default USB backend from config. */
