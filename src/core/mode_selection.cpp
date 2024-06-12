@@ -69,7 +69,8 @@ void set_mode(CommunicationBackend *backend, GameModeConfig &mode_config, Config
             set_mode(backend, &rivals_mode);
             break;
         case MODE_KEYBOARD:
-            if (mode_config.keyboard_mode_config < 1 ||
+            if (backend->BackendId() != COMMS_BACKEND_DINPUT ||
+                mode_config.keyboard_mode_config < 1 ||
                 mode_config.keyboard_mode_config > config.keyboard_modes_count) {
                 break;
             }
