@@ -69,8 +69,8 @@ void CustomControllerMode::UpdateAnalogOutputs(const InputState &inputs, OutputS
     const Button *direction_buttons = _custom_mode_config->stick_direction_mappings;
     uint8_t stick_range = _custom_mode_config->stick_range;
     UpdateDirections(
-        get_button(_filtered_buttons, SD_LSTICK_LEFT)),
-        get_button(_filtered_buttons, SD_LSTICK_RIGHT)),
+        get_button(_filtered_buttons, GetDirectionButton(direction_buttons, SD_LSTICK_LEFT)),
+        get_button(_filtered_buttons, GetDirectionButton(direction_buttons, SD_LSTICK_RIGHT)),
         get_button(_filtered_buttons, GetDirectionButton(direction_buttons, SD_LSTICK_DOWN)),
         get_button(_filtered_buttons, GetDirectionButton(direction_buttons, SD_LSTICK_UP)),
         get_button(_filtered_buttons, GetDirectionButton(direction_buttons, SD_RSTICK_LEFT)),
