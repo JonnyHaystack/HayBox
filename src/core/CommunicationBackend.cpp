@@ -21,6 +21,10 @@ InputState &CommunicationBackend::GetInputs() {
     return _inputs;
 }
 
+OutputState &CommunicationBackend::GetOutputs() {
+    return _outputs;
+}
+
 void CommunicationBackend::ScanInputs() {
     for (size_t i = 0; i < _input_source_count; i++) {
         _input_sources[i]->UpdateInputs(_inputs);

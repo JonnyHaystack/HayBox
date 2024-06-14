@@ -15,6 +15,7 @@ class CommunicationBackend {
     virtual ~CommunicationBackend(){};
 
     InputState &GetInputs();
+    OutputState &GetOutputs();
     void ScanInputs();
     void ScanInputs(InputScanSpeed input_source_filter);
 
