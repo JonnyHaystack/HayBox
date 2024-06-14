@@ -129,12 +129,18 @@ typedef struct _OutputState {
     };
 
     // Analog outputs.
-    uint8_t leftStickX = 128;
-    uint8_t leftStickY = 128;
-    uint8_t rightStickX = 128;
-    uint8_t rightStickY = 128;
-    uint8_t triggerRAnalog = 0;
-    uint8_t triggerLAnalog = 0;
+    union {
+        uint8_t analog_axes[6] = { 128, 128, 128, 128, 0, 0 };
+
+        struct {
+            uint8_t leftStickX;
+            uint8_t leftStickY;
+            uint8_t rightStickX;
+            uint8_t rightStickY;
+            uint8_t triggerLAnalog;
+            uint8_t triggerRAnalog;
+        };
+    };
 } OutputState;
 
 #endif
