@@ -69,4 +69,47 @@ inline uint8_t OutputState::*axis_pointer(AnalogAxis axis) {
     }
 }
 
+constexpr const char *digital_output_name(DigitalOutput output) {
+    switch (output) {
+        case GP_A:
+            return "A";
+        case GP_B:
+            return "B";
+        case GP_X:
+            return "X";
+        case GP_Y:
+            return "Y";
+        case GP_LB:
+            return "L1";
+        case GP_RB:
+            return "R1";
+        case GP_LT:
+            return "L2";
+        case GP_RT:
+            return "R2";
+        case GP_START:
+            return "Start";
+        case GP_SELECT:
+            return "Select";
+        case GP_HOME:
+            return "Home";
+        case GP_CAPTURE:
+            return "Capture";
+        case GP_DPAD_UP:
+            return "D-Pad Up";
+        case GP_DPAD_DOWN:
+            return "D-Pad Down";
+        case GP_DPAD_LEFT:
+            return "D-Pad Left";
+        case GP_DPAD_RIGHT:
+            return "D-Pad Right";
+        case GP_LSTICK_CLICK:
+            return "L3";
+        case GP_RSTICK_CLICK:
+            return "R3";
+        default:
+            return "Unknown";
+    }
+}
+
 #endif
