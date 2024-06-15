@@ -33,9 +33,9 @@ jobs:
       PIO_ENV: ${{ matrix.env }}
       BIN_EXT: ${{ matrix.bin_ext }}
     strategy:
-        fail-fast: false
-        matrix: 
-          include: ${{ fromJson(needs.metadata.outputs.meta_json).build }}
+      fail-fast: false
+      matrix: 
+        include: ${{ fromJson(needs.metadata.outputs.meta_json).build }}
 
     steps:
     - name: Check out specific HayBox revision
@@ -74,7 +74,7 @@ jobs:
         cp ".pio/build/${PIO_ENV}/firmware.${BIN_EXT}" "$ARTIFACT_PATH"
 
     - name: Publish ${{ matrix.env }} artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ env.ARTIFACT_NAME }}
         path: ${{ env.ARTIFACT_PATH }}

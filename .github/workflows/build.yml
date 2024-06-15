@@ -9,44 +9,46 @@ jobs:
       contents: write
     env:
       VERSION_REF: ${{ github.ref_type == 'tag' && github.ref_name || github.sha }}
+      PIO_ENV: ${{ matrix.env }}
+      BIN_EXT: ${{ matrix.bin_ext }}
     strategy:
-        fail-fast: false
-        matrix:
-          include:
-            - env: c53
-              bin_ext: uf2
-            - env: b0xx_r4
-              bin_ext: uf2
-            - env: glyph
-              bin_ext: uf2
-            - env: pico
-              bin_ext: uf2
-            - env: schism
-              bin_ext: uf2
-            - env: arduino_uno
-              bin_ext: hex
-            - env: arduino_nano
-              bin_ext: hex
-            - env: arduino_mega
-              bin_ext: hex
-            - env: arduino_leonardo
-              bin_ext: hex
-            - env: arduino_micro
-              bin_ext: hex
-            - env: b0xx_r1
-              bin_ext: hex
-            - env: b0xx_r2
-              bin_ext: hex
-            - env: gccmx
-              bin_ext: hex
-            - env: gccpcb1
-              bin_ext: hex
-            - env: gccpcb2
-              bin_ext: hex
-            - env: lbx
-              bin_ext: hex
-            - env: smashbox
-              bin_ext: hex
+      fail-fast: false
+      matrix:
+        include:
+          - env: c53
+            bin_ext: uf2
+          - env: b0xx_r4
+            bin_ext: uf2
+          - env: glyph
+            bin_ext: uf2
+          - env: pico
+            bin_ext: uf2
+          - env: schism
+            bin_ext: uf2
+          - env: arduino_uno
+            bin_ext: hex
+          - env: arduino_nano
+            bin_ext: hex
+          - env: arduino_mega
+            bin_ext: hex
+          - env: arduino_leonardo
+            bin_ext: hex
+          - env: arduino_micro
+            bin_ext: hex
+          - env: b0xx_r1
+            bin_ext: hex
+          - env: b0xx_r2
+            bin_ext: hex
+          - env: gccmx
+            bin_ext: hex
+          - env: gccpcb1
+            bin_ext: hex
+          - env: gccpcb2
+            bin_ext: hex
+          - env: lbx
+            bin_ext: hex
+          - env: smashbox
+            bin_ext: hex
 
     steps:
     - name: Check out source code
@@ -62,20 +64,28 @@ jobs:
         python -m pip install --upgrade pip
         pip install --upgrade platformio
 
+    - name: Set artifact filename environment variable
+      run: |
+        echo "ARTIFACT_NAME=HayBox-${VERSION_REF}-${PIO_ENV}.${BIN_EXT}" >> "$GITHUB_ENV"
+
+    - name: Set artifact path environment variable
+      run: |
+        echo "ARTIFACT_PATH=${PIO_ENV}/${ARTIFACT_NAME}" >> "$GITHUB_ENV"
+
     - name: Build ${{ matrix.env }} env
       run: |
-        pio run -e ${{ matrix.env }}
-        mkdir -p ${{ matrix.env }}
-        cp ".pio/build/${{ matrix.env }}/firmware.${{ matrix.bin_ext }}" "${{ matrix.env }}/HayBox-${VERSION_REF}-${{ matrix.env }}.${{ matrix.bin_ext }}"
+        pio run -e "$PIO_ENV"
+        mkdir -p "$PIO_ENV"
+        cp ".pio/build/${PIO_ENV}/firmware.${BIN_EXT}" "$ARTIFACT_PATH"
 
     - name: Publish ${{ matrix.env }} artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: HayBox-${{ env.VERSION_REF }}-${{ matrix.env }}.${{ matrix.bin_ext }}
-        path: ${{ matrix.env }}/HayBox-${{ env.VERSION_REF }}-${{ matrix.env }}.${{ matrix.bin_ext }}
+        name: ${{ env.ARTIFACT_NAME }}
+        path: ${{ env.ARTIFACT_PATH }}
 
     - name: Upload binaries to release
       uses: softprops/action-gh-release@v1
       if: github.ref_type == 'tag'
       with:
-        files: ${{ matrix.env }}/HayBox-${{ env.VERSION_REF }}-${{ matrix.env }}.${{ matrix.bin_ext }}
+        files: ${{ env.ARTIFACT_PATH }}
