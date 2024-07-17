@@ -56,7 +56,7 @@ void select_mode(CommunicationBackend *backend) {
             new ProjectM(
                     socd::SOCD_2IP,
                     { .true_z_press = true, .ledgedash_max_jump_traj = false }
-                )
+                );
         }
     } else if (inputs.mod_y && !inputs.mod_x && inputs.start) {
         if (inputs.l) {
