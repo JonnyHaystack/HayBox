@@ -128,9 +128,12 @@ void setup() {
         backends = new CommunicationBackend *[backend_count] { primary_backend };
     }
 
-    // Default to Melee mode.
+    // Default to ProjectM mode.
     primary_backend->SetGameMode(
-        new Melee20Button(socd::SOCD_2IP_NO_REAC, { .crouch_walk_os = false })
+        new ProjectM(
+                    socd::SOCD_2IP,
+                    { .true_z_press = true, .ledgedash_max_jump_traj = false }
+                )
     );
 }
 
