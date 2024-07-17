@@ -1,4 +1,15 @@
-# HayBox
+# HayBox-20M3
+Forked version of HayBox focused on P+ Lucas
+Changes:
+- Added snekdash angles (use mod X + L)
+- Made ProjectM mode default
+  - SOCD_2IP (second input priority w/ reactivation)
+  - true Z press = false (analog shield + A macro)
+  - ledgedash_max_jump_traj = false
+- Added an input mode for ProjectM with true Z press enabled
+  - Mod X + Start + X
+
+## Original ReadMe below
 
 HayBox is a modular, cross-platform firmware for digital or mixed analog/digital controllers, primarily targeted at [B0XX](https://b0xx.com)-style controllers.
 
