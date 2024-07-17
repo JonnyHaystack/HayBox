@@ -52,7 +52,7 @@ void select_mode(CommunicationBackend *backend) {
             set_mode(backend, new FgcMode(socd::SOCD_NEUTRAL, socd::SOCD_NEUTRAL));
         } else if (inputs.b) {
             set_mode(backend, new RivalsOfAether(socd::SOCD_2IP));
-        } else if (inputs.x) {
+        } else if (inputs.z) {
             new ProjectM(
                     socd::SOCD_2IP,
                     { .true_z_press = true, .ledgedash_max_jump_traj = false }
