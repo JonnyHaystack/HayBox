@@ -130,6 +130,12 @@ void ProjectM::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
                 outputs.leftStickX = 128 + (directions.x * 72);
                 outputs.leftStickY = 128 + (directions.y * 61);
             }
+
+            // snekdash angle
+            if (inputs.r) {
+                outputs.leftStickX = 128 + (directions.x * 120);
+                outputs.leftStickY = 128 + (directions.y * 84);
+            }
         }
     }
 
@@ -173,6 +179,12 @@ void ProjectM::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
             if (inputs.c_right) {
                 outputs.leftStickX = 128 + (directions.x * 62);
                 outputs.leftStickY = 128 + (directions.y * 72);
+            }
+
+            // snekdash angle 2
+            if (inputs.r) {
+                outputs.leftStickX = 128 + (directions.x * 120);
+                outputs.leftStickY = 128 + (directions.y * 87);
             }
         }
     }
