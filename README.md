@@ -8,7 +8,7 @@ Changes:
   - true Z press = false (analog shield + A macro)
   - ledgedash_max_jump_traj = false
 - Added an input mode for ProjectM with true Z press enabled
-  - Mod X + Start + X
+  - Mod X + Start + Z to activate
 
 ## Original ReadMe below
 
