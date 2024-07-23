@@ -1,4 +1,4 @@
-# HayBox-20M3
+# SnekBox
 Forked version of HayBox focused on P+ Lucas
 
 Changes:
