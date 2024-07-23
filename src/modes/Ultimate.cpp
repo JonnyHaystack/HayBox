@@ -6,10 +6,11 @@
 #define ANALOG_STICK_MAX 228
 
 Ultimate::Ultimate(socd::SocdType socd_type) {
-    _socd_pair_count = 4;
+    _socd_pair_count = 5;
     _socd_pairs = new socd::SocdPair[_socd_pair_count]{
-        socd::SocdPair{&InputState::left,    &InputState::right,   socd_type},
+        socd::SocdPair{ &InputState::left,   &InputState::right,   socd_type},
         socd::SocdPair{ &InputState::down,   &InputState::up,      socd_type},
+        socd::SocdPair{ &InputState::down,   &InputState::up2,      socd_type},
         socd::SocdPair{ &InputState::c_left, &InputState::c_right, socd_type},
         socd::SocdPair{ &InputState::c_down, &InputState::c_up,    socd_type},
     };
@@ -35,6 +36,12 @@ void Ultimate::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
         outputs.dpadLeft = inputs.c_left;
         outputs.dpadRight = inputs.c_right;
     }
+
+    // Activate select/home by holding Mod Y
+    if ((inputs.mod_y)) {
+        outputs.select = inputs.midshield;
+        outputs.home = inputs.start;
+    }
 }
 
 void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
@@ -43,7 +50,7 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         inputs.left,
         inputs.right,
         inputs.down,
-        inputs.up,
+        inputs.up || inputs.up2,
         inputs.c_left,
         inputs.c_right,
         inputs.c_down,
@@ -269,6 +276,11 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
     if ((inputs.mod_x && inputs.mod_y) || inputs.nunchuk_c) {
         outputs.rightStickX = 128;
         outputs.rightStickY = 128;
+    }
+
+    // Turns off Start when holding Mod Y
+    if ((inputs.mod_y)) {
+        outputs.start = false;
     }
 
     // Nunchuk overrides left stick.
