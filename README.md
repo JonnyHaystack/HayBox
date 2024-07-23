@@ -2,11 +2,13 @@
 Forked version of HayBox focused on P+ Lucas
 
 Changes:
-- Added snekdash angles (use mod X + L)
+- Added Up2 functionality (BubbleBox, GRAM, etc.)
 - Made ProjectM mode default
+  - Added snekdash angles (use mod X + L)
   - SOCD_2IP (second input priority w/ reactivation)
   - true Z press = false (analog shield + A macro)
   - ledgedash_max_jump_traj = false
+  - Left/Right + Down always inputs down special
 - Added an input mode for ProjectM with true Z press enabled
   - Mod X + Start + Z to activate
 
