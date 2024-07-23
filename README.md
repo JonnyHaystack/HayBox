@@ -3,6 +3,7 @@ Forked version of HayBox focused on P+ Lucas
 
 Changes:
 - Added Up2 functionality (BubbleBox, GRAM, etc.)
+- Swapped A and C-stick down buttons
 - Made ProjectM mode default
   - Added snekdash angles (use mod X + L)
   - SOCD_2IP (second input priority w/ reactivation)
@@ -12,7 +13,7 @@ Changes:
 - Added an input mode for ProjectM with true Z press enabled
   - Mod X + Start + Z to activate
 
-## Original ReadMe below
+## Original ReadMe below:
 
 HayBox is a modular, cross-platform firmware for digital or mixed analog/digital controllers, primarily targeted at [B0XX](https://b0xx.com)-style controllers.
 
