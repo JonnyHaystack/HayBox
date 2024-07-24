@@ -21,27 +21,27 @@ void Ultimate::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
     outputs.b = inputs.b;
     outputs.x = inputs.x;
     outputs.y = inputs.y;
-    outputs.buttonL = inputs.lightshield;
-    outputs.buttonR = inputs.z || inputs.midshield;
-    outputs.triggerLDigital = inputs.l;
-    outputs.triggerRDigital = inputs.r;
+    outputs.buttonL = inputs.l;
+    outputs.buttonR = inputs.r;
+    outputs.triggerLDigital = inputs.lightshield;
+    outputs.triggerRDigital = inputs.z;
     outputs.start = inputs.start;
     outputs.select = inputs.select;
     outputs.home = inputs.home;
 
-    // Turn on D-Pad layer by holding Mod X + Mod Y or Nunchuk C button.
+    // Turn on D-Pad layer and activate select/home by holding Mod X + Mod Y or Nunchuk C button.
     if ((inputs.mod_x && inputs.mod_y) || inputs.nunchuk_c) {
         outputs.dpadUp = inputs.c_up;
         outputs.dpadDown = inputs.c_down;
         outputs.dpadLeft = inputs.c_left;
         outputs.dpadRight = inputs.c_right;
-    }
-
-    // Activate select/home by holding Mod Y
-    if ((inputs.mod_y)) {
         outputs.select = inputs.midshield;
         outputs.home = inputs.start;
     }
+
+    // Don't override dpad up if it's already pressed using the MX + MY dpad
+    // layer.
+    outputs.dpadUp = outputs.dpadUp || inputs.midshield;
 }
 
 void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
