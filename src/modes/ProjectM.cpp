@@ -32,7 +32,7 @@ void ProjectM::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
     if (_options.true_z_press || inputs.mod_x) {
         outputs.buttonR = inputs.z;
     } else {
-        outputs.a = inputs.a || inputs.z;
+        outputs.a = inputs.c_down || inputs.z;
     }
     if (inputs.nunchuk_connected) {
         outputs.triggerLDigital = inputs.nunchuk_z;
