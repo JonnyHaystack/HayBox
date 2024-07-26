@@ -96,8 +96,8 @@ void setup() {
             primary_backend = new NintendoSwitchBackend(input_sources, input_source_count);
             backends = new CommunicationBackend *[backend_count] { primary_backend };
 
-            // Default to Ultimate mode on Switch.
-            primary_backend->SetGameMode(new Ultimate(socd::SOCD_2IP));
+            // Default to HDR mode on Switch.
+            primary_backend->SetGameMode(new HDR(socd::SOCD_2IP));
             return;
         } else if (button_holds.z) {
             // If no console detected and Z is held on plugin then use DInput backend.
