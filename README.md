@@ -15,7 +15,7 @@ Changes:
 - Changes to Ultimate mode focused on HDR
   - Swapped L/ZL and R/ZR to match L + R + A + Start with Melee/P+
   - Set midshield button to D-Pad Up for footstools
-  - Changed select/home buttons to activate when Mod X + Mod Y or Nunchuk C is pressed instead of just Mod Y
+  - Changed select/home buttons to activate when Mod X + Start/Mod Y + Start is pressed, respectively
 
 ## Original ReadMe below:
 
