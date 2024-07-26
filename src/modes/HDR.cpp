@@ -9,7 +9,7 @@ HDR::HDR(socd::SocdType socd_type) {
     _socd_pairs = new socd::SocdPair[_socd_pair_count]{
         socd::SocdPair{ &InputState::left,   &InputState::right,   socd_type},
         socd::SocdPair{ &InputState::down,   &InputState::up,      socd_type},
-        socd::SocdPair{ &InputState::down,   &InputState::up2,      socd_type},
+        socd::SocdPair{ &InputState::down,   &InputState::up2,     socd_type},
         socd::SocdPair{ &InputState::c_left, &InputState::c_right, socd_type},
         socd::SocdPair{ &InputState::c_down, &InputState::c_up,    socd_type},
     };
