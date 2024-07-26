@@ -6,6 +6,8 @@
 #include <hardware/pio.h>
 #include <hardware/timer.h>
 
+bool rumble;
+
 GamecubeBackend::GamecubeBackend(
     InputSource **input_sources,
     size_t input_source_count,
@@ -63,7 +65,12 @@ void GamecubeBackend::SendReport() {
     _report.r_analog = _outputs.triggerRAnalog;
 
     // Send outputs to console unless poll command is invalid.
-    if (_gamecube->WaitForPollEnd() != PollStatus::ERROR) {
+    PollStatus pollStatus = _gamecube->WaitForPollEnd();
+    if (pollStatus != PollStatus::ERROR && pollStatus == PollStatus::RUMBLE_ON) {
+        rumble = true;
+        _gamecube->SendReport(&_report);
+    }else if (pollStatus != PollStatus::ERROR && pollStatus == PollStatus::RUMBLE_OFF){
+        rumble = false;
         _gamecube->SendReport(&_report);
     }
 }

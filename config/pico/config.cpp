@@ -18,6 +18,7 @@
 #include "stdlib.hpp"
 #include "HAL/pico/include/input/GamecubeControllerInput.hpp"
 #include "modes/MeleeRSwap.hpp"
+#include "modes/Zeke.hpp"
 
 
 #include <pico/bootrom.h>
@@ -222,17 +223,10 @@ void setup() {
         backend_count = 1;
         backends = new CommunicationBackend *[backend_count] { primary_backend };
     }
-
-    if(button_holds.a){
-        primary_backend->SetGameMode(
-            new MeleeRSwap(socd::SOCD_2IP_NO_REAC, { .crouch_walk_os = false })
-        );
-    }else{
-        // Default to Melee mode.
-        primary_backend->SetGameMode(
-            new Melee20Button(socd::SOCD_2IP_NO_REAC, { .crouch_walk_os = false })
-        );
-    }
+    // Default to Melee mode.
+    primary_backend->SetGameMode(
+        new Melee20Button(socd::SOCD_2IP_NO_REAC, { .crouch_walk_os = false })
+    );
 }
 
 void loop() {
@@ -254,6 +248,7 @@ void setup1() {
     while (backends == nullptr) {
         tight_loop_contents();
     }
+    sleep_ms(100);
     gcc = new GamecubeControllerInput(9, 1000, pio1);
 }
 

@@ -4,6 +4,8 @@
 
 #include <GamecubeController.hpp>
 
+extern bool rumble;
+
 GamecubeControllerInput::GamecubeControllerInput(
     uint pin,
     uint polling_rate,
@@ -24,7 +26,7 @@ InputScanSpeed GamecubeControllerInput::ScanSpeed() {
 
 void GamecubeControllerInput::UpdateInputs(InputState &inputs) {
     // Only update inputs if poll response is received.
-    if (_controller->Poll(&_report, false)) {
+    if (_controller->Poll(&_report, rumble)) {
         inputs.nunchuk_connected = true;
         inputs.nunchuk_x = _report.stick_x;
         inputs.nunchuk_y = _report.stick_y;
@@ -34,7 +36,7 @@ void GamecubeControllerInput::UpdateInputs(InputState &inputs) {
         inputs.nunchuk_dright = _report.dpad_right;
         inputs.nunchuk_dup = _report.dpad_up;
         inputs.nunchuk_ddown = _report.dpad_down;
-        inputs.l_analog = _report.l_analog;
+        //inputs.l_analog = _report.l_analog;
     }
 }
 

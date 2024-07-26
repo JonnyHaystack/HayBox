@@ -44,6 +44,8 @@ void select_mode(CommunicationBackend *backend) {
             set_mode(backend, new MeleeRSwap(socd::SOCD_2IP_NO_REAC));
         }else if (inputs.x) {
             set_mode(backend, new SparkMarthMode(socd::SOCD_2IP_NO_REAC));
+        }else if (inputs.y){
+            set_mode(backend, new FgcMode(socd::SOCD_NEUTRAL));
         }
     } else if (inputs.mod_y && !inputs.mod_x && inputs.start) {
         if (inputs.l) {
