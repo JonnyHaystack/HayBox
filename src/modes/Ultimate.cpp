@@ -29,15 +29,19 @@ void Ultimate::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
     outputs.select = inputs.select;
     outputs.home = inputs.home;
 
-    // Turn on D-Pad layer and activate select/home by holding Mod X + Mod Y or Nunchuk C button.
+    // Turn on D-Pad layer by holding Mod X + Mod Y or Nunchuk C button.
     if ((inputs.mod_x && inputs.mod_y) || inputs.nunchuk_c) {
         outputs.dpadUp = inputs.c_up;
         outputs.dpadDown = inputs.c_down;
         outputs.dpadLeft = inputs.c_left;
         outputs.dpadRight = inputs.c_right;
-        outputs.select = inputs.midshield;
-        outputs.home = inputs.start;
     }
+    
+    // Activate select by holding Mod X
+    if ((inputs.mod_x)) outputs.select = inputs.start;
+
+    // Activate home by holding Mod Y
+    if ((inputs.mod_y)) outputs.home = inputs.start;
 
     // Don't override dpad up if it's already pressed using the MX + MY dpad
     // layer.
@@ -278,8 +282,8 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         outputs.rightStickY = 128;
     }
 
-    // Turns off Start when holding Mod Y
-    if ((inputs.mod_y)) {
+    // Turns off Start when holding Mod X or Mod Y
+    if ((inputs.mod_x || inputs.mod_y)) {
         outputs.start = false;
     }
 
