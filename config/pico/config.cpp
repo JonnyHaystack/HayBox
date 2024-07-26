@@ -39,8 +39,8 @@ GpioButtonMapping button_mappings[] = {
 
     { &InputState::c_left,      13},
     { &InputState::c_up,        12},
-    { &InputState::c_down,      14},
-    { &InputState::a,           15},
+    { &InputState::c_down,      15},
+    { &InputState::a,           14},
     { &InputState::c_right,     16},
 
     { &InputState::b,           26},

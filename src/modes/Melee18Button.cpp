@@ -5,10 +5,11 @@
 #define ANALOG_STICK_MAX 208
 
 Melee18Button::Melee18Button(socd::SocdType socd_type, Melee18ButtonOptions options) {
-    _socd_pair_count = 4;
+    _socd_pair_count = 5;
     _socd_pairs = new socd::SocdPair[_socd_pair_count]{
-        socd::SocdPair{&InputState::left,    &InputState::right,   socd_type},
+        socd::SocdPair{ &InputState::left,   &InputState::right,   socd_type},
         socd::SocdPair{ &InputState::down,   &InputState::up,      socd_type},
+        socd::SocdPair{ &InputState::down,   &InputState::up2,     socd_type},
         socd::SocdPair{ &InputState::c_left, &InputState::c_right, socd_type},
         socd::SocdPair{ &InputState::c_down, &InputState::c_up,    socd_type},
     };
@@ -23,7 +24,7 @@ void Melee18Button::HandleSocd(InputState &inputs) {
 }
 
 void Melee18Button::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
-    outputs.a = inputs.a;
+    outputs.a = inputs.c_down;
     outputs.b = inputs.b;
     outputs.x = inputs.x;
     outputs.y = inputs.y;
@@ -63,7 +64,7 @@ void Melee18Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
         inputs.up,
         inputs.c_left,
         inputs.c_right,
-        inputs.c_down,
+        inputs.a,
         inputs.c_up,
         ANALOG_STICK_MIN,
         ANALOG_STICK_NEUTRAL,
