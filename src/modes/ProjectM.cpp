@@ -68,7 +68,7 @@ void ProjectM::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         inputs.up || inputs.up2,
         inputs.c_left,
         inputs.c_right,
-        inputs.a,
+        inputs.c_down,
         inputs.c_up,
         ANALOG_STICK_MIN,
         ANALOG_STICK_NEUTRAL,
