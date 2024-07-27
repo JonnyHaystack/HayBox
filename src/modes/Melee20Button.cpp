@@ -23,7 +23,7 @@ void Melee20Button::HandleSocd(InputState &inputs) {
 }
 
 void Melee20Button::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
-    outputs.a = inputs.c_down;
+    outputs.a = inputs.a;
     outputs.b = inputs.b;
     outputs.x = inputs.x;
     outputs.y = inputs.y;

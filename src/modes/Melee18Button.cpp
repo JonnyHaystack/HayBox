@@ -24,7 +24,7 @@ void Melee18Button::HandleSocd(InputState &inputs) {
 }
 
 void Melee18Button::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
-    outputs.a = inputs.c_down;
+    outputs.a = inputs.a;
     outputs.b = inputs.b;
     outputs.x = inputs.x;
     outputs.y = inputs.y;
@@ -64,7 +64,7 @@ void Melee18Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
         inputs.up,
         inputs.c_left,
         inputs.c_right,
-        inputs.a,
+        inputs.c_down,
         inputs.c_up,
         ANALOG_STICK_MIN,
         ANALOG_STICK_NEUTRAL,

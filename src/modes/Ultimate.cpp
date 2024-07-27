@@ -17,7 +17,7 @@ Ultimate::Ultimate(socd::SocdType socd_type) {
 }
 
 void Ultimate::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
-    outputs.a = inputs.c_down;
+    outputs.a = inputs.a;
     outputs.b = inputs.b;
     outputs.x = inputs.x;
     outputs.y = inputs.y;
@@ -57,7 +57,7 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         inputs.up || inputs.up2,
         inputs.c_left,
         inputs.c_right,
-        inputs.a,
+        inputs.c_down,
         inputs.c_up,
         ANALOG_STICK_MIN,
         ANALOG_STICK_NEUTRAL,
