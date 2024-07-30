@@ -81,7 +81,7 @@ void ProjectM::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
     if (directions.diagonal) {
         
         // down + horizontal + B outputs down special
-        if(inputs.b) {
+        if (inputs.b) {
             outputs.leftStickX = 128 + (directions.x * 28);
             outputs.leftStickY = 128 + (directions.y * 85);
         }
