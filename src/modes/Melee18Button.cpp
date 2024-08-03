@@ -61,7 +61,7 @@ void Melee18Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
         inputs.left,
         inputs.right,
         inputs.down,
-        inputs.up,
+        inputs.up || inputs.up2,
         inputs.c_left,
         inputs.c_right,
         inputs.c_down,
@@ -155,6 +155,10 @@ void Melee18Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
         }
         if (directions.vertical) {
             outputs.leftStickY = 128 + (directions.y * 59);
+
+            if (shield_button_pressed) {
+                outputs.leftStickY = 128 + (directions.y * 55);
+            }
         }
 
         // Turnaround neutral B nerf
@@ -248,7 +252,7 @@ void Melee18Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
         // L + Mod Y = lightshield
         if (inputs.mod_y) {
             outputs.triggerLDigital = false;
-            outputs.triggerRAnalog = 49;
+            outputs.triggerRAnalog = 43;
 
             if (directions.diagonal) {
                 outputs.leftStickX = 128 + (directions.x * 40);

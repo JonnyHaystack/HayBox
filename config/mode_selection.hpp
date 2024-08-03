@@ -37,7 +37,7 @@ void select_mode(CommunicationBackend *backend) {
         if (inputs.l) {
             set_mode(
                 backend,
-                new Melee20Button(socd::SOCD_2IP_NO_REAC, { .crouch_walk_os = false })
+                new Melee20Button(socd::SOCD_NEUTRAL, { .crouch_walk_os = false })
             );
         } else if (inputs.left) {
             set_mode(
@@ -50,7 +50,7 @@ void select_mode(CommunicationBackend *backend) {
         } else if (inputs.down) {
             set_mode(backend, new Ultimate(socd::SOCD_2IP));
         } else if (inputs.right) {
-            set_mode(backend, new FgcMode(socd::SOCD_NEUTRAL, socd::SOCD_NEUTRAL));
+            set_mode(backend, new FgcMode(socd::SOCD_2IP, socd::SOCD_2IP));
         } else if (inputs.b) {
             set_mode(backend, new RivalsOfAether(socd::SOCD_2IP));
         } else if (inputs.x) {
