@@ -5,10 +5,11 @@
 #define ANALOG_STICK_MAX 208
 
 Melee20Button::Melee20Button(socd::SocdType socd_type, Melee20ButtonOptions options) {
-    _socd_pair_count = 4;
+    _socd_pair_count = 5;
     _socd_pairs = new socd::SocdPair[_socd_pair_count]{
         socd::SocdPair{ &InputState::left,   &InputState::right,   socd_type},
         socd::SocdPair{ &InputState::down,   &InputState::up,      socd_type},
+        socd::SocdPair{ &InputState::down,   &InputState::up2,     socd_type},
         socd::SocdPair{ &InputState::c_left, &InputState::c_right, socd_type},
         socd::SocdPair{ &InputState::c_down, &InputState::c_up,    socd_type},
     };
@@ -56,7 +57,7 @@ void Melee20Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
         inputs.left,
         inputs.right,
         inputs.down,
-        inputs.up,
+        inputs.up || inputs.up2,
         inputs.c_left,
         inputs.c_right,
         inputs.c_down,
@@ -163,9 +164,14 @@ void Melee20Button::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs
         if (directions.horizontal) {
             outputs.leftStickX = 128 + (directions.x * 27);
         }
-        // MY + Vertical (even if shield is held) = 7375 = 59
+        // MY + Vertical = 7375 = 59
         if (directions.vertical) {
             outputs.leftStickY = 128 + (directions.y * 59);
+
+            if (shield_button_pressed) {
+                outputs.leftStickY = 128 + (directions.y * 55);
+            }
+
         }
         if (directions.diagonal && shield_button_pressed) {
             // MY + L, R, LS, and MS + q1/2 = 4750 8750 = 38 70
