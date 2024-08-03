@@ -16,6 +16,7 @@ Changes:
   - Swapped L/ZL and R/ZR to match L + R + A + Start with Melee/P+ (this change also applies to Ultimate mode)
   - Set midshield button to D-Pad Up for footstools
   - Changed select/home buttons to activate when Mod X + Start/Mod Y + Start is pressed, respectively
+- Added Mod Y + Down shield drops in Melee mode
 
 ## Original ReadMe below:
 
