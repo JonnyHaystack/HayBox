@@ -2,7 +2,7 @@
 
 #include "core/InputMode.hpp"
 
-KeyboardMode::KeyboardMode(socd::SocdType socd_type) : InputMode(socd_type) {}
+KeyboardMode::KeyboardMode() {}
 
 KeyboardMode::~KeyboardMode() {}
 

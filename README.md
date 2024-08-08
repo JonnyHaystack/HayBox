@@ -8,15 +8,16 @@ HayBox is a modular, cross-platform firmware for digital or mixed analog/digital
 ## Table of Contents
 
 * [Features](#features)
-* [Getting Started](#getting-started)
-  * [Requirements](#requirements)
-  * [Installation](#installation)
+* [Installation](#installation)
+  * [Pre-built binaries](#pre-built-binaries)
+  * [Building from source](#building-from-source)
 * [Usage](#usage)
   * [Default button holds](#default-button-holds)
   * [Dolphin setup](#dolphin-setup)
 * [Customisation](#customisation)
   * [Console/gamemode selection bindings](#consolegamemode-selection-bindings)
   * [Creating custom input modes](#creating-custom-input-modes)
+  * [SOCD](#socd)
   * [Mod X lightshield and R shield tilt](#mod-x-lightshield-and-r-shield-tilt)
   * [Mode-specific optional features](#mode-specific-optional-features)
     * [Melee modes](#melee-modes)
@@ -52,42 +53,75 @@ Features include:
 - Existing modes for popular games (e.g. Melee, Project M, Ultimate, Rivals of Aether, traditional fighting games)
 - Easy to create new controller modes (or keyboard modes) for different games
 - USB keyboard game modes for games that lack gamepad support
-- Fully customisable SOCD cleaning, allowing you to configure SOCD button pairs (e.g. left/right, up/down) for each controller/keyboard mode, and also easily change the SOCD resolution method
+- Fully customisable SOCD cleaning, allowing you to configure SOCD button pairs (e.g. left/right, up/down) for each controller/keyboard mode, and also easily change the SOCD resolution method for each SOCD pair
 - Switch modes on the fly without unplugging your controller
 - Automatically detects whether plugged into console or USB
 - Game modes and communication backends are independent entities, meaning you can use any game mode with any supported console without extra work
 - Easily switch between different GameCube/N64 polling rates in order to have optimal latency on console, overclocked adapter, etc. (not necessary for Pico/RP2040)
 
-## Getting Started
+## Installation
 
-### Requirements
+If you want to simply use a pre-built firmware with default pin mappings and configuration, refer to the [pre-built binaries](#pre-built-binaries) section. If you want to make any changes to the code, refer to the [building from source](#building-from-source) section.
 
-- [Git](https://git-scm.com/downloads) - required only if you are using a Pico. May become unnecessary at some point in the future.
+### Pre-built binaries
+
+1. Browse the [existing configs](config/) to determine which config is appropriate for your hardware
+2. Download the corresponding artifact from either the [latest HayBox release](https://github.com/JonnyHaystack/HayBox/releases), or from a [workflow run](https://github.com/JonnyHaystack/HayBox/actions) if you want the latest development version (unstable).
+3. Flash the firmware to your microcontroller in the usual way
+   - If you are using a Pico/RP2040 build (`.uf2` file), simply put it into bootsel mode while plugging it into your PC, and drag and drop the `.uf2` file onto the RPI-RP2 drive that comes up
+   - If you are using Arduino/AVR build (`.hex` file), you can use a program like [QMK Toolbox](https://github.com/qmk/qmk_toolbox) to flash the `.hex` file to it
+
+### Building from source
+
+There are currently three main ways to build HayBox:
+- Locally using PlatformIO IDE for VSCode or PlatformIO CLI
+- In the cloud using GitHub Codespaces
+- In the cloud using GitHub Actions
+
+Both GitHub Actions and GitHub Codespaces require you to create a GitHub account, but do not require you to install any dependencies on your local machine.
+
+#### Building locally
+
+The following dependencies are required when building locally:
+- [Git](https://git-scm.com/downloads) - required only if you are using a Pico
 - [PlatformIO IDE for VSCode](https://platformio.org/install/ide?install=vscode)
 
-### Installation
-
-Download and extract the
+After installing all of the requirements, download and extract the
 [latest HayBox release](https://github.com/JonnyHaystack/HayBox/releases),
 or clone the repository if you have git installed (which makes it easier for you
 to pull updates).
 
 After that:
 1. Open Visual Studio Code
-2. Click File -> **Open Folder** and choose the HayBox folder (the one containing platformio.ini, not the folder above that)
-3. Choose the appropriate build environment for your controller's PCB by
+2. If on Windows and it's your first time building HayBox, run the command `git config --global core.longpaths true` in any terminal (within VS Code or regular cmd/PowerShell are all fine)
+3. Click File -> **Open Folder** and choose the HayBox folder (the one containing platformio.ini, not the folder above that)
+4. Choose the appropriate build environment for your controller's PCB by
   clicking the environment selection button near the bottom left of the window
   
   ![image](https://user-images.githubusercontent.com/1266473/187039372-485c5f0d-60b3-4534-befb-e713f138a7c8.png)
   ![image](https://user-images.githubusercontent.com/1266473/187039585-cea18994-fd12-45fb-b43f-427eb7affb81.png)
   
-4. If your controller has a different pinout than any of the existing configs, you may edit the button mappings and other pins at the top of the config (`config/<environment>/config.cpp`). Any buttons that your controller doesn't have can simply be deleted from the list.
-5. If you see a message in the bottom bar saying "Rebuilding IntelliSense Index" or "Loading Project Tasks", wait for it to disappear. For Pico especially it may take quite a while the first time because it has to download 2-3GB of dependencies.
-6. Click **Build** (in the bottom left) and make sure everything compiles without
+5. If your controller has a different pinout than any of the existing configs, you may edit the button mappings and other pins at the top of the config (`config/<environment>/config.cpp`). Any buttons that your controller doesn't have can simply be deleted from the list.
+6. If you see a message in the bottom bar saying "Rebuilding IntelliSense Index" or "Loading Project Tasks", wait for it to disappear. For Pico especially it may take quite a while the first time because it has to download 2-3GB of dependencies.
+7. Click **Build** (in the bottom left) and make sure everything compiles without
   errors
-7. This  next step differs depending on the microcontroller used in your controller.
+8. This next step differs depending on the microcontroller used in your controller.
     - **For Pico-based controllers**: hold the bootsel button while plugging it in (or your Start button if you already have HayBox installed) and then drag and drop the file `HayBox/.pio/build/<environment>/firmware.uf2` onto the RPI-RP2 drive that comes up.
     - **For Arduino-based controllers**: Plug in your controller via USB and click **Upload** (next to the Build button)
+
+#### Building using GitHub Codespaces
+
+This is probably the most convenient way to modify and rebuild HayBox, but bear in mind that GitHub's free tier places [some limitations](https://docs.github.com/en/billing/managing-billing-for-github-codespaces/about-billing-for-github-codespaces#monthly-included-storage-and-core-hours-for-personal-accounts) on how much you can use Codespaces each month. Because of this, you will want to make sure you shut down your Codespaces when you aren't using them, in order to maximise what you can get from your quota.
+
+First, create a GitHub account or just log in if you already have one, then [fork this repository](https://github.com/JonnyHaystack/HayBox/fork) and open your fork in a new Codespace by clicking the green Code button -> Codespaces -> Create codespace on master. This should open VS Code in your browser with all of the necessary extensions and dependencies pre-installed. From here, the process is much the same as [building locally](#building-locally), except you can't use the Upload button to flash the firmware. You will instead have to download the compiled binary from `HayBox/.pio/build/<environment>/` and flash it manually (see [here](#pre-built-binaries) for more on that).
+
+#### Building using GitHub Actions
+
+This repository contains a GitHub Actions workflow definition that builds each PlatformIO environment [specified in the matrix](https://github.com/JonnyHaystack/HayBox/blob/master/.github/workflows/build.yml#L13) on every push, and uploads firmware binaries as artifacts which you can download by clicking a specific workflow run from the [history](https://github.com/JonnyHaystack/HayBox/actions). You can create a fork of this repository and enable Actions by clicking Settings -> Actions -> General -> Select "Allow all actions and reusable workflows" -> Save.
+
+The fastest way to make changes if you only want to build via GitHub Actions is to use [github.dev](https://github.dev). You can do so by simply pressing `.` on your keyboard while you have your fork of this repository open, and it will open a VS Code editor in your browser. This does not give you the same development capabilities that you'd get in a Codespace, but it does allow you to make changes and commit them directly from your browser. Change whatever you'd like, then use the Source Control tab on the left to add, commit, and push your changes. Finally, go back to the repository and click on the Actions tab, click on your workflow run, and wait for it to build the artifact.
+
+If you are adding a new device config/PlatformIO environment, you will have to add the environment to the [matrix](https://github.com/JonnyHaystack/HayBox/blob/master/.github/workflows/build.yml#L13) in order for it to be built by the GitHub Actions workflow. You can also remove any environments from the matrix that you don't care about in order to reduce resource usage and potentially speed up your builds.
 
 ## Usage
 
@@ -147,6 +181,7 @@ To install the profile:
 - For Slippi this should be
   - On Windows: `%appdata%\Slippi Launcher\netplay\User\Config\Profiles\GCPad\`
   - On Linux: `~/.config/SlippiOnline/Config/Profiles/GCPad/`
+  - On Mac: `Cmd + Shift + G` and enter the path `/Users/<USER>/Library/Application Support/Slippi Launcher/netplay/Slippi Dolphin.app/Contents/Resources/Sys/Config/Profiles/GCPad`
 - For vanilla Dolphin: 
   - On Windows: `%userprofile%\Documents\Dolphin Emulator\Config\Profiles\GCPad\`
   - On Linux: `~/.config/dolphin-emu/Profiles/GCPad/`
@@ -198,9 +233,8 @@ To configure the button holds for input modes (controller/keyboard modes), edit
 the `select_mode()` function in `config/mode_selection.hpp`. Each `if`
 statement is a button combination to select an input mode.
 
-All input modes support passing in a SOCD cleaning mode, e.g.
-`socd::2IP_NO_REAC`. You can see the other available modes in
-`src/include/socd.hpp`.
+Most input modes support passing in an SOCD cleaning mode, e.g.
+`socd::2IP_NO_REAC`. See [here](#socd) for the other available modes.
 
 ### Creating custom input modes
 
@@ -269,7 +303,7 @@ along with the other analog outputs.
 Also note: You don't need to worry about resetting the output state or clearing
 anything from it. This is done automatically at the start of each iteration.
 
-#### SOCD
+### SOCD
 
 In the constructor of each mode (for controller modes *and* keyboard modes), you
 can configure pairs of opposing direction inputs to apply SOCD cleaning to.
@@ -278,10 +312,10 @@ For example, in `src/modes/Melee20Button.cpp`:
 ```
 _socd_pair_count = 4;
 _socd_pairs = new socd::SocdPair[_socd_pair_count]{
-    socd::SocdPair{&InputState::left,    &InputState::right  },
-    socd::SocdPair{ &InputState::down,   &InputState::up     },
-    socd::SocdPair{ &InputState::c_left, &InputState::c_right},
-    socd::SocdPair{ &InputState::c_down, &InputState::c_up   },
+    socd::SocdPair{&InputState::left,    &InputState::right,   socd_type},
+    socd::SocdPair{ &InputState::down,   &InputState::up,      socd_type},
+    socd::SocdPair{ &InputState::c_left, &InputState::c_right, socd_type},
+    socd::SocdPair{ &InputState::c_down, &InputState::c_up,    socd_type},
 };
 ```
 
@@ -291,8 +325,22 @@ cleaning is automatically done before `UpdateDigitalOutputs()` and
 `UpdateAnalogOutputs()`, and you do not need to worry about it any further than
 that.
 
-Note that you do not have to write a `HandleSocd()` function like in the
-Melee20Button and Melee18Button modes. It is only overridden in these two modes
+For each `SocdPair` you can pass in an `SocdType` of your choosing. By default
+for most modes this is passed in as a single constructor parameter, but it is
+possible to pass in multiple parameters, or simply use a hardcoded value. Both
+of these approaches are exemplified in `src/modes/FgcMode.cpp`.
+
+| `SocdType` | Description |
+| ---------- | ----------- |
+| `SOCD_NEUTRAL` | Left + right = neutral - the default if no `SocdType` specified in the `SocdPair` |
+| `SOCD_2IP` | Second input priority - left -> left + right = right, and vice versa. Releasing the second direction gives the original direction |
+| `SOCD_2IP_NO_REAC` | Second input priority without reactivation - same as above, except releasing the second direction results in neutral. The original direction must be physically reactuated. |
+| `SOCD_DIR1_PRIORITY` | The first button in the `SocdPair` always takes priority over the second |
+| `SOCD_DIR2_PRIORITY` | The second button in the `SocdPair` always takes priority over the first |
+| `SOCD_NONE` | No SOCD resolution - the game decides |
+
+Note that you do not have to implement a `HandleSocd()` function like in the
+Melee20Button and Melee18Button modes. It is only overridden in these modes
 so that we can check if left and right are both held *before* SOCD cleaning,
 because when they are both held (without a vertical direction being held) we
 need to override all modifiers.

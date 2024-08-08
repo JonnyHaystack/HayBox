@@ -4,7 +4,7 @@
 
 #include <TUKeyboard.hpp>
 
-KeyboardMode::KeyboardMode(socd::SocdType socd_type) : InputMode(socd_type) {
+KeyboardMode::KeyboardMode() {
     _keyboard = new TUKeyboard();
     _keyboard->begin();
 }

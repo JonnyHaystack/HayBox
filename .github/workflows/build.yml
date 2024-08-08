@@ -1,0 +1,74 @@
+name: PlatformIO CI
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      VERSION_REF: ${{ github.ref_type == 'tag' && github.ref_name || github.sha }}
+    strategy:
+        matrix:
+          include:
+            - env: c53
+              bin_ext: uf2
+            - env: pico
+              bin_ext: uf2
+            - env: arduino_uno
+              bin_ext: hex
+            - env: arduino_nano
+              bin_ext: hex
+            - env: arduino_mega
+              bin_ext: hex
+            - env: arduino_leonardo
+              bin_ext: hex
+            - env: arduino_micro
+              bin_ext: hex
+            - env: b0xx_r1
+              bin_ext: hex
+            - env: b0xx_r2
+              bin_ext: hex
+            - env: gccmx
+              bin_ext: hex
+            - env: gccpcb1
+              bin_ext: hex
+            - env: gccpcb2
+              bin_ext: hex
+            - env: lbx
+              bin_ext: hex
+            - env: smashbox
+              bin_ext: hex
+
+    steps:
+    - name: Check out source code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install PlatformIO
+      run: |
+        python -m pip install --upgrade pip
+        pip install --upgrade platformio
+
+    - name: Build ${{ matrix.env }} env
+      run: |
+        pio run -e ${{ matrix.env }}
+        mkdir -p ${{ matrix.env }}
+        cp .pio/build/${{ matrix.env }}/firmware.${{ matrix.bin_ext }} ${{ matrix.env }}/HayBox-${{ env.VERSION_REF }}-${{ matrix.env }}.${{ matrix.bin_ext }}
+
+    - name: Publish ${{ matrix.env }} artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: HayBox-${{ env.VERSION_REF }}-${{ matrix.env }}.${{ matrix.bin_ext }}
+        path: ${{ matrix.env }}/HayBox-${{ env.VERSION_REF }}-${{ matrix.env }}.${{ matrix.bin_ext }}
+
+    - name: Upload binaries to release
+      uses: softprops/action-gh-release@v1
+      if: github.ref_type == 'tag'
+      with:
+        files: ${{ matrix.env }}/HayBox-${{ env.VERSION_REF }}-${{ matrix.env }}.${{ matrix.bin_ext }}

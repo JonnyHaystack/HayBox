@@ -1,6 +1,10 @@
 #include "core/socd.hpp"
 
-void socd::twoIPNoReactivate(bool &input_dir1, bool &input_dir2, SocdState &socd_state) {
+void socd::second_input_priority_no_reactivation(
+    bool &input_dir1,
+    bool &input_dir2,
+    SocdState &socd_state
+) {
     bool is_dir1 = false;
     bool is_dir2 = false;
     if (input_dir1 && input_dir2) {
@@ -39,7 +43,7 @@ void socd::twoIPNoReactivate(bool &input_dir1, bool &input_dir2, SocdState &socd
     input_dir2 = is_dir2;
 }
 
-void socd::twoIP(bool &input_dir1, bool &input_dir2, SocdState &socd_state) {
+void socd::second_input_priority(bool &input_dir1, bool &input_dir2, SocdState &socd_state) {
     bool is_dir1 = false;
     bool is_dir2 = false;
     if (input_dir1 && socd_state.was_dir2) {
@@ -67,16 +71,14 @@ void socd::twoIP(bool &input_dir1, bool &input_dir2, SocdState &socd_state) {
 }
 
 void socd::neutral(bool &input_dir1, bool &input_dir2) {
-    bool is_dir1 = false;
-    bool is_dir2 = false;
-    if (!input_dir1 && input_dir2) {
-        is_dir1 = false;
-        is_dir2 = true;
+    if (input_dir1 && input_dir2) {
+        input_dir1 = false;
+        input_dir2 = false;
     }
-    if (input_dir1 && !input_dir2) {
-        is_dir1 = true;
-        is_dir2 = false;
+}
+
+void socd::dir1_priority(bool &input_dir1, bool &input_dir2) {
+    if (input_dir1 && input_dir2) {
+        input_dir2 = false;
     }
-    input_dir1 = is_dir1;
-    input_dir2 = is_dir2;
 }

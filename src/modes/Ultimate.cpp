@@ -5,13 +5,13 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 228
 
-Ultimate::Ultimate(socd::SocdType socd_type) : ControllerMode(socd_type) {
+Ultimate::Ultimate(socd::SocdType socd_type) {
     _socd_pair_count = 4;
     _socd_pairs = new socd::SocdPair[_socd_pair_count]{
-        socd::SocdPair{&InputState::left,    &InputState::right  },
-        socd::SocdPair{ &InputState::down,   &InputState::up     },
-        socd::SocdPair{ &InputState::c_left, &InputState::c_right},
-        socd::SocdPair{ &InputState::c_down, &InputState::c_up   },
+        socd::SocdPair{&InputState::left,    &InputState::right,   socd_type},
+        socd::SocdPair{ &InputState::down,   &InputState::up,      socd_type},
+        socd::SocdPair{ &InputState::c_left, &InputState::c_right, socd_type},
+        socd::SocdPair{ &InputState::c_down, &InputState::c_up,    socd_type},
     };
 }
 
@@ -20,7 +20,8 @@ void Ultimate::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
     outputs.b = inputs.b;
     outputs.x = inputs.x;
     outputs.y = inputs.y;
-    outputs.buttonR = inputs.z;
+    outputs.buttonL = inputs.lightshield;
+    outputs.buttonR = inputs.z || inputs.midshield;
     outputs.triggerLDigital = inputs.l;
     outputs.triggerRDigital = inputs.r;
     outputs.start = inputs.start;
@@ -60,6 +61,7 @@ void Ultimate::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         ANALOG_STICK_MAX,
         outputs
     );
+
 //Output L analog from controller along with Right side LSMS
     outputs.triggerLAnalog = inputs.l_analog;
     bool shield_button_pressed = inputs.l || inputs.r || inputs.lightshield || inputs.midshield;
