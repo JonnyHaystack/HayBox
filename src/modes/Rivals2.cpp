@@ -1,9 +1,9 @@
 #include "modes/Rivals2.hpp"
 
-#define ANALOG_STICK_MIN 0 
+#define ANALOG_STICK_MIN 0 //changed from 28 to 0
 #define ANALOG_STICK_NEUTRAL 128
-#define ANALOG_STICK_MAX 255 
-
+#define ANALOG_STICK_MAX 255 //changing from  228 to 255 for testing; 255 is max allowed without compile error
+//changing to 255 seems to only have affected right and up; had to change analog_min to 0 for left and down
 
 Rivals2::Rivals2(socd::SocdType socd_type) {
     _socd_pair_count = 4;
@@ -98,83 +98,83 @@ void Rivals2::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
     y value 0.7 or more initiates tap jump 
 
     UPDATES (10-31-2024)
-    Shielding on platform while holding ModX will now not allow rolls nor tap jumps nor spotdodges
+    Shielding on platform while holding ModX will now not allow rolls nor tap jumps nor spotdodges (does shield drop)
     Pressing diagonal while shielding on the ground will now not spotdodge (mimic Melee behavior)
     Angled forward tilts work now
+    Holding either Modifier on platform while shielding allows shield dropping with a down press
+    Tweaked ModX walk speed
 
-    TO-DO
-    VERIFY that Forsburn's 80 and 60% up B angles are good
+    Forsburn Angle Updates
+    Holding B gives max distance up B's for all ModX and ModY angles
+    NOT holding B during ModX & ModY Up-Bs gives a shortened up B. 
+    Holding Z during ModX or ModY Up-B angle gives the shortest Up-B for that angle (does not need/use C-modifiers)
    
    */
 
     if (inputs.mod_x) {
         if (directions.horizontal) {
-            outputs.leftStickX = 128 + (directions.x * 90); //90 gives 0.77~ in-game for a max speed walk. dash begins at 0.8
+            outputs.leftStickX = 128 + (directions.x * 76); //76 gives 0.58~ in-game for a medium speed walk. will also do tilts 
             
             // MX Horizontal Tilts
             if (inputs.a) {
                 outputs.leftStickX = 128 + (directions.x * 53); // 53 converts to 0.31~ in-game; 0.3 is min required for tilts
             }
         }
-
+        
         if(directions.vertical) {
-            outputs.leftStickY = 128 + (directions.y * 48); // 48 (0.25~ in-game), this prevents shield drops while holding modX
-            // MX Vertical Tilts
-            if (inputs.a) {
-                outputs.leftStickY = 128 + (directions.y * 53); // 53 = 0.31; tilts begin at 0.3
-            }
+            outputs.leftStickY = 128 + (directions.y * 53); // 48 (0.31~ in-game), 0.3 allows tilts and shield drop
         }
 
             /* 100% Magnitude UpB when holding B */
         if (!inputs.z && inputs.b && directions.diagonal && !shield_button_pressed) {
-            // (x, y), (92, 47), (0.77~, 0.24~) [coords, code_values, in-game values]
-            outputs.leftStickX = 128 + (directions.x * 92);
-            outputs.leftStickY = 128 + (directions.y * 47);
-            // (x, y), (89, 50), (0.75~, 0.27~) [coords, code_values, in-game values]
+            // (x, y), (123, 42), (1.14~, 0.188~) [coords, code_values, in-game values]
+            outputs.leftStickX = 128 + (directions.x * 123);
+            outputs.leftStickY = 128 + (directions.y * 42);
+            // (x, y), (120, 53), (1.1~, 0.31~) [coords, code_values, in-game values]
             if (inputs.c_down) {
-                outputs.leftStickX = 128 + (directions.x * 89);
-                outputs.leftStickY = 128 + (directions.y * 50);
+                outputs.leftStickX = 128 + (directions.x * 120);
+                outputs.leftStickY = 128 + (directions.y * 53);
             }
-            // (x, y), (85, 55), (0.7~, 0.34~) [coords, code_values, in-game values]
+            // (x, y), (115, 61), (1.04~, 0.41~) [coords, code_values, in-game values]
             if (inputs.c_left) {
-                 outputs.leftStickX = 128 + (directions.x * 85);
-                 outputs.leftStickY = 128 + (directions.y * 55);
+                 outputs.leftStickX = 128 + (directions.x * 115);
+                 outputs.leftStickY = 128 + (directions.y * 61);
             }
-            // (x, y), (81, 60), (0.65~, 0.38~) [coords, code_values, in-game values]
+            // (x, y), (110, 69), (0.98~, 0.51~) [coords, code_values, in-game values]
             if (inputs.c_up) {
-                outputs.leftStickX = 128 + (directions.x * 81);
-                outputs.leftStickY = 128 + (directions.y * 60);
+                outputs.leftStickX = 128 + (directions.x * 110);
+                outputs.leftStickY = 128 + (directions.y * 69);
             }
-            // (x, y), (76, 65), (0.6~, 0.46~) [coords, code_values, in-game values]
+            // (x, y), (103, 78), (0.9~, 0.61~) [coords, code_values, in-game values]
             if (inputs.c_right) {
-                outputs.leftStickX = 128 + (directions.x * 76);
-                outputs.leftStickY = 128 + (directions.y * 65);
+                outputs.leftStickX = 128 + (directions.x * 103);
+                outputs.leftStickY = 128 + (directions.y * 78);
             }
         }
-        /* 80% Magnitude UpB when not holding B nor Z*/
+        /* 60% Magnitude UpB when not holding B nor Z*/
         else if (!inputs.z && !inputs.b && directions.diagonal && !shield_button_pressed) {
-            // (x, y), (74, 47), (0.56~, 0.24~) [coords, code_values, in-game values]
-            outputs.leftStickX = 128 + (directions.x * 74);
-            outputs.leftStickY = 128 + (directions.y * 47);
-            // (x, y), (71, 49), (~0.53, 0.27~) [coords, code_values, in-game values]
+            // (x, y), (68, 42), (~0.49, ~0.188) [coords, code_values, in-game values]
+            outputs.leftStickX = 128 + (directions.x * 68);
+            outputs.leftStickY = 128 + (directions.y * 42);
+            // (x, y), (71, 47), (~0.52, ~0.24) [coords, code_values, in-game values]
             if (inputs.c_down) {
                 outputs.leftStickX = 128 + (directions.x * 71);
-                outputs.leftStickY = 128 + (directions.y * 49);
+                outputs.leftStickY = 128 + (directions.y * 47);
             }
-            // (x, y), (68, 51), (~0.49, ~0.29) [coords, code_values, in-game values]
+            // (x, y), (71, 51), (~0.52, 0.29~) [coords, code_values, in-game values]
             if (inputs.c_left) {
-                outputs.leftStickX = 128 + (directions.x * 68);
+                outputs.leftStickX = 128 + (directions.x * 71);
                 outputs.leftStickY = 128 + (directions.y * 51);
             }
-            // (x, y), (65, 54), (~0.45, ~0.32) [coords, code_values, in-game values]
-            if (inputs.c_up) { 
-                outputs.leftStickX = 128 + (directions.x * 65);
-                outputs.leftStickY = 128 + (directions.y * 54);
+            // (x, y), (69, 55), (~0.51, ~0.34) [coords, code_values, in-game values]
+            if (inputs.c_up) {
+                outputs.leftStickX = 128 + (directions.x * 69);
+                outputs.leftStickY = 128 + (directions.y * 55);
             }
-            // (x, y), (61, 57), (~0.41, ~0.36) [coords, code_values, in-game values]
+            // (x, y), (64, 60), (, ~0.38) [coords, code_values, in-game values]
             if (inputs.c_right) {
-                outputs.leftStickX = 128 + (directions.x * 61);
-                outputs.leftStickY = 128 + (directions.y * 57);
+                outputs.leftStickX = 128 + (directions.x * 64);
+                outputs.leftStickY = 128 + (directions.y * 60);
             }
              // (x, y), (69, 53), (~0.506, ~0.31) [coords, code_values, in-game values]
             //for angled forward tilts
@@ -183,31 +183,11 @@ void Rivals2::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
                 outputs.leftStickY = 128 + (directions.y * 53);
             }
         }
-        /* 60% Magnitude UpB when holding Z*/
+        /* Shortest UpB when holding Z*/
         else if (inputs.z && directions.diagonal && !shield_button_pressed) { 
-            // (x, y), (55, 47), (~0.34, ~0.24) [coords, code_values, in-game values]
-            outputs.leftStickX = 128 + (directions.x * 55);
-            outputs.leftStickY = 128 + (directions.y * 47);
-            // (x, y), (53, 49), (~0.31, ~0.27) [coords, code_values, in-game values]
-            if (inputs.c_down) {
-                outputs.leftStickX = 128 + (directions.x * 53);
-                outputs.leftStickY = 128 + (directions.y * 49);
-            }
-            // (x, y), (51, 51), (~0.29, 0.29~) [coords, code_values, in-game values]
-            if (inputs.c_left) {
-                outputs.leftStickX = 128 + (directions.x * 51);
-                outputs.leftStickY = 128 + (directions.y * 51);
-            }
-            // (x, y), (48, 54), (~0.25, ~0.32) [coords, code_values, in-game values]
-            if (inputs.c_up) {
-                outputs.leftStickX = 128 + (directions.x * 48);
-                outputs.leftStickY = 128 + (directions.y * 54);
-            }
-            // (x, y), (46, 57), (~0.23, ~0.36) [coords, code_values, in-game values]
-            if (inputs.c_right) {
-                outputs.leftStickX = 128 + (directions.x * 46);
-                outputs.leftStickY = 128 + (directions.y * 57);
-            }
+            // (x, y), (53, 68), (~0.31, ~0.188) [coords, code_values, in-game values] 
+            outputs.leftStickX = 128 + (directions.x * 53);
+            outputs.leftStickY = 128 + (directions.y * 42);
         }
     }
 
@@ -217,85 +197,65 @@ void Rivals2::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         }
 
         if(directions.vertical) {
-            outputs.leftStickY = 128 + (directions.y * 96); // this should give both fast fall and tap jump; spot dodge on plat
+            outputs.leftStickY = 128 + (directions.y * 90); // 0.75~ in-game. will shield drop and tap jump; will not fast fall
         }
             /* 100% Magnitude UpB when holding B*/
         if (!inputs.z && inputs.b && directions.diagonal && !shield_button_pressed) {
-            // (x, y), (47, 92), (~0.24, ~0.77) [coords, code_values, in-game values]
-            outputs.leftStickX = 128 + (directions.x * 47);
-            outputs.leftStickY = 128 + (directions.y * 92);
-            // (x, y), (50, 89), (~0.27, ~0.74) [coords, code_values, in-game values]
+            // (x, y), (42, 123), (~0.188, ~1.14) [coords, code_values, in-game values]
+            outputs.leftStickX = 128 + (directions.x * 42);
+            outputs.leftStickY = 128 + (directions.y * 123);
+            // (x, y), (53, 120), (~0.31, ~1.1) [coords, code_values, in-game values]
             if (inputs.c_down) {
-                outputs.leftStickX = 128 + (directions.x * 50);
-                outputs.leftStickY = 128 + (directions.y * 89);
+                outputs.leftStickX = 128 + (directions.x * 53);
+                outputs.leftStickY = 128 + (directions.y * 120);
             }
-            // (x, y), (55, 85), (~0.34, 0.69~) [coords, code_values, in-game values]
+            // (x, y), (61, 115), (~0.41, 1.04~) [coords, code_values, in-game values]
             if (inputs.c_left) {
-                outputs.leftStickX = 128 + (directions.x * 55);
-                outputs.leftStickY = 128 + (directions.y * 85);
+                outputs.leftStickX = 128 + (directions.x * 61);
+                outputs.leftStickY = 128 + (directions.y * 115);
             }
-            // (x, y), (60, 81), (~0.38, 0.64~) [coords, code_values, in-game values]
+            // (x, y), (69, 110), (~0.51, 0.98~) [coords, code_values, in-game values]
             if (inputs.c_up) {
-                outputs.leftStickX = 128 + (directions.x * 60);
-                outputs.leftStickY = 128 + (directions.y * 81);
+                outputs.leftStickX = 128 + (directions.x * 69);
+                outputs.leftStickY = 128 + (directions.y * 110);
             }
-            // (x, y), (65, 76), (~0.46, 0.58~) [coords, code_values, in-game values]
+            // (x, y), (78, 103), (~0.61, 0.9~) [coords, code_values, in-game values]
             if (inputs.c_right) {
-                outputs.leftStickX = 128 + (directions.x * 65);
-                outputs.leftStickY = 128 + (directions.y * 76);
+                outputs.leftStickX = 128 + (directions.x * 78);
+                outputs.leftStickY = 128 + (directions.y * 103);
             }
         }
-            /* 80% Magnitude UpB when not holding B nor Z*/
+            /* 60% Magnitude UpB when not holding B nor Z*/
         else if (!inputs.z && !inputs.b && directions.diagonal && !shield_button_pressed) {
-            // (x, y), (47, 74), (~0.24, 0.56~) [coords, code_values, in-game values]
-            outputs.leftStickX = 128 + (directions.x * 47);
-            outputs.leftStickY = 128 + (directions.y * 74);
-            // (x, y), (49, 71), (~0.27, ~0.52) [coords, code_values, in-game values]
+            // (x, y), (42, 68), (~0.188, ~0.49) [coords, code_values, in-game values] 
+            outputs.leftStickX = 128 + (directions.x * 42);
+            outputs.leftStickY = 128 + (directions.y * 68);
+            // (x, y), (47, 71), (~0.24, ~0.52) [coords, code_values, in-game values]
             if (inputs.c_down) {
-                outputs.leftStickX = 128 + (directions.x * 49);
+                 outputs.leftStickX = 128 + (directions.x * 47);
+                 outputs.leftStickY = 128 + (directions.y * 71);
+            }
+            // (x, y), (51, 71), (~0.29, ~0.52) [coords, code_values, in-game values]
+            if (inputs.c_left) {
+                outputs.leftStickX = 128 + (directions.x * 51);
                 outputs.leftStickY = 128 + (directions.y * 71);
             }
-            // (x, y), (51, 68), (~0.29, ~0.49) [coords, code_values, in-game values]
-            if (inputs.c_left) {
-                outputs.leftStickX = 128 + (directions.x * 51);
-                outputs.leftStickY = 128 + (directions.y * 68);
+            // (x, y), (55, 69), (~0.34, ~0.51) [coords, code_values, in-game values]
+            if (inputs.c_up) {
+                outputs.leftStickX = 128 + (directions.x * 55);
+                outputs.leftStickY = 128 + (directions.y * 69);
             }
-            // (x, y), (54, 65), (~0.32, ~0.46) [coords, code_values, in-game values]
-            if (inputs.c_up) { 
-                outputs.leftStickX = 128 + (directions.x * 54);
-                outputs.leftStickY = 128 + (directions.y * 65);
-            }
-            // (x, y), (57, 61), (~0.36, ~0.41) [coords, code_values, in-game values]
+            // (x, y), (60, 64), (~0.38, ~0.) [coords, code_values, in-game values]
             if (inputs.c_right) {
-                outputs.leftStickX = 128 + (directions.x * 57);
-                outputs.leftStickY = 128 + (directions.y * 61);
+                outputs.leftStickX = 128 + (directions.x * 60);
+                outputs.leftStickY = 128 + (directions.y * 64);
             }
         }
-            /* 60% Magnitude UpB when holding Z*/
+            /* Shortest UpB when holding Z*/
         else if (inputs.z && directions.diagonal && !shield_button_pressed) {
-            // (x, y), (47, 55), (~0.24, ~0.34) [coords, code_values, in-game values]
-            outputs.leftStickX = 128 + (directions.x * 47);
-            outputs.leftStickY = 128 + (directions.y * 55);
-            // (x, y), (49, 53), (~0.27, ~0.31) [coords, code_values, in-game values]
-            if (inputs.c_down) {
-                 outputs.leftStickX = 128 + (directions.x * 49);
-                 outputs.leftStickY = 128 + (directions.y * 53);
-            }
-            // (x, y), (51, 51), (~0.29, ~0.29) [coords, code_values, in-game values]
-            if (inputs.c_left) {
-                outputs.leftStickX = 128 + (directions.x * 51);
-                outputs.leftStickY = 128 + (directions.y * 51);
-            }
-            // (x, y), (54, 48), (~0.32, ~0.25) [coords, code_values, in-game values]
-            if (inputs.c_up) {
-                outputs.leftStickX = 128 + (directions.x * 54);
-                outputs.leftStickY = 128 + (directions.y * 48);
-            }
-            // (x, y), (57, 46), (~0.36, ~0.23) [coords, code_values, in-game values]
-            if (inputs.c_right) {
-                outputs.leftStickX = 128 + (directions.x * 57);
-                outputs.leftStickY = 128 + (directions.y * 46);
-            }
+            // (x, y), (42, 53), (~0.188, ~0.31) [coords, code_values, in-game values] 
+            outputs.leftStickX = 128 + (directions.x * 42);
+            outputs.leftStickY = 128 + (directions.y * 53);
         }
     }
 
