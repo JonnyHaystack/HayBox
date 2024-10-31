@@ -1,8 +1,9 @@
 #include "modes/Rivals2.hpp"
 
-#define ANALOG_STICK_MIN 0 
+#define ANALOG_STICK_MIN 0 //changed from 28 to 0
 #define ANALOG_STICK_NEUTRAL 128
-#define ANALOG_STICK_MAX 255 
+#define ANALOG_STICK_MAX 255 //changing from  228 to 255 for testing; 255 is max allowed without compile error
+//changing to 255 seems to only have affected right and up; had to change analog_min to 0 for left and down
 
 Rivals2::Rivals2(socd::SocdType socd_type) {
     _socd_pair_count = 4;
@@ -65,8 +66,8 @@ void Rivals2::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
    bool shield_button_pressed = inputs.r || inputs.l;
 
    if (directions.diagonal && !shield_button_pressed) { //added this conditional to give joystick accurate diagonals rather than (+/- 1.2, 1.2) should be (0.87~, 0.87~)
-    outputs.leftStickX = 128 + (directions.x * 100); //also allows fastfalling with down while holding forward
-    outputs.leftStickY = 128 + (directions.y * 100);
+    outputs.leftStickX = 128 + (directions.x * 93); // 92 (0.78 in-game), reduced below 0.8 to allow crouch tilts/crouch turn-around tilts
+    outputs.leftStickY = 128 + (directions.y * 96);//Y value 0.83. >0.8 allows fast fall
    }
 
    if (directions.diagonal && shield_button_pressed) {
@@ -103,10 +104,8 @@ void Rivals2::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
     Holding either Modifier on platform while shielding allows shield dropping with a down press
     Tweaked ModX walk speed
 
-    Forsburn Angle Updates
-    Holding B gives max distance up B's for all ModX and ModY angles
-    NOT holding B during ModX & ModY Up-Bs gives a shortened up B. 
-    Holding Z during ModX or ModY Up-B angle gives the shortest Up-B for that angle (does not need/use C-modifiers)
+    TO-DO
+    VERIFY that Forsburn's 80% and 60% up B angles are good
    
    */
 
