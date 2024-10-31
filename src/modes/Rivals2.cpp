@@ -1,9 +1,8 @@
 #include "modes/Rivals2.hpp"
 
-#define ANALOG_STICK_MIN 0 //changed from 28 to 0
+#define ANALOG_STICK_MIN 0 
 #define ANALOG_STICK_NEUTRAL 128
-#define ANALOG_STICK_MAX 255 //changing from  228 to 255 for testing; 255 is max allowed without compile error
-//changing to 255 seems to only have affected right and up; had to change analog_min to 0 for left and down
+#define ANALOG_STICK_MAX 255 
 
 Rivals2::Rivals2(socd::SocdType socd_type) {
     _socd_pair_count = 4;
