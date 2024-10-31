@@ -1,9 +1,9 @@
 #include "modes/Rivals2.hpp"
 
-#define ANALOG_STICK_MIN 0 //changed from 28 to 0
+#define ANALOG_STICK_MIN 0 
 #define ANALOG_STICK_NEUTRAL 128
-#define ANALOG_STICK_MAX 255 //changing from  228 to 255 for testing; 255 is max allowed without compile error
-//changing to 255 seems to only have affected right and up; had to change analog_min to 0 for left and down
+#define ANALOG_STICK_MAX 255 
+
 
 Rivals2::Rivals2(socd::SocdType socd_type) {
     _socd_pair_count = 4;
@@ -65,9 +65,14 @@ void Rivals2::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
 
    bool shield_button_pressed = inputs.r || inputs.l;
 
-   if (directions.diagonal) { //added this conditional to give joystick accurate diagonals rather than (+/- 1.2, 1.2) should be (0.87~, 0.87~)
-    outputs.leftStickX = 128 + (directions.x * 100);
+   if (directions.diagonal && !shield_button_pressed) { //added this conditional to give joystick accurate diagonals rather than (+/- 1.2, 1.2) should be (0.87~, 0.87~)
+    outputs.leftStickX = 128 + (directions.x * 100); //also allows fastfalling with down while holding forward
     outputs.leftStickY = 128 + (directions.y * 100);
+   }
+
+   if (directions.diagonal && shield_button_pressed) {
+    outputs.leftStickX = 128 + (directions.x * 92); // (0.77~, 0.77~) to prevent spot dodging when pressing diagonal on the ground
+    outputs.leftStickY = 128 + (directions.y * 92);  
    }
 
    /* coordinate notes
@@ -79,28 +84,47 @@ void Rivals2::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
     PlatDrop - Y: -0.8
     *Credit to KhaoKG for coords listed above
 
+    0.3 Y value for upward/downward angled tilts
+
     0.24 or (directions.x/y * 47) seems to be the minimum/steepest angle available with forsburn
     zetterburn can angle a bit steeper around 0.1 
+    
+
+    When Shielding
+    y value <0.28 = nothing
+    y value 0.28~ through 0.79~ = shield drop on plat
+    x value 0.8 thru 1.2 initiates roll
+    y value 0.8 thru 1.2 initiates spot-dodge on platform
+    y value 0.7 or more initiates tap jump 
+
+    UPDATES (10-31-2024)
+    Shielding on platform while holding ModX will now not allow rolls nor tap jumps nor spotdodges
+    Pressing diagonal while shielding on the ground will now not spotdodge (mimic Melee behavior)
+    Angled forward tilts work now
+
+    TO-DO
+    VERIFY that Forsburn's 80 and 60% up B angles are good
    
    */
 
     if (inputs.mod_x) {
         if (directions.horizontal) {
-            outputs.leftStickX = 128 + (directions.x * 90); //changed from 67 to 90
-            //90 gives 0.77~ in-game for a max speed walk. dash begins at 0.8
+            outputs.leftStickX = 128 + (directions.x * 90); //90 gives 0.77~ in-game for a max speed walk. dash begins at 0.8
+            
             // MX Horizontal Tilts
             if (inputs.a) {
-                outputs.leftStickX = 128 + (directions.x * 58); //changed from 44 to 58. 58 converts to 0.4~ in-game; 0.3 is min required for tilts
+                outputs.leftStickX = 128 + (directions.x * 53); // 53 converts to 0.31~ in-game; 0.3 is min required for tilts
             }
         }
 
         if(directions.vertical) {
-            outputs.leftStickY = 128 + (directions.y * 58); // 44 to 58 (0.4~ in-game)
+            outputs.leftStickY = 128 + (directions.y * 48); // 48 (0.25~ in-game), this prevents shield drops while holding modX
             // MX Vertical Tilts
             if (inputs.a) {
-                outputs.leftStickY = 128 + (directions.y * 67); // 67 should be low enough to prevent dropping thru plat
+                outputs.leftStickY = 128 + (directions.y * 53); // 53 = 0.31; tilts begin at 0.3
             }
         }
+
             /* 100% Magnitude UpB when holding B */
         if (!inputs.z && inputs.b && directions.diagonal && !shield_button_pressed) {
             // (x, y), (92, 47), (0.77~, 0.24~) [coords, code_values, in-game values]
@@ -125,11 +149,6 @@ void Rivals2::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
             if (inputs.c_right) {
                 outputs.leftStickX = 128 + (directions.x * 76);
                 outputs.leftStickY = 128 + (directions.y * 65);
-            }
-            /* Don't PlatDrop During ModX DTilt */
-            if (inputs.a) {
-                outputs.leftStickX = 128 + (directions.x * 41);
-                outputs.leftStickY = 128 + (directions.y * 67);
             }
         }
         /* 80% Magnitude UpB when not holding B nor Z*/
@@ -156,6 +175,12 @@ void Rivals2::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
             if (inputs.c_right) {
                 outputs.leftStickX = 128 + (directions.x * 61);
                 outputs.leftStickY = 128 + (directions.y * 57);
+            }
+             // (x, y), (69, 53), (~0.506, ~0.31) [coords, code_values, in-game values]
+            //for angled forward tilts
+            if (inputs.a) {
+                outputs.leftStickX = 128 + (directions.x * 69);
+                outputs.leftStickY = 128 + (directions.y * 53);
             }
         }
         /* 60% Magnitude UpB when holding Z*/
@@ -188,11 +213,11 @@ void Rivals2::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
 
     if (inputs.mod_y) {
         if (directions.horizontal) {
-            outputs.leftStickX = 128 + (directions.x * 53); //53 equats to 0.318~ in-game. 0.3 is min to achieve a walk
+            outputs.leftStickX = 128 + (directions.x * 53); //53 equates to 0.318~ in-game. 0.3 is min to achieve a walk
         }
 
         if(directions.vertical) {
-            outputs.leftStickY = 128 + (directions.y * 90);
+            outputs.leftStickY = 128 + (directions.y * 96); // this should give both fast fall and tap jump; spot dodge on plat
         }
             /* 100% Magnitude UpB when holding B*/
         if (!inputs.z && inputs.b && directions.diagonal && !shield_button_pressed) {
