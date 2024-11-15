@@ -100,9 +100,9 @@ void Rivals2::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
             outputs.leftStickY = 128 + (directions.y * 53); // 48 (0.31~ in-game), 0.3 allows tilts and shield drop
         }
 
-        if (directions.diagonal && shield_button_pressed) { //for max-length wavedash while holding ModX
+        if (directions.diagonal && shield_button_pressed) { //for max-length diagonal wavedash while holding ModX
             outputs.leftStickX = 128 + (directions.x * 76);
-            outputs.leftStickY = 128; //makes Y-value 0 so that max-length wavedash is achieved
+            outputs.leftStickY = 128 + (directions.y * 42); 
         }
 
         if (directions.diagonal && !shield_button_pressed) {
