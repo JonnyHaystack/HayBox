@@ -1,5 +1,5 @@
-#ifndef _MODES_RIVALS2_HPP
-#define _MODES_RIVALS2_HPP
+#ifndef _MODES_RIVALS_2_HPP
+#define _MODES_RIVALS_2_HPP
 
 #include "core/ControllerMode.hpp"
 #include "core/state.hpp"
