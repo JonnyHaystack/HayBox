@@ -76,7 +76,7 @@ const Config default_config = {
             .activation_binding = { BTN_LT1, BTN_MB1, BTN_RF1 },
         },
         GameModeConfig {
-            .mode_id = MODE_RIVALS2,
+            .mode_id = MODE_RIVALS_2,
             .socd_pairs_count = 4,
             .socd_pairs = {
                 SocdPair { .button_dir1 = BTN_LF3, .button_dir2 = BTN_LF1, .socd_type = SOCD_2IP_NO_REAC },
