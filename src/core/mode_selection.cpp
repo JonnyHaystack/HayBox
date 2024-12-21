@@ -9,6 +9,7 @@
 #include "modes/RivalsOfAether.hpp"
 #include "modes/Ultimate.hpp"
 #include "util/state_util.hpp"
+#include "modes/Rivals2.hpp"
 
 #include <config.pb.h>
 
@@ -17,6 +18,7 @@ ProjectM projectm_mode;
 Ultimate ultimate_mode;
 FgcMode fgc_mode;
 RivalsOfAether rivals_mode;
+Rivals2 rivals2_mode;
 CustomKeyboardMode keyboard_mode;
 CustomControllerMode custom_mode;
 
@@ -67,6 +69,10 @@ void set_mode(CommunicationBackend *backend, GameModeConfig &mode_config, Config
         case MODE_RIVALS_OF_AETHER:
             rivals_mode.SetConfig(mode_config);
             set_mode(backend, &rivals_mode);
+            break;
+        case MODE_RIVALS_2:
+            rivals2_mode.SetConfig(mode_config);
+            set_mode(backend, &rivals2_mode);
             break;
         case MODE_KEYBOARD:
             if (backend->BackendId() != COMMS_BACKEND_DINPUT ||

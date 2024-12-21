@@ -7,9 +7,9 @@
 // clang-format off
 
 const Config default_config = {
-    .game_mode_configs_count = 6,
-    .game_mode_configs = {
-        GameModeConfig {
+    .game_mode_configs_count = 7, // originally was 6, +1 for Rivals 2 Mode
+    .game_mode_configs = { 
+    GameModeConfig { //even with all GameModeConfigs commented out besides one, the code works the same and switches modes the same
             .mode_id = MODE_MELEE,
             .socd_pairs_count = 4,
             .socd_pairs = {
@@ -22,7 +22,7 @@ const Config default_config = {
             .activation_binding_count = 3,
             .activation_binding = { BTN_LT1, BTN_MB1, BTN_LF4 },
         },
-        GameModeConfig {
+       GameModeConfig {
             .mode_id = MODE_PROJECT_M,
             .socd_pairs_count = 4,
             .socd_pairs = {
@@ -36,7 +36,7 @@ const Config default_config = {
             .activation_binding = { BTN_LT1, BTN_MB1, BTN_LF3 },
         },
         GameModeConfig {
-            .mode_id = MODE_ULTIMATE,
+            .mode_id = MODE_ULTIMATE, 
             .socd_pairs_count = 4,
             .socd_pairs = {
                 SocdPair { .button_dir1 = BTN_LF3, .button_dir2 = BTN_LF1, .socd_type = SOCD_2IP },
@@ -76,6 +76,19 @@ const Config default_config = {
             .activation_binding = { BTN_LT1, BTN_MB1, BTN_RF1 },
         },
         GameModeConfig {
+            .mode_id = MODE_RIVALS_2,
+            .socd_pairs_count = 4,
+            .socd_pairs = {
+                SocdPair { .button_dir1 = BTN_LF3, .button_dir2 = BTN_LF1, .socd_type = SOCD_2IP_NO_REAC },
+                SocdPair { .button_dir1 = BTN_LF2, .button_dir2 = BTN_RF4, .socd_type = SOCD_2IP_NO_REAC },
+                SocdPair { .button_dir1 = BTN_RT3, .button_dir2 = BTN_RT5, .socd_type = SOCD_2IP_NO_REAC },
+                SocdPair { .button_dir1 = BTN_RT2, .button_dir2 = BTN_RT4, .socd_type = SOCD_2IP_NO_REAC },
+            },
+            .button_remapping_count = 0,
+            .activation_binding_count = 3,
+            .activation_binding = { BTN_LT1, BTN_MB1, BTN_RF5 }, // ModX + Start + R
+        },
+        GameModeConfig {
             .mode_id = MODE_KEYBOARD,
             .socd_pairs_count = 2,
             .socd_pairs = {
@@ -86,8 +99,8 @@ const Config default_config = {
             .activation_binding_count = 3,
             .activation_binding = { BTN_LT2, BTN_MB1, BTN_LF4 },
             .keyboard_mode_config = 1,
-        },
-    },
+        },  
+    }, 
     .communication_backend_configs_count = 8,
     .communication_backend_configs = {
         CommunicationBackendConfig {
@@ -98,13 +111,13 @@ const Config default_config = {
             .backend_id = COMMS_BACKEND_DINPUT,
             .default_mode_config = 1,
             .activation_binding_count = 1,
-            .activation_binding = { BTN_RF3 },
+            .activation_binding = { BTN_RF3 }, // Z
         },
         CommunicationBackendConfig {
             .backend_id = COMMS_BACKEND_NINTENDO_SWITCH,
             .default_mode_config = 3,
             .activation_binding_count = 1,
-            .activation_binding = { BTN_RF2 },
+            .activation_binding = { BTN_RF2 }, // X
         },
         CommunicationBackendConfig {
             .backend_id = COMMS_BACKEND_GAMECUBE,
@@ -118,18 +131,18 @@ const Config default_config = {
             .backend_id = COMMS_BACKEND_NES,
             .default_mode_config = 1,
             .activation_binding_count = 1,
-            .activation_binding = { BTN_LT1 },
+            .activation_binding = { BTN_LT1 }, //Mod X
         },
         CommunicationBackendConfig {
             .backend_id = COMMS_BACKEND_SNES,
             .default_mode_config = 1,
             .activation_binding_count = 1,
-            .activation_binding = { BTN_LT2 },
+            .activation_binding = { BTN_LT2 }, //Mod Y
         },
         CommunicationBackendConfig {
             .backend_id = COMMS_BACKEND_CONFIGURATOR,
             .activation_binding_count = 1,
-            .activation_binding = { BTN_RT2 },
+            .activation_binding = { BTN_RT2 }, //C-Down
         }
     },
     .keyboard_modes_count = 1,
@@ -166,7 +179,7 @@ const Config default_config = {
     .default_backend_config = 1,
     .default_usb_backend_config = 1,
     .melee_options = {
-        .crouch_walk_os = false,
+        .crouch_walk_os = false, 
         .disable_ledgedash_socd_override = false,
     },
     .project_m_options = {
