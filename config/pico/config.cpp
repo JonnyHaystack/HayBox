@@ -16,33 +16,33 @@
 Config config = default_config;
 
 GpioButtonMapping button_mappings[] = {
-    { BTN_LF1, 2 }, // Right
-    { BTN_LF2, 3 }, // Down
-    { BTN_LF3, 4 }, // Left
-    { BTN_LF4, 5 }, // L
+    { BTN_LF1, 2  },
+    { BTN_LF2, 3  },
+    { BTN_LF3, 4  },
+    { BTN_LF4, 5  },
 
-    { BTN_LT1, 6 }, // ModX
-    { BTN_LT2, 7 }, // ModY 
+    { BTN_LT1, 6  },
+    { BTN_LT2, 7  },
 
-    { BTN_MB1, 0 }, // Start
-    { BTN_MB2, 10 }, // Home
-    { BTN_MB3, 11 }, // Select
+    { BTN_MB1, 0  },
+    { BTN_MB2, 10 },
+    { BTN_MB3, 11 },
 
-    { BTN_RT1, 14 }, // A
-    { BTN_RT2, 15 }, // C-Down
-    { BTN_RT3, 13 }, // C-Left
-    { BTN_RT4, 12 }, // C-Up
-    { BTN_RT5, 16 }, // C-Right
+    { BTN_RT1, 14 },
+    { BTN_RT2, 15 },
+    { BTN_RT3, 13 },
+    { BTN_RT4, 12 },
+    { BTN_RT5, 16 },
 
-    { BTN_RF1, 26 }, // B
-    { BTN_RF2, 21 }, // X
-    { BTN_RF3, 19 }, // Z (buttonR)
-    { BTN_RF4, 17 }, // Up
+    { BTN_RF1, 26 },
+    { BTN_RF2, 21 },
+    { BTN_RF3, 19 },
+    { BTN_RF4, 17 },
 
-    { BTN_RF5, 27 }, // R
-    { BTN_RF6, 22 }, // Y
-    { BTN_RF7, 20 }, // LightShield
-    { BTN_RF8, 18 }, // MidShield
+    { BTN_RF5, 27 },
+    { BTN_RF6, 22 },
+    { BTN_RF7, 20 },
+    { BTN_RF8, 18 },
 };
 const size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
 
@@ -67,7 +67,7 @@ void setup() {
     gpio_input.UpdateInputs(inputs);
 
     // Check bootsel button hold as early as possible for safety.
-    if (inputs.rt1) {
+    if (inputs.mb1) {
         reboot_bootloader();
     }
 
@@ -77,7 +77,7 @@ void setup() {
     gpio_put(PICO_DEFAULT_LED_PIN, 1);
 
     // Attempt to load config, or write default config to flash if failed to load config.
-    if (inputs.rf5 || !persistence.LoadConfig(config)) { //hold R on plugin to overwrite config
+    if (!persistence.LoadConfig(config)) {
         persistence.SaveConfig(config);
     }
 
