@@ -6,10 +6,10 @@
 #include "modes/FgcMode.hpp"
 #include "modes/Melee20Button.hpp"
 #include "modes/ProjectM.hpp"
+#include "modes/Rivals2.hpp"
 #include "modes/RivalsOfAether.hpp"
 #include "modes/Ultimate.hpp"
 #include "util/state_util.hpp"
-#include "modes/Rivals2.hpp"
 
 #include <config.pb.h>
 

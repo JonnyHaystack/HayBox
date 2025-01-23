@@ -7,9 +7,9 @@
 // clang-format off
 
 const Config default_config = {
-    .game_mode_configs_count = 7, // originally was 6, +1 for Rivals 2 Mode
+    .game_mode_configs_count = 7,
     .game_mode_configs = {
-    GameModeConfig { //even with all GameModeConfigs commented out besides one, the code works the same and switches modes the same
+    GameModeConfig {
             .mode_id = MODE_MELEE,
             .socd_pairs_count = 4,
             .socd_pairs = {
@@ -86,7 +86,7 @@ const Config default_config = {
             },
             .button_remapping_count = 0,
             .activation_binding_count = 3,
-            .activation_binding = { BTN_LT1, BTN_MB1, BTN_RF5 }, // ModX + Start + R
+            .activation_binding = { BTN_LT1, BTN_MB1, BTN_RF5 },
         },
         GameModeConfig {
             .mode_id = MODE_KEYBOARD,
@@ -99,8 +99,8 @@ const Config default_config = {
             .activation_binding_count = 3,
             .activation_binding = { BTN_LT2, BTN_MB1, BTN_LF4 },
             .keyboard_mode_config = 1,
-        },  
-    }, 
+        },
+    },
     .communication_backend_configs_count = 8,
     .communication_backend_configs = {
         CommunicationBackendConfig {
