@@ -48,6 +48,9 @@ void ControllerMode::UpdateDirections(
     outputs.rightStickX = analogStickNeutral;
     outputs.rightStickY = analogStickNeutral;
 
+    // Ensure min value is at least 1
+    analogStickMin = max(analogStickMin, 1);
+
     // Coordinate calculations to make modifier handling simpler.
     if (lsLeft || lsRight) {
         directions.horizontal = true;
