@@ -142,7 +142,7 @@ const Config default_config = {
         CommunicationBackendConfig {
             .backend_id = COMMS_BACKEND_CONFIGURATOR,
             .activation_binding_count = 1,
-            .activation_binding = { BTN_MB1 },
+            .activation_binding = { BTN_RT2 },
         }
     },
     .keyboard_modes_count = 1,
