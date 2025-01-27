@@ -23,6 +23,27 @@ CommunicationBackendId XInputBackend::BackendId() {
     return COMMS_BACKEND_XINPUT;
 }
 
+int16_t XInputBackend::ScaleValue(uint8_t input) {
+    // 128 -> 0
+    // 1 -> -32768
+    // 255 -> 32767
+
+    const uint8_t lowThreshold = 63;
+    const uint8_t highThreshold = 126;
+
+    int8_t offset = 0;
+
+    if (input < 128 - highThreshold) {
+        offset = -2;
+    } else if (input < 128 - lowThreshold) {
+        offset = -1;
+    } else if (input > 128 + highThreshold) {
+        offset = 1; 
+    }
+
+    return input * 258 - 33024 + offset;
+}
+
 void XInputBackend::SendReport() {
     ScanInputs(InputScanSpeed::SLOW);
     ScanInputs(InputScanSpeed::MEDIUM);
@@ -54,10 +75,10 @@ void XInputBackend::SendReport() {
     _report.ls = _outputs.leftStickClick;
     _report.rs = _outputs.rightStickClick;
 
-    _report.lx = _outputs.leftStickX * 258 - 33024;
-    _report.ly = _outputs.leftStickY * 258 - 33024;
-    _report.rx = _outputs.rightStickX * 258 - 33024;
-    _report.ry = _outputs.rightStickY * 258 - 33024;
+    _report.lx = ScaleValue(_outputs.leftStickX);
+    _report.ly = ScaleValue(_outputs.leftStickY);
+    _report.rx = ScaleValue(_outputs.rightStickX);
+    _report.ry = ScaleValue(_outputs.rightStickY);
 
     _xinput.sendReport(&_report);
 }
