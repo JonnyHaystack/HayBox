@@ -6,11 +6,6 @@
 
 #include <config.pb.h>
 
-// typedef struct {
-//     bool true_z_press = false;
-//     bool ledgedash_max_jump_traj = true;
-// } ProjectMOptions;
-
 class ProjectM : public ControllerMode {
   public:
     ProjectM();
