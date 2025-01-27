@@ -12,7 +12,7 @@ class XInputBackend : public CommunicationBackend {
     XInputBackend(InputState &inputs, InputSource **input_sources, size_t input_source_count);
     CommunicationBackendId BackendId();
     void SendReport();
-    int16_t XInputBackend::ScaleValue(uint8_t input);
+    int16_t ScaleValue(uint8_t input);
 
   private:
     Adafruit_USBD_XInput _xinput;
