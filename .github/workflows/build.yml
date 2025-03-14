@@ -45,6 +45,8 @@ jobs:
             bin_ext: hex
           - env: gccpcb2
             bin_ext: hex
+          - env: htangl_v1
+            bin_ext: hex
           - env: lbx
             bin_ext: hex
           - env: smashbox
