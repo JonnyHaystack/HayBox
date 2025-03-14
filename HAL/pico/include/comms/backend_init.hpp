@@ -9,8 +9,6 @@
 
 #include <config.pb.h>
 
-// clang-format off
-
 /**
  * @brief Optionally defined function that allows a device config to hook into initialize_backends()
  * and use a custom method for selecting backend config before console detection
@@ -93,8 +91,6 @@ typedef size_t (*secondary_backend_initializer_t)(
 
 typedef CommunicationBackendId (*detect_console_t)(const Pinout &pinout);
 
-// clang-format on
-
 extern backend_config_selector_t get_backend_config_default;
 extern usb_backend_getter_t get_usb_backend_config_default;
 extern primary_backend_initializer_t init_primary_backend_default;
@@ -109,7 +105,7 @@ extern secondary_backend_initializer_t init_secondary_backends_default;
  * @param input_source_count Number of elements in the input_sources array
  * @param config Reference to global config struct
  * @param pinout Pinout struct used for GameCube/N64 communication backends
- * @return The number of backends in the array
+ * @return size_t The number of backends in the array
  */
 size_t initialize_backends(
     CommunicationBackend **&backends,

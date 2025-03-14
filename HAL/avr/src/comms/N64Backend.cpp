@@ -56,7 +56,7 @@ void N64Backend::SendReport() {
     _data.report.yAxis = _outputs.leftStickY - 128;
 
     // Send outputs to console.
-    _n64->write(_data);
+    _n64.write(_data);
 
     delayMicroseconds(_delay);
 }

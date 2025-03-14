@@ -53,7 +53,7 @@ void DInputBackend::SendReport() {
 
     // D-pad Hat Switch
     _joystick
-        ->setHatSwitch(_outputs.dpadLeft, _outputs.dpadRight, _outputs.dpadDown, _outputs.dpadUp);
+        .setHatSwitch(_outputs.dpadLeft, _outputs.dpadRight, _outputs.dpadDown, _outputs.dpadUp);
 
     _joystick.sendState();
 }

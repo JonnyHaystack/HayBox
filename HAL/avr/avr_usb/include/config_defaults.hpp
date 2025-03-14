@@ -11,6 +11,7 @@ const Config default_config = {
     .game_mode_configs = new GameModeConfig[5] {
         GameModeConfig {
             .mode_id = MODE_MELEE,
+            .name = {},
             .socd_pairs_count = 4,
             .socd_pairs = new SocdPair[4] {
                 SocdPair { .button_dir1 = BTN_LF3, .button_dir2 = BTN_LF1, .socd_type = SOCD_2IP_NO_REAC },
@@ -22,9 +23,13 @@ const Config default_config = {
             .button_remapping = {},
             .activation_binding_count = 3,
             .activation_binding = new Button[3] { BTN_LT1, BTN_MB1, BTN_LF4 },
+            .custom_mode_config = 0,
+            .keyboard_mode_config = 0,
+            .rgb_config = 0,
         },
         GameModeConfig {
             .mode_id = MODE_PROJECT_M,
+            .name = {},
             .socd_pairs_count = 4,
             .socd_pairs = new SocdPair[4] {
                 SocdPair { .button_dir1 = BTN_LF3, .button_dir2 = BTN_LF1, .socd_type = SOCD_2IP_NO_REAC },
@@ -36,9 +41,13 @@ const Config default_config = {
             .button_remapping = {},
             .activation_binding_count = 3,
             .activation_binding = new Button[3] { BTN_LT1, BTN_MB1, BTN_LF3 },
+            .custom_mode_config = 0,
+            .keyboard_mode_config = 0,
+            .rgb_config = 0,
         },
         GameModeConfig {
             .mode_id = MODE_ULTIMATE,
+            .name = {},
             .socd_pairs_count = 4,
             .socd_pairs = new SocdPair[4] {
                 SocdPair { .button_dir1 = BTN_LF3, .button_dir2 = BTN_LF1, .socd_type = SOCD_2IP },
@@ -50,9 +59,13 @@ const Config default_config = {
             .button_remapping = {},
             .activation_binding_count = 3,
             .activation_binding = new Button[3] { BTN_LT1, BTN_MB1, BTN_LF2 },
+            .custom_mode_config = 0,
+            .keyboard_mode_config = 0,
+            .rgb_config = 0,
         },
         GameModeConfig {
             .mode_id = MODE_FGC,
+            .name = {},
             .socd_pairs_count = 2,
             .socd_pairs = new SocdPair[2] {
                 SocdPair { .button_dir1 = BTN_LF3, .button_dir2 = BTN_LF1, .socd_type = SOCD_NEUTRAL },
@@ -64,9 +77,13 @@ const Config default_config = {
             },
             .activation_binding_count = 3,
             .activation_binding = new Button[3] { BTN_LT1, BTN_MB1, BTN_LF1 },
+            .custom_mode_config = 0,
+            .keyboard_mode_config = 0,
+            .rgb_config = 0,
         },
         GameModeConfig {
             .mode_id = MODE_KEYBOARD,
+            .name = {},
             .socd_pairs_count = 2,
             .socd_pairs = new SocdPair[2] {
                 SocdPair { .button_dir1 = BTN_LF3, .button_dir2 = BTN_LF1, .socd_type = SOCD_2IP },
@@ -76,23 +93,34 @@ const Config default_config = {
             .button_remapping = {},
             .activation_binding_count = 3,
             .activation_binding = new Button[3] { BTN_LT2, BTN_MB1, BTN_LF4 },
+            .custom_mode_config = 0,
             .keyboard_mode_config = 1,
+            .rgb_config = 0,
         },
     },
-    .communication_backend_configs_count = 1,
-    .communication_backend_configs = new CommunicationBackendConfig[1] {
+    .communication_backend_configs_count = 2,
+    .communication_backend_configs = new CommunicationBackendConfig[2] {
         CommunicationBackendConfig {
             .backend_id = COMMS_BACKEND_DINPUT,
             .default_mode_config = 1,
             .activation_binding_count = 1,
             .activation_binding = new Button[1] { BTN_RF3 },
+            .secondary_backends = {},
+        },
+        CommunicationBackendConfig {
+            .backend_id = COMMS_BACKEND_GAMECUBE,
+            .default_mode_config = 1,
+            .activation_binding_count = 1,
+            .activation_binding = new Button[1] { BTN_RT1 },
+            .secondary_backends = {},
         },
     },
+    .custom_modes_count = 0,
+    .custom_modes = {},
     .keyboard_modes_count = 1,
     .keyboard_modes = new KeyboardModeConfig[1] {
         KeyboardModeConfig {
             0,
-            "Default",
             22,
             new ButtonToKeycodeMapping[22] {
                 { BTN_LF4, HID_KEY_A },
@@ -124,6 +152,21 @@ const Config default_config = {
     .rgb_configs = {},
     .default_backend_config = 1,
     .default_usb_backend_config = 1,
+    .rgb_brightness = 0,
+    .has_melee_options = true,
+    .melee_options = {
+        .crouch_walk_os = false,
+        .disable_ledgedash_socd_override = false,
+        .has_custom_airdodge = false,
+        .custom_airdodge = { .x = 0, .y = 0 },
+    },
+    .has_project_m_options = true,
+    .project_m_options = {
+        .true_z_press = false,
+        .disable_ledgedash_socd_override = false,
+        .has_custom_airdodge = false,
+        .custom_airdodge = { .x = 0, .y = 0 },
+    },
 };
 
 // clang-format on
