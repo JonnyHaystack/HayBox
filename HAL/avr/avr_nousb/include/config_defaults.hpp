@@ -81,15 +81,8 @@ const Config default_config = {
             .rgb_config = 0,
         },
     },
-    .communication_backend_configs_count = 3,
-    .communication_backend_configs = new CommunicationBackendConfig[3] {
-        CommunicationBackendConfig {
-            .backend_id = COMMS_BACKEND_DINPUT,
-            .default_mode_config = 1,
-            .activation_binding_count = 1,
-            .activation_binding = new Button[1] { BTN_RF3 },
-            .secondary_backends = {},
-        },
+    .communication_backend_configs_count = 2,
+    .communication_backend_configs = new CommunicationBackendConfig[2] {
         CommunicationBackendConfig {
             .backend_id = COMMS_BACKEND_GAMECUBE,
             .default_mode_config = 1,
