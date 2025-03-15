@@ -127,13 +127,17 @@ If you are adding a new device config/PlatformIO environment, you will have to a
 
 ### Default button holds
 
+#### Config mode
+
+To enter config mode (Pico-based devices only), hold MB1 (Start) on plugin.
+
 #### Pico bootsel mode
 
-To reboot Pico-based controllers into bootsel mode, hold Start on plugin.
+To reboot Pico-based controllers into bootsel mode, hold RT2 (C-Down) on plugin.
 
 #### Brook board passthrough mode
 
-To switch to Brook board mode on GCCPCB2, GCCMX, B0XX R2, or LBX, hold B on
+To switch to Brook board mode on GCCPCB2, GCCMX, B0XX R2, or LBX, hold RF1 (B) on
 plugin.
 
 #### Communication backends (console selection)
@@ -145,14 +149,14 @@ On Pico/RP2040, USB vs GameCube vs Nintendo 64 is detected automatically. If
 not plugged into a console, the default is **XInput**, which should work
 plug-and-play with most PC games.
 Other backends are selected by holding one of the following buttons on plugin:
-- X - Nintendo Switch USB mode (also sets initial game mode to Ultimate mode)
-- Z - DInput mode (only recommended for games which don't support XInput)
+- RF2 (X) - Nintendo Switch USB mode (also sets initial game mode to Ultimate mode)
+- RF3 (Z) - DInput mode (only recommended for games which don't support XInput)
 
 On Arduino/AVR, the **DInput** backend is selected if a USB connection is detected.
 Otherwise, it defaults to GameCube backend, unless another backend is manually
 selected by holding one of the following buttons on plugin:
-- A - GameCube backend with polling rate fix disabled (used for GCC adapters)
-- C-Left - Nintendo 64 backend (60Hz polling rate)
+- RT1 (A) - GameCube backend with polling rate fix disabled (used for GCC adapters)
+- RT3 (C-Left) - Nintendo 64 backend (60Hz polling rate)
 
 #### Game mode selection
 
@@ -163,14 +167,14 @@ switch game anyway. It also serves the purpose of reducing the number of buttons
 you have to hold with one hand while plugging in.
 
 The default controller mode button combinations are:
-- Mod X + Start + L - Melee mode (default)
-- Mod X + Start + Left - Project M/Project+ mode
-- Mod X + Start + Down - Ultimate mode
-- Mod X + Start + Right - FGC mode (Hitbox style fighting game layout)
-- Mod X + Start + B - Rivals of Aether mode
+- MB1 + LT1 + LF4 (Start + Mod X + L) - Melee mode (default)
+- MB1 + LT1 + LF3 (Start + Mod X + Left) - Project M/Project+ mode
+- MB1 + LT1 + LF2 (Start + Mod X + Down) - Ultimate mode
+- MB1 + LT1 + LF1 (Start + Mod X + Right) - FGC mode (Hitbox style fighting game layout)
+- MB1 + LT1 + RF1 (Start + Mod X + B) - Rivals of Aether mode
 
 Default keyboard mode button combinations (only available when using DInput backend, **not** with XInput):
-- Mod Y + Start + L - Default keyboard mode
+- MB1 + LT2 + LF4 (Start + Mod Y + L) - Default keyboard mode
 
 ### Dolphin setup
 
