@@ -106,7 +106,7 @@ void init_primary_backend(
                 inputs,
                 input_sources,
                 input_source_count,
-                inputs.rt1 ? 1000 : 125,
+                inputs.rt1 ? 0 : 125,
                 pinout.joybus_data
             );
     }

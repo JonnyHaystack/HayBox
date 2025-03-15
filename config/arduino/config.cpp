@@ -67,6 +67,7 @@ void setup() {
     static GpioButtonInput gpio_input(button_mappings, button_count);
     gpio_input.UpdateInputs(inputs);
 
+    // Check bootloader button hold as early as possible for safety.
     if (inputs.mb1) {
         Serial.begin(115200);
         reboot_bootloader();

@@ -4,7 +4,7 @@
 #include "comms/N64Backend.hpp"
 #include "config/mode_selection.hpp"
 #include "core/CommunicationBackend.hpp"
-#include "core/InputMode.hpp"
+#include "core/KeyboardMode.hpp"
 #include "core/pinout.hpp"
 #include "core/socd.hpp"
 #include "core/state.hpp"
