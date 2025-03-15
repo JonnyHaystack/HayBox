@@ -17,6 +17,7 @@ HayBox is a modular, cross-platform firmware for digital or mixed analog/digital
 * [Customisation](#customisation)
   * [Console/gamemode selection bindings](#consolegamemode-selection-bindings)
   * [Creating custom input modes](#creating-custom-input-modes)
+  * [SOCD](#socd)
   * [Mod X lightshield and R shield tilt](#mod-x-lightshield-and-r-shield-tilt)
   * [Mode-specific optional features](#mode-specific-optional-features)
     * [Melee modes](#melee-modes)
@@ -92,18 +93,19 @@ to pull updates).
 
 After that:
 1. Open Visual Studio Code
-2. Click File -> **Open Folder** and choose the HayBox folder (the one containing platformio.ini, not the folder above that)
-3. Choose the appropriate build environment for your controller's PCB by
+2. If on Windows and it's your first time building HayBox, run the command `git config --global core.longpaths true` in any terminal (within VS Code or regular cmd/PowerShell are all fine)
+3. Click File -> **Open Folder** and choose the HayBox folder (the one containing platformio.ini, not the folder above that)
+4. Choose the appropriate build environment for your controller's PCB by
   clicking the environment selection button near the bottom left of the window
   
   ![image](https://user-images.githubusercontent.com/1266473/187039372-485c5f0d-60b3-4534-befb-e713f138a7c8.png)
   ![image](https://user-images.githubusercontent.com/1266473/187039585-cea18994-fd12-45fb-b43f-427eb7affb81.png)
   
-4. If your controller has a different pinout than any of the existing configs, you may edit the button mappings and other pins at the top of the config (`config/<environment>/config.cpp`). Any buttons that your controller doesn't have can simply be deleted from the list.
-5. If you see a message in the bottom bar saying "Rebuilding IntelliSense Index" or "Loading Project Tasks", wait for it to disappear. For Pico especially it may take quite a while the first time because it has to download 2-3GB of dependencies.
-6. Click **Build** (in the bottom left) and make sure everything compiles without
+5. If your controller has a different pinout than any of the existing configs, you may edit the button mappings and other pins at the top of the config (`config/<environment>/config.cpp`). Any buttons that your controller doesn't have can simply be deleted from the list.
+6. If you see a message in the bottom bar saying "Rebuilding IntelliSense Index" or "Loading Project Tasks", wait for it to disappear. For Pico especially it may take quite a while the first time because it has to download 2-3GB of dependencies.
+7. Click **Build** (in the bottom left) and make sure everything compiles without
   errors
-7. This next step differs depending on the microcontroller used in your controller.
+8. This next step differs depending on the microcontroller used in your controller.
     - **For Pico-based controllers**: hold the bootsel button while plugging it in (or your Start button if you already have HayBox installed) and then drag and drop the file `HayBox/.pio/build/<environment>/firmware.uf2` onto the RPI-RP2 drive that comes up.
     - **For Arduino-based controllers**: Plug in your controller via USB and click **Upload** (next to the Build button)
 
