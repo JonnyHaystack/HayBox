@@ -53,7 +53,7 @@ void setup() {
     matrix_input.UpdateInputs(inputs);
 
     // Bootsel button hold as early as possible for safety.
-    if (inputs.mb1) {
+    if (inputs.rt2) {
         reboot_bootloader();
     }
 

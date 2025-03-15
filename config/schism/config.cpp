@@ -71,7 +71,7 @@ void setup() {
     gpio_input.UpdateInputs(inputs);
 
     // Check bootsel button hold as early as possible for safety.
-    if (inputs.mb1) {
+    if (inputs.rt2) {
         reboot_bootloader();
     }
 

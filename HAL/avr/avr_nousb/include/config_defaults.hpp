@@ -116,7 +116,7 @@ const Config default_config = {
     },
     .has_project_m_options = true,
     .project_m_options = {
-        .true_z_press = false,
+        .true_z_press = true,
         .disable_ledgedash_socd_override = false,
         .has_custom_airdodge = false,
         .custom_airdodge = { .x = 0, .y = 0 },
