@@ -4,32 +4,24 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 255
 
-MKWii::MKWii(socd::SocdType socd_type) {
-    _socd_pair_count = 4;
-    _socd_pairs = new socd::SocdPair[_socd_pair_count]{
-        socd::SocdPair{&InputState::left, &InputState::right, socd_type},
-        socd::SocdPair{ &InputState::l,   &InputState::down,  socd_type},
-        socd::SocdPair{ &InputState::l,   &InputState::mod_x, socd_type},
-        socd::SocdPair{ &InputState::l,   &InputState::mod_y, socd_type},
-    };
+MKWii::MKWii() : ControllerMode() {}
+
+void MKWii::UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs) {
+    outputs.a = inputs.rf1;
+    outputs.b = inputs.rf2;
+    outputs.triggerLDigital = inputs.rf3;
+    outputs.buttonR = inputs.rf4;
+    outputs.dpadUp = inputs.rt1;
+    outputs.start = inputs.mb1;
 }
 
-void MKWii::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
-    outputs.a = inputs.b;
-    outputs.b = inputs.x;
-    outputs.triggerLDigital = inputs.z;
-    outputs.buttonR = inputs.up;
-    outputs.dpadUp = inputs.a;
-    outputs.start = inputs.start;
-}
-
-void MKWii::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
-    bool up = inputs.down || inputs.mod_x || inputs.mod_y;
+void MKWii::UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs) {
+    bool up = inputs.lf2 || inputs.lt1 || inputs.lt2;
 
     UpdateDirections(
-        inputs.left,
-        inputs.right,
-        inputs.l,
+        inputs.lf3,
+        inputs.lf1,
+        inputs.lf4,
         up,
         false,
         false,
@@ -41,7 +33,7 @@ void MKWii::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         outputs
     );
 
-    if (inputs.z) {
+    if (inputs.rf3) {
         outputs.triggerLAnalog = 140;
     }
 

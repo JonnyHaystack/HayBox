@@ -1,8 +1,9 @@
 #include "input/GpioButtonInput.hpp"
 
 #include "gpio.hpp"
+#include "util/state_util.hpp"
 
-GpioButtonInput::GpioButtonInput(GpioButtonMapping *button_mappings, size_t button_count) {
+GpioButtonInput::GpioButtonInput(const GpioButtonMapping *button_mappings, size_t button_count) {
     _button_mappings = button_mappings;
     _button_count = button_count;
 
@@ -19,7 +20,14 @@ InputScanSpeed GpioButtonInput::ScanSpeed() {
 
 void GpioButtonInput::UpdateInputs(InputState &inputs) {
     for (size_t i = 0; i < _button_count; i++) {
-        GpioButtonMapping button_mapping = _button_mappings[i];
-        inputs.*(button_mapping.button) = !gpio::read_digital(button_mapping.pin);
+        UpdateButtonState(inputs, i, !gpio::read_digital(_button_mappings[i].pin));
     }
+}
+
+void GpioButtonInput::UpdateButtonState(
+    InputState &inputs,
+    size_t button_mapping_index,
+    bool pressed
+) {
+    set_button(inputs.buttons, _button_mappings[button_mapping_index].button, pressed);
 }

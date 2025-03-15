@@ -9,6 +9,7 @@
 class GamecubeBackend : public CommunicationBackend {
   public:
     GamecubeBackend(
+        InputState &inputs,
         InputSource **input_sources,
         size_t input_source_count,
         uint data_pin,
@@ -16,12 +17,12 @@ class GamecubeBackend : public CommunicationBackend {
         int sm = -1,
         int offset = -1
     );
-    ~GamecubeBackend();
+    CommunicationBackendId BackendId();
     void SendReport();
     int GetOffset();
 
   private:
-    GamecubeConsole *_gamecube;
+    GamecubeConsole _gamecube;
     gc_report_t _report;
 };
 

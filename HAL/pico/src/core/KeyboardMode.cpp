@@ -4,7 +4,7 @@
 
 #include <TUKeyboard.hpp>
 
-KeyboardMode::KeyboardMode() {
+KeyboardMode::KeyboardMode() : InputMode() {
     _keyboard = new TUKeyboard();
     _keyboard->begin();
 }
@@ -15,8 +15,10 @@ KeyboardMode::~KeyboardMode() {
     delete _keyboard;
 }
 
-void KeyboardMode::SendReport(InputState &inputs) {
-    HandleSocd(inputs);
+void KeyboardMode::SendReport(const InputState &inputs) {
+    InputState remapped_inputs = inputs;
+    HandleRemap(inputs, remapped_inputs);
+    HandleSocd(remapped_inputs);
     UpdateKeys(inputs);
     _keyboard->sendState();
 }

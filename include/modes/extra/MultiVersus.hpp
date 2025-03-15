@@ -7,11 +7,11 @@
 
 class MultiVersus : public ControllerMode {
   public:
-    MultiVersus(socd::SocdType socd_type);
+    MultiVersus();
 
   protected:
-    virtual void UpdateDigitalOutputs(InputState &inputs, OutputState &outputs);
-    virtual void UpdateAnalogOutputs(InputState &inputs, OutputState &outputs);
+    virtual void UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs);
+    virtual void UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs);
 };
 
 #endif

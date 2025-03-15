@@ -6,6 +6,7 @@
 #include <hardware/pio.h>
 
 N64Backend::N64Backend(
+    InputState &inputs,
     InputSource **input_sources,
     size_t input_source_count,
     uint data_pin,
@@ -13,13 +14,13 @@ N64Backend::N64Backend(
     int sm,
     int offset
 )
-    : CommunicationBackend(input_sources, input_source_count) {
-    _n64 = new N64Console(data_pin, pio, sm, offset);
+    : CommunicationBackend(inputs, input_sources, input_source_count),
+      _n64(data_pin, pio, sm, offset) {
     _report = default_n64_report;
 }
 
-N64Backend::~N64Backend() {
-    delete _n64;
+CommunicationBackendId N64Backend::BackendId() {
+    return COMMS_BACKEND_N64;
 }
 
 void N64Backend::SendReport() {
@@ -28,7 +29,7 @@ void N64Backend::SendReport() {
     ScanInputs(InputScanSpeed::MEDIUM);
 
     // Read inputs
-    _n64->WaitForPoll();
+    _n64.WaitForPoll();
 
     // Update fast inputs in response to poll.
     ScanInputs(InputScanSpeed::FAST);
@@ -58,9 +59,9 @@ void N64Backend::SendReport() {
     _report.stick_y = _outputs.leftStickY - 128;
 
     // Send outputs to console.
-    _n64->SendReport(&_report);
+    _n64.SendReport(&_report);
 }
 
 int N64Backend::GetOffset() {
-    return _n64->GetOffset();
+    return _n64.GetOffset();
 }

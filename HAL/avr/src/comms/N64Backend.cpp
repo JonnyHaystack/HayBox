@@ -3,13 +3,14 @@
 #include <Nintendo.h>
 
 N64Backend::N64Backend(
+    InputState &inputs,
     InputSource **input_sources,
     size_t input_source_count,
     int polling_rate,
     int data_pin
 )
-    : CommunicationBackend(input_sources, input_source_count) {
-    _n64 = new CN64Console(data_pin);
+    : CommunicationBackend(inputs, input_sources, input_source_count),
+      _n64(data_pin) {
     _data = defaultN64Data;
 
     if (polling_rate > 0) {
@@ -22,8 +23,8 @@ N64Backend::N64Backend(
     }
 }
 
-N64Backend::~N64Backend() {
-    delete _n64;
+CommunicationBackendId N64Backend::BackendId() {
+    return COMMS_BACKEND_N64;
 }
 
 void N64Backend::SendReport() {
@@ -55,7 +56,7 @@ void N64Backend::SendReport() {
     _data.report.yAxis = _outputs.leftStickY - 128;
 
     // Send outputs to console.
-    _n64->write(_data);
+    _n64.write(_data);
 
     delayMicroseconds(_delay);
 }

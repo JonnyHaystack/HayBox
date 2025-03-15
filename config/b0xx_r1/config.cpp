@@ -1,113 +1,93 @@
-#include "comms/B0XXInputViewer.hpp"
-#include "comms/DInputBackend.hpp"
-#include "comms/GamecubeBackend.hpp"
-#include "comms/N64Backend.hpp"
-#include "config/mode_selection.hpp"
+#include "comms/backend_init.hpp"
+#include "config_defaults.hpp"
 #include "core/CommunicationBackend.hpp"
-#include "core/InputMode.hpp"
+#include "core/KeyboardMode.hpp"
+#include "core/mode_selection.hpp"
 #include "core/pinout.hpp"
-#include "core/socd.hpp"
 #include "core/state.hpp"
 #include "input/GpioButtonInput.hpp"
 #include "input/NunchukInput.hpp"
-#include "modes/Melee20Button.hpp"
+#include "reboot.hpp"
 #include "stdlib.hpp"
 
-CommunicationBackend **backends = nullptr;
-size_t backend_count;
-KeyboardMode *current_kb_mode = nullptr;
+#include <config.pb.h>
 
-GpioButtonMapping button_mappings[] = {
-    {&InputState::l,        7 },
-    { &InputState::left,    15},
-    { &InputState::down,    16},
-    { &InputState::right,   14},
+Config config = default_config;
 
-    { &InputState::mod_x,   6 },
-    { &InputState::mod_y,   8 },
+const GpioButtonMapping button_mappings[] = {
+    { BTN_LF4, 7  },
+    { BTN_LF3, 15 },
+    { BTN_LF2, 16 },
+    { BTN_LF1, 14 },
 
-    { &InputState::start,   12},
+    { BTN_LT1, 6  },
+    { BTN_LT2, 8  },
 
-    { &InputState::c_left,  A1},
-    { &InputState::c_up,    A2},
-    { &InputState::c_down,  5 },
-    { &InputState::a,       13},
-    { &InputState::c_right, A0},
+    { BTN_MB1, 12 },
 
-    { &InputState::b,       4 },
-    { &InputState::x,       A5},
-    { &InputState::z,       A4},
-    { &InputState::up,      A3},
+    { BTN_RT3, A1 },
+    { BTN_RT4, A2 },
+    { BTN_RT2, 5  },
+    { BTN_RT1, 13 },
+    { BTN_RT5, A0 },
 
-    { &InputState::r,       0 },
-    { &InputState::y,       1 },
+    { BTN_RF1, 4  },
+    { BTN_RF2, A5 },
+    { BTN_RF3, A4 },
+    { BTN_RF4, A3 },
+
+    { BTN_RF5, 0  },
+    { BTN_RF6, 1  },
 };
-size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
+const size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
 
-Pinout pinout = {
+const Pinout pinout = {
     .joybus_data = 17,
+    .nes_data = 0,
+    .nes_clock = 0,
+    .nes_latch = 0,
     .mux = -1,
     .nunchuk_detect = -1,
     .nunchuk_sda = -1,
     .nunchuk_scl = -1,
 };
 
+CommunicationBackend **backends = nullptr;
+size_t backend_count;
+KeyboardMode *current_kb_mode = nullptr;
+
 void setup() {
+    static InputState inputs;
+
     // Create Nunchuk input source - must be done before GPIO input source otherwise it would
     // disable the pullups on the i2c pins.
-    NunchukInput *nunchuk = new NunchukInput();
+    // static NunchukInput nunchuk;
 
     // Create GPIO input source and use it to read button states for checking button holds.
-    GpioButtonInput *gpio_input = new GpioButtonInput(button_mappings, button_count);
+    static GpioButtonInput gpio_input(button_mappings, button_count);
+    gpio_input.UpdateInputs(inputs);
 
-    InputState button_holds;
-    gpio_input->UpdateInputs(button_holds);
-
-    // Create array of input sources to be used.
-    static InputSource *input_sources[] = { gpio_input, nunchuk };
-    size_t input_source_count = sizeof(input_sources) / sizeof(InputSource *);
-
-    CommunicationBackend *primary_backend = new DInputBackend(input_sources, input_source_count);
-    delay(500);
-    bool usb_connected = UDADDR & _BV(ADDEN);
-
-    /* Select communication backend. */
-    if (usb_connected) {
-        // Default to DInput mode if USB is connected.
-        // Input viewer only used when connected to PC i.e. when using DInput mode.
-        backend_count = 2;
-        backends = new CommunicationBackend *[backend_count] {
-            primary_backend, new B0XXInputViewer(input_sources, input_source_count)
-        };
-    } else {
-        delete primary_backend;
-        if (button_holds.c_left) {
-            // Hold C-Left on plugin for N64.
-            primary_backend =
-                new N64Backend(input_sources, input_source_count, 60, pinout.joybus_data);
-        } else if (button_holds.a) {
-            // Hold A on plugin for GameCube adapter.
-            primary_backend =
-                new GamecubeBackend(input_sources, input_source_count, 0, pinout.joybus_data);
-        } else {
-            // Default to GameCube/Wii.
-            primary_backend =
-                new GamecubeBackend(input_sources, input_source_count, 125, pinout.joybus_data);
-        }
-
-        // If not DInput then only using 1 backend (no input viewer).
-        backend_count = 1;
-        backends = new CommunicationBackend *[backend_count] { primary_backend };
+    // Check bootloader button hold as early as possible for safety.
+    if (inputs.mb1) {
+        Serial.begin(115200);
+        reboot_bootloader();
     }
 
-    // Default to Melee mode.
-    primary_backend->SetGameMode(
-        new Melee20Button(socd::SOCD_2IP_NO_REAC, { .crouch_walk_os = false })
-    );
+    // Create array of input sources to be used.
+    static InputSource *input_sources[] = {
+        &gpio_input,
+        // &nunchuk,
+    };
+    size_t input_source_count = sizeof(input_sources) / sizeof(InputSource *);
+
+    backend_count =
+        initialize_backends(backends, inputs, input_sources, input_source_count, config, pinout);
+
+    setup_mode_activation_bindings(config.game_mode_configs, config.game_mode_configs_count);
 }
 
 void loop() {
-    select_mode(backends[0]);
+    select_mode(backends, backend_count, config);
 
     for (size_t i = 0; i < backend_count; i++) {
         backends[i]->SendReport();

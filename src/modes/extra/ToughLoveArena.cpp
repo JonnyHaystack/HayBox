@@ -1,16 +1,11 @@
 #include "modes/extra/ToughLoveArena.hpp"
 
-ToughLoveArena::ToughLoveArena(socd::SocdType socd_type) {
-    _socd_pair_count = 1;
-    _socd_pairs = new socd::SocdPair[_socd_pair_count]{
-        socd::SocdPair{&InputState::left, &InputState::right, socd_type},
-    };
-}
+ToughLoveArena::ToughLoveArena() : KeyboardMode() {}
 
-void ToughLoveArena::UpdateKeys(InputState &inputs) {
-    Press('s', inputs.left);
-    Press('d', inputs.right);
-    Press('j', inputs.b);
-    Press('k', inputs.x);
-    Press('l', inputs.z);
+void ToughLoveArena::UpdateKeys(const InputState &inputs) {
+    Press(HID_KEY_S, inputs.lf3);
+    Press(HID_KEY_D, inputs.lf1);
+    Press(HID_KEY_J, inputs.rf1);
+    Press(HID_KEY_K, inputs.rf2);
+    Press(HID_KEY_L, inputs.rf3);
 }

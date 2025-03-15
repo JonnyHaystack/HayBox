@@ -5,60 +5,52 @@
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 228
 
-Ultimate2::Ultimate2(socd::SocdType socd_type) {
-    _socd_pair_count = 4;
-    _socd_pairs = new socd::SocdPair[_socd_pair_count]{
-        socd::SocdPair{&InputState::left,    &InputState::right,   socd_type},
-        socd::SocdPair{ &InputState::down,   &InputState::up,      socd_type},
-        socd::SocdPair{ &InputState::c_left, &InputState::c_right, socd_type},
-        socd::SocdPair{ &InputState::c_down, &InputState::c_up,    socd_type},
-    };
-}
+Ultimate2::Ultimate2() : ControllerMode() {}
 
-void Ultimate2::UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) {
-    outputs.a = inputs.a;
-    outputs.b = inputs.b;
-    outputs.x = inputs.x;
-    outputs.y = inputs.y;
-    outputs.buttonR = inputs.z;
-    outputs.triggerLDigital = inputs.l;
-    outputs.triggerRDigital = inputs.r;
-    outputs.start = inputs.start;
+void Ultimate2::UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs) {
+    outputs.a = inputs.rt1;
+    outputs.b = inputs.rf1;
+    outputs.x = inputs.rf2;
+    outputs.y = inputs.rf6;
+    outputs.buttonR = inputs.rf3;
+    outputs.triggerLDigital = inputs.lf4;
+    outputs.triggerRDigital = inputs.rf5;
+    outputs.start = inputs.mb1;
 
     // Turn on D-Pad layer by holding Mod X + Mod Y, or Nunchuk C button.
-    if ((inputs.mod_x && inputs.mod_y) || inputs.nunchuk_c) {
-        outputs.dpadUp = inputs.c_up;
-        outputs.dpadDown = inputs.c_down;
-        outputs.dpadLeft = inputs.c_left;
-        outputs.dpadRight = inputs.c_right;
+    if ((inputs.lt1 && inputs.lt2) || inputs.nunchuk_c) {
+        outputs.dpadUp = inputs.rt4;
+        outputs.dpadDown = inputs.rt2;
+        outputs.dpadLeft = inputs.rt3;
+        outputs.dpadRight = inputs.rt5;
     }
 
-    if (inputs.select)
+    if (inputs.mb3)
         outputs.dpadLeft = true;
-    if (inputs.home)
+    if (inputs.mb2)
         outputs.dpadRight = true;
 }
 
-void Ultimate2::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
+void Ultimate2::UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs) {
     // Coordinate calculations to make modifier handling simpler.
     UpdateDirections(
-        inputs.left,
-        inputs.right,
-        inputs.down,
-        inputs.up,
-        inputs.c_left,
-        inputs.c_right,
-        inputs.c_down,
-        inputs.c_up,
+        inputs.lf3, // Left
+        inputs.lf1, // Right
+        inputs.lf2, // Down
+        inputs.rf4, // Up
+        inputs.rt3, // C-Left
+        inputs.rt5, // C-Right
+        inputs.rt2, // C-Down
+        inputs.rt4, // C-Up
         ANALOG_STICK_MIN,
         ANALOG_STICK_NEUTRAL,
         ANALOG_STICK_MAX,
         outputs
     );
 
-    bool shield_button_pressed = inputs.l || inputs.r || inputs.lightshield || inputs.midshield;
+    bool shield_button_pressed = inputs.lf4 || inputs.rf5 || inputs.rf7 || inputs.rf8;
 
-    if (inputs.mod_x) {
+    if (inputs.lt1) {
         // MX + Horizontal = 6625 = 53
         if (directions.horizontal) {
             outputs.leftStickX = 128 + (directions.x * 53);
@@ -67,7 +59,7 @@ void Ultimate2::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
                 outputs.leftStickX = 128 + (directions.x * 51);
             }
             // Horizontal Tilts = 36
-            if (inputs.a) {
+            if (inputs.rt1) {
                 outputs.leftStickX = 128 + (directions.x * 36);
             }
         }
@@ -103,19 +95,19 @@ void Ultimate2::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
             outputs.leftStickY = 128 + (directions.y * 40);
 
             // Angled Ftilts
-            if (inputs.a) {
+            if (inputs.rt1) {
                 outputs.leftStickX = 128 + (directions.x * 36);
                 outputs.leftStickY = 128 + (directions.y * 26);
             }
         }
     }
 
-    if (inputs.mod_y) {
+    if (inputs.lt2) {
         // MY + Horizontal (even if shield is held) = 41
         if (directions.horizontal) {
             outputs.leftStickX = 128 + (directions.x * 41);
             // MY Horizontal Tilts
-            if (inputs.a) {
+            if (inputs.rt1) {
                 outputs.leftStickX = 128 + (directions.x * 36);
             }
         }
@@ -123,7 +115,7 @@ void Ultimate2::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         if (directions.vertical) {
             outputs.leftStickY = 128 + (directions.y * 44);
             // MY Vertical Tilts
-            if (inputs.a) {
+            if (inputs.rt1) {
                 outputs.leftStickY = 128 + (directions.y * 36);
             }
         }
@@ -150,7 +142,7 @@ void Ultimate2::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
             outputs.leftStickY = 128 + (directions.y * 44);
 
             // MY Pivot Uptilt/Dtilt
-            if (inputs.a) {
+            if (inputs.rt1) {
                 outputs.leftStickX = 128 + (directions.x * 34);
                 outputs.leftStickY = 128 + (directions.y * 38);
             }
@@ -165,16 +157,16 @@ void Ultimate2::UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) {
         outputs.rightStickY = 128 + (directions.cy * 68);
     }
 
-    if (inputs.l) {
+    if (inputs.lf4) {
         outputs.triggerLAnalog = 140;
     }
 
-    if (inputs.r) {
+    if (inputs.rf5) {
         outputs.triggerRAnalog = 140;
     }
 
     // Shut off C-stick when using D-Pad layer.
-    if ((inputs.mod_x && inputs.mod_y) || inputs.nunchuk_c) {
+    if ((inputs.lt1 && inputs.lt2) || inputs.nunchuk_c) {
         outputs.rightStickX = 128;
         outputs.rightStickY = 128;
     }

@@ -4,7 +4,14 @@
 #include "core/InputSource.hpp"
 #include "core/state.hpp"
 
-CommunicationBackend::CommunicationBackend(InputSource **input_sources, size_t input_source_count) {
+#include <config.pb.h>
+
+CommunicationBackend::CommunicationBackend(
+    InputState &inputs,
+    InputSource **input_sources,
+    size_t input_source_count
+)
+    : _inputs(inputs) {
     _gamemode = nullptr;
     _input_sources = input_sources;
     _input_source_count = input_source_count;
@@ -12,6 +19,10 @@ CommunicationBackend::CommunicationBackend(InputSource **input_sources, size_t i
 
 InputState &CommunicationBackend::GetInputs() {
     return _inputs;
+}
+
+OutputState &CommunicationBackend::GetOutputs() {
+    return _outputs;
 }
 
 void CommunicationBackend::ScanInputs() {
@@ -40,7 +51,14 @@ void CommunicationBackend::UpdateOutputs() {
     }
 }
 
-void CommunicationBackend::SetGameMode(ControllerMode *gamemode) {
-    delete _gamemode;
+CommunicationBackendId CommunicationBackend::BackendId() {
+    return COMMS_BACKEND_UNSPECIFIED;
+}
+
+void CommunicationBackend::SetGameMode(InputMode *gamemode) {
     _gamemode = gamemode;
+}
+
+InputMode *CommunicationBackend::CurrentGameMode() {
+    return _gamemode;
 }

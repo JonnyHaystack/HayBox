@@ -3,29 +3,29 @@
 #include "core/socd.hpp"
 #include "core/state.hpp"
 
-DefaultKeyboardMode::DefaultKeyboardMode(socd::SocdType socd_type) {}
+DefaultKeyboardMode::DefaultKeyboardMode() : KeyboardMode() {}
 
-void DefaultKeyboardMode::UpdateKeys(InputState &inputs) {
-    Press(HID_KEY_A, inputs.l);
-    Press(HID_KEY_B, inputs.left);
-    Press(HID_KEY_C, inputs.down);
-    Press(HID_KEY_D, inputs.right);
-    Press(HID_KEY_E, inputs.mod_x);
-    Press(HID_KEY_F, inputs.mod_y);
-    Press(HID_KEY_G, inputs.select);
-    Press(HID_KEY_H, inputs.start);
-    Press(HID_KEY_I, inputs.home);
-    Press(HID_KEY_J, inputs.r);
-    Press(HID_KEY_K, inputs.y);
-    Press(HID_KEY_L, inputs.lightshield);
-    Press(HID_KEY_M, inputs.midshield);
-    Press(HID_KEY_N, inputs.b);
-    Press(HID_KEY_O, inputs.x);
-    Press(HID_KEY_P, inputs.z);
-    Press(HID_KEY_Q, inputs.up);
-    Press(HID_KEY_R, inputs.c_up);
-    Press(HID_KEY_S, inputs.c_left);
-    Press(HID_KEY_T, inputs.c_right);
-    Press(HID_KEY_U, inputs.a);
-    Press(HID_KEY_V, inputs.c_down);
+void DefaultKeyboardMode::UpdateKeys(const InputState &inputs) {
+    Press(HID_KEY_A, inputs.lf4);
+    Press(HID_KEY_B, inputs.lf3);
+    Press(HID_KEY_C, inputs.lf2);
+    Press(HID_KEY_D, inputs.lf1);
+    Press(HID_KEY_E, inputs.lt1);
+    Press(HID_KEY_F, inputs.lt2);
+    Press(HID_KEY_G, inputs.mb3);
+    Press(HID_KEY_H, inputs.mb1);
+    Press(HID_KEY_I, inputs.mb2);
+    Press(HID_KEY_J, inputs.rf5);
+    Press(HID_KEY_K, inputs.rf6);
+    Press(HID_KEY_L, inputs.rf7);
+    Press(HID_KEY_M, inputs.rf8);
+    Press(HID_KEY_N, inputs.rf1);
+    Press(HID_KEY_O, inputs.rf2);
+    Press(HID_KEY_P, inputs.rf3);
+    Press(HID_KEY_Q, inputs.rf4);
+    Press(HID_KEY_R, inputs.rt4);
+    Press(HID_KEY_S, inputs.rt3);
+    Press(HID_KEY_T, inputs.rt5);
+    Press(HID_KEY_U, inputs.rt1);
+    Press(HID_KEY_V, inputs.rt2);
 }

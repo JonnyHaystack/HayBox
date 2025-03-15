@@ -2,10 +2,10 @@
 
 #include "core/InputMode.hpp"
 
-KeyboardMode::KeyboardMode() {}
+KeyboardMode::KeyboardMode() : InputMode() {}
 
 KeyboardMode::~KeyboardMode() {}
 
-void KeyboardMode::SendReport(InputState &inputs) {}
+void KeyboardMode::SendReport(const InputState &inputs) {}
 
 void KeyboardMode::Press(uint8_t keycode, bool press) {}

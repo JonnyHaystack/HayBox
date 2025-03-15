@@ -7,11 +7,11 @@
 
 class ShovelKnight : public ControllerMode {
   public:
-    ShovelKnight(socd::SocdType socd_type);
+    ShovelKnight();
 
   private:
-    virtual void UpdateDigitalOutputs(InputState &inputs, OutputState &outputs);
-    virtual void UpdateAnalogOutputs(InputState &inputs, OutputState &outputs);
+    virtual void UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs);
+    virtual void UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs);
 };
 
 #endif

@@ -11,13 +11,15 @@ class KeyboardMode : public InputMode {
   public:
     KeyboardMode();
     ~KeyboardMode();
-    void SendReport(InputState &inputs);
+    void SendReport(const InputState &inputs);
+
+    void UpdateOutputs(const InputState &inputs, OutputState &outputs) {}
 
   protected:
     void Press(uint8_t keycode, bool press);
 
   private:
-    virtual void UpdateKeys(InputState &inputs) = 0;
+    virtual void UpdateKeys(const InputState &inputs) = 0;
 };
 
 #endif

@@ -4,15 +4,17 @@
 
 #include <ArduinoKeyboard.hpp>
 
-KeyboardMode::KeyboardMode() {}
+KeyboardMode::KeyboardMode() : InputMode() {}
 
 KeyboardMode::~KeyboardMode() {
     _keyboard.releaseAll();
     _keyboard.sendReport();
 }
 
-void KeyboardMode::SendReport(InputState &inputs) {
-    HandleSocd(inputs);
+void KeyboardMode::SendReport(const InputState &inputs) {
+    InputState remapped_inputs = inputs;
+    HandleRemap(inputs, remapped_inputs);
+    HandleSocd(remapped_inputs);
     UpdateKeys(inputs);
     _keyboard.sendReport();
 }

@@ -1,0 +1,99 @@
+ButtonRemap.physical_button int_size:IS_8
+ButtonRemap.activates int_size:IS_8
+
+SocdPair.button_dir1 int_size:IS_8
+SocdPair.button_dir2 int_size:IS_8
+SocdPair.socd_type int_size:IS_8
+
+AnalogTriggerMapping.button int_size:IS_8
+AnalogTriggerMapping.trigger int_size:IS_8
+AnalogTriggerMapping.value int_size:IS_8
+
+AnalogModifier.buttons int_size:IS_8
+AnalogModifier.buttons max_count:3
+AnalogModifier.buttons type:FT_POINTER
+AnalogModifier.axis int_size:IS_8
+AnalogModifier.combination_mode int_size:IS_8
+
+ButtonComboMapping.buttons int_size:IS_8
+ButtonComboMapping.buttons max_count:3
+ButtonComboMapping.buttons type:FT_POINTER
+ButtonComboMapping.digital_output int_size:IS_8
+
+Coords.x int_size:IS_8
+Coords.y int_size:IS_8
+
+ButtonToKeycodeMapping.button int_size:IS_8
+ButtonToKeycodeMapping.keycode int_size:IS_8
+
+ButtonToColorMapping.button int_size:IS_8
+
+GameModeConfig.mode_id int_size:IS_8
+GameModeConfig.name max_length:17
+GameModeConfig.name type:FT_POINTER
+GameModeConfig.socd_pairs max_count:10
+GameModeConfig.socd_pairs type:FT_POINTER
+GameModeConfig.button_remapping max_count:60
+GameModeConfig.button_remapping type:FT_POINTER
+GameModeConfig.activation_binding max_count:4
+GameModeConfig.activation_binding type:FT_POINTER
+GameModeConfig.custom_mode_config int_size:IS_8
+GameModeConfig.keyboard_mode_config int_size:IS_8
+GameModeConfig.rgb_config int_size:IS_8
+
+CustomModeConfig.id int_size:IS_8
+CustomModeConfig.digital_button_mappings max_count:18
+CustomModeConfig.digital_button_mappings type:FT_POINTER
+CustomModeConfig.stick_direction_mappings max_count:8
+CustomModeConfig.stick_direction_mappings type:FT_POINTER
+CustomModeConfig.analog_trigger_mappings max_count:4
+CustomModeConfig.analog_trigger_mappings type:FT_POINTER
+CustomModeConfig.button_combo_mappings max_count:5
+CustomModeConfig.button_combo_mappings type:FT_POINTER
+CustomModeConfig.modifiers max_count:20
+CustomModeConfig.modifiers type:FT_POINTER
+CustomModeConfig.stick_range int_size:IS_8
+
+KeyboardModeConfig.id int_size:IS_8
+KeyboardModeConfig.buttons_to_keycodes max_count:60
+KeyboardModeConfig.buttons_to_keycodes type:FT_POINTER
+
+CommunicationBackendConfig.backend_id int_size:IS_8
+CommunicationBackendConfig.default_mode_config int_size:IS_8
+CommunicationBackendConfig.activation_binding max_count:2
+CommunicationBackendConfig.activation_binding type:FT_POINTER
+
+RgbConfig.button_colors max_count:60
+RgbConfig.button_colors type:FT_POINTER
+RgbConfig.animation int_size:IS_8
+RgbConfig.speed int_size:IS_8
+
+Config.game_mode_configs max_count:10
+Config.game_mode_configs type:FT_POINTER
+Config.communication_backend_configs max_count:10
+Config.communication_backend_configs type:FT_POINTER
+Config.custom_modes max_count:5
+Config.custom_modes type:FT_POINTER
+Config.keyboard_modes max_count:5
+Config.keyboard_modes type:FT_POINTER
+Config.rgb_configs max_count:10
+Config.rgb_configs type:FT_POINTER
+Config.default_backend_config int_size:IS_8
+Config.default_usb_backend_config int_size:IS_8
+Config.rgb_brightness int_size:IS_8
+
+DeviceInfo.firmware_name max_length:25
+DeviceInfo.firmware_version max_length:8
+DeviceInfo.device_name max_length:30
+
+Command long_names:false
+Button long_names:false
+DigitalOutput long_names:false
+StickDirectionButton long_names:false
+AnalogAxis long_names:false
+AnalogTrigger long_names:false
+ModifierCombinationMode long_names:false
+SocdType long_names:false
+GameModeId long_names:false
+CommunicationBackendId long_names:false
+RgbAnimationId long_names:false

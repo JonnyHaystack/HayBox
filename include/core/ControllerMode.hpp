@@ -5,10 +5,12 @@
 #include "core/socd.hpp"
 #include "core/state.hpp"
 
+#include <config.pb.h>
+
 class ControllerMode : public InputMode {
   public:
     ControllerMode();
-    void UpdateOutputs(InputState &inputs, OutputState &outputs);
+    void UpdateOutputs(const InputState &inputs, OutputState &outputs);
     void ResetDirections();
     virtual void UpdateDirections(
         bool lsLeft,
@@ -29,8 +31,8 @@ class ControllerMode : public InputMode {
     StickDirections directions;
 
   private:
-    virtual void UpdateDigitalOutputs(InputState &inputs, OutputState &outputs) = 0;
-    virtual void UpdateAnalogOutputs(InputState &inputs, OutputState &outputs) = 0;
+    virtual void UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs) = 0;
+    virtual void UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs) = 0;
 };
 
 #endif

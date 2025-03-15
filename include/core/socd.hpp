@@ -4,22 +4,9 @@
 #include "state.hpp"
 #include "stdlib.hpp"
 
+#include <config.pb.h>
+
 namespace socd {
-    typedef enum {
-        SOCD_NEUTRAL,
-        SOCD_2IP,
-        SOCD_2IP_NO_REAC,
-        SOCD_DIR1_PRIORITY,
-        SOCD_DIR2_PRIORITY,
-        SOCD_NONE,
-    } SocdType;
-
-    typedef struct {
-        bool InputState::*input_dir1;
-        bool InputState::*input_dir2;
-        SocdType socd_type = SOCD_NEUTRAL;
-    } SocdPair;
-
     typedef struct {
         bool was_dir1 = false;
         bool was_dir2 = false;
@@ -28,16 +15,22 @@ namespace socd {
     } SocdState;
 
     void second_input_priority_no_reactivation(
-        bool &input_dir1,
-        bool &input_dir2,
+        InputState &inputs,
+        Button button_dir1,
+        Button button_dir2,
         SocdState &socd_state
     );
 
-    void second_input_priority(bool &input_dir1, bool &input_dir2, SocdState &socd_state);
+    void second_input_priority(
+        InputState &inputs,
+        Button button_dir1,
+        Button button_dir2,
+        SocdState &socd_state
+    );
 
-    void neutral(bool &input_dir1, bool &input_dir2);
+    void neutral(InputState &inputs, Button button_dir1, Button button_dir2);
 
-    void dir1_priority(bool &input_dir1, bool &input_dir2);
+    void dir1_priority(InputState &inputs, Button button_dir1, Button button_dir2);
 }
 
 #endif

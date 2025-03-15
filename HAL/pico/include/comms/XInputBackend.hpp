@@ -9,12 +9,12 @@
 
 class XInputBackend : public CommunicationBackend {
   public:
-    XInputBackend(InputSource **input_sources, size_t input_source_count);
-    ~XInputBackend();
+    XInputBackend(InputState &inputs, InputSource **input_sources, size_t input_source_count);
+    CommunicationBackendId BackendId();
     void SendReport();
 
   private:
-    Adafruit_USBD_XInput *_xinput;
+    Adafruit_USBD_XInput _xinput;
     xinput_report_t _report = {};
 };
 

@@ -1,77 +1,77 @@
-#include "comms/B0XXInputViewer.hpp"
-#include "comms/DInputBackend.hpp"
-#include "comms/GamecubeBackend.hpp"
-#include "comms/N64Backend.hpp"
-#include "comms/NintendoSwitchBackend.hpp"
-#include "comms/XInputBackend.hpp"
-#include "config/mode_selection.hpp"
+#include "comms/backend_init.hpp"
+#include "config_defaults.hpp"
 #include "core/CommunicationBackend.hpp"
-#include "core/InputMode.hpp"
 #include "core/KeyboardMode.hpp"
+#include "core/Persistence.hpp"
+#include "core/mode_selection.hpp"
 #include "core/pinout.hpp"
-#include "core/socd.hpp"
 #include "core/state.hpp"
-#include "input/GpioButtonInput.hpp"
+#include "input/DebouncedGpioButtonInput.hpp"
 #include "input/NunchukInput.hpp"
-#include "joybus_utils.hpp"
-#include "modes/Melee20Button.hpp"
+#include "reboot.hpp"
 #include "stdlib.hpp"
 
-#include <pico/bootrom.h>
+#include <config.pb.h>
 
-CommunicationBackend **backends = nullptr;
-size_t backend_count;
-KeyboardMode *current_kb_mode = nullptr;
+Config config = default_config;
 
 GpioButtonMapping button_mappings[] = {
-    {&InputState::l,            5 },
-    { &InputState::left,        4 },
-    { &InputState::down,        3 },
-    { &InputState::right,       2 },
+    { BTN_LF1, 2  },
+    { BTN_LF2, 3  },
+    { BTN_LF3, 4  },
+    { BTN_LF4, 5  },
 
-    { &InputState::mod_x,       6 },
-    { &InputState::mod_y,       7 },
+    { BTN_LT1, 6  },
+    { BTN_LT2, 7  },
 
-    { &InputState::select,      10},
-    { &InputState::start,       0 },
-    { &InputState::home,        11},
+    { BTN_MB1, 0  },
+    { BTN_MB2, 10 },
+    { BTN_MB3, 11 },
 
-    { &InputState::c_left,      13},
-    { &InputState::c_up,        12},
-    { &InputState::c_down,      15},
-    { &InputState::a,           14},
-    { &InputState::c_right,     16},
+    { BTN_RT1, 14 },
+    { BTN_RT2, 15 },
+    { BTN_RT3, 13 },
+    { BTN_RT4, 12 },
+    { BTN_RT5, 16 },
 
-    { &InputState::b,           26},
-    { &InputState::x,           21},
-    { &InputState::z,           19},
-    { &InputState::up,          17},
+    { BTN_RF1, 26 },
+    { BTN_RF2, 21 },
+    { BTN_RF3, 19 },
+    { BTN_RF4, 17 },
 
-    { &InputState::r,           27},
-    { &InputState::y,           22},
-    { &InputState::lightshield, 20},
-    { &InputState::midshield,   18},
+    { BTN_RF5, 27 },
+    { BTN_RF6, 22 },
+    { BTN_RF7, 20 },
+    { BTN_RF8, 18 },
 };
-size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
+const size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
+
+DebouncedGpioButtonInput<button_count> gpio_input(button_mappings);
 
 const Pinout pinout = {
     .joybus_data = 28,
+    .nes_data = -1,
+    .nes_clock = -1,
+    .nes_latch = -1,
     .mux = -1,
     .nunchuk_detect = -1,
     .nunchuk_sda = -1,
     .nunchuk_scl = -1,
 };
 
+CommunicationBackend **backends = nullptr;
+size_t backend_count;
+KeyboardMode *current_kb_mode = nullptr;
+
 void setup() {
+    static InputState inputs;
+
     // Create GPIO input source and use it to read button states for checking button holds.
-    GpioButtonInput *gpio_input = new GpioButtonInput(button_mappings, button_count);
+    gpio_input.UpdateInputs(inputs);
 
-    InputState button_holds;
-    gpio_input->UpdateInputs(button_holds);
-
-    // Bootsel button hold as early as possible for safety.
-    if (button_holds.start) {
-        reset_usb_boot(0, 0);
+    // Check bootsel button hold as early as possible for safety.
+    if (inputs.mb1) {
+        reboot_bootloader();
     }
 
     // Turn on LED to indicate firmware booted.
@@ -79,63 +79,23 @@ void setup() {
     gpio_set_dir(PICO_DEFAULT_LED_PIN, GPIO_OUT);
     gpio_put(PICO_DEFAULT_LED_PIN, 1);
 
-    // Create array of input sources to be used.
-    static InputSource *input_sources[] = { gpio_input };
-    size_t input_source_count = sizeof(input_sources) / sizeof(InputSource *);
-
-    ConnectedConsole console = detect_console(pinout.joybus_data);
-
-    /* Select communication backend. */
-    CommunicationBackend *primary_backend;
-    if (console == ConnectedConsole::NONE) {
-        if (button_holds.x) {
-            // If no console detected and X is held on plugin then use Switch USB backend.
-            NintendoSwitchBackend::RegisterDescriptor();
-            backend_count = 1;
-            primary_backend = new NintendoSwitchBackend(input_sources, input_source_count);
-            backends = new CommunicationBackend *[backend_count] { primary_backend };
-
-            // Default to Ultimate mode on Switch.
-            primary_backend->SetGameMode(new Ultimate(socd::SOCD_2IP));
-            return;
-        } else if (button_holds.z) {
-            // If no console detected and Z is held on plugin then use DInput backend.
-            TUGamepad::registerDescriptor();
-            TUKeyboard::registerDescriptor();
-            backend_count = 2;
-            primary_backend = new DInputBackend(input_sources, input_source_count);
-            backends = new CommunicationBackend *[backend_count] {
-                primary_backend, new B0XXInputViewer(input_sources, input_source_count)
-            };
-        } else {
-            // Default to XInput mode if no console detected and no other mode forced.
-            backend_count = 2;
-            primary_backend = new XInputBackend(input_sources, input_source_count);
-            backends = new CommunicationBackend *[backend_count] {
-                primary_backend, new B0XXInputViewer(input_sources, input_source_count)
-            };
-        }
-    } else {
-        if (console == ConnectedConsole::GAMECUBE) {
-            primary_backend =
-                new GamecubeBackend(input_sources, input_source_count, pinout.joybus_data);
-        } else if (console == ConnectedConsole::N64) {
-            primary_backend = new N64Backend(input_sources, input_source_count, pinout.joybus_data);
-        }
-
-        // If console then only using 1 backend (no input viewer).
-        backend_count = 1;
-        backends = new CommunicationBackend *[backend_count] { primary_backend };
+    // Attempt to load config, or write default config to flash if failed to load config.
+    if (!persistence.LoadConfig(config)) {
+        persistence.SaveConfig(config);
     }
 
-    // Default to Melee mode.
-    primary_backend->SetGameMode(
-        new Melee20Button(socd::SOCD_2IP_NO_REAC, { .crouch_walk_os = false })
-    );
+    // Create array of input sources to be used.
+    static InputSource *input_sources[] = {};
+    size_t input_source_count = sizeof(input_sources) / sizeof(InputSource *);
+
+    backend_count =
+        initialize_backends(backends, inputs, input_sources, input_source_count, config, pinout);
+
+    setup_mode_activation_bindings(config.game_mode_configs, config.game_mode_configs_count);
 }
 
 void loop() {
-    select_mode(backends[0]);
+    select_mode(backends, backend_count, config);
 
     for (size_t i = 0; i < backend_count; i++) {
         backends[i]->SendReport();
@@ -146,21 +106,16 @@ void loop() {
     }
 }
 
-/* Nunchuk code runs on the second core */
-NunchukInput *nunchuk = nullptr;
+/* Button inputs are read from the second core */
 
 void setup1() {
     while (backends == nullptr) {
         tight_loop_contents();
     }
-
-    // Create Nunchuk input source.
-    nunchuk = new NunchukInput(Wire, pinout.nunchuk_detect, pinout.nunchuk_sda, pinout.nunchuk_scl);
 }
 
 void loop1() {
     if (backends != nullptr) {
-        nunchuk->UpdateInputs(backends[0]->GetInputs());
-        busy_wait_us(50);
+        gpio_input.UpdateInputs(backends[0]->GetInputs());
     }
 }

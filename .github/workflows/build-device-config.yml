@@ -1,0 +1,86 @@
+name: Build device config
+
+on: [workflow_call]
+
+jobs:
+  metadata:
+    runs-on: ubuntu-latest
+    name: Parse config metadata
+    outputs:
+      meta_json: ${{ steps.parse_yaml.outputs.metadata }}
+      build_matrix: ${{ steps.parse_yaml.outputs.metadata.build }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Install yaml2json
+      run: python3 -m pip install remarshal
+
+    - name: Read metadata from yaml file
+      id: parse_yaml
+      run: |
+        echo "metadata=$(yaml2json 'meta.yaml')" >> "$GITHUB_OUTPUT"
+
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    needs: metadata
+    env:
+      HAYBOX_REPO: ${{ fromJson(needs.metadata.outputs.meta_json).repo }}
+      HAYBOX_REVISION: ${{ fromJson(needs.metadata.outputs.meta_json).revision }}
+      DEVICE_CONFIG_REVISION: ${{ github.ref_type == 'tag' && github.ref_name || github.sha }}
+      PIO_ENV: ${{ matrix.env }}
+      BIN_EXT: ${{ matrix.bin_ext }}
+    strategy:
+      fail-fast: false
+      matrix: 
+        include: ${{ fromJson(needs.metadata.outputs.meta_json).build }}
+
+    steps:
+    - name: Check out specific HayBox revision
+      run: |
+        git clone "https://github.com/$HAYBOX_REPO" .
+        git checkout "$HAYBOX_REVISION"
+
+    - name: Check out config repo
+      uses: actions/checkout@v4
+      with:
+        path: config/device
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install PlatformIO
+      run: |
+        python -m pip install --upgrade pip
+        pip install --upgrade platformio
+
+    - name: Set artifact filename environment variable
+      run: |
+        echo "ARTIFACT_NAME=HayBox-${HAYBOX_REVISION}-${PIO_ENV}-${DEVICE_CONFIG_REVISION}.${BIN_EXT}" >> "$GITHUB_ENV"
+
+    - name: Set artifact path environment variable
+      run: |
+        echo "ARTIFACT_PATH=${PIO_ENV}/${ARTIFACT_NAME}" >> "$GITHUB_ENV"
+
+    - name: Build ${{ matrix.env }} env
+      run: |
+        pio run -e "$PIO_ENV"
+        mkdir -p "$PIO_ENV"
+
+        cp ".pio/build/${PIO_ENV}/firmware.${BIN_EXT}" "$ARTIFACT_PATH"
+
+    - name: Publish ${{ matrix.env }} artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ env.ARTIFACT_NAME }}
+        path: ${{ env.ARTIFACT_PATH }}
+
+    - name: Upload binaries to release
+      uses: softprops/action-gh-release@v1
+      if: github.ref_type == 'tag'
+      with:
+        files: ${{ env.ARTIFACT_PATH }}

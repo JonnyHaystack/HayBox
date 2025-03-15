@@ -1,14 +1,18 @@
 #include "core/ControllerMode.hpp"
 
-ControllerMode::ControllerMode() {
+ControllerMode::ControllerMode() : InputMode() {
     // Set up initial state.
     ResetDirections();
 }
 
-void ControllerMode::UpdateOutputs(InputState &inputs, OutputState &outputs) {
-    HandleSocd(inputs);
-    UpdateDigitalOutputs(inputs, outputs);
-    UpdateAnalogOutputs(inputs, outputs);
+void ControllerMode::UpdateOutputs(const InputState &inputs, OutputState &outputs) {
+    // Create a copy of the input state here so remapping can be many-to-one (many physical buttons
+    // to one activated button).
+    InputState remapped_inputs = inputs;
+    HandleRemap(inputs, remapped_inputs);
+    HandleSocd(remapped_inputs);
+    UpdateDigitalOutputs(remapped_inputs, outputs);
+    UpdateAnalogOutputs(remapped_inputs, outputs);
 }
 
 void ControllerMode::ResetDirections() {

@@ -2,16 +2,15 @@
 #define _MODES_RIVALSOFAETHER_HPP
 
 #include "core/ControllerMode.hpp"
-#include "core/socd.hpp"
 #include "core/state.hpp"
 
 class RivalsOfAether : public ControllerMode {
   public:
-    RivalsOfAether(socd::SocdType socd_type);
+    RivalsOfAether();
 
   private:
-    void UpdateDigitalOutputs(InputState &inputs, OutputState &outputs);
-    void UpdateAnalogOutputs(InputState &inputs, OutputState &outputs);
+    void UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs);
+    void UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs);
 };
 
 #endif

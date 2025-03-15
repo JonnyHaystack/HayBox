@@ -41,11 +41,16 @@ typedef struct __attribute__((packed, aligned(1))) {
 
 class NintendoSwitchBackend : public CommunicationBackend {
   public:
-    NintendoSwitchBackend(InputSource **input_sources, size_t input_source_count);
+    NintendoSwitchBackend(
+        InputState &inputs,
+        InputSource **input_sources,
+        size_t input_source_count
+    );
     ~NintendoSwitchBackend();
 
     static void RegisterDescriptor();
 
+    CommunicationBackendId BackendId();
     void SendReport();
 
   protected:

@@ -12,7 +12,7 @@ enum reportState : byte {
 
 class B0XXInputViewer : public CommunicationBackend {
   public:
-    B0XXInputViewer(InputSource **input_sources, size_t input_source_count);
+    B0XXInputViewer(InputState &inputs, InputSource **input_sources, size_t input_source_count);
     ~B0XXInputViewer();
     void SendReport();
 

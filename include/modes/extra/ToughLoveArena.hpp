@@ -7,10 +7,10 @@
 
 class ToughLoveArena : public KeyboardMode {
   public:
-    ToughLoveArena(socd::SocdType socd_type);
+    ToughLoveArena();
 
   private:
-    void UpdateKeys(InputState &inputs);
+    void UpdateKeys(const InputState &inputs);
 };
 
 #endif

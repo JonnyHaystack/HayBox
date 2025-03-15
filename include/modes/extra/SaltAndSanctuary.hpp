@@ -7,11 +7,11 @@
 
 class SaltAndSanctuary : public ControllerMode {
   public:
-    SaltAndSanctuary(socd::SocdType socd_type);
+    SaltAndSanctuary();
 
   private:
-    void UpdateDigitalOutputs(InputState &inputs, OutputState &outputs);
-    void UpdateAnalogOutputs(InputState &inputs, OutputState &outputs);
+    void UpdateDigitalOutputs(const InputState &inputs, OutputState &outputs);
+    void UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs);
 };
 
 #endif

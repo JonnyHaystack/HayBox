@@ -5,6 +5,9 @@
 
 typedef struct {
     uint8_t joybus_data;
+    int nes_data;
+    int nes_clock;
+    int nes_latch;
     int mux;
     int nunchuk_detect;
     int nunchuk_sda;
