@@ -61,7 +61,7 @@ void setup() {
 
     // Create Nunchuk input source - must be done before GPIO input source otherwise it would
     // disable the pullups on the i2c pins.
-    static NunchukInput nunchuk;
+    // static NunchukInput nunchuk;
 
     // Create GPIO input source and use it to read button states for checking button holds.
     static GpioButtonInput gpio_input(button_mappings, button_count);
@@ -74,7 +74,10 @@ void setup() {
     }
 
     // Create array of input sources to be used.
-    static InputSource *input_sources[] = { &gpio_input, &nunchuk };
+    static InputSource *input_sources[] = {
+        &gpio_input,
+        // &nunchuk,
+    };
     size_t input_source_count = sizeof(input_sources) / sizeof(InputSource *);
 
     backend_count =
