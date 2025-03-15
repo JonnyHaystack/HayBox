@@ -184,7 +184,7 @@ const Config default_config = {
         .disable_ledgedash_socd_override = false,
     },
     .project_m_options = {
-        .true_z_press = false,
+        .true_z_press = true,
         .disable_ledgedash_socd_override = false,
     },
 };
