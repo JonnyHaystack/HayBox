@@ -46,6 +46,9 @@ const size_t button_count = sizeof(button_mappings) / sizeof(GpioButtonMapping);
 
 const Pinout pinout = {
     .joybus_data = 2,
+    .nes_data = -1,
+    .nes_clock = -1,
+    .nes_latch = -1,
     .mux = -1,
     .nunchuk_detect = 3,
     .nunchuk_sda = 4,
@@ -62,7 +65,7 @@ KeyboardMode *current_kb_mode = nullptr;
 void setup() {
     static InputState inputs;
 
-    // Create GPIO input source and use it to read button states for checking button holds.
+    // Read button states for checking button holds.
     gpio_input.UpdateInputs(inputs);
 
     // Check bootsel button hold as early as possible for safety.

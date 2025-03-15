@@ -10,11 +10,9 @@
 #include "reboot.hpp"
 #include "stdlib.hpp"
 
-Config config = default_config;
+#include <config.pb.h>
 
-CommunicationBackend **backends;
-size_t backend_count;
-KeyboardMode *current_kb_mode = nullptr;
+Config config = default_config;
 
 const size_t num_rows = 5;
 const size_t num_cols = 13;
@@ -29,22 +27,29 @@ const Button matrix[num_rows][num_cols] = {
     { NA,       NA,       BTN_LT1,  BTN_LT2, NA, BTN_LT6,  BTN_RT7,  BTN_RT6,  NA, BTN_RT2, BTN_RT1,  NA,       NA      },
 };
 // clang-format on
-DiodeDirection diode_direction = DiodeDirection::COL2ROW;
+const DiodeDirection diode_direction = DiodeDirection::COL2ROW;
 
 const Pinout pinout = {
     .joybus_data = 22,
+    .nes_data = -1,
+    .nes_clock = -1,
+    .nes_latch = -1,
     .mux = -1,
     .nunchuk_detect = -1,
     .nunchuk_sda = -1,
     .nunchuk_scl = -1,
 };
 
+SwitchMatrixInput<num_rows, num_cols> matrix_input(row_pins, col_pins, matrix, diode_direction);
+
+CommunicationBackend **backends;
+size_t backend_count;
+KeyboardMode *current_kb_mode = nullptr;
+
 void setup() {
     static InputState inputs;
 
-    // Create switch matrix input source and use it to read button states for checking button holds.
-    static SwitchMatrixInput<num_rows, num_cols>
-        matrix_input(row_pins, col_pins, matrix, diode_direction);
+    // Read button states for checking button holds.
     matrix_input.UpdateInputs(inputs);
 
     // Bootsel button hold as early as possible for safety.
@@ -58,30 +63,17 @@ void setup() {
     gpio_put(PICO_DEFAULT_LED_PIN, 1);
 
     // Attempt to load config, or write default config to flash if failed to load config.
-    Persistence *persistence = new Persistence();
-    if (!persistence->LoadConfig(config)) {
-        persistence->SaveConfig(config);
+    if (!persistence.LoadConfig(config)) {
+        persistence.SaveConfig(config);
     }
-    delete persistence;
 
-    // Create array of input sources to be used.
-    static InputSource *input_sources[] = { &matrix_input };
-    size_t input_source_count = sizeof(input_sources) / sizeof(InputSource *);
-
-    backend_count =
-        initialize_backends(backends, inputs, input_sources, input_source_count, config, pinout);
+    backend_count = initialize_backends(backends, inputs, nullptr, 0, config, pinout);
 
     setup_mode_activation_bindings(config.game_mode_configs, config.game_mode_configs_count);
 }
 
 void loop() {
-    select_mode(
-        backends[0],
-        config.game_mode_configs,
-        config.game_mode_configs_count,
-        config.keyboard_modes,
-        config.keyboard_modes_count
-    );
+    select_mode(backends, backend_count, config);
 
     for (size_t i = 0; i < backend_count; i++) {
         backends[i]->SendReport();
@@ -89,5 +81,19 @@ void loop() {
 
     if (current_kb_mode != nullptr) {
         current_kb_mode->SendReport(backends[0]->GetInputs());
+    }
+}
+
+/* Button inputs are read from the second core */
+
+void setup1() {
+    while (backends == nullptr) {
+        tight_loop_contents();
+    }
+}
+
+void loop1() {
+    if (backends != nullptr) {
+        matrix_input.UpdateInputs(backends[0]->GetInputs());
     }
 }
