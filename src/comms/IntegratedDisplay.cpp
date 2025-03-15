@@ -1,7 +1,7 @@
 #include "comms/IntegratedDisplay.hpp"
 
 #include "core/Persistence.hpp"
-#include "core/config_utils.hpp"
+#include "util/config_util.hpp"
 #include "util/state_util.hpp"
 
 IntegratedDisplay::IntegratedDisplay(

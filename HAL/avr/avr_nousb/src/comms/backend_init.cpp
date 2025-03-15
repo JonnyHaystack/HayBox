@@ -3,9 +3,9 @@
 #include "comms/GamecubeBackend.hpp"
 #include "comms/N64Backend.hpp"
 #include "core/CommunicationBackend.hpp"
-#include "core/config_utils.hpp"
 #include "core/mode_selection.hpp"
 #include "core/pinout.hpp"
+#include "util/config_util.hpp"
 
 #include <config.pb.h>
 

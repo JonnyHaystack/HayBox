@@ -1,4 +1,4 @@
-#include "core/config_utils.hpp"
+#include "util/config_util.hpp"
 
 #include "core/state.hpp"
 #include "util/state_util.hpp"

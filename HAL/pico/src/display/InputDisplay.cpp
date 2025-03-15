@@ -1,7 +1,7 @@
 #include "display/InputDisplay.hpp"
 
 #include "comms/IntegratedDisplay.hpp"
-#include "core/config_utils.hpp"
+#include "util/config_util.hpp"
 #include "util/state_util.hpp"
 
 InputDisplay::InputDisplay(

@@ -10,9 +10,9 @@
 #include "comms/SnesBackend.hpp"
 #include "comms/XInputBackend.hpp"
 #include "core/CommunicationBackend.hpp"
-#include "core/config_utils.hpp"
 #include "core/mode_selection.hpp"
 #include "core/pinout.hpp"
+#include "util/config_util.hpp"
 
 #include <TUGamepad.hpp>
 #include <TUKeyboard.hpp>

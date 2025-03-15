@@ -1,9 +1,9 @@
 #include "display/ConfigMenu.hpp"
 
 #include "core/Persistence.hpp"
-#include "core/config_utils.hpp"
 #include "core/mode_selection.hpp"
 #include "reboot.hpp"
+#include "util/config_util.hpp"
 
 ConfigMenu::ConfigMenu(Config &config, CommunicationBackend **backends, size_t backends_count)
     : _config(config),
