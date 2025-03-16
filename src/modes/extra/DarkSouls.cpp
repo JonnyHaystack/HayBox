@@ -1,6 +1,6 @@
 #include "modes/extra/DarkSouls.hpp"
 
-#define ANALOG_STICK_MIN 0
+#define ANALOG_STICK_MIN 1
 #define ANALOG_STICK_NEUTRAL 128
 #define ANALOG_STICK_MAX 255
 
