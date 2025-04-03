@@ -172,6 +172,7 @@ The default controller mode button combinations are:
 - MB1 + LT1 + LF2 (Start + Mod X + Down) - Ultimate mode
 - MB1 + LT1 + LF1 (Start + Mod X + Right) - FGC mode (Hitbox style fighting game layout)
 - MB1 + LT1 + RF1 (Start + Mod X + B) - Rivals of Aether mode
+- MB1 + LT1 + RF5 (Start + Mod X + R) - Rivals of Aether 2 mode
 
 Default keyboard mode button combinations (only available when using DInput backend, **not** with XInput):
 - MB1 + LT2 + LF4 (Start + Mod Y + L) - Default keyboard mode
