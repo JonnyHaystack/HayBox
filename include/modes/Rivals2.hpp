@@ -4,8 +4,6 @@
 #include "core/ControllerMode.hpp"
 #include "core/state.hpp"
 
-#include <config.pb.h> //this was not here, but doesn't seem to matter if I remove it from Melee20Button.hpp anyway
-
 class Rivals2 : public ControllerMode {
   public:
     Rivals2();
