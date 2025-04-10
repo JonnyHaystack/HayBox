@@ -59,6 +59,15 @@ Features include:
 - Game modes and communication backends are independent entities, meaning you can use any game mode with any supported console without extra work
 - Easily switch between different GameCube/N64 polling rates in order to have optimal latency on console, overclocked adapter, etc. (not necessary for Pico/RP2040)
 
+### Supported Gamecube adapters
+Below is the list of known adapters to work with HayBox, depending on the adapter both usb cables may need to be connected: 
+
+* Official Nintendo adapter
+* HHL adapters
+* [Lossless adapter](https://www.input-integrity.com/product-page/adaptateur-sans-perte)
+* Mayflash (V5 Firmware)
+
+
 ## Installation
 
 If you want to simply use a pre-built firmware with default pin mappings and configuration, refer to the [pre-built binaries](#pre-built-binaries) section. If you want to make any changes to the code, refer to the [building from source](#building-from-source) section.
