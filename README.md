@@ -106,7 +106,7 @@ After that:
 7. Click **Build** (in the bottom left) and make sure everything compiles without
   errors
 8. This next step differs depending on the microcontroller used in your controller.
-    - **For Pico-based controllers**: hold the bootsel button while plugging it in (or your Start button if you already have HayBox installed) and then drag and drop the file `HayBox/.pio/build/<environment>/firmware.uf2` onto the RPI-RP2 drive that comes up.
+    - **For Pico-based controllers**: hold the bootsel button while plugging it in (or RT2 (C-Down) if you already have HayBox installed) and then drag and drop the file `HayBox/.pio/build/<environment>/firmware.uf2` onto the RPI-RP2 drive that comes up.
     - **For Arduino-based controllers**: Plug in your controller via USB and click **Upload** (next to the Build button)
 
 #### Building using GitHub Codespaces
