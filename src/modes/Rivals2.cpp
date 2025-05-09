@@ -102,7 +102,7 @@ void Rivals2::UpdateAnalogOutputs(const InputState &inputs, OutputState &outputs
 
         // for max-length diagonal wavedash while holding ModX
         if (directions.diagonal && shield_button_pressed) {
-            outputs.leftStickX = 128 + (directions.x * 120);
+            outputs.leftStickX = 128 + (directions.x * 90);
             outputs.leftStickY = 128 + (directions.y * 42);
         }
 
