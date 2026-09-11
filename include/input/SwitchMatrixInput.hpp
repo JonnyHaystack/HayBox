@@ -59,6 +59,11 @@ template <size_t num_rows, size_t num_cols> class SwitchMatrixInput : public Inp
     InputScanSpeed ScanSpeed() { return InputScanSpeed::FAST; }
 
     void UpdateInputs(InputState &inputs) {
+        for (size_t i = 0; i < num_rows; i++) {
+            for (size_t j = 0; j < num_cols; j++) {
+                set_button(inputs.buttons, _matrix[i][j], false);
+            }
+        }
         for (size_t i = 0; i < _num_outputs; i++) {
             // Activate the column/row.
             gpio::init_pin(_output_pins[i], gpio::GpioMode::GPIO_OUTPUT);
@@ -94,8 +99,9 @@ template <size_t num_rows, size_t num_cols> class SwitchMatrixInput : public Inp
         size_t row_index,
         bool pressed
     ) {
-        Button button = _matrix[col_index][row_index];
-        set_button(inputs.buttons, button, pressed);
+        if (pressed) {
+            set_button(inputs.buttons, _matrix[col_index][row_index], true);
+        }
     };
 };
 

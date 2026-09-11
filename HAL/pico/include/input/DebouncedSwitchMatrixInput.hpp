@@ -23,14 +23,9 @@ class DebouncedSwitchMatrixInput : public SwitchMatrixInput<num_rows, num_cols> 
     uint32_t _debounce_period_ms;
 
     void UpdateButtonState(InputState &inputs, size_t col_index, size_t row_index, bool pressed) {
-        bool state_changed = update_debounce_state(
-            _debounce_state[col_index][row_index],
-            pressed,
-            _debounce_period_ms
-        );
-        if (state_changed) {
-            Button button = this->_matrix[col_index][row_index];
-            set_button(inputs.buttons, button, pressed);
+        update_debounce_state(_debounce_state[col_index][row_index], pressed, _debounce_period_ms);
+        if (_debounce_state[col_index][row_index].pressed) {
+            set_button(inputs.buttons, this->_matrix[col_index][row_index], true);
         }
     };
 };

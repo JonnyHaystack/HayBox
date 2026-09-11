@@ -14,7 +14,7 @@ uint8_t apply_deadzone(uint8_t value, uint8_t deadzone, bool scale) {
         // value is given on the rim.
         if (scale) {
             int8_t sign = SIGNUM(post_deadzone);
-            int8_t post_scaling = min(127, abs(post_deadzone) * 128.0 / (128 - deadzone)) * sign;
+            int8_t post_scaling = min(127, (int)(abs(post_deadzone) * 128.0 / (128 - deadzone))) * sign;
             return post_scaling + 128;
         }
         return post_deadzone + 128;

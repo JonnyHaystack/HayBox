@@ -21,13 +21,9 @@ template <size_t button_count> class DebouncedGpioButtonInput : public GpioButto
     uint32_t _debounce_period_ms;
 
     void UpdateButtonState(InputState &inputs, size_t button_mapping_index, bool pressed) {
-        bool state_changed = update_debounce_state(
-            _debounce_state[button_mapping_index],
-            pressed,
-            _debounce_period_ms
-        );
-        if (state_changed) {
-            set_button(inputs.buttons, _button_mappings[button_mapping_index].button, pressed);
+        update_debounce_state(_debounce_state[button_mapping_index], pressed, _debounce_period_ms);
+        if (_debounce_state[button_mapping_index].pressed) {
+            set_button(inputs.buttons, _button_mappings[button_mapping_index].button, true);
         }
     }
 };

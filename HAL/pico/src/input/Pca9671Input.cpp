@@ -31,6 +31,10 @@ InputScanSpeed Pca9671Input::ScanSpeed() {
 }
 
 void Pca9671Input::UpdateInputs(InputState &inputs) {
+    for (size_t i = 0; i < _button_count; i++) {
+        set_button(inputs.buttons, _button_mappings[i].button, false);
+    }
+
     uint16_t pin_values = _pcf.read16();
 
     for (size_t i = 0; i < _button_count; i++) {
@@ -43,5 +47,7 @@ void Pca9671Input::UpdateButtonState(
     size_t button_mapping_index,
     bool pressed
 ) {
-    set_button(inputs.buttons, _button_mappings[button_mapping_index].button, pressed);
+    if (pressed) {
+        set_button(inputs.buttons, _button_mappings[button_mapping_index].button, true);
+    }
 }

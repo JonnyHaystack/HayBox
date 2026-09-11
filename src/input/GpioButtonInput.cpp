@@ -20,6 +20,9 @@ InputScanSpeed GpioButtonInput::ScanSpeed() {
 
 void GpioButtonInput::UpdateInputs(InputState &inputs) {
     for (size_t i = 0; i < _button_count; i++) {
+        set_button(inputs.buttons, _button_mappings[i].button, false);
+    }
+    for (size_t i = 0; i < _button_count; i++) {
         UpdateButtonState(inputs, i, !gpio::read_digital(_button_mappings[i].pin));
     }
 }
@@ -29,5 +32,7 @@ void GpioButtonInput::UpdateButtonState(
     size_t button_mapping_index,
     bool pressed
 ) {
-    set_button(inputs.buttons, _button_mappings[button_mapping_index].button, pressed);
+    if (pressed) {
+        set_button(inputs.buttons, _button_mappings[button_mapping_index].button, true);
+    }
 }
